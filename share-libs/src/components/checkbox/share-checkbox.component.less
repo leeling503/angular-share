@@ -1,0 +1,33 @@
+@import '../../styles/index.less';
+
+.share-cheack-box {
+  width: 100%;
+  height: 100%;
+  min-width: 16px;
+  min-height: 16px;
+  display: inline-block;
+  cursor: pointer;
+  .share-icon('checkbox/checkbox-blank')
+}
+
+.share-check-default {
+  .imag-url('checkbox/checkbox-blank')
+}
+
+.share-check-other {
+  .imag-url('checkbox/checkbox-mixed')
+}
+
+.share-cheack-box.share-check-selected {
+  .imag-url('checkbox/checkbox-checked')
+}
+
+// .share-cheack-box.share-check-selected.share-check-disable {
+//   .share-icon('checkbox/checkbox-checked-disabled')
+// }
+
+.share-check-disable {
+  filter: grayscale(1);
+  opacity: 0.5;
+  cursor: default;
+}

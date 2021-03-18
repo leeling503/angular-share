@@ -1,0 +1,23 @@
+<div class="share-date-year" (click)="onToggleOpen()" shareClearIcon (onClearValue)="onClearValue()"
+  [inHasValue]="modelYear">
+  <input type="text" [ngModel]="viewYear" [placeholder]="inPlaceholder" cdkOverlayOrigin>
+  <div class="function-icons" [ngClass]="'has-split-line'">
+    <i class="pull-down-icon-p"></i>
+  </div>
+</div>
+
+<ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="cdkOverlayOrigin" [cdkConnectedOverlayHasBackdrop]="true"
+  [cdkConnectedOverlayBackdropClass]='"transparent-overlay-back"' [cdkConnectedOverlayOpen]="overlayOpen"
+  [cdkConnectedOverlayOffsetY]='3' (backdropClick)="onClose()">
+  <div class="year-plan overlay-plan">
+    <div class="per-year" (click)="onGoYear(-9)"> <i></i></div>
+    <div class="year-items">
+      <div class="year-item" [ngClass]="{'active-item':year === modelYear}" *ngFor="let year of yearValues">
+        <div class="item" (click)="onSelectYear(year)">
+          <span>{{year}}</span>
+        </div>
+      </div>
+    </div>
+    <div class="next-year" (click)="onGoYear(9)"><i></i></div>
+  </div>
+</ng-template>

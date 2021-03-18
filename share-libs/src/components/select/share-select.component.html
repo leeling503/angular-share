@@ -1,0 +1,44 @@
+<div class="share-select" cdkOverlayOrigin (click)='clickToggleOpen()'
+  [ngClass]="{'select-has-border':activeNodes.length > 1,'select-has-control':selectConfig.showFlag }">
+  <div class="selected-nodes">
+    <ng-container *ngIf="!activeNodes || activeNodes.length==0 ">
+      <div class="selected-node placeholder-text">
+        <span>{{selectConfig.placeholder}}</span>
+      </div>
+    </ng-container>
+    <ng-container *ngFor="let node of activeNodes">
+      <div class="selected-node node-data-text">
+        <span>{{node.showName || node.name}}</span>
+        <i class="select-clear" *ngIf="selectConfig.showClear" (click)="clickClearNode(node)"></i>
+      </div>
+    </ng-container>
+  </div>
+  <i class="select-clear" *ngIf="selectConfig.showClear && activeNodes.length" (click)='clickClearNodes()'></i>
+  <i class="select-control" [ngClass]=" {'select-control-on':optionsOpen}"></i>
+</div>
+<ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="cdkOverlayOrigin" [cdkConnectedOverlayHasBackdrop]="true"
+  [cdkConnectedOverlayOpen]="optionsOpen" [cdkConnectedOverlayOffsetY]='3'
+  [cdkConnectedOverlayWidth]='cdkConnectedOverlayWidth' [cdkConnectedOverlayBackdropClass]="'transparent-overlay-back'"
+  (backdropClick)="backdropClick()">
+  <div class="open-nodes">
+    <div class="open-node" *ngIf="selectOptions.length == 0"> {{selectConfig.noneTip || '暂无数据'}}</div>
+    <div *ngTemplateOutlet="optionEl;context:{options:selectOptions}"></div>
+  </div>
+</ng-template>
+
+<ng-template #optionEl let-options="options">
+  <div class="open-node" *ngFor="let option of options">
+    <div class="node-content" [ngClass]='{"node-content-active": activeValues.includes(option.value) }'
+      (click)="onClickOptionNode(option)">
+      <div class="node-check" *ngIf="selectConfig.showCheck"></div>
+      <div class="node-content-text"><span>{{option.name}}</span></div>
+      <ng-container *ngIf="option.children && option.children.length > 0">
+        <i (click)="onClickOptionChild(option)" class="children-icon"
+          [ngClass]='{"open-children-icon":option.showChild}'></i>
+      </ng-container>
+    </div>
+    <ng-container *ngIf="option.showChild">
+      <div *ngTemplateOutlet="optionEl;context:{options:option.children}"></div>
+    </ng-container>
+  </div>
+</ng-template>

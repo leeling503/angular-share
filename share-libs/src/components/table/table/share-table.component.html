@@ -1,0 +1,62 @@
+<div class="share-table">
+  <div class="table-part" [class]="inClassNames">
+    <table>
+      <thead>
+        <tr class="table-thead">
+          <td *ngFor="let item of inItems" [ngClass]="{'is-sticky':item.styckyLeft}"
+            [ngStyle]="{'width': item.width+'px','left':item.styckyLeft}" [class]="item.classNames">
+            <ng-container [ngSwitch]="item.type">
+              <div *ngSwitchCase="'check'">
+                <share-checkbox [inIsChecked]='headAllSelect(tableDatas)' [inIsOther]='headMix(tableDatas)'
+                  [inIsFather]="true" (onClick)="checkThead($event,tableDatas)">
+                </share-checkbox>
+              </div>
+              <div *ngSwitchDefault>
+                <span>{{item.title}}</span>
+              </div>
+            </ng-container>
+          </td>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let data of tableDatas;index as i">
+          <tr>
+            <ng-container *ngFor="let item of inItems">
+              <td [ngClass]="{'is-sticky':item.styckyLeft}"
+                [ngStyle]="{'width': item.width+'px','left':item.styckyLeft}" [class]="item.classNames">
+                <ng-container [ngSwitch]="item.type">
+                  <div *ngSwitchCase="'check'">
+                    <share-checkbox [inIsChecked]='getDataCheckStatus(data)' [inIsDisable]="getDataDisableStatus(data)"
+                      (onClick)="checkedData($event, data)">
+                    </share-checkbox>
+                  </div>
+                  <div *ngSwitchCase="'serial'"> {{(page.currentPage-1)*page.pageRecord+i+1}}</div>
+                  <div *ngSwitchCase="'tag'">
+                    <span class="table-tag" [ngClass]="item.tagRule[data[item.property]].tagType">
+                      {{item.tagRule[data[item.property]].text}}
+                    </span>
+                  </div>
+                  <div *ngSwitchDefault>
+                    <span class="text-info">
+                      {{data[item.property]}}
+                    </span>
+                  </div>
+                </ng-container>
+              </td>
+            </ng-container>
+          </tr>
+        </ng-container>
+
+      </tbody>
+    </table>
+  </div>
+  <ng-container *ngIf="tableDatas.length == 0">
+    <div class="no-data">
+      无数据
+    </div>
+  </ng-container>
+  <div class="pagination-part">
+    <share-pagination [paginPageRecord]="pageRecordOptions" [paginPage]="page" (emitPageChange)="pageChange($event)">
+    </share-pagination>
+  </div>
+</div>

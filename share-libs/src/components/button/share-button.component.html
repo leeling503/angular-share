@@ -1,0 +1,8 @@
+<div class="share-button">
+  <i class="sl-button-per-icon" [class]="btnPerIcon" *ngIf="btnPerIcon"></i>
+  <span>
+    <ng-container *ngIf="btnText">{{btnText}}</ng-container>
+    <ng-content></ng-content>
+  </span>
+  <i class="sl-button-suf-icon" [class]="btnSufIcon" *ngIf="btnSufIcon"></i>
+</div>

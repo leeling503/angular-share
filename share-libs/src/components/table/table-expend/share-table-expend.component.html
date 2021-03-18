@@ -1,0 +1,66 @@
+<ng-template #expendEl class="table-expend-el">
+</ng-template>
+<div class="share-table">
+  <div class="table-part" [class]="inClassNames">
+    <table>
+      <thead>
+        <tr class="table-thead">
+          <td *ngFor="let item of inItems" [ngClass]="{'is-sticky':item.styckyLeft}"
+            [ngStyle]="{'width': item.width+'px','left':item.styckyLeft}" [class]="item.classNames">
+            <ng-container [ngSwitch]="item.type">
+              <div *ngSwitchCase="'check'">
+                <share-checkbox [inIsChecked]='headAllSelect' [inIsOther]='headMix' [inIsFather]="true"
+                  (onClick)="checkThead($event)">
+                </share-checkbox>
+              </div>
+              <div *ngSwitchDefault>
+                <span>{{item.title}}</span>
+              </div>
+            </ng-container>
+          </td>
+        </tr>
+      </thead>
+      <tbody [class.has-expend]="tableExpend">
+        <ng-container *ngFor="let data of tableDatas;index as i">
+          <tr>
+            <ng-container *ngFor="let item of inItems">
+              <td [ngClass]="{'is-sticky':item.styckyLeft}"
+                [ngStyle]="{'width': item.width+'px','left':item.styckyLeft}" [class]="item.classNames">
+                <ng-container [ngSwitch]="item.type">
+                  <div *ngSwitchCase="'check'">
+                    <share-checkbox [inIsChecked]='getDataCheckStatus(data)'
+                      [inIsDisable]="getDataDisableStatus(data)" (onClick)="checkedData($event, data)">
+                    </share-checkbox>
+                  </div>
+                  <div *ngSwitchCase="'serial'"> {{(page.currentPage-1)*page.pageRecord+i+1}}</div>
+                  <div *ngSwitchCase="'tag'">
+                    <span class="table-tag" [ngClass]="item.tagRule[data[item.property]].tagType">
+                      {{item.tagRule[data[item.property]].text}}
+                    </span>
+                  </div>
+                  <div *ngSwitchCase="'expend'">
+                    <div *ngIf="data[item.property]" (click)="expendLine(data[item.property],i)" class="expend-link">查看
+                    </div>
+                  </div>
+                  <div *ngSwitchDefault>
+                    {{data[item.property]}}
+                  </div>
+                </ng-container>
+              </td>
+            </ng-container>
+          </tr>
+          <tr *ngIf="tableExpend" [ngStyle]='{"display":i == expendIndex? "table":"none"}'>
+            <td *ngIf="i == expendIndex" [attr.colspan]="inItems.length"
+              [class.expend-element-td]=" i == expendIndex">
+              <ng-template *ngTemplateOutlet="expendEl"></ng-template>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
+  <div class="pagination-part">
+    <share-pagination [paginPageRecord]="pageRecordOptions" [paginPage]="page" (emitPageChange)="pageChange($event)">
+    </share-pagination>
+  </div>
+</div>

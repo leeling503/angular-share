@@ -1,0 +1,1 @@
+export type CheckType  =  "all" | "none" | "other";

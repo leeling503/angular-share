@@ -1,0 +1,7 @@
+<div class="share-date-picker" appDateRangePicker [rangePickerOpt]="inOptions" [inClearView]="clearValue"
+  (onDateChange)="onDateChange($event)" shareClearIcon (onClearValue)="onClearValue()" [inHasValue]="hasVal">
+  <input type="text" [placeholder]="inPlaceholder">
+  <div class="function-icons" [ngClass]="'has-split-line'">
+    <i class="date-day-icon-p"></i>
+  </div>
+</div>

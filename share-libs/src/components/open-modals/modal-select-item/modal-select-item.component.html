@@ -1,0 +1,12 @@
+<div class="modal-select-item">
+  <div *ngIf="propHasAll" class="select-item">
+    <share-checkbox [inIsChecked]="allCheckStatus" [inIsOther]='allMixStatus' [inIsFather]="true"
+      (onClick)="acceptCheckAll($event)"></share-checkbox>
+    <span>全选/反选</span>
+  </div>
+  <div *ngFor="let item of propItems" class="select-item">
+    <share-checkbox [inIsChecked]="checkedItemUuids.includes(item[uuid])" (onClick)="acceptCheck($event,item)">
+    </share-checkbox>
+    <span>{{item.value}}</span>
+  </div>
+</div>

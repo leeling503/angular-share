@@ -1,0 +1,57 @@
+//如果写了实体的.claaName{} ； 打包时所有引入了改less的less文件都会有该className
+@base-url: '../../assets/';
+
+.Icon(@iconUrl, @w: 16px, @h: @w) {
+  .share-icon(@iconUrl, @w: 16px, @h)
+}
+.Icon-P(@iconUrl, @w: 16px, @h: @w) {
+  .share-icon-position(@iconUrl, @w: 16px, @h)
+}
+.share-icon(@iconUrl, @w: 16px, @h: @w) {
+  display: inline-block;
+  width: @w;
+  height: @h;
+  min-width: @w;
+  min-height: @h;
+  cursor: pointer;
+  .background-image(@iconUrl);
+}
+.share-icon-position(@iconUrl, @w: 16px, @h: @w) {
+  display: inline-block;
+  width: @w;
+  height: @h;
+  min-width: @w;
+  min-height: @h;
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  right: 5px;
+  transform: translate(0,-50%);
+  .background-image(@iconUrl);
+}
+
+.background-image(@iconUrl) {
+  .imag-url(@iconUrl);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.imag-url(@url){
+  background-image: url('@{base-url}@{url}.png');
+}
+
+.F(@W: wrap) {
+  display: flex;
+  flex-wrap: @W;
+}
+
+.F-G(@G: 1) {
+  flex-grow: @G;
+}
+
+.F-C(@J: center, @A: center) {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

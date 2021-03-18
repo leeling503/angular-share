@@ -1,0 +1,54 @@
+<div class="share-table">
+  <div class="table-part" [class]="inClassNames">
+    <table>
+      <ng-container *ngFor="let tableItems of tableMultiItems;last as itemLast">
+        <thead>
+          <tr class="table-thead">
+            <td *ngFor="let item of tableItems.heads" [ngClass]="{'is-sticky':item.styckyLeft}"
+              [ngStyle]="{'width': item.width+'px','left':item.styckyLeft}" [class]="item.classNames">
+              <ng-container [ngSwitch]="item.type">
+                <div *ngSwitchCase="'check'">
+                  <share-checkbox [inIsChecked]='headAllSelect(tableItems.datas)' [inIsFather]="true"
+                    [inIsOther]='headMix(tableItems.datas)' (onClick)="checkThead($event,tableItems.datas)">
+                  </share-checkbox>
+                </div>
+                <div *ngSwitchDefault>
+                  <span>{{item.title}}</span>
+                </div>
+              </ng-container>
+            </td>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let data of tableItems.datas;index as i;last as dataLast">
+            <!--cancle-border 去掉多表头的前一个最后列边框-->
+            <tr [ngClass]="{'cancle-border':dataLast && !itemLast}">
+              <ng-container *ngFor="let item of tableItems.heads">
+                <td [ngClass]="{'is-sticky':item.styckyLeft}"
+                  [ngStyle]="{'width': item.width+'px','left':item.styckyLeft}" [class]="item.classNames">
+                  <ng-container [ngSwitch]="item.type">
+                    <div *ngSwitchCase="'check'">
+                      <share-checkbox [inIsChecked]='getDataCheckStatus(data)'
+                        [inIsDisable]="getDataDisableStatus(data)" (onClick)="checkedData($event, data)">
+                      </share-checkbox>
+                    </div>
+                    <div *ngSwitchCase="'serial'"> {{data.serial}}</div>
+                    <div *ngSwitchDefault>
+                      <span class="text-info" [title]="data[item.property]">
+                        {{data[item.property]}}
+                      </span>
+                    </div>
+                  </ng-container>
+                </td>
+              </ng-container>
+            </tr>
+          </ng-container>
+        </tbody>
+      </ng-container>
+    </table>
+  </div>
+  <div class="pagination-part">
+    <share-pagination [paginPageRecord]="pageRecordOptions" [paginPage]="page" (emitPageChange)="pageChange($event)">
+    </share-pagination>
+  </div>
+</div>

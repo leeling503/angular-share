@@ -1,0 +1,29 @@
+<nz-layout class="app-layout">
+  <!--头部导航栏-->
+  <div class="layout-header">
+    <app-header></app-header>
+  </div>
+  <nz-layout class="layout-content">
+    <div style="overflow: auto;" class="content-main" [ngClass]='{"menu-close":menuClose}'>
+      <!--侧边导航栏-->
+      <div class="left-sidebar">
+        <layout-sidebar></layout-sidebar>
+      </div>
+      <div class="router-content">
+        <!-- 路由复用tab -->
+        <div class="reuse-content-header">
+          <layout-content-header class="reuse-content-header"></layout-content-header>
+        </div>
+        <!--主体部分-->
+        <div class="layout-content-slimscroll">
+          <router-outlet></router-outlet>
+        </div>
+        <div class="layout-footer">
+          <i class="app-icon app-main-icon"></i>
+          <span> 河北省交通运输厅港航管理局航道处 Copyright ©2020</span>
+        </div>
+      </div>
+    </div>
+    <!--页脚-->
+  </nz-layout>
+</nz-layout>

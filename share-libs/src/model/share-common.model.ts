@@ -1,0 +1,1 @@
+export type ShareSize = "small" | "normal" | "large"

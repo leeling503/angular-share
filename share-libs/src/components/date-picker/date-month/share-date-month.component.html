@@ -1,0 +1,24 @@
+<div class="share-date-month" (click)="onToggleOpen()" shareClearIcon (onClearValue)="onClearValue()"
+  [inHasValue]="modelMonth">
+  <input type="text" [ngModel]="viewMonth" [placeholder]="inPlaceholder" cdkOverlayOrigin>
+  <div class="function-icons" [ngClass]="'has-split-line'">
+    <i class="pull-down-icon-p"></i>
+  </div>
+</div>
+
+<ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="cdkOverlayOrigin" [cdkConnectedOverlayHasBackdrop]="true"
+  [cdkConnectedOverlayBackdropClass]='"transparent-overlay-back"' [cdkConnectedOverlayOpen]="overlayOpen"
+  [cdkConnectedOverlayOffsetY]='3' (backdropClick)="onClose()">
+  <div class="month-plan overlay-plan">
+    <div class="month-year" *ngIf="inHasYear">
+      <div class="per-year" (click)="onGoYear(-1)"><i class="pull-down-icon-p"></i></div>
+      <div class="year-cont"><span>{{viewYear}}</span></div>
+      <div class="next-year" (click)="onGoYear(+1)"><i class="pull-down-icon-p"></i></div>
+    </div>
+    <div class="month-item" [ngClass]="{'active-item':month.id == monthValue}" *ngFor="let month of monthValues">
+      <div class="item" (click)="onSelectMonth(month)">
+        <span>{{month.name}}</span>
+      </div>
+    </div>
+  </div>
+</ng-template>
