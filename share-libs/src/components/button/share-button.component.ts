@@ -63,8 +63,8 @@ export class ShareButtonComponent implements OnInit {
 
   setClassMap() {
     let classMap = {
-      [`sl-button-size-${this.btnSize}`]: this.btnSize,
-      [`sl-button-type-${this.btnType}`]: this.btnType
+      [`sl-button-size-${this.btnSize}`]: true,
+      [`sl-button-type-${this.btnType}`]: true
     }
     this.upElClass.updateElClass(this.nativeEl.querySelector(".share-button"), classMap)
   }

@@ -10,14 +10,15 @@ import { SharePage, TableClassName, TableItem, TableSelect } from '../share-tabl
   templateUrl: './share-table.component.html',
   styleUrls: ['./share-table.component.less']
 })
-export  class  TableComponent implements OnInit {
+export class TableComponent implements OnInit {
   constructor(private http: ShareBaseService, private el: ElementRef) {
     this.nativeEl = this.el.nativeElement
   }
-  @Input() inApiUrl: string = [][0];//
-  @Input() inSearchObj: any;
+  @Input() inApiUrl: string = [][0];//后台url路径
+  @Input() inLoading: boolean = true;//后台异步获取数据时是否开启遮罩
+  @Input() inSearchObj: ShareBaseSearch;
   @Input() inItems: Array<TableItem> = [
-    { title: '', type: 'check', width: 60, styckyLeft: '0px' },
+    // { title: '', type: 'check', width: 60, styckyLeft: '0px' },
     { title: '序号', type: 'serial', width: 60, styckyLeft: '62px' },
     { title: '时间', property: 'taskDate', width: 150 },
     {
@@ -45,10 +46,11 @@ export  class  TableComponent implements OnInit {
     },
   ];
   @Input() inUuid: string = "id";//数据唯一标识
-  @Input() inAllDatas: any[] = [];//表格数据
+  @Input() inAllDatas: any[] = [];//传入的表格数据
   @Input() inSelectedDatas: Array<any> = [];//已经选中的数据
   @Input() inDisableDatas: Array<any> = [];//禁止改动选择状态的数据
-  @Input() inClassNames: TableClassName[] = ["simple-border","background-color"];
+  @Input() inClassNames: TableClassName[] = ["simple-border", "background-color"];
+  @Input() inCheckKey: string = "share-check";
   nativeEl: HTMLElement;
   tableDatas: any[] = [];//表格数据
   tableSelectedUuids: Array<string> = [];//选中的数据的唯一标识集合
@@ -56,7 +58,8 @@ export  class  TableComponent implements OnInit {
   page: SharePage = new SharePage();
   searchItem: ShareBaseSearch = new ShareBaseSearch();
   pageRecordOptions: number[] = [15, 20, 30, 50];
-  @Output() emitSelectChange: EventEmitter<TableSelect> = new EventEmitter();
+  loadingFlag: boolean = false;
+  @Output() onSelectChange: EventEmitter<TableSelect> = new EventEmitter();
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.searchObj && changes.searchObj.currentValue) {
@@ -77,7 +80,7 @@ export  class  TableComponent implements OnInit {
       this.page.recordCount = this.inAllDatas.length;
       this.page = Object.assign({}, this.page)
     }
-    this.onChanges(changes)
+    this.superChanges(changes)
   }
 
   ngAfterViewInit(): void {
@@ -91,12 +94,9 @@ export  class  TableComponent implements OnInit {
     }
   }
 
-  onChanges(changes: SimpleChanges) {
-  }
-
   ngOnInit(): void {
     this.setTableSelectedUuidsByDatas();
-    this.setTableDisableUuidsByDatas()
+    this.setTableDisableUuidsByDatas();
     // this.inAllDatas = [];
     // for (let i = 0; i < 100; i++) {
     //   let data = {
@@ -105,17 +105,25 @@ export  class  TableComponent implements OnInit {
     //   this.inAllDatas.push(data);
     // };
     this.getList();
-    this.superInit();
+    this.superInitAfter();
   }
 
-  superInit() { }
+  setTableSelectedUuidsByDatas() {
+    this.tableSelectedUuids = this.inSelectedDatas.map(e => e[this.inUuid])
+  }
+
+  setTableDisableUuidsByDatas() {
+    this.tableDisableUuids = this.inDisableDatas.map(e => e[this.inUuid])
+  }
 
   getList() {
+    this.superGetListBefor();
     if (this.inApiUrl) {
+      if (this.inLoading) {
+        this.loadingFlag = true;
+      }
       this.getDatasByHttp()
     } else {
-      this.page.recordCount = this.inAllDatas.length;
-      this.page = Object.assign({}, this.page);
       let page = this.page;
       let pageRecord = page.pageRecord;
       this.tableDatas = this.inAllDatas.slice((page.currentPage - 1) * pageRecord, page.currentPage * pageRecord);
@@ -125,6 +133,7 @@ export  class  TableComponent implements OnInit {
 
   getDatasByHttp() {
     this.http.post(this.inApiUrl, this.searchItem).subscribe((res: ShareResult) => {
+      this.loadingFlag = false;
       if (res.rlt == 0) {
         this.page = res.datas;
         this.tableDatas = res.datas && res.datas.result || [];
@@ -132,12 +141,16 @@ export  class  TableComponent implements OnInit {
       }
     })
   }
-  superGetListAfter(){};
 
-  checkThead(flag, datas = this.tableDatas) {
+  superChanges(changes: SimpleChanges) { }
+  superInitAfter() { }
+  superGetListBefor() { }
+  superGetListAfter() { };
+
+  checkThead(flag, datas = this.tableDatas, thead = this.inItems) {
     let changeDatas = []
     datas.forEach((e) => { if (!this.getDataDisableStatus(e)) { this.checkedData(flag, e, changeDatas) } });
-    this.emitSelectChange.emit(new TableSelect(flag, changeDatas, this.inSelectedDatas, this.tableSelectedUuids))
+    this.onSelectChange.emit(new TableSelect(flag, changeDatas, this.inSelectedDatas, this.tableSelectedUuids))
   }
 
   checkedData(flag, data, changeDatas: any[] = undefined) {
@@ -151,16 +164,8 @@ export  class  TableComponent implements OnInit {
     }
     changeDatas && changeDatas.push(data);
     if (!changeDatas) {
-      this.emitSelectChange.emit(new TableSelect(flag, [data], this.inSelectedDatas, this.tableSelectedUuids))
+      this.onSelectChange.emit(new TableSelect(flag, [data], this.inSelectedDatas, this.tableSelectedUuids))
     }
-  }
-
-  setTableSelectedUuidsByDatas() {
-    this.tableSelectedUuids = this.inSelectedDatas.map(e => e[this.inUuid])
-  }
-
-  setTableDisableUuidsByDatas() {
-    this.tableDisableUuids = this.inDisableDatas.map(e => e[this.inUuid])
   }
 
   pageChange(page: PaginationPage) {
@@ -171,7 +176,7 @@ export  class  TableComponent implements OnInit {
     this.getList();
   }
 
-
+  //以下方案待优化
   headMix(datas = this.tableDatas): boolean {
     let flag = datas.some(e => this.tableSelectedUuids.includes(e[this.inUuid]))
     return flag;
@@ -186,6 +191,7 @@ export  class  TableComponent implements OnInit {
     let flag = this.tableSelectedUuids.includes(data[this.inUuid])
     return flag;
   }
+
   getDataDisableStatus(data): boolean {
     let flag = this.tableDisableUuids.includes(data[this.inUuid])
     return flag;

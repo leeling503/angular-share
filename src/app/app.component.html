@@ -29,8 +29,8 @@
   </div>
 </ng-template> -->
 <div class="app">
-  <share-table-multi-head></share-table-multi-head>
-  <share-table></share-table>
+  <share-table-multi-head (onSelectChange)="onSelectChange($event)"></share-table-multi-head>
+  <share-table [inApiUrl]="'api/Statuslist/getList'" [inItems]="inItems"></share-table>
   <share-checkbox [inIsOther]='false'></share-checkbox>
   <!-- <share-pagination></share-pagination> -->
   <share-pagination [paginPage]='paginPage' [paginSize]="'big'"></share-pagination>

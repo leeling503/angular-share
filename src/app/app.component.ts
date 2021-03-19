@@ -1,6 +1,7 @@
 import { Component, Injector, ChangeDetectorRef, TemplateRef } from '@angular/core';
 import { TimeRange } from 'share-libs/src/components/date-picker/share-date-picker.model';
 import { PaginationPage } from 'share-libs/src/components/pagination/share-pagination.model';
+import { TableItem } from 'share-libs/src/components/table/share-table.model';
 
 @Component({
   selector: 'app-root',
@@ -105,7 +106,32 @@ export class AppComponent {
   year;
   dateRange: '';
   month;
-  modelMonthChange(m){
+  modelMonthChange(m) {
     console.log(m)
   }
+  onSelectChange(item) {
+    console.log(item)
+  }
+
+  inItems: Array<TableItem> = [
+    { title: '', type: 'check', width: 60, styckyLeft: '0px' },
+    { title: '序号', type: 'serial', width: 60, styckyLeft: '62px' },
+    { title: '时间', property: 'aidsCode', width: 150 },
+    { title: '变更内容', property: 'aidsName', width: 200 },
+    {
+      title: '报文类型', property: 'commModeCodeName', width: 180
+    },
+    { title: '操作用户', property: 'userName', width: 180 },
+    {
+      title: '执行结果', property: 'ifBind', type: "tag", width: 180, tagRule: [
+        { value: 0, text: '成功', tagType: 'success' },
+        { value: 1, text: '失败', tagType: 'danger' },
+        { value: 2, text: '队列中', tagType: 'default' },
+        { value: 3, text: '等待回复', tagType: 'default' },
+      ]
+    },
+    {
+      title: '参数详情', property: 'targetingName', type: "expend", width: 60
+    },
+  ]
 }

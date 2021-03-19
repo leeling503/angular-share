@@ -1,4 +1,4 @@
-<div class="share-table">
+<div class="share-table" share-loading [inLoading]="loadingFlag">
   <div class="table-part" [class]="inClassNames">
     <table>
       <thead>
@@ -7,8 +7,8 @@
             [ngStyle]="{'width': item.width+'px','left':item.styckyLeft}" [class]="item.classNames">
             <ng-container [ngSwitch]="item.type">
               <div *ngSwitchCase="'check'">
-                <share-checkbox [inIsChecked]='headAllSelect(tableDatas)' [inIsOther]='headMix(tableDatas)'
-                  [inIsFather]="true" (onClick)="checkThead($event,tableDatas)">
+                <share-checkbox [inIsChecked]='headAllSelect()' [inIsOther]='headMix()' [inIsFather]="true"
+                  (onClick)="checkThead($event)">
                 </share-checkbox>
               </div>
               <div *ngSwitchDefault>

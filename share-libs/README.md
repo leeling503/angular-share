@@ -5,3 +5,4 @@
 
 
 npm i @types/daterangepicker --save-dev
+package.json 加入 --proxy-config proxy.conf.json  添加代理  

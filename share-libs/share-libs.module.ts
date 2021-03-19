@@ -1,13 +1,9 @@
 
 import { NgModule } from '@angular/core';
-import { HasAnyAuthorityDirective } from './src/directives/has-any-authority.directive';
 import modules from 'share-libs';
+import { ShareDirectiveModule } from './src/directives/share-directive.module';
 
 @NgModule({
-  declarations: [HasAnyAuthorityDirective],
-  imports: [
-    ...modules
-  ],
-  exports: [...modules, HasAnyAuthorityDirective]
+  exports: [...modules, ShareDirectiveModule]
 })
 export class ShareLibsModule { }

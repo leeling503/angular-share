@@ -45,6 +45,7 @@ export class TableSelect {
 }
 
 export interface TableMultiItem extends TableItem {
+    checkFlag?: boolean;
     keyCode: string;//多表头中keyCode相同的 title会在同一列
 }
 //对表头html使用 ，heads表示表头 ， datas表示对应该表头的数据

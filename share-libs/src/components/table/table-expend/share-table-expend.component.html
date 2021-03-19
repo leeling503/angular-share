@@ -1,6 +1,6 @@
 <ng-template #expendEl class="table-expend-el">
 </ng-template>
-<div class="share-table">
+<div class="share-table" share-loading [inLoading]="loadingFlag">
   <div class="table-part" [class]="inClassNames">
     <table>
       <thead>
@@ -9,8 +9,8 @@
             [ngStyle]="{'width': item.width+'px','left':item.styckyLeft}" [class]="item.classNames">
             <ng-container [ngSwitch]="item.type">
               <div *ngSwitchCase="'check'">
-                <share-checkbox [inIsChecked]='headAllSelect' [inIsOther]='headMix' [inIsFather]="true"
-                  (onClick)="checkThead($event)">
+                <share-checkbox [inIsChecked]='headAllSelect()' [inIsOther]='headMix()'
+                  [inIsFather]="true" (onClick)="checkThead($event)">
                 </share-checkbox>
               </div>
               <div *ngSwitchDefault>
@@ -28,8 +28,8 @@
                 [ngStyle]="{'width': item.width+'px','left':item.styckyLeft}" [class]="item.classNames">
                 <ng-container [ngSwitch]="item.type">
                   <div *ngSwitchCase="'check'">
-                    <share-checkbox [inIsChecked]='getDataCheckStatus(data)'
-                      [inIsDisable]="getDataDisableStatus(data)" (onClick)="checkedData($event, data)">
+                    <share-checkbox [inIsChecked]='getDataCheckStatus(data)' [inIsDisable]="getDataDisableStatus(data)"
+                      (onClick)="checkedData($event, data)">
                     </share-checkbox>
                   </div>
                   <div *ngSwitchCase="'serial'"> {{(page.currentPage-1)*page.pageRecord+i+1}}</div>
@@ -50,8 +50,7 @@
             </ng-container>
           </tr>
           <tr *ngIf="tableExpend" [ngStyle]='{"display":i == expendIndex? "table":"none"}'>
-            <td *ngIf="i == expendIndex" [attr.colspan]="inItems.length"
-              [class.expend-element-td]=" i == expendIndex">
+            <td *ngIf="i == expendIndex" [attr.colspan]="inItems.length" [class.expend-element-td]=" i == expendIndex">
               <ng-template *ngTemplateOutlet="expendEl"></ng-template>
             </td>
           </tr>

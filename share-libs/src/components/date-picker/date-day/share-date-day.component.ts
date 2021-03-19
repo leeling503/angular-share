@@ -6,7 +6,7 @@ import { TimeRange } from '../share-date-picker.model';
     templateUrl: './share-date-day.component.html',
     styleUrls: ['./share-date-day.component.less'],
 })
-export class ShareDatePickerComponent {
+export class ShareDateDayComponent {
     @Input() modelDay: string | TimeRange;//初始时间
     @Input() inPlaceholder: string;
     @Input() inIsSingle: boolean = true;//单日期选择器，如果传入对象会强制改为双日期，此设置会失效

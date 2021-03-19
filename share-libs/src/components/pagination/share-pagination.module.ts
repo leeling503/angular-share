@@ -8,8 +8,8 @@ import { PortalModule } from '@angular/cdk/portal';
 import { OverlayModule } from '@angular/cdk/overlay';
 
 @NgModule({
-    imports: [CommonModule, FormsModule, PortalModule , OverlayModule],
-    declarations: [SharePaginationComponent, ShareInputNumberDirective],
+    imports: [CommonModule, FormsModule, PortalModule, OverlayModule],
+    declarations: [SharePaginationComponent],
     exports: [SharePaginationComponent]
 })
 export class SharePaginationModule { }
