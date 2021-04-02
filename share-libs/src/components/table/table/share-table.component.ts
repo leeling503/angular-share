@@ -1,7 +1,6 @@
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { Component, OnInit, SimpleChanges, Input, Output, EventEmitter, ElementRef } from '@angular/core';
-import { ShareBaseSearch, ShareResult } from 'share-libs/src/model';
-import { ShareBaseService } from 'share-libs/src/servers';
+import { ShareBaseSearch, ShareResult } from 'share-libs/src/models';
+import { ShareBaseHttpService } from 'share-libs/src/services';
 import { PaginationPage } from '../../pagination/share-pagination.model';
 import { SharePage, TableClassName, TableItem, TableSelect } from '../share-table.model';
 
@@ -11,30 +10,34 @@ import { SharePage, TableClassName, TableItem, TableSelect } from '../share-tabl
   styleUrls: ['./share-table.component.less']
 })
 export class TableComponent implements OnInit {
-  constructor(private http: ShareBaseService, private el: ElementRef) {
+  constructor(private http: ShareBaseHttpService, private el: ElementRef) {
     this.nativeEl = this.el.nativeElement
   }
-  @Input() inApiUrl: string = [][0];//后台url路径
-  @Input() inLoading: boolean = true;//后台异步获取数据时是否开启遮罩
+  /**后台url路径 */
+  @Input() inApiUrl: string = [][0];
+  /**后台异步获取数据时是否开启遮罩  默认true*/
+  @Input() inLoading: boolean = true;
+  /**后台异步获取数据时搜索条件 */
   @Input() inSearchObj: ShareBaseSearch;
+  /**表头配置  true*/
   @Input() inItems: Array<TableItem> = [
-    // { title: '', type: 'check', width: 60, styckyLeft: '0px' },
-    { title: '序号', type: 'serial', width: 60, styckyLeft: '62px' },
-    { title: '时间', property: 'taskDate', width: 150 },
+    { title: '', type: 'check', width: 60, canFilter: false, styckyLeft: '0px' },
+    { title: '序号', type: 'serial', width: 60, canFilter: false, styckyLeft: '62px', },
+    { title: '时间', key: 'taskDate', width: 150, canFilter: false },
     {
-      title: '收/发', property: 'connectDirect', width: 90, type: "tag",
+      title: '收/发', key: 'connectDirect', width: 90, type: "tag",
       tagRule: [
         { tagType: 'org', value: '0', text: '发送' },
         { tagType: 'primary', value: '1', text: '接收' }
       ]
     },
-    { title: '变更内容', property: 'detail', width: 200 },
+    { title: '变更内容', key: 'detail', width: 200 },
     {
-      title: '报文类型', property: 'type', width: 180
+      title: '报文类型', key: 'type', width: 180
     },
-    { title: '操作用户', property: 'userName', width: 180 },
+    { title: '操作用户', key: 'userName', width: 180 },
     {
-      title: '执行结果', property: 'exeResult', type: "tag", width: 180, tagRule: [
+      title: '执行结果', key: 'exeResult', type: "tag", width: 180, tagRule: [
         { value: 0, text: '成功', tagType: 'success' },
         { value: 1, text: '失败', tagType: 'danger' },
         { value: 2, text: '队列中', tagType: 'default' },
@@ -42,20 +45,30 @@ export class TableComponent implements OnInit {
       ]
     },
     {
-      title: '参数详情', property: 'parameterId', type: "expend", width: 60
+      title: '参数详情', key: 'parameterId', type: "expend", width: 60
     },
   ];
-  @Input() inUuid: string = "id";//数据唯一标识
-  @Input() inAllDatas: any[] = [];//传入的表格数据
-  @Input() inSelectedDatas: Array<any> = [];//已经选中的数据
-  @Input() inDisableDatas: Array<any> = [];//禁止改动选择状态的数据
-  @Input() inClassNames: TableClassName[] = ["simple-border", "background-color"];
+  /**表格数据的唯一标识key  默认id*/
+  @Input() inUuid: string = "id";
+  /**非后台获取时传入的表格数据 */
+  @Input() inAllDatas: any[] = [];
+  /**已经选中的表格数据 */
+  @Input() inSelectedDatas: Array<any> = [];
+  /**禁止改动选择状态的数据 */
+  @Input() inDisableDatas: Array<any> = [];
+  /**表格样式  "border" | "simple-border" | "background-color"*/
+  @Input() inClassNames: TableClassName[] = ["border", "background-color"];
+
   @Input() inCheckKey: string = "share-check";
   nativeEl: HTMLElement;
-  tableDatas: any[] = [];//表格数据
-  tableSelectedUuids: Array<string> = [];//选中的数据的唯一标识集合
-  tableDisableUuids: Array<string> = [];//禁用数据的唯一标识集合
+  /**表格数据 */
+  tableDatas: any[] = [];//
+  /**选中的数据的唯一标识集合 */
+  tableSelectedUuids: Array<string> = [];
+  /**禁用数据的唯一标识集合 */
+  tableDisableUuids: Array<string> = [];
   page: SharePage = new SharePage();
+  paginPage: SharePage = new SharePage();
   searchItem: ShareBaseSearch = new ShareBaseSearch();
   pageRecordOptions: number[] = [15, 20, 30, 50];
   loadingFlag: boolean = false;
@@ -78,25 +91,52 @@ export class TableComponent implements OnInit {
     if (changes.inAllDatas && this.inAllDatas.length > 0) {
       //用户自己传入表格数据非后台查询
       this.page.recordCount = this.inAllDatas.length;
-      this.page = Object.assign({}, this.page)
+      // this.paginPage = Object.assign({}, this.page)
     }
     this.superChanges(changes)
   }
 
   ngAfterViewInit(): void {
-    let allWith = 0;
-    this.inItems.forEach(e => e.width && (allWith += e.width) || e.widthMin && (allWith += e.widthMin) || (allWith += 60))
+    this.setTableWidth();
+  }
+
+  setTableWidth() {
+    let allWith = 0, computeWidth = 0, len = this.inItems.length - 1;;
+    this.inItems.forEach(e => {
+      if (e.ifShow !== false) {
+        allWith += (e.width || e.widthMin || 60);
+        if (!e.styckyLeft) {
+          computeWidth += (e.width || e.widthMin || 60)
+        }
+      }
+    })
     let tableWidth = this.nativeEl.querySelector('.share-table').clientWidth;
+    if (this.inClassNames.includes('border')) {
+      tableWidth -= (len + 2)
+    }
     if (tableWidth <= allWith) {
       Promise.resolve().then(res => {
-        this.inItems.forEach(e => e.width || (e.widthMin && (e.width = e.widthMin)) || (e.width = 60))
+        this.inItems.forEach(e => e._width = e.width || e.widthMin || 60)
+      })
+    } else if (tableWidth > allWith) {
+      let extraWidth = tableWidth, len = this.inItems.length - 1;
+      Promise.resolve().then(res => {
+        this.inItems.forEach((e, i) => {
+          if (i === len) {
+            e._width = extraWidth;
+          } else if (e.styckyLeft) {
+            e._width = e.width;
+          } else {
+            e._width = (extraWidth * e.width / computeWidth) | 0;
+            computeWidth -= e.width;
+          }
+          extraWidth -= e._width;
+        })
       })
     }
   }
 
   ngOnInit(): void {
-    this.setTableSelectedUuidsByDatas();
-    this.setTableDisableUuidsByDatas();
     // this.inAllDatas = [];
     // for (let i = 0; i < 100; i++) {
     //   let data = {
@@ -104,6 +144,10 @@ export class TableComponent implements OnInit {
     //   }
     //   this.inAllDatas.push(data);
     // };
+    // this.page.recordCount = this.inAllDatas.length;
+    this.paginPage = Object.assign({}, this.page)
+    this.setTableSelectedUuidsByDatas();
+    this.setTableDisableUuidsByDatas();
     this.getList();
     this.superInitAfter();
   }
@@ -124,7 +168,7 @@ export class TableComponent implements OnInit {
       }
       this.getDatasByHttp()
     } else {
-      let page = this.page;
+      let page = this.page = this.paginPage;
       let pageRecord = page.pageRecord;
       this.tableDatas = this.inAllDatas.slice((page.currentPage - 1) * pageRecord, page.currentPage * pageRecord);
       this.superGetListAfter();
@@ -136,6 +180,7 @@ export class TableComponent implements OnInit {
       this.loadingFlag = false;
       if (res.rlt == 0) {
         this.page = res.datas;
+        this.paginPage = Object.assign({}, this.page);
         this.tableDatas = res.datas && res.datas.result || [];
         this.superGetListAfter();
       }
@@ -169,11 +214,15 @@ export class TableComponent implements OnInit {
   }
 
   pageChange(page: PaginationPage) {
-    let currentPage = page.currentPage;
-    let pageRecord = page.pageRecord;
+    let currentPage = page.currentPage, pageRecord = page.pageRecord;
     if (this.searchItem.currentPage == currentPage && this.searchItem.pageRecord == pageRecord) return;
     Object.assign(this.searchItem, { currentPage, pageRecord });
     this.getList();
+  }
+
+  /** 表头显示列有改变 */
+  onChangeItemFilter() {
+    this.setTableWidth();
   }
 
   //以下方案待优化

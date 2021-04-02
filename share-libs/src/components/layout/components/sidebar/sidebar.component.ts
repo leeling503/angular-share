@@ -1,7 +1,7 @@
 import { Menu } from './../../models/menu';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
-import { GlobalState } from 'share-libs/src/servers/global.state';
+import { GlobalState } from 'share-libs/src/services/global-event';
 import { GONGSI_MENUS, SETTING_MENU } from '../../layout.menu';
 import { UrlMenuService } from '../../services/url-menu.service';
 import { filter } from 'rxjs/operators';

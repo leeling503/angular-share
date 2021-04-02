@@ -12,9 +12,6 @@ import { PortalModule } from '@angular/cdk/portal';
   declarations: [ShareModalComponent],
   entryComponents: [ShareModalComponent],
   providers: [],
-  exports: [
-    ShareModalComponent,
-    OverlayModule,
-    PortalModule]
+  exports: [ShareModalComponent]
 })
 export class ShareModalModule { }

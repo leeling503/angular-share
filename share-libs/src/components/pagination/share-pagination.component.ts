@@ -77,44 +77,49 @@ export class SharePaginationComponent {
     }
 
     jumpTo(type: JumpType) {
+        let currentPage = 0;
         switch (type) {
             case 'first':
-                this.paginPage.currentPage = 1;
+                currentPage = 1;
                 break;
             case 'prev':
-                this.paginPage.currentPage = this.paginPage.currentPage - 1 || 1;
+                currentPage = this.paginPage.currentPage - 1 || 1;
                 break;
             case 'next':
-                this.paginPage.currentPage = this.paginPage.currentPage + 1 > this.paginPage.pageCount ? this.paginPage.pageCount : this.paginPage.currentPage + 1;
+                currentPage = this.paginPage.currentPage + 1 > this.paginPage.pageCount ? this.paginPage.pageCount : this.paginPage.currentPage + 1;
                 break;
             case 'last':
-                this.paginPage.currentPage = this.paginPage.pageCount;
+                currentPage = this.paginPage.pageCount;
                 break;
             case 'prev5':
-                this.paginPage.currentPage = this.paginPage.currentPage - 5;
+                currentPage = this.paginPage.currentPage - 5;
                 break;
             case 'next5':
-                this.paginPage.currentPage = this.paginPage.currentPage + 5;
+                currentPage = this.paginPage.currentPage + 5;
                 break;
             case 'num':
                 if (!this.inputNum) {
                     return;
                 }
-                this.paginPage.currentPage = parseInt(this.inputNum);
+                currentPage = parseInt(this.inputNum);
                 this.inputNum = null;
                 break;
         }
+        if (this.paginPage.currentPage == currentPage) { return };
+        this.paginPage.currentPage = currentPage;
         this.getPaginationButtons();
         this.emitPage();
     }
 
     jumpToNum(i: number) {
+        if (this.paginPage.currentPage == i) { return };
         this.paginPage.currentPage = i;
         this.getPaginationButtons();
         this.emitPage();
     }
 
     pageRecordChange(pageRecord) {
+        if (this.paginPage.pageRecord == pageRecord) { return };
         this.paginPage.pageRecord = pageRecord;
         this.initPage();
         this.emitPage();

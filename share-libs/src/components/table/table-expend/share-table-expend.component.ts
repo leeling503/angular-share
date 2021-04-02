@@ -1,6 +1,5 @@
-import { Component, OnInit, SimpleChanges, ElementRef, Renderer2, Input, Output, EventEmitter } from '@angular/core';
-import { ShareBaseSearch, ShareResult } from 'share-libs/src/model';
-import { ShareBaseService } from 'share-libs/src/servers';
+import { Component, OnInit, ElementRef, Renderer2, Input, Output, EventEmitter } from '@angular/core';
+import { ShareBaseHttpService } from 'share-libs/src/services';
 import { TableComponent } from '../table/share-table.component';
 
 @Component({
@@ -9,12 +8,12 @@ import { TableComponent } from '../table/share-table.component';
   styleUrls: ['./share-table-expend.component.less']
 })
 export class TableExpendComponent extends TableComponent implements OnInit {
-  constructor(http: ShareBaseService, el: ElementRef) {
+  constructor(http: ShareBaseHttpService, el: ElementRef) {
     super(http, el);
   }
   tableExpend: boolean = false;//是否有展开列
   expendIndex: number = [][0];//展开列序号
-  
+
   superInitAfter() {
     this.expendIndex = [][0];
     this.tableExpend = this.inItems.some(e => e.type == 'expend');

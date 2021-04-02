@@ -2,7 +2,7 @@ import { OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { TemplateRef, Type, ComponentRef } from '@angular/core';
 import { ShareModalComponent } from './modal.component';
 
-export interface ShareModalPara<T = any, M = ShareModalComponent> {
+export interface ShareModalPara<T = any, M = ShareModalComponent<T>> {
     modalWidth?: number;//弹框宽度
     modalHeight?: number;//弹框高度
     modalPara?: Partial<M>;//ShareModalComponent的属性

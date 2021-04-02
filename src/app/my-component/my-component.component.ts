@@ -18,7 +18,7 @@ export class MyComponentComponent implements OnInit, OnChanges {
   @Input() data: any = {};
   ngOnInit() {
     // this.modalRef.setEmitData("MyComponentComponent setEmitData")
-    console.log(this.modalRef.getInstance())
+    // console.log(this.modalRef.getInstance())
   }
 
 }

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { GlobalState } from 'share-libs/src/servers/global.state';
+import { GlobalState } from 'share-libs/src/services/global-event';
 @Component({
   selector: 'app-layout',
   templateUrl: 'layout.component.html',

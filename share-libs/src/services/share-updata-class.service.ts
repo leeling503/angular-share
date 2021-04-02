@@ -3,7 +3,7 @@ import { Injectable, Renderer2, RendererFactory2 } from "@angular/core";
 @Injectable({
     providedIn: 'root'
 })
-export class UpdataElClassService {
+export class ShareUpdataClassService {
     private classMap = {};
     readonly renderer: Renderer2;
     constructor(rendererFactory2: RendererFactory2) {

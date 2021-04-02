@@ -96,6 +96,7 @@ export class DateRangePickerDirective implements OnInit, OnChanges, OnDestroy {
     }
 
     ngOnDestroy(): void {
+        this.daterangepicker.remove();
         this.datepicker = null;
     }
 

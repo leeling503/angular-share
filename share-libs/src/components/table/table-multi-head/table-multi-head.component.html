@@ -1,5 +1,9 @@
 <div class="share-table">
   <div class="table-part" [class]="inClassNames">
+    <ng-container>
+      <filter-head [inFilterKey]="'keyCode'" [inItems]="tableMultiItems" (onChangeItemFilter)="onChangeItemFilter()">
+      </filter-head>
+    </ng-container>
     <table>
       <ng-container *ngFor="let tableItems of tableMultiItems;last as itemLast">
         <thead>
@@ -8,7 +12,7 @@
               [ngStyle]="{'width': item.width+'px','left':item.styckyLeft}" [class]="item.classNames">
               <ng-container [ngSwitch]="item.type">
                 <div *ngSwitchCase="'check'">
-                  <share-checkbox [inIsChecked]='headAllSelect(tableItems.datas)' [inIsFather]="true"
+                  <share-checkbox [modelChecked]='headAllSelect(tableItems.datas)' [inIsFather]="true"
                     [inIsOther]='headMix(tableItems.datas)' (onClick)="checkThead($event,tableItems.datas)">
                   </share-checkbox>
                 </div>
@@ -28,14 +32,14 @@
                   [ngStyle]="{'width': item.width+'px','left':item.styckyLeft}" [class]="item.classNames">
                   <ng-container [ngSwitch]="item.type">
                     <div *ngSwitchCase="'check'">
-                      <share-checkbox [inIsChecked]='getDataCheckStatus(data)'
+                      <share-checkbox [modelChecked]='getDataCheckStatus(data)'
                         [inIsDisable]="getDataDisableStatus(data)" (onClick)="checkedData($event, data)">
                       </share-checkbox>
                     </div>
                     <div *ngSwitchCase="'serial'"> {{data.serial}}</div>
                     <div *ngSwitchDefault>
-                      <span class="text-info" [title]="data[item.property]">
-                        {{data[item.property]}}
+                      <span class="text-info" [title]="data[item.key]">
+                        {{data[item.key]}}
                       </span>
                     </div>
                   </ng-container>
@@ -48,7 +52,8 @@
     </table>
   </div>
   <div class="pagination-part">
-    <share-pagination [paginPageRecord]="pageRecordOptions" [paginPage]="page" (emitPageChange)="pageChange($event)">
+    <share-pagination [paginPageRecord]="pageRecordOptions" [paginPage]="paginPage"
+      (emitPageChange)="pageChange($event)">
     </share-pagination>
   </div>
 </div>

@@ -1,5 +1,5 @@
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
-import { ShareOverlayService } from './../../servers/share-overlay.service';
+import { ShareOverlayService } from '../../services/share-overlay.service';
 
 import { Injectable, ComponentRef } from '@angular/core';
 import { ShareModalPara } from './share-modal.model';
@@ -11,14 +11,14 @@ import { ShareModalRef } from './modalRef.service';
 })
 export class ShareModalService {
     private overlayRef: OverlayRef
-    private modalRef: ComponentRef<ShareModalComponent> | null; // Modal ComponentRef, "null" means it has been destroyed
+    private modalRef: ComponentRef<ShareModalComponent<any>> | null; // Modal ComponentRef, "null" means it has been destroyed
     constructor(private shareOverlayer: ShareOverlayService, private overlay: Overlay) { }
 
     getOverlayRef(): OverlayRef {
         return this.overlayRef;
     }
 
-    getModalRef(): ComponentRef<ShareModalComponent> {
+    getModalRef<T>(): ComponentRef<ShareModalComponent<T>> {
         return this.modalRef;
     }
 
@@ -26,31 +26,23 @@ export class ShareModalService {
      * 打开弹窗
      * @param para ShareModalPara
      */
-    openModal<T>(para: ShareModalPara<T> = {}): ShareModalRef<T> {
+    openModal(para: ShareModalPara = {}): ShareModalRef {
         para.modalPara = para.modalPara || {};
         this.overlayRef && this.overlayRef.detach();
         this.createModal(para);
         return this.modalRef.instance;
     }
 
-    createModal(para: ShareModalPara): void {
+    private createModal<T>(para: ShareModalPara<T>): void {
         let config = para.overlayerConfig || {};
-        let positionStrategy = this.shareOverlayer.getBodyPositionStrategy({ centerHorizontally: true, centerVertically: true })
-        config.positionStrategy = positionStrategy;
-        this.overlayRef = this.overlay.create(config);
-        this.modalRef = this.overlayRef.attach(new ComponentPortal(ShareModalComponent));
-        para.modalPara.overlayRef = this.overlayRef;
-        this.changeProps(para);
-    }
-
-    private changeProps(options: ShareModalPara): void {
-        if (this.modalRef) {
-            if (options.modalComponent) {
-                options.modalPara.modalComponent = options.modalComponent;
-                options.modalPara.modalComponentPara = options.modalComponentPara || {};
-            }
-            Object.assign(this.modalRef.instance, options.modalPara);
+        let showOverlay = this.shareOverlayer.showComponent(new ComponentPortal(ShareModalComponent), undefined, config);
+        this.modalRef = showOverlay.modalRef;
+        para.modalPara.overlayRef = showOverlay.overlayRef;
+        if (para.modalComponent) {
+            para.modalPara.modalComponent = para.modalComponent;
+            para.modalPara.modalComponentPara = para.modalComponentPara || {};
         }
+        this.shareOverlayer.instanceComponent(showOverlay, para.modalPara);
     }
 
 }

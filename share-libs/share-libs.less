@@ -2,14 +2,6 @@
 @import "@angular/cdk/overlay-prebuilt.css";
 @import "./styles/index.less";
 
-.sl-share-overlay-center-panel {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 2000;
-}
-
 //半透明遮罩
 .overlay-shade {
   background-color: rgba(51, 51, 51, 0.25);
@@ -72,4 +64,10 @@
   100% {
     transform: translate(-50%, -50%) rotateZ(360deg);
   }
+}
+
+.share-overlay-panel {
+  background-color: #FFF;
+  border: 1px solid @C-blue-b;
+  border-radius: 5px;
 }

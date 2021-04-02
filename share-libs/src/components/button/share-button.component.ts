@@ -1,12 +1,12 @@
-import { BtnPara, defaultBtn, BtnType, BtnSize } from './share-buttom';
+import { BtnPara, BtnType, BtnSize } from './share-buttom';
 import { Component, OnInit, Input, ElementRef, RendererFactory2, Renderer2, SimpleChanges, Output, EventEmitter } from '@angular/core';
-import { UpdataElClassService } from '../../servers/updata-el-class.service';
+import { ShareUpdataClassService } from '../../services/share-updata-class.service';
 
 @Component({
   selector: 'share-button,[share-button]',
   templateUrl: './share-button.component.html',
   styleUrls: ['./share-button.component.less'],
-  providers: [UpdataElClassService],
+  providers: [ShareUpdataClassService],
   host: {
     "(click)": "triggerClick()"
   }
@@ -24,7 +24,7 @@ export class ShareButtonComponent implements OnInit {
   nativeEl: HTMLElement;
   renderer2: Renderer2;
   classMap: any = {};
-  constructor(private el: ElementRef, private rendeFactory: RendererFactory2, private upElClass: UpdataElClassService) {
+  constructor(private el: ElementRef, private rendeFactory: RendererFactory2, private upElClass: ShareUpdataClassService) {
     this.nativeEl = this.el.nativeElement;
     this.renderer2 = this.rendeFactory.createRenderer(null, null)
   }

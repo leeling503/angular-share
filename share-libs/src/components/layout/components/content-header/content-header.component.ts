@@ -5,12 +5,12 @@ import { UrlMenuService } from '../../services/url-menu.service';
 import { Menu } from '../../models';
 import { ReuseTabService } from 'share-libs/src/components/route-reuse/reuse-tab.service';
 import { TemplatePortal, CdkPortal } from '@angular/cdk/portal';
-import { SlOverlayService, OverlayPosition } from 'share-libs/src/servers/sl-overlay.service';
+import { ShareOverlayPosition, ShareOverlayService } from 'share-libs/src/services/share-overlay.service';
 @Component({
   selector: 'layout-content-header',
   templateUrl: './content-header.component.html',
   styleUrls: ['./content-header.component.less'],
-  providers:[SlOverlayService]
+  providers: [ShareOverlayService]
 })
 export class ContentHeaderComponent {
   reuseMenus: Menu[] = [];
@@ -19,7 +19,7 @@ export class ContentHeaderComponent {
   constructor(
     private _router: Router,
     private menuUrlS: UrlMenuService,
-    private slOverlay: SlOverlayService,
+    private slOverlay: ShareOverlayService,
     private reuseTab$: ReuseTabService) { }
   ngOnInit(): void {
     this.addMenu()
@@ -64,12 +64,11 @@ export class ContentHeaderComponent {
   openContextmenu(event: MouseEvent, menu: Menu) {
     event.preventDefault();
     this.contextMenu = menu;
-    let position: OverlayPosition = {
-      type: 'flexible',
+    let position: ShareOverlayPosition = {
+      type: 'event',
       event,
-      backdrop: false
     }
-    this.slOverlay.showOverlay(position, this.templateCDKPortal);
+    this.slOverlay.createOverlay(this.templateCDKPortal, position);
   }
 
   contextMenu: Menu;
@@ -87,7 +86,7 @@ export class ContentHeaderComponent {
   }
 
   @HostListener('body:click')
-  clearOverlay(){
+  clearOverlay() {
     this.slOverlay.clearOverlay();
   }
 

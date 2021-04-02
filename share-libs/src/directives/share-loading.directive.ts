@@ -1,5 +1,4 @@
-import { Directive, ElementRef, Input, NgModule, Renderer2, SimpleChanges } from "@angular/core";
-import { UpdataElClassService } from "../servers";
+import { Directive, ElementRef, Input, Renderer2, SimpleChanges } from "@angular/core";
 
 @Directive({
     selector: '[share-loading],share-loading'

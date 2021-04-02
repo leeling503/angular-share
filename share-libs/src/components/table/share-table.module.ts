@@ -6,15 +6,28 @@ import { SharePaginationModule } from '../pagination/share-pagination.module';
 import { ShareDirectiveModule } from 'share-libs/src/directives/share-directive.module';
 import { TableExpendComponent } from './table-expend/share-table-expend.component';
 import { TableMultiHeadComponent } from './table-multi-head/table-multi-head.component';
+import { FilterTableHeadComponent } from './filter-table-head/filter-table-head.component';
+import { OverlayModule } from '@angular/cdk/overlay';
+import { PortalModule } from '@angular/cdk/portal';
+import { FormsModule } from '@angular/forms';
+import { ShareInputComponent } from '../input/share-input.component';
+import { ShareInputModule } from '../input/share-input.module';
+import { ShareOpenModalsModule } from '../open-modals/open-modals.module';
+import { ShareModalSelectItemComponent } from '../open-modals/modal-select-item/modal-select-item.component';
 
 @NgModule({
   imports: [
     CommonModule,
+    OverlayModule,
+    PortalModule,
     ShareDirectiveModule,
+    ShareInputModule,
     ShareCheckboxModule,
-    SharePaginationModule
+    SharePaginationModule,
+    ShareOpenModalsModule
   ],
-  declarations: [TableComponent, TableExpendComponent, TableMultiHeadComponent],
+  // entryComponents: [ShareModalSelectItemComponent],
+  declarations: [FilterTableHeadComponent, TableComponent, TableExpendComponent, TableMultiHeadComponent],
   exports: [TableComponent, TableExpendComponent, TableMultiHeadComponent]
 })
 export class ShareTableModule { }

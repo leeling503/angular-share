@@ -1,7 +1,6 @@
 import { Component, ElementRef, Input, OnInit } from "@angular/core";
 import { promise } from "protractor";
-import { ShareSize } from "share-libs/src/model/share-common.model";
-import { InputType } from "./share-input.model";
+import { InputType, ShareSize } from "./share-input.model";
 
 @Component({
     templateUrl: './share-input.component.html',

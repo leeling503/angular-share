@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
 
 @Component({
     selector: 'share-modal-select-item',
@@ -6,62 +6,83 @@ import { Component, EventEmitter, Input, Output } from "@angular/core";
     styleUrls: ['./modal-select-item.component.less']
 })
 export class ShareModalSelectItemComponent {
-    @Input() propItems: ModalItem[] = [
-        { value: '123', key: "11" },
-        { value: '122', key: "22" },
-    ];
-    @Input() propHasAll: boolean = true;//是否有全选
-    @Output() emitModalChangeItem: EventEmitter<ModalChange> = new EventEmitter();
-    uuid: string = "key";
-    checkedItemUuids: string[] = [];
-    checkedItems: ModalItem[] = [];
+    @Input() inItems: ShareModalSelectItem[] = [];
+    @Input() inCheckKey: string = "_checked";
+    @Input() inHasAll: boolean = true;//是否有全选
+    @Output() onModalChangeItem: EventEmitter<ModalChange> = new EventEmitter();
+    checkedItems: ShareModalSelectItem[] = [];
+    allChecked: boolean = false;
+    allMixStatus: boolean = false;
+    allSelectItem: ShareModalSelectItem = { value: '全选/反选', key: '_all', _checked: false, _mix: false }
+    ngOnChanges(changes: SimpleChanges): void {
+        //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
+        //Add '${implements OnChanges}' to the class.
+        if (changes.inCheckKey || changes.inItems) {
+            this.setCheckedItem()
+        }
+    }
 
     ngOnInit(): void {
-        this.checkedItems = this.propItems.map((e) => { if (e.ifChecked) return e; }).filter(e => e !== undefined);
-        this.checkedItemUuids = this.checkedItems.map((e) => e[this.uuid]);
+        this.setCheckedItem()
     }
 
-    acceptCheck(flag, item: ModalItem, changeItems?: ModalItem[]) {
+    setCheckedItem() {
+        this.checkedItems = this.inItems.map((e) => {
+            if (e[this.inCheckKey]) { e._checked = true } else { e._checked = false }
+            return e
+        }).filter(e => e._checked);
+        this.setAllCheckStatus();
+        this.setAllMixStatus();
+    }
+
+    acceptCheck(flag: boolean, item: ShareModalSelectItem, changeItems?: ShareModalSelectItem[]) {
+        if (!item.canChange) { return }
         if (flag) {
-            item.ifChecked = flag;
-            this.checkedItems.push(item);
-            this.checkedItemUuids.push(item[this.uuid]);
-            changeItems && changeItems.push(item);
+            if (item._checked) { return }
+            item._checked = flag;
+            this.checkedItems.push(item)
         } else {
-            item.ifChecked = flag;
-            this.checkedItems = this.checkedItems.filter(e => e[this.uuid] !== item[this.uuid])
-            this.checkedItemUuids = this.checkedItems.map((e) => e[this.uuid]);
+            item._checked = flag;
+            this.checkedItems = this.checkedItems.filter(e => e._checked)
         }
+        this.setAllCheckStatus();
+        this.setAllMixStatus();
+        changeItems && changeItems.push(item);
         if (!changeItems) {
-            this.emitModalChangeItem.emit({ flag, changeItems: [item], selectItems: this.checkedItems })
+            this.onModalChangeItem.emit({ flag, changeItems: [item], selectItems: this.checkedItems })
         }
     }
 
-    acceptCheckAll(flag) {
-        let changeItems = !flag && this.checkedItems || [];
-        this.propItems.forEach(e => { this.acceptCheck(flag, e, changeItems) });
-        this.emitModalChangeItem.emit({ flag, changeItems, selectItems: this.checkedItems })
+    acceptCheckAll(flag: boolean) {
+        let changeItems = [];
+        this.inItems.forEach(e => { this.acceptCheck(flag, e, changeItems) });
+        this.allSelectItem._checked = flag;
+        this.onModalChangeItem.emit({ flag, changeItems, selectItems: this.checkedItems })
     }
 
-    get allCheckStatus(): boolean {
-        let flag = this.propItems.every(e => this.checkedItemUuids.includes(e[this.uuid]));
-        return flag;
+    setAllCheckStatus() {
+        this.allSelectItem._checked = this.inItems.every(e => e._checked);
     }
 
-    get allMixStatus(): boolean {
-        let flag = this.propItems.some(e => this.checkedItemUuids.includes(e[this.uuid]));
-        return flag;
+    setAllMixStatus() {
+        this.allSelectItem._mix = this.inItems.some(e => e._checked);
     }
+
 }
 
-class ModalItem {
-    value: string;
-    key: string;
-    ifChecked?: boolean;
+export class ShareModalSelectItem {
+    value?: string;
+    key?: string;
+    /** 选中 */
+    _checked?: boolean;
+    /** 头部mix状态 */
+    _mix?: boolean;
+    /**能否改变选中状态 */
+    canChange?: boolean;
 }
 
-class ModalChange {
+export class ModalChange {
     flag: boolean; //选中
-    changeItems: ModalItem[]; //改变的item
-    selectItems: ModalItem[]; //选中的Item
+    changeItems: ShareModalSelectItem[]; //改变的item
+    selectItems: ShareModalSelectItem[]; //选中的Item
 }
