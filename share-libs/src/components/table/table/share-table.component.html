@@ -1,8 +1,8 @@
 <div class="share-table" share-loading [inLoading]="loadingFlag">
+  <ng-container>
+    <filter-head [inItems]="inItems" (onChangeItemFilter)="onChangeItemFilter()"></filter-head>
+  </ng-container>
   <div class="table-part" [class]="inClassNames">
-    <ng-container>
-      <filter-head [inItems]="inItems" (onChangeItemFilter)="onChangeItemFilter()"></filter-head>
-    </ng-container>
     <table>
       <thead>
         <tr class="table-thead">
@@ -13,7 +13,7 @@
                 <ng-container [ngSwitch]="item.type">
                   <div *ngSwitchCase="'check'">
                     <share-checkbox [modelChecked]='headAllSelect()' [inIsOther]='headMix()' [inIsFather]="true"
-                      (onClick)="checkThead($event)">
+                      (onClick)="onCheckThead($event)">
                     </share-checkbox>
                   </div>
                   <div *ngSwitchDefault>
@@ -35,7 +35,7 @@
                   <ng-container [ngSwitch]="item.type">
                     <div *ngSwitchCase="'check'">
                       <share-checkbox [modelChecked]='getDataCheckStatus(data)'
-                        [inIsDisable]="getDataDisableStatus(data)" (onClick)="checkedData($event, data)">
+                        [inIsDisable]="getDataDisableStatus(data)" (onClick)="onCheckedData($event, data)">
                       </share-checkbox>
                     </div>
                     <div *ngSwitchCase="'serial'"> {{(page.currentPage-1)*page.pageRecord+i+1}}</div>

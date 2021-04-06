@@ -43,7 +43,7 @@ export class TableMultiHeadComponent extends TableComponent implements OnInit {
         { "id": "6a73e6f7-a667-4a44-a11f-1f36cc3544f7", "aidsTableCode": "", "aidsName": "老铁山RBN-DGPS台站", "locationAttr": "01", "typeCode": "0306", "aidsType": "RBN-DGPS台站", "position": "38°43’38.3” N 121°8’5.3”E", "location": "", "lightId": "", "lightHeight": 160, "lightRange": "200.0", "managekey": "公用", "ownerUnitName": "大连航标处", "authorityUnitName": "大连航标处", "usageCode": "01", "usageName": "使用中", "remarks": "", "levels": "level_6", },
         { "id": "9882b381-b6fc-4207-a184-ca4f43e73355", "aidsTableCode": "", "aidsName": "王家麦岛RBN-DGPS台站", "locationAttr": "01", "typeCode": "0306", "aidsType": "RBN-DGPS台站", "position": "36°4’22.8” N 120°26’25.8”E", "location": "", "lightId": "RBN A1", "lightHeight": 200, "lightRange": "", "managekey": "公用", "ownerUnitName": "青岛航标处", "authorityUnitName": "青岛航标处", "usageCode": "01", "usageName": "使用中", "remarks": "", "levels": "level_6", },
         { "id": "d3c2995b-e555-46ea-976a-ba91908ab98f", "aidsTableCode": "", "aidsName": "秦皇岛RBN-DGPS台站", "locationAttr": "01", "typeCode": "0306", "aidsType": "RBN-DGPS台站", "levelCode": "01A", "levelName": "一级A等", "position": "39°54’41.0” N 119°37’0.7”E", "location": "秦皇岛主航道", "lightId": "", "lightHeight": 200, "lightRange": "", "managekey": "公用", "ownerUnitName": "秦皇岛航标处", "authorityUnitName": "秦皇岛航标处", "usageCode": "01", "usageName": "使用中", "remarks": "", "levels": "level_6", },
-        { "id": "0151cb3f-6ef0-4a07-b08c-5074f1814c5b", "aidsTableCode": "", "aidsName": "上古林导航台", "locationAttr": "01", "typeCode": "0307", "aidsType": "导航台", "position": "38°50’11.6” N 117°30’17.5”E", "location": "滨州港", "lightRange": "", "managekey": "公用", "ownerUnitName": "天津航标处", "authorityUnitName": "天津航标处", "usageCode": "01", "usageName": "使用中", "remarks": "", "levels": "level_7", }];
+        { "id": "0151cb3f-6ef0-4a07-b08c-5074f1814c5b", "aidsTableCode": "", "aidsName": "上古林导航台", "locationAttr": "01", "typeCode": "0307", "aidsType": "导航台", "position": "38°50’11.6” N 117°30’17.5”E", "location": "滨州港", "lightRange": "", "managekey": "公用", "ownerUnitName": "天津航标处", "authorityUnitName": "天津航标处", "usageCode": "01", "usageName": "使用中", "remarks": "", "levels": "level_7", },{ "id": "0151cb3f-6ef0-4a07-b08c-5074f1814c5b", "aidsTableCode": "", "aidsName": "上古林导航台", "locationAttr": "01", "typeCode": "0307", "aidsType": "导航台", "position": "38°50’11.6” N 117°30’17.5”E", "location": "滨州港", "lightRange": "", "managekey": "公用", "ownerUnitName": "天津航标处", "authorityUnitName": "天津航标处", "usageCode": "01", "usageName": "使用中", "remarks": "", "levels": "level_7", },{ "id": "0151cb3f-6ef0-4a07-b08c-5074f1814c5b", "aidsTableCode": "", "aidsName": "上古林导航台", "locationAttr": "01", "typeCode": "0307", "aidsType": "导航台", "position": "38°50’11.6” N 117°30’17.5”E", "location": "滨州港", "lightRange": "", "managekey": "公用", "ownerUnitName": "天津航标处", "authorityUnitName": "天津航标处", "usageCode": "01", "usageName": "使用中", "remarks": "", "levels": "level_7", },{ "id": "0151cb3f-6ef0-4a07-b08c-5074f1814c5b", "aidsTableCode": "", "aidsName": "上古林导航台", "locationAttr": "01", "typeCode": "0307", "aidsType": "导航台", "position": "38°50’11.6” N 117°30’17.5”E", "location": "滨州港", "lightRange": "", "managekey": "公用", "ownerUnitName": "天津航标处", "authorityUnitName": "天津航标处", "usageCode": "01", "usageName": "使用中", "remarks": "", "levels": "level_7", }];
     /**选中的数据 */
     @Input() inSelectedDatas: Array<any> = [{ id: "d86adb59-d180-49ef-8d2b-3bd2aa767bcf" }, { id: "0151cb3f-6ef0-4a07-b08c-5074f1814c5b" },];
     /**禁用数据 */
@@ -54,37 +54,38 @@ export class TableMultiHeadComponent extends TableComponent implements OnInit {
     /**表格对应数据value的表头的数据 */
     @Input() inAllItems: MultiAllItems = {
         "0307": [
-            { title: '', type: 'check', width: 60, styckyLeft: '0px', keyCode: '1001' },
-            { title: '序号0307', type: 'serial', key: 'serial', width: 60, styckyLeft: '62px', keyCode: '1002' },
-            { title: 'aidsName', key: 'aidsName', width: 150, keyCode: '1003' },
-            { title: 'locationAttr', key: 'locationAttr', keyCode: '1004', },
-            { title: 'typeCode', key: 'typeCode', width: 200, keyCode: '1005' },
-            { title: 'aidsType', key: 'aidsType', width: 180, keyCode: '1006' },
-            { title: 'position', key: 'position', width: 180, keyCode: '1007' },
-            { title: 'location', key: 'location', width: 180, keyCode: '1008' },
-            { title: 'managekey', key: 'managekey', keyCode: '1009', },
-            { title: 'ownerUnitName', key: 'ownerUnitName', keyCode: '1010', type: "expend", width: 180 },
+            { title: '', type: 'check', width: 20, styckyLeft: '0px', keyCode: '1001', canFilter: false },
+            { title: '名称', type: 'serial', key: 'serial', width: 30, styckyLeft: '62px', keyCode: '1002', canFilter: false },
+            { title: '身高', key: 'aidsName', width: 30, keyCode: '1003', canFilter: false },
+            { title: '体重', key: 'locationAttr', width: 30, keyCode: '1004', },
+            { title: '性别', key: 'typeCode', width: 30, keyCode: '1005' },
+            { title: '学历', key: 'aidsType', width: 50, keyCode: '1006' },
+            { title: '政治面貌', key: 'position', width: 50, keyCode: '1007' },
+            { title: '姓名', key: 'location', width: 80, keyCode: '1008' },
+            { title: '印度', key: 'managekey', width: 80, keyCode: '1009', },
+            { title: '美国', key: 'ownerUnitName', keyCode: '1010', type: "expend", width: 80 },
         ],
         "0303": [
-            { title: '', type: 'check', width: 60, keyCode: '1001', styckyLeft: '0px' },
-            { title: '序号0303', type: 'serial', width: 60, keyCode: '1002', styckyLeft: '62px' },
-            { title: 'aidsName', key: 'aidsName', keyCode: '1003', width: 150 },
-            { title: 'locationAttr', key: 'locationAttr', keyCode: '1004' },
-            { title: 'typeCode', key: 'typeCode', keyCode: '1005', width: 200 },
-            { title: 'aidsType', key: 'aidsType', keyCode: '1006', width: 180 },
-            { title: 'position', key: 'position', keyCode: '1007', width: 180 },
-            { title: 'location', key: 'location', keyCode: '1008', width: 180 },
-            { title: 'managekey', key: 'managekey', keyCode: '1010', type: "expend", width: 100 },
+            { title: '', type: 'check', width: 20, keyCode: '1001', styckyLeft: '0px' },
+            { title: '名称', type: 'serial', width: 30, keyCode: '1002', styckyLeft: '62px' },
+            { title: '身高', key: 'aidsName', keyCode: '1003', width: 80 },
+            { title: '体重', key: 'locationAttr', width: 30, keyCode: '1004' },
+            { title: '性别', key: 'typeCode', keyCode: '1005', width: 30 },
+            { title: '学历', key: 'aidsType', keyCode: '1006', width: 50 },
+            { title: '政治面貌', key: 'position', keyCode: '1007', width: 50, canFilter: false },
+            { title: '姓名', key: 'location', keyCode: '1008', width: 50 },
+            { title: '新加坡', key: 'managekey', keyCode: '1011', width: 80 },
+            { title: '美国', key: 'managekey', keyCode: '1010', type: "expend", width: 80 },
         ],
         "0306": [
-            { title: '', type: 'check', width: 60, keyCode: '1001', styckyLeft: '0px' },
-            { title: '序号0306', type: 'serial', width: 60, keyCode: '1002', styckyLeft: '62px' },
-            { title: 'aidsType0306', key: 'aidsType', keyCode: '1006', width: 180 },
-            { title: 'aidsName', key: 'aidsName', keyCode: '1013', width: 150 },
-            { title: 'locationAttr', key: 'locationAttr', keyCode: '1014', width: 90 },
-            { title: 'typeCode', key: 'typeCode', keyCode: '1015', width: 200 },
-            { title: 'position', key: 'position', keyCode: '1017', width: 180 },
-            { title: 'location', key: 'location', keyCode: '1019', type: "expend", width: 180 },
+            { title: '', type: 'check', width: 20, keyCode: '1001', styckyLeft: '0px' },
+            { title: '名称', type: 'serial', width: 30, keyCode: '1002', styckyLeft: '62px' },
+            { title: '身高', key: 'aidsType', keyCode: '1003', width: 130 },
+            { title: '体重', key: 'aidsName', keyCode: '1004', width: 30 },
+            { title: '性别', key: 'locationAttr', keyCode: '1005', width: 50 },
+            { title: '学历', key: 'typeCode', keyCode: '1006', width: 50 },
+            { title: '姓名', key: 'position', keyCode: '1007', width: 50 },
+            { title: '中国', key: 'location', keyCode: '1011', type: "expend", width: 80 },
         ]
     };
     /**从数据中获取表头时的关键字 */
@@ -117,10 +118,12 @@ export class TableMultiHeadComponent extends TableComponent implements OnInit {
             }
         })
         this.tableMultiItems = tableMultiItems;
-        this.setDataSerial()
         this.setMultiItems(heads);
+        this.setDataSerial();
+        this.set_ifShow();
     }
 
+    /**数据排序 */
     setDataSerial() {
         let index = (this.page.currentPage - 1) * this.page.pageRecord + 1;
         this.tableMultiItems.forEach(e => {
@@ -133,33 +136,41 @@ export class TableMultiHeadComponent extends TableComponent implements OnInit {
     setMultiItems(heads: Array<TableMultiItem[]>) {
         let len = heads.length;
         if (len > 1) {
-            this.configHeadItems(heads)
+            this.configHeadItems()
         }
         this.setHeadItemWidth(heads);
     }
 
-    configHeadItems(heads: Array<TableMultiItem[]>) {
-        let maxLength = 0;
+    configHeadItems() {
+        let heads: Array<TableMultiItem[]> = [];
+        /**表头最多的放在第一行 */
+        this.tableMultiItems.sort((a, b) => { return (b.heads.length) - (a.heads.length); });
+        this.tableMultiItems.forEach(e => heads.push(e.heads));
+        /**交换顺序用_keyCode */
+        heads.forEach(e => {
+            e.forEach(item => {
+                item._keyCode = item.keyCode;
+            })
+        })
         /**计算表头最长有多少 */
-        heads.forEach(e => maxLength = maxLength > e.length ? maxLength : e.length);
-        /**将第一个表头补充到最大长度 */
-        let head = heads[0];
-        for (let j = 0; j < maxLength; j++) {
-            head[j] || head.push({ title: '', keyCode: '' });
-        }
+        let maxLength = heads[0].length;
         /**调整表头顺序，以第上一个为准 */
-        let len = heads.length - 1
-        for (let i = 0; i < len; i++) {
+        for (let i = 0, len = heads.length - 1; i < len; i++) {
             let cur = heads[i], next = heads[i + 1];
-            let allCode = cur.map(e => e.keyCode);
+            let allCode = cur.map(e => e._keyCode);
             for (let j = 0; j < maxLength; j++) {
-                let curCode = cur[j].keyCode;
-                let index = next.findIndex((e, i) => e.keyCode == curCode && i >= j);
+                let curCode = cur[j]._keyCode;
+                let index = next.findIndex((e, i) => e._keyCode == curCode && i >= j);
+                //下一个表中不存在该keycode
                 if (index < 0) {
-                    index = next.findIndex((e, i) => !allCode.includes(e.keyCode) && i >= j);
+                    /** 找到下个表头数组剩余的表头，且在上一个表中不存在的code */
+                    index = next.findIndex((e, i) => !allCode.includes(e._keyCode) && i >= j);
                     if (index < 0) {
-                        next.push({ title: '', keyCode: '' });
-                        continue;
+                        next.push({ title: '', keyCode: curCode, _keyCode: curCode });
+                        index = next.length - 1;
+                    } else {
+                        /**改写_keyCode以便下一个 */
+                        next[index]._keyCode = curCode;
                     }
                 }
                 this.swapHeadItem(next, index, j)
@@ -167,26 +178,25 @@ export class TableMultiHeadComponent extends TableComponent implements OnInit {
         }
     }
 
-    swapHeadItem(data, index, j) {
-        let item = data[index];
-        data[index] = data[j];
-        data[j] = item;
+    swapHeadItem(datas: TableMultiItem[], index, j) {
+        let item = datas[index];
+        datas[index] = datas[j];
+        datas[j] = item;
     }
 
+    /**设置宽度 */
     setHeadItemWidth(heads: Array<TableMultiItem[]>) {
         let allWith = 0, head = heads[0];
         head.forEach(e => e.width && (allWith += e.width) || e.widthMin && (allWith += e.widthMin) || (allWith += 60))
         let tableWidth = this.nativeEl.querySelector('.share-table').clientWidth;
         if (tableWidth <= allWith) {
             for (let i = 0, len = heads[0].length; i < len; i++) {
-                let width, widthMin;
-                for (let j = 0, len = heads.length; j < len && !width; j++) {
-                    width = heads[j][i].width;
-                    widthMin = widthMin || heads[j][i].widthMin;
+                let _width;
+                for (let j = 0, len = heads.length; j < len && !_width; j++) {
+                    _width = heads[j][i].width || heads[j][i].widthMin;
                 }
                 for (let j = 0, len = heads.length; j < len; j++) {
-                    heads[j][i].width = width;
-                    heads[j][i].widthMin = widthMin;
+                    heads[j][i]._width = _width;
                 }
             }
             Promise.resolve().then(res => {
@@ -195,10 +205,29 @@ export class TableMultiHeadComponent extends TableComponent implements OnInit {
         } else {
             for (let i = 0, len = heads[0].length; i < len; i++) {
                 for (let j = 0, l = heads.length; j < l; j++) {
-                    heads[j][i].width = heads[0][i].width;
+                    heads[j][i]._width = heads[0][i].width;
                 }
             }
         }
+    }
+
+    /**多表头整列是否隐藏 */
+    set_ifShow() {
+        let heads: TableMultiItem[][] = [];
+        this.tableMultiItems.forEach(e => heads.push(e.heads));
+        for (let i = 0, len = heads[0].length; i < len; i++) {
+            let ifShow = false;
+            for (let j = 0, len = heads.length; j < len && !ifShow; j++) {
+                ifShow = heads[j][i].ifShow !== false;
+            }
+            for (let j = 0, len = heads.length; j < len; j++) {
+                heads[j][i]._ifShow = ifShow;
+            }
+        }
+    }
+
+    onChangeItemFilter() {
+        this.set_ifShow();
     }
 }
 

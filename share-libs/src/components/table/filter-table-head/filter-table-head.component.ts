@@ -1,7 +1,5 @@
-import { CdkOverlayOrigin } from '@angular/cdk/overlay';
-import { CdkPortal, ComponentPortal, Portal, TemplatePortal } from '@angular/cdk/portal';
-import { Component, ComponentFactoryResolver, ElementRef, EventEmitter, Input, OnInit, Output, SimpleChanges, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
-import { table } from 'console';
+import { ComponentPortal, } from '@angular/cdk/portal';
+import { Component, ComponentFactoryResolver, ElementRef, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { ShareOverlayPosition, ShareOverlayService } from 'share-libs/src/services/share-overlay.service';
 import { ModalChange, ShareModalSelectItem, ShareModalSelectItemComponent } from '../../open-modals/modal-select-item/modal-select-item.component';
 import { MultiHeadItem, TableItem } from '../share-table.model';
@@ -23,6 +21,7 @@ export class FilterTableHeadComponent implements OnInit {
     @Input() inFilterKey: 'key' | 'keyCode' = 'key';
     /** 表格列的唯一key  单表头为key 多表头为keyCode */
     @Output() onChangeItemFilter: EventEmitter<any> = new EventEmitter();
+    tableType: 'multi' | 'single' = 'single';
     ngOnChanges(changes: SimpleChanges): void {
         //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
         //Add '${implements OnChanges}' to the class.
@@ -32,8 +31,10 @@ export class FilterTableHeadComponent implements OnInit {
     }
     ngOnInit(): void {
         if (this.inFilterKey == 'keyCode') {
+            this.tableType = 'multi';
             this.setMultiSelectItems(<MultiHeadItem[]>this.inItems);
         } else {
+            this.tableType = 'single';
             this.modalSelectItems = this.getSelectItems(<TableItem[]>this.inItems);
         }
     }
@@ -84,12 +85,22 @@ export class FilterTableHeadComponent implements OnInit {
         overlay.component.onModalChangeItem.subscribe((res: ModalChange) => {
             let changeItems = res.changeItems;
             for (let i = 0, len = changeItems.length; i < len; i++) {
-                const e = changeItems[i];
-                this.inItems.forEach(item => {
-                    if (item[this.inFilterKey] == e.key) {
-                        item.ifShow = e._checked;
-                    }
-                })
+                const _item = changeItems[i];
+                if (this.tableType == 'single') {
+                    this.inItems.forEach(item => {
+                        if (item[this.inFilterKey] == _item.key) {
+                            item.ifShow = _item._checked;
+                        }
+                    })
+                } else {
+                    (<MultiHeadItem[]>this.inItems).forEach(e => {
+                        e.heads.forEach(head => {
+                            if (head[this.inFilterKey] == _item.key) {
+                                head.ifShow = _item._checked;
+                            }
+                        })
+                    })
+                }
             }
             this.onChangeItemFilter.emit()
         })

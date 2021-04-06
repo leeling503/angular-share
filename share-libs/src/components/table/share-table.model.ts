@@ -8,7 +8,7 @@ export interface TableItem {
     widthMin?: number;
     /**计算后的显示宽度 */
     _width?: number;
-    /**计算后的显示宽度 */
+    /**该列的类型 */
     type?: tdType;
     /** 对应data中的key取值 */
     key?: string;
@@ -33,7 +33,6 @@ export interface TagRule {
 type tdType = 'check' | 'serial' | "tag" | "expend";
 
 export class SharePage {
-    // maxSize?: number = 5;//分页按钮个数
     numPages?: number = 1;//当总页数改变时触发，$ event：number等于总页数
     currentPage?: number = 1;//当前页
     pageRecord?: number = 15;//页容量
@@ -52,7 +51,6 @@ export class TableSelect {
     /**所有选中的数据 */
     selectedDatas: any[];
     selectedUuids: string[];
-    /** */
     constructor(flag: boolean, changes: any[], datas, uuids) {
         this.curChangeDatas = changes;
         this.changeFlag = flag;
@@ -65,8 +63,12 @@ export interface TableMultiItem extends TableItem {
     checkFlag?: boolean;
     /** 多表头中keyCode相同的 title会在同一列 */
     keyCode: string;
+    /**计算后同列的keycode */
+    _keyCode?: string;
+    /**多表头同列所有th隐藏才被隐藏 */
+    _ifShow?: boolean;
 }
-//对表头html使用 ，heads表示表头 ， datas表示对应该表头的数据
+//多表头html使用 ，heads表示表头 ， datas表示对应该表头的数据
 export interface MultiHeadItem {
     /**表头信息 */
     heads: TableMultiItem[];

@@ -9,8 +9,8 @@
             [ngStyle]="{'width': item.width+'px','left':item.styckyLeft}" [class]="item.classNames">
             <ng-container [ngSwitch]="item.type">
               <div *ngSwitchCase="'check'">
-                <share-checkbox [modelChecked]='headAllSelect()' [inIsOther]='headMix()'
-                  [inIsFather]="true" (onClick)="checkThead($event)">
+                <share-checkbox [modelChecked]='headAllSelect()' [inIsOther]='headMix()' [inIsFather]="true"
+                  (onClick)="onCheckThead($event)">
                 </share-checkbox>
               </div>
               <div *ngSwitchDefault>
@@ -29,21 +29,21 @@
                 <ng-container [ngSwitch]="item.type">
                   <div *ngSwitchCase="'check'">
                     <share-checkbox [modelChecked]='getDataCheckStatus(data)' [inIsDisable]="getDataDisableStatus(data)"
-                      (onClick)="checkedData($event, data)">
+                      (onClick)="onCheckedData($event, data)">
                     </share-checkbox>
                   </div>
                   <div *ngSwitchCase="'serial'"> {{(page.currentPage-1)*page.pageRecord+i+1}}</div>
                   <div *ngSwitchCase="'tag'">
-                    <span class="table-tag" [ngClass]="item.tagRule[data[item.property]].tagType">
-                      {{item.tagRule[data[item.property]].text}}
+                    <span class="table-tag" [ngClass]="item.tagRule[data[item.key]].tagType">
+                      {{item.tagRule[data[item.key]].text}}
                     </span>
                   </div>
                   <div *ngSwitchCase="'expend'">
-                    <div *ngIf="data[item.property]" (click)="expendLine(data[item.property],i)" class="expend-link">查看
+                    <div *ngIf="data[item.key]" (click)="expendLine(data[item.key],i)" class="expend-link">查看
                     </div>
                   </div>
                   <div *ngSwitchDefault>
-                    {{data[item.property]}}
+                    {{data[item.key]}}
                   </div>
                 </ng-container>
               </td>
