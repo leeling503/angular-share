@@ -86,8 +86,8 @@
 
 
   .select-control {
-    .share-icon('select/select-up');
-    background-size: 75% 75%;
+    .share-icon('icon/pull_down');
+    background-size: auto;
     cursor: pointer;
     display: none;
 
@@ -127,24 +127,24 @@
       cursor: pointer;
       padding: 2px;
 
-      &.node-content-active {
-        .node-check {
-          .background-image('checkbox/checkbox-checked');
-        }
+      &:hover {
+        background-color: @C-blue-2;
+      }
 
-        .node-content-text {
-          span {
-            background-color: @C-BG-active;;
-          }
+      &.node-content-check {
+        background-color: @C-blue-1;
+
+        &:hover {
+          background-color: @C-blue-2;
         }
       }
 
-      .node-check {
-        width: 16px;
-        height: 16px;
-        .background-image('checkbox/checkbox-blank');
-        margin-right: 3px;
-        flex-shrink: 0;
+      &.node-content-active {
+        background-color: @C-blue-2;
+
+        &:hover {
+          background-color: @C-blue-2;
+        }
       }
 
       .node-content-text {
@@ -156,10 +156,6 @@
         white-space: nowrap;
         overflow: hidden;
         display: flex;
-
-        &:hover {
-          background-color: @C-BG-active;;
-        }
 
         span {
           display: inline-block;
@@ -176,8 +172,8 @@
 }
 
 .children-icon {
-  .share-icon('select/select-up');
-  background-size: 75% 75%;
+  .share-icon('icon/pull_down');
+  background-size: auto;
   flex-shrink: 0;
 
   &.open-children-icon {

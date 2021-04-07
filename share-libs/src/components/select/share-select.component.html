@@ -1,19 +1,19 @@
 <div class="share-select" cdkOverlayOrigin (click)='clickToggleOpen()'
-  [ngClass]="{'select-has-border':activeNodes.length > 1,'select-has-control':selectConfig.showFlag }">
+  [ngClass]="{'select-has-border':checkOptions.length > 1,'select-has-control':inConfig.showFlag }">
   <div class="selected-nodes">
-    <ng-container *ngIf="!activeNodes || activeNodes.length==0 ">
+    <ng-container *ngIf="!checkOptions || checkOptions.length==0 ">
       <div class="selected-node placeholder-text">
-        <span>{{selectConfig.placeholder}}</span>
+        <span>{{_placeholder}}</span>
       </div>
     </ng-container>
-    <ng-container *ngFor="let node of activeNodes">
+    <ng-container *ngFor="let node of checkOptions">
       <div class="selected-node node-data-text">
-        <span>{{node.showName || node.name}}</span>
-        <i class="select-clear" *ngIf="selectConfig.showClear" (click)="clickClearNode(node)"></i>
+        <span>{{node.showName || node.value}}</span>
+        <i class="select-clear" *ngIf="_showClear" (click)="clickClearNode(node)"></i>
       </div>
     </ng-container>
   </div>
-  <i class="select-clear" *ngIf="selectConfig.showClear && activeNodes.length" (click)='clickClearNodes()'></i>
+  <i class="select-clear" *ngIf="_showClear && checkOptions.length" (click)='clickClearNodes()'></i>
   <i class="select-control" [ngClass]=" {'select-control-on':optionsOpen}"></i>
 </div>
 <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="cdkOverlayOrigin" [cdkConnectedOverlayHasBackdrop]="true"
@@ -21,17 +21,21 @@
   [cdkConnectedOverlayWidth]='cdkConnectedOverlayWidth' [cdkConnectedOverlayBackdropClass]="'transparent-overlay-back'"
   (backdropClick)="backdropClick()">
   <div class="open-nodes">
-    <div class="open-node" *ngIf="selectOptions.length == 0"> {{selectConfig.noneTip || '暂无数据'}}</div>
-    <div *ngTemplateOutlet="optionEl;context:{options:selectOptions}"></div>
+    <div class="open-node" *ngIf="inOptions.length == 0"> {{_noneTip}}</div>
+    <div *ngTemplateOutlet="optionEl;context:{options:inOptions}"></div>
   </div>
 </ng-template>
 
 <ng-template #optionEl let-options="options">
   <div class="open-node" *ngFor="let option of options">
-    <div class="node-content" [ngClass]='{"node-content-active": activeValues.includes(option.value) }'
+    <div class="node-content"
+      [ngClass]='{"node-content-check": option._check ,"node-content-active": option[inUuid] == activeOption[inUuid] }'
       (click)="onClickOptionNode(option)">
-      <div class="node-check" *ngIf="selectConfig.showCheck"></div>
-      <div class="node-content-text"><span>{{option.name}}</span></div>
+      <ng-container *ngIf="_showCheck">
+        <share-checkbox [modelChecked]='option._check' [inIsOther]='option._mix' (onClick)="onCheckChange( option)">
+        </share-checkbox>
+      </ng-container>
+      <div class="node-content-text"><span>{{option.value}}</span></div>
       <ng-container *ngIf="option.children && option.children.length > 0">
         <i (click)="onClickOptionChild(option)" class="children-icon"
           [ngClass]='{"open-children-icon":option.showChild}'></i>

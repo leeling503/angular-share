@@ -1,53 +1,131 @@
 import { CdkOverlayOrigin, OverlayRef, Overlay } from '@angular/cdk/overlay';
 import { Component, OnInit, Input, ViewChild, ElementRef, Output, EventEmitter, SimpleChanges } from '@angular/core';
-import { SelectOption, SelectConfig, SelectInput, SelectInputType } from './share-select.model';
-import { shareIsEmpty, shareIsEqual } from 'share-libs/src/utils/util';
+import { SelectOption, SelectConfig } from './share-select.model';
+import { utilArrayClear, utilArrayRemoveItem, utilIsEqual } from 'share-libs/src/utils/util';
+import * as _ from 'lodash';
 @Component({
   selector: 'share-select',
   templateUrl: './share-select.component.html',
   styleUrls: ['./share-select.component.less']
 })
 export class ShareSelectComponent implements OnInit {
-  constructor(private overlay: Overlay, private el: ElementRef) {
+  constructor(private el: ElementRef) {
     this.nativeEl = this.el.nativeElement;
   }
-  nativeEl: HTMLElement;
-  @Input() selectConfig: SelectConfig = new SelectConfig();
-  @Input() selectOptions: SelectOption[] = [];
-  @Input() selectOption: SelectInput;
-  activeNodes: SelectOption[] = [];
-  activeValues: any[] = [];
+  nativeEl: HTMLElement
+  /**配置 */
+  @Input() inConfig: SelectConfig = new SelectConfig();
+  /**选项 */
+  @Input() inOptions: SelectOption[] = [];
+  /**已选中 */
+  @Input() modelOption: SelectOption[];
+  checkUuids: string[];
+  checkOptions: SelectOption[] = [];
+  /**已选中的对比uuid */
+  @Input() inUuid: string = 'key';
+  @Output() modelOptionChange: EventEmitter<SelectOption[]> = new EventEmitter();
+  /**改变激活项 */
+  @Output() onActiveChange: EventEmitter<SelectOption> = new EventEmitter();
+
+  /**配置项 */
+  _config: SelectConfig;
+  _multi: boolean;
+  _showCheck: boolean;
+  _leastOne: boolean;
+  _showClear: boolean;
+  _showFlag: boolean;
+  _placeholder: string;
+  _noneTip: string;
+  _hasActive: boolean;
+
+  orgCheckOptions: SelectOption[] = [];
+  activeOption: SelectOption = {};
   optionsOpen: boolean = false;
-  inputType: SelectInputType;
   cdkConnectedOverlayWidth: number | string;
-  outNodes: SelectInput = undefined;
   @ViewChild(CdkOverlayOrigin, { static: true }) cdkOverlayOrigin: CdkOverlayOrigin;
-  @Output() emitOptionChange: EventEmitter<SelectInput> = new EventEmitter();
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.selectOption && changes.selectOption.firstChange) {
-      let option = this.selectOption;
-      if (Array.isArray(option)) {
-        this.selectConfig.multi = true;
-        let input = option[0];
-        this.inputType = typeof input == 'string' || typeof input == 'number' ? 'string' : 'SelectOption';
-      } else {
-        this.inputType = typeof option == 'string' || typeof option == 'number' ? 'string' : 'SelectOption';
-      }
+    if (changes.modelOption && !changes.modelOption.firstChange) {
+      if (utilIsEqual(this.modelOption, this.checkOptions)) return;
+      this.setCheckOptions();
+      this.setCheckMixState()
     }
-    if (changes.selectOptions) {
-      this.setActiveNode()
+    if (changes.inOptions && !changes.inOptions.firstChange) {
+      this.setCheckMixState()
     }
   }
 
   ngOnInit() {
-    this.selectConfig = Object.assign(new SelectConfig(), this.selectConfig)
-    this.setActiveNode();
-    this.setOpenWidth(this.selectConfig.openWidth);
+    this._config = Object.assign(new SelectConfig(), this.inConfig)
+    this.setConfig();
+    this.setCheckOptions();
+    this.setCheckMixState();
+    this.setOpenWidth();
+    Promise.resolve().then(() => {
+      this.closeOptions();
+    })
   }
 
-  setOpenWidth(width?: number | string) {
-    if (width) {
-      this.cdkConnectedOverlayWidth = this.selectConfig.openWidth;
+  setCheckOptions() {
+    this.checkOptions = this.modelOption || [];
+    this.checkUuids = this.checkOptions.map(e => e[this.inUuid]);
+    this.orgCheckOptions = [...this.checkOptions];
+    if (this.checkUuids.length == 0 && this._leastOne && this.inOptions && this.inOptions.length > 0) {
+      utilArrayClear(this.checkOptions).push(this.inOptions[0]);
+      this.checkUuids = [this.checkOptions[0][this.inUuid]];
+    }
+  }
+
+  /**设置配置项 */
+  setConfig() {
+    this._multi = this._config.multi;
+    this._showCheck = this._config.showCheck;
+    this._leastOne = this._config.leastOne;
+    this._placeholder = this._config.placeholder;
+    this._showClear = this._config.showClear;
+    this._noneTip = this._config.noneTip;
+    this._showFlag = this._config.showFlag;
+    this._hasActive = this._config.hasActive;
+  }
+
+  /**设置选项状态 */
+  setOptionsState() {
+    this.mixStateClear();
+    this.setCheckMixState();
+  }
+
+  /**清除mix状态 */
+  mixStateClear(options?: SelectOption[]) {
+    options = options || this.inOptions || [];
+    options.forEach(e => {
+      e._mix = false;
+      if (e.children && e.children.length > 0) {
+        this.mixStateClear(e.children)
+      }
+    })
+  }
+
+  /**设置选中和mix状态 */
+  setCheckMixState(options?: SelectOption[], father?: SelectOption[]) {
+    options = options || this.inOptions || [];
+    options.forEach(e => {
+      if (this.checkUuids.includes(e[this.inUuid])) {
+        father && father.map(e => e._mix = true)
+        e._check = true
+      } else {
+        e._check = false
+      }
+      if (e.children && e.children.length > 0) {
+        let curFather = father || [];
+        curFather.push(e)
+        this.setCheckMixState(e.children, curFather)
+      }
+    })
+    father && father.splice(father.length - 1, 1)
+  }
+
+  setOpenWidth() {
+    if (this.inConfig.openWidth) {
+      this.cdkConnectedOverlayWidth = this.inConfig.openWidth;
     } else {
       this.nativeEl = this.nativeEl.querySelector('.share-select')
       let rect = this.nativeEl.getBoundingClientRect();
@@ -55,77 +133,22 @@ export class ShareSelectComponent implements OnInit {
     }
   }
 
-  setActiveNode() {
-    this.activeValues = [];
-    this.activeNodes = [];
-    if (this.selectConfig.leastOne && shareIsEmpty(this.selectOption) && !shareIsEmpty(this.selectOptions)) {
-      let option = this.selectOptions && this.selectOptions[0]
-      if (this.inputType == 'string') {
-        this.selectOption = option.value
-      } else {
-        this.selectOption = option
-      }
-      this.outNodes = this.selectOption;
-      Promise.resolve().then(
-        res => this.emitOptionChange.emit(this.outNodes)
-      )
-    }
-    if (shareIsEmpty(this.selectOption) || shareIsEmpty(this.selectOptions)) {
-      this.activeNodes = [];
-      return
-    } else if (typeof this.selectOption == 'string' || typeof this.selectOption == 'number') {
-      let value = this.selectOption;
-      this.activeValues.push(value)
-    } else if (Array.isArray(this.selectOption)) {
-      this.selectOption.forEach(e => {
-        let value = e.value || e;
-        this.activeValues.push(value);
-      })
-    } else {
-      let value = this.selectOption.value;
-      this.activeValues.push(value)
-    }
-    this.getNode()
-  }
-
-  getNode() {
-    this.selectOptions.forEach(e => {
-      if (this.activeValues.includes(e.value)) {
-        this.activeNodes.push(e);
-      }
-      if (e.children && e.children.length > 0) {
-        e.showChild = this.inChildren(e, e.children, this.activeValues)
-      }
-    })
-  }
-
-  inChildren(node: SelectOption, nodes: SelectOption[], values: string[]): boolean {
-    for (let i = 0, len = nodes.length; i < len; i++) {
-      let e = nodes[i]
-      if (values.includes(e.value)) {
-        node.showChild = false;
-        this.activeNodes.push(e);
-        return true;
-      } else if (e.children && e.children.length > 0) {
-        node.showChild = this.inChildren(e, e.children, values)
-        return node.showChild
-      }
-    }
-    return !1;
-  }
-
   clickClearNodes() {
     event.stopPropagation();
-    this.activeNodes = [];
-    this.activeValues = [];
+    let option = this.checkOptions[0];
+    utilArrayClear(this.checkOptions);
+    this.checkUuids = [];
+    if (this._leastOne) {
+      this.addItem(option)
+    }
+    this.setOptionsState();
     this.closeOptions();
   }
 
-  clickClearNode(node: SelectOption) {
+  clickClearNode(option: SelectOption) {
     event.stopPropagation();
-    let index = this.activeValues.findIndex(e => e === node.value)
-    this.activeNodes.splice(index, 1);
-    this.activeValues.splice(index, 1);
+    this.removeItem(option);
+    this.setOptionsState();
     this.closeOptions();
   }
 
@@ -133,25 +156,52 @@ export class ShareSelectComponent implements OnInit {
     this.optionsOpen = !this.optionsOpen;
   }
 
-  onClickOptionNode(option: SelectOption) {
-    event.stopPropagation();
-    let value = option.value;
-    if (this.selectConfig.multi) {
-      if (this.activeValues.includes(value)) {
-        this.activeValues = this.activeValues.filter(e => e != value);
-        this.activeNodes = this.activeNodes.filter(e => e.value != value);
-      } else {
-        this.activeNodes.push(option);
-        this.activeValues.push(option.value);
-      }
-      return;
-    } else {
-      this.activeNodes = [option];
-      this.activeValues = [value]
-    }
-    this.closeOptions();
+  onCheckChange(option: SelectOption) {
+    this.onClickOptionNode(option, true)
   }
 
+  /** */
+  onClickOptionNode(option: SelectOption, sourceCheck: boolean = false) {
+    event.stopPropagation();
+    let uuid = this.inUuid;
+    /** 申明有激活项时，点击item只能改变激活的option*/
+    if (!sourceCheck && this._hasActive) {
+      if (option[uuid] !== this.activeOption[uuid]) {
+        this.activeOption = option;
+        this.onActiveChange.emit(option);
+      };
+      /**有勾选框需要通过勾选框进行勾选 */
+      if (this._showCheck) {
+        return;
+      }
+    }
+    if (this.checkUuids.includes(option[uuid])) {
+      this.removeItem(option);
+    } else {
+      if (!this._multi) {
+        utilArrayClear(this.checkOptions)
+        utilArrayClear(this.checkUuids)
+      }
+      this.addItem(option)
+    }
+    this.setOptionsState()
+    !this._multi && this.closeOptions();
+  }
+
+  removeItem(option: SelectOption): void {
+    utilArrayRemoveItem(this.checkUuids, option[this.inUuid]);
+    utilArrayRemoveItem(this.checkOptions, option);
+    if (this.checkUuids.length == 0 && this._leastOne) {
+      this.addItem(option)
+    }
+  }
+
+  addItem(option) {
+    this.checkUuids.push(option[this.inUuid]);
+    this.checkOptions.push(option)
+  }
+
+  /**子项的显影 */
   onClickOptionChild(option: SelectOption) {
     event.stopPropagation();
     option.showChild = !option.showChild;
@@ -159,24 +209,9 @@ export class ShareSelectComponent implements OnInit {
 
   closeOptions() {
     this.optionsOpen = !1;
-    this.setOutNodes()
-  }
-
-  setOutNodes() {
-    let outNodes;
-    if (this.inputType == 'string') {
-      outNodes = this.activeValues;
-    } else {
-      outNodes = this.activeNodes;
-    }
-    if (!this.selectConfig.multi) {
-      outNodes = outNodes[0];
-    }
-    if (shareIsEqual(outNodes, this.outNodes)) {
-      return
-    }
-    this.outNodes = outNodes;
-    this.emitOptionChange.emit(outNodes);
+    if (utilIsEqual(this.orgCheckOptions, this.checkOptions, this.inUuid)) return;
+    this.orgCheckOptions = [...this.checkOptions]
+    this.modelOptionChange.emit(this.orgCheckOptions);
   }
 
   backdropClick() {

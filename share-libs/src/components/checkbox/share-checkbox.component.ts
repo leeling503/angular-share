@@ -37,13 +37,14 @@ export class ShareCheckboxComponent implements OnInit {
     // if (this.inIsFather) { this.onClick.emit(!this.modelChecked); return }
     this.modelChecked = !this.modelChecked;
     // this.upClass();
+    this.modelCheckedChange.emit(this.modelChecked);
     this.onClick.emit(this.modelChecked);
-    this.modelCheckedChange.emit(this.modelChecked)
+    this.upClass();
   }
 
   upClass() {
     let classMap = {
-      "share-check-default":  !this.modelChecked,
+      "share-check-default": !this.modelChecked,
       "share-check-other": this.inIsOther,
       "share-check-selected": this.modelChecked,
       "share-check-disable": this.inIsDisable

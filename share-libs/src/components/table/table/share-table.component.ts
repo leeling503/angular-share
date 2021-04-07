@@ -103,6 +103,9 @@ export class TableComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
+    /**初次计算避免首次加载宽度与获得数据后计算的不统一 */
+    this.setTableWidth();
+    /**数据过多可能出现滚动条需要重新计算 */
     let $after = this.onCurDataChange.asObservable().subscribe(res => {
       this.setTableWidth();
       $after.unsubscribe();
