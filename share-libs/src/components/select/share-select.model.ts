@@ -1,20 +1,20 @@
 export class SelectConfig {
     /**是否显示control标签 */
-    showFlag: boolean = true;
+    ifFlag: boolean = true;
     /**是否显示选项多选框  */
-    showCheck: boolean = true;
+    ifCheck: boolean = true;
     /**是否显示清空按钮 */
-    showClear: boolean = true;
-    /**是否是多选同时也会根据传入的数据类型判断 */
-    multi: boolean = true;
+    ifClear: boolean = true;
+    /**是否是多选 */
+    ifMulti: boolean = false;
     /**是否拥有激活项状态 */
-    hasActive: boolean = false;
+    ifActive: boolean = false;
     /**提示语 */
     placeholder: string = '请选择';
     /**下拉无数据提示 */
     noneTip: string = '暂无数据';
-    /**默认选中第一个，对多选无效  */
-    leastOne: boolean = true;
+    /**至少选择一个，默认选中第一个 */
+    leastOne: boolean = false;
     openWidth: number | string;
 }
 
@@ -32,3 +32,4 @@ export class SelectOption {
     /**有子项被勾选 */
     _mix?: boolean;
 }
+export type SelectModelInputs = string[] | SelectOption[] | string | SelectOption

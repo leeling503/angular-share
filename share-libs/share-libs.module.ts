@@ -1,9 +1,9 @@
 
 import { NgModule } from '@angular/core';
-import modules from 'share-libs';
+import { MODULES } from 'share-libs';
 import { ShareDirectiveModule } from './src/directives/share-directive.module';
 
 @NgModule({
-  exports: [...modules, ShareDirectiveModule]
+  exports: [MODULES, ShareDirectiveModule]
 })
 export class ShareLibsModule { }

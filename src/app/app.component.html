@@ -1,6 +1,6 @@
-<share-select [inConfig]="selectConfig" (modelOptionChange)="emitSelectChange($event)" [(modelOption)]='option'
+<!-- <share-select [inConfig]="selectConfig" (modelOptionChange)="emitSelectChange($event)" [(modelOption)]='option'
   (onActiveChange)="onActiveChange($event)" [inOptions]='options'>
-</share-select>
+</share-select> -->
 <!-- <share-modal-select-item></share-modal-select-item> -->
 <!-- <div style="padding: 20px;"> 
   <share-date-picker></share-date-picker>
@@ -29,14 +29,17 @@
   </div>
 </ng-template>
 <div class="app">
-  <share-button [btnSize]="'large'" [btnWidth]="120" (click)="showShareModal()" [btnPerIcon]="'icon-checked'"
-    [btnSufIcon]="'icon-checked'">按钮</share-button>
-  <div class="share-table">
+  <ex-share-radio></ex-share-radio>
+  <ex-share-select></ex-share-select>
+  <ex-share-table></ex-share-table>
+  <share-button [btnSize]="'small'" [btnDisable]="true" [btnClick]="showShareModal">按钮</share-button>
+  <share-radio [inRadioDatas]="radioDatas"></share-radio>
+  <!-- <div class="share-table">
     <share-table-multi-head (onSelectChange)="onSelectChange($event)"></share-table-multi-head>
     <share-table [inApiUrl]="'api/Statuslist/getList'" [inDisableDatas]="disItem" [inSelectedDatas]="selectedItem"
       [inItems]="inItems" (onSelectChange)="onSelectChange($event)">
     </share-table>
-  </div>
+  </div> -->
   <!-- <share-table></share-table> -->
   <share-checkbox></share-checkbox>
   <share-pagination></share-pagination>

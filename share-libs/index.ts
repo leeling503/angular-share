@@ -2,7 +2,18 @@ import { ShareDateModule } from './src/components/date-picker/share-date-picker.
 import { ShareCheckboxModule } from './src/components/checkbox/share-checkbox.module';
 import { ShareButtonModule } from './src/components/button/button.module';
 import { SharePaginationModule } from './src/components/pagination/share-pagination.module';
+import { ShareRadioModule } from './src/components/radio/share-radio.module';
+import { ShareSelectModule } from './src/components/select/share-select.module';
+import { ShareTableModule } from './src/components/table/share-table.module';
 
-let modules = [ShareDateModule, ShareCheckboxModule, ShareButtonModule, SharePaginationModule];
-export { ShareDateModule, ShareCheckboxModule, ShareButtonModule, SharePaginationModule };
-export default modules;
+
+export { ShareDateModule, ShareSelectModule, ShareTableModule, ShareCheckboxModule, ShareButtonModule, ShareRadioModule, SharePaginationModule };
+export var MODULES = [
+    ShareRadioModule,
+    ShareDateModule,
+    ShareSelectModule,
+    ShareCheckboxModule,
+    ShareButtonModule,
+    SharePaginationModule,
+    ShareTableModule
+];

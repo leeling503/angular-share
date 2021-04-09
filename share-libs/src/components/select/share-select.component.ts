@@ -1,8 +1,9 @@
-import { CdkOverlayOrigin, OverlayRef, Overlay } from '@angular/cdk/overlay';
+import { CdkOverlayOrigin } from '@angular/cdk/overlay';
 import { Component, OnInit, Input, ViewChild, ElementRef, Output, EventEmitter, SimpleChanges } from '@angular/core';
-import { SelectOption, SelectConfig } from './share-select.model';
-import { utilArrayClear, utilArrayRemoveItem, utilIsEqual } from 'share-libs/src/utils/util';
-import * as _ from 'lodash';
+import { SelectOption, SelectConfig, SelectModelInputs } from './share-select.model';
+import { utilArrayClear, utilArrayGetValueByKey, utilArrayRemoveItem, utilChanges, utilChangesNoFirst, utilIsEqual } from 'share-libs/src/utils/util';
+import { ShareInputType } from 'share-libs/src/models';
+
 @Component({
   selector: 'share-select',
   templateUrl: './share-select.component.html',
@@ -18,12 +19,12 @@ export class ShareSelectComponent implements OnInit {
   /**选项 */
   @Input() inOptions: SelectOption[] = [];
   /**已选中 */
-  @Input() modelOption: SelectOption[];
+  @Input() modelOption: SelectModelInputs;
   checkUuids: string[];
   checkOptions: SelectOption[] = [];
   /**已选中的对比uuid */
   @Input() inUuid: string = 'key';
-  @Output() modelOptionChange: EventEmitter<SelectOption[]> = new EventEmitter();
+  @Output() modelOptionChange: EventEmitter<SelectModelInputs> = new EventEmitter();
   /**改变激活项 */
   @Output() onActiveChange: EventEmitter<SelectOption> = new EventEmitter();
 
@@ -38,25 +39,30 @@ export class ShareSelectComponent implements OnInit {
   _noneTip: string;
   _hasActive: boolean;
 
+  _inputType: ShareInputType = 'string';
+  _outOptions: SelectModelInputs;
   orgCheckOptions: SelectOption[] = [];
   activeOption: SelectOption = {};
   optionsOpen: boolean = false;
   cdkConnectedOverlayWidth: number | string;
   @ViewChild(CdkOverlayOrigin, { static: true }) cdkOverlayOrigin: CdkOverlayOrigin;
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.modelOption && !changes.modelOption.firstChange) {
-      if (utilIsEqual(this.modelOption, this.checkOptions)) return;
+    if (utilChangesNoFirst(changes, 'modelOption')) {
+      if (utilIsEqual(this.modelOption, this._outOptions)) return;
       this.setCheckOptions();
       this.setCheckMixState()
     }
-    if (changes.inOptions && !changes.inOptions.firstChange) {
+    if (utilChangesNoFirst(changes, 'inOptions')) {
+      this.setCheckOptions();
       this.setCheckMixState()
     }
+    if (utilChanges(changes, 'inConfig')) {
+      this.setConfig();
+    }
+
   }
 
   ngOnInit() {
-    this._config = Object.assign(new SelectConfig(), this.inConfig)
-    this.setConfig();
     this.setCheckOptions();
     this.setCheckMixState();
     this.setOpenWidth();
@@ -66,7 +72,32 @@ export class ShareSelectComponent implements OnInit {
   }
 
   setCheckOptions() {
-    this.checkOptions = this.modelOption || [];
+    let option = this.modelOption || [];
+    let value = option[0];
+    if (Array.isArray(option)) {
+      if (typeof value !== "object") {
+        this._inputType = 'strings';
+        this.checkOptions = [...option].map(e => {
+          let option = utilArrayGetValueByKey(this.inOptions, e as string, this.inUuid);
+          return option
+        }).filter(e => e !== undefined)
+      } else {
+        this._inputType = 'objects';
+        this.checkOptions = option as SelectOption[];
+      }
+    } else {
+      if (typeof option == "string") {
+        this._inputType = 'string';
+        let options = option.split(',');
+        this.checkOptions = options.map(e => {
+          let option = utilArrayGetValueByKey(this.inOptions, e as string, this.inUuid);
+          return option
+        }).filter(e => e !== undefined)
+      } else {
+        this._inputType = 'object';
+        this.checkOptions = [utilArrayGetValueByKey(this.inOptions, option[this.inUuid], this.inUuid)].filter(e => e !== undefined);
+      }
+    }
     this.checkUuids = this.checkOptions.map(e => e[this.inUuid]);
     this.orgCheckOptions = [...this.checkOptions];
     if (this.checkUuids.length == 0 && this._leastOne && this.inOptions && this.inOptions.length > 0) {
@@ -77,14 +108,15 @@ export class ShareSelectComponent implements OnInit {
 
   /**设置配置项 */
   setConfig() {
-    this._multi = this._config.multi;
-    this._showCheck = this._config.showCheck;
+    this._config = Object.assign(new SelectConfig(), this.inConfig)
+    this._multi = this._config.ifMulti;
+    this._showCheck = this._config.ifCheck;
     this._leastOne = this._config.leastOne;
     this._placeholder = this._config.placeholder;
-    this._showClear = this._config.showClear;
+    this._showClear = this._config.ifClear;
     this._noneTip = this._config.noneTip;
-    this._showFlag = this._config.showFlag;
-    this._hasActive = this._config.hasActive;
+    this._showFlag = this._config.ifFlag;
+    this._hasActive = this._config.ifActive;
   }
 
   /**设置选项状态 */
@@ -211,7 +243,17 @@ export class ShareSelectComponent implements OnInit {
     this.optionsOpen = !1;
     if (utilIsEqual(this.orgCheckOptions, this.checkOptions, this.inUuid)) return;
     this.orgCheckOptions = [...this.checkOptions]
-    this.modelOptionChange.emit(this.orgCheckOptions);
+    let uuids = this.orgCheckOptions.map(e => e[this.inUuid])
+    if (this._inputType == "string") {
+      this._outOptions = uuids.join(',');
+    } else if (this._inputType == "strings") {
+      this._outOptions = uuids;
+    } else if (this._inputType == 'object') {
+      this._outOptions = this.orgCheckOptions[0]
+    } else {
+      this._outOptions = this.orgCheckOptions;
+    }
+    this.modelOptionChange.emit(this._outOptions);
   }
 
   backdropClick() {

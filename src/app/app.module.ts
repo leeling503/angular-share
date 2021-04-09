@@ -15,6 +15,8 @@ import { ModuleWithProviders } from '@angular/core';
 import { ShareModalModule } from 'share-libs/src/components/modal/modal.module';
 import { ShareModalSelectItemComponent } from 'share-libs/src/components/open-modals/modal-select-item/modal-select-item.component';
 import { ShareSelectModule } from 'share-libs/src/components/select/share-select.module';
+import { ShareRadioModule } from 'share-libs/src/components/radio/share-radio.module';
+import { ExamplesModule } from 'share-libs/src/examples/examples.module';
 let routers: Routes = [{
   path: '', component: MyComponentComponent
 }]
@@ -33,12 +35,12 @@ const a: ModuleWithProviders<RouterModule> = RouterModule.forRoot(routers)
     RouterModule,
     HttpClientModule,
     FormsModule,
-    ShareTableModule,
     ShareCheckboxModule,
     ShareDateModule,
     SharePaginationModule,
-    ShareLibsModule,
-    ShareSelectModule
+    ShareSelectModule,
+    ShareRadioModule,
+    ExamplesModule
   ],
   providers: [httpInterceptorProviders],
   entryComponents: [MyComponentComponent, ShareModalSelectItemComponent],

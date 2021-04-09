@@ -1,4 +1,4 @@
-import { BtnPara, BtnType, BtnSize } from './share-buttom';
+import { BtnType, BtnSize, ShareBtnPara } from './share-buttom';
 import { Component, OnInit, Input, ElementRef, RendererFactory2, Renderer2, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { ShareUpdataClassService } from '../../services/share-updata-class.service';
 
@@ -12,14 +12,20 @@ import { ShareUpdataClassService } from '../../services/share-updata-class.servi
   }
 })
 export class ShareButtonComponent implements OnInit {
-  @Input() btnPara: BtnPara;//按钮配置
-  @Input() btnPerIcon: string;//前置图标class
+  @Input() btnPara: ShareBtnPara;//按钮配置
+  @Input() btnPerIcon: string = "date-day-icon";//前置图标class
   @Input() btnSufIcon: string;//后置图标class
-  @Input() btnWidth: number | string;//固定宽度
-  @Input() btnHeight: number | string;//固定高度
-  @Input() btnType: BtnType = 'primary';//按钮类型
+  /**按钮类型 决定背景色，边框色 和字体颜色  */
+  @Input() btnType: BtnType = 'default';
+  /**决定按钮的最小宽高度 'small' | 'default' | 'large'  65-28| 75-30 | 85-32  */
   @Input() btnSize: BtnSize = 'default';//按钮大小
-  @Input() btnText: string;//按钮文字
+  /**设置宽高 ， 优先级高于size */
+  @Input() btnWidth: number | string;
+  @Input() btnHeight: number | string;
+  /**按钮文字*/
+  @Input() btnText: string;
+  /**是否禁用*/
+  @Input() btnDisable: boolean;
   @Input() btnClick: () => {};
   nativeEl: HTMLElement;
   renderer2: Renderer2;
@@ -30,16 +36,18 @@ export class ShareButtonComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.btnPara) {
+    if (changes.btnPara && this.btnPara) {
+      this.btnPara = Object.assign({}, this.btnPara);
       this.btnClick = this.btnPara.btnClick;
       this.btnSize = this.btnPara.btnSize || 'default';
       this.btnType = this.btnPara.btnType || 'default';
+      this.btnDisable = this.btnPara.btnDisable;
       this.btnPerIcon = this.btnPara.btnPerIcon;
       this.btnSufIcon = this.btnPara.btnSufIcon;
       this.btnText = this.btnPara.btnText;
       this.setClassMap();
     }
-    if (changes.slType || changes.slSize) {
+    if (changes.btnSize || changes.btnDisable || changes.btnDisable) {
       this.setClassMap();
     }
     if (changes.btnWidth || changes.btnHeight) {
@@ -57,20 +65,25 @@ export class ShareButtonComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.renderer2.setStyle(this.nativeEl, "display", 'inline-block')
+    this.renderer2.setStyle(this.nativeEl, "display", 'inline-block');
     this.setClassMap();
+  }
+
+  setConfig() {
+
   }
 
   setClassMap() {
     let classMap = {
       [`sl-button-size-${this.btnSize}`]: true,
-      [`sl-button-type-${this.btnType}`]: true
+      [`sl-button-type-${this.btnType}`]: true,
+      [`sl-button-type-disable`]: this.btnDisable,
     }
     this.upElClass.updateElClass(this.nativeEl.querySelector(".share-button"), classMap)
   }
 
   triggerClick() {
-    this.btnClick && this.btnClick();
+    !this.btnDisable && this.btnClick && this.btnClick();
   }
 
 }

@@ -1,5 +1,15 @@
 @import '../../../styles/index.less';
 
+.F(@W: wrap) {
+  display: flex;
+  flex-wrap: @W;
+}
+
+.F-C(@J: center, @A: center) {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 :host {
   width: 100%;
   height: 100%;
@@ -32,7 +42,8 @@
     display: flex;
     align-items: center;
     .B-B();
-    .year-cont{
+
+    .year-cont {
       text-align: center;
     }
 
@@ -49,11 +60,11 @@
     }
 
     .per-year i {
-      transform:translate(5px,-50%) rotateZ(90deg);
+      transform: translate(5px, -50%) rotateZ(90deg);
     }
 
     .next-year i {
-      transform:translate(5px,-50%) rotateZ(-90deg);
+      transform: translate(5px, -50%) rotateZ(-90deg);
     }
   }
 

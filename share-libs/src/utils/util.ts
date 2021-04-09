@@ -1,3 +1,5 @@
+import { SimpleChanges } from "@angular/core";
+import { ShareInputType } from "../models";
 
 export function utilIsEmpty(value: any): boolean {
     if (Array.isArray(value)) {
@@ -9,24 +11,38 @@ export function utilIsEmpty(value: any): boolean {
     }
 }
 
-/**判断是否相等 ， 传入uuid后就只比对uuid对应的值是否相等 */
-export function utilIsEqual(cur, value, uuid?: string) {
+/**判断是否相等 ， 传入uuid后就只比对对象的key的值是否相等 */
+export function utilIsEqual(cur, value, key?: string) {
     if (cur === value) {
         return true
     } else if (Array.isArray(value) && Array.isArray(cur)) {
         if (value.length === cur.length) {
             let flag = value.every(e => cur.includes(e))
-            if (uuid && !flag) {
-                let curUuids = cur.map(e => e && e[uuid])
-                flag = value.every(e => curUuids.includes(e[uuid]))
+            if (key && !flag) {
+                let curUuids = cur.map(e => e && e[key])
+                flag = value.every(e => curUuids.includes(e[key]))
             }
             return flag
         }
         return false
-    } else if (uuid && cur[uuid] === value[uuid]) {
+    } else if (key && cur[key] === value[key] && cur[key]) {
         return true
     }
     return false
+}
+
+export function utilArrayGetValueByKey<T>(arrs: T[], value: string, key: string = 'key'): T | undefined {
+    for (let i = 0, len = arrs.length; i < len; i++) {
+        let data = arrs[i];
+        if (data[key] == value) {
+            return data
+        } else if (data['children'] && data['children'].length > 0) {
+            let a = utilArrayGetValueByKey(data['children'], value, key);
+            if (a) {
+                return a as T;
+            }
+        }
+    }
 }
 
 /**移除掉数组中指定的item  arr和item不能同时为sting*/
@@ -44,4 +60,36 @@ export function utilArrayRemoveItem(arr: any[], item: any, key?: string) {
 export function utilArrayClear<T>(arr: T[]): T[] {
     arr.splice(0, arr.length);
     return arr;
+}
+
+/**不是第一次改变且当前值存在时返回true */
+export function utilChangesNoFirst(c: SimpleChanges, key: string): boolean {
+    return c[key] && !c[key].firstChange && c[key].currentValue
+}
+/**改变且当前值存在时返回true */
+export function utilChanges(c: SimpleChanges, key: string): boolean {
+    return c[key] && c[key].currentValue
+}
+
+/**undefined和null是返回true */
+export function utilIsUndefined(value: any): boolean {
+    return value === undefined || value === null
+}
+
+export function utilValueType(value: any): ShareInputType {
+    let T: ShareInputType;
+    if (Array.isArray(value)) {
+        if (typeof value[0] !== "object") {
+            T = 'strings';
+        } else {
+            T = 'objects';
+        }
+    } else {
+        if (typeof value == "string") {
+            T = 'string';
+        } else {
+            T = 'object';
+        }
+    }
+    return T
 }

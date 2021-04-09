@@ -29,7 +29,7 @@ export class AppComponent {
     // this.overlay = this.injector.get(Overlay)
     // this.ngZone = this.injector.get(NgZone)
   }
-  option: SelectOption[] = [{ key: 'a', value: 'asd' }];
+  option: SelectOption[] = [];
   options: SelectOption[] = []
   a = [
     {
@@ -51,6 +51,9 @@ export class AppComponent {
   // data = {
   //   value: 500
   // }
+  radioDatas = [
+    { id: '1', value: '好', ifCheck: true, ifDis: false }
+  ]
   paginPage = new PaginationPage();
   ngOnInit(): void {
     this.paginPage.currentPage = 5;
@@ -62,7 +65,7 @@ export class AppComponent {
     }, 5000);
   }
 
-  showShareModal() {
+  showShareModal = () => {
     let modelInstance = this.shareModal.openModal({
       overlayerConfig: {
         hasBackdrop: false,

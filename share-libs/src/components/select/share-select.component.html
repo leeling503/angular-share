@@ -1,5 +1,5 @@
 <div class="share-select" cdkOverlayOrigin (click)='clickToggleOpen()'
-  [ngClass]="{'select-has-border':checkOptions.length > 1,'select-has-control':inConfig.showFlag }">
+  [ngClass]="{'select-has-border':checkOptions.length > 1,'select-has-control':_showFlag }">
   <div class="selected-nodes">
     <ng-container *ngIf="!checkOptions || checkOptions.length==0 ">
       <div class="selected-node placeholder-text">

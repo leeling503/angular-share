@@ -1,10 +1,10 @@
 import { OverlayRef } from '@angular/cdk/overlay';
 import { Component, OnInit, Input, SimpleChanges, ViewChild, ViewContainerRef, ComponentFactory, ComponentFactoryResolver, ComponentRef, Type, Output, EventEmitter, Injector, TemplateRef } from '@angular/core';
 
-import { BtnPara } from '../button/share-buttom';
 import { ShareModalPara, ModalContentStyles } from './share-modal.model';
 import { ShareModalRef } from './modalRef.service';
 import { Observable } from 'rxjs/internal/Observable';
+import { ShareBtnPara } from '../button/share-buttom';
 
 @Component({
   selector: 'app-modal',
@@ -25,7 +25,7 @@ export class ShareModalComponent<T> extends ShareModalRef implements OnInit {
   @Input() overlayRef: OverlayRef;//弹窗的overlay对象,用来关闭弹窗
   @Input() cbCloseModal: () => any;
   @ViewChild('bodyContainer', { read: ViewContainerRef, static: true }) private bodyContainer: ViewContainerRef;
-  footerBtns: BtnPara[] = [];
+  footerBtns: ShareBtnPara[] = [];
   private contentComponentRef: ComponentRef<T>;
   private emitModalOpen: EventEmitter<any> = new EventEmitter();
   private emitModalClose: EventEmitter<any> = new EventEmitter();

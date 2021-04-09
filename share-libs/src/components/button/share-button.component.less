@@ -7,11 +7,11 @@
   justify-content: center;
 }
 
-.sl-button-type(@b-color, @color) {
+.sl-button-type(@b-color, @color , @c-border : @b-color ) {
   cursor: pointer;
   box-sizing: border-box;
   background-color: @b-color;
-  border: 1px solid @b-color;
+  border: 1px solid @c-border;
   text-align: center;
   color: @color;
 }
@@ -57,5 +57,13 @@
 }
 
 .sl-button-type-default {
-  .sl-button-type-primary();
+  .sl-button-type(@C-white, @C-blue-c, @C-blue-c);
+}
+
+.sl-button-type-disable {
+  cursor: default;
+
+  i {
+    cursor: default !important;
+  }
 }

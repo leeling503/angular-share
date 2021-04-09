@@ -1,0 +1,8 @@
+<div class="radios">
+  <ng-container *ngFor="let radio of _datas">
+    <div (click)="tiggerCheck(radio)" [class]="'radio radio-type-'+_iconType " [ngClass]="{'radio-dis':radio.ifDis}">
+      <i [ngClass]="{ 'radio-check':radio.ifCheck,'radio-dis':radio.ifDis}"></i>
+      <span>{{ radio.value === [][0] ?  radio.key: radio.value}}</span>
+    </div>
+  </ng-container>
+</div>

@@ -2,11 +2,13 @@
 @base-url: '../../assets/';
 
 .Icon(@iconUrl, @w: 16px, @h: @w) {
-  .share-icon(@iconUrl, @w: 16px, @h)
+  .share-icon(@iconUrl, @w, @h)
 }
+
 .Icon-P(@iconUrl, @w: 16px, @h: @w) {
-  .share-icon-position(@iconUrl, @w: 16px, @h)
+  .share-icon-position(@iconUrl, @w, @h)
 }
+
 .share-icon(@iconUrl, @w: 16px, @h: @w) {
   display: inline-block;
   width: @w;
@@ -16,6 +18,7 @@
   cursor: pointer;
   .background-image(@iconUrl);
 }
+
 .share-icon-position(@iconUrl, @w: 16px, @h: @w) {
   display: inline-block;
   width: @w;
@@ -26,7 +29,7 @@
   position: absolute;
   top: 50%;
   right: 5px;
-  transform: translate(0,-50%);
+  transform: translate(0, -50%);
   .background-image(@iconUrl);
 }
 
@@ -37,21 +40,18 @@
   background-position: center;
 }
 
-.imag-url(@url){
+.imag-url(@url) {
   background-image: url('@{base-url}@{url}.png');
 }
 
-.F(@W: wrap) {
-  display: flex;
-  flex-wrap: @W;
-}
+.Y-center() {
+  max-height: 100%;
+  &::before {
+    content: '';
+    height: 100%;
+    width: 0px;
+    vertical-align: middle;
+  }
 
-.F-G(@G: 1) {
-  flex-grow: @G;
-}
-
-.F-C(@J: center, @A: center) {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  vertical-align: middle;
 }
