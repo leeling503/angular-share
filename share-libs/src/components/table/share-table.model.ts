@@ -9,11 +9,9 @@ export interface TableItem {
     /**计算后的显示宽度 */
     _width?: number;
     /**该列的类型 */
-    type?: tdType;
+    type?: TdType;
     /** 对应data中的key取值 */
     key?: string;
-    /**tag类型的规则 */
-    tagRule?: TagRule[];//
     /** td的class view-left居左  view-right居右  is-sticky该列固定 */
     classNames?: string;
     /** 列固定居左的距离（设置该距离后会固定列） */
@@ -22,15 +20,40 @@ export interface TableItem {
     ifShow?: boolean;
     /** 能否过滤掉该选列 只有设置为false才不能取消*/
     canFilter?: boolean;
+    /**text类型函数 */
+    cbText?: (data: any, item: TableItem) => string;
+    /**tag类型回调函数 */
+    cbTag?: (data: any, item: TableItem) => TagRule;
+    /**tag类型回调函数 */
+    cbDot?: (data: any, item: TableItem) => DotRule;
+}
+/** 
+ * 'check'  选款   'serial'  序号   "tag" 拥有背景色的小方块 
+ */
+type TdType = 'check' | 'serial' | "tag" | "dot" | 'text' | "expend";
+
+type TagType = 'green' | 'danger' | "blue" | 'orange' | "pink";
+type DotType = TagType;
+
+export interface TagRules {
+    [key: string]: TagRule
+}
+export interface DotRules {
+    [key: string]: DotRule
 }
 
 export interface TagRule {
-    tagType: string;//决定tag颜色
-    value: string | number;//后台传过来的值
-    text: string | number; //值对应的显示的字
+    /**决定tag颜色 */
+    class: TagType;
+    /**后台传过来的值*/
+    value?: string | number;//后台传过来的值
+    /** 显示的字*/
+    text: string | number;
+    /** 字体颜色*/
+    color?: string;
 }
 
-type tdType = 'check' | 'serial' | "tag" | "expend";
+export interface DotRule extends TagRule { }
 
 export class SharePage {
     numPages?: number = 1;//当总页数改变时触发，$ event：number等于总页数
@@ -78,4 +101,31 @@ export interface MultiHeadItem {
 
 export interface MultiAllItems {
     [key: string]: TableMultiItem[]
+}
+
+
+
+
+
+
+export var CbUtileTagFun = function (data: any, item: TableItem, tags: TagRules, defualt?: TagRule): TagRule {
+    let key = data[item.key];
+    let tag = tags[key] || defualt || { value: '', text: '无数据', class: 'blue', color: '#FFF' };
+    data['_tagText' + key] = tag.text;
+    data['_tagClass' + key] = tag.class;
+    data['_tagColor' + key] = tag.color || '#FFF';
+    return tag;
+}
+export var CbUtileDotFun = function (data: any, item: TableItem, tags: DotRules, defualt?: DotRule): DotRule {
+    let key = data[item.key];
+    let tag = tags[key] || defualt || { value: '', text: '无数据', class: 'blue', color: '#333' };
+    data['_dotText' + key] = tag.text;
+    data['_dotClass' + key] = tag.class;
+    data['_dotColor' + key] = tag.color || '#333';
+    return tag;
+}
+
+export var CbUtileTextFun = function (data: any, item: TableItem) {
+    let text = data["_textText" + item.key] = data[item.key]
+    return text;
 }

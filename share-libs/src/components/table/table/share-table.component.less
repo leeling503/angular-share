@@ -3,7 +3,8 @@
 @c-tbody-tr: #F6FAFF;
 @table-border: 1px solid #c0d8fe;
 @import '../../../styles/index.less';
-:host{
+
+:host {
   width: 100%;
   height: 100%;
 }
@@ -93,6 +94,10 @@
             height: @trheight;
             overflow: hidden;
 
+            &>div {
+              padding: 0px 3px;
+            }
+
             .table-tag {
               display: inline-block;
               min-width: 40px;
@@ -106,25 +111,48 @@
               font-size: 12px;
             }
 
-            .success {
-              background-color: #13C4B0;
+            .table-dot {
+              width: 10px;
+              height: 10px;
+              border-radius: 50%;
             }
 
-            .danger {
-              background-color: #F04864;
+            .table-dot-span {
+              display: inline-block;
+              min-width: 20px;
+              height: 22px;
+              text-align: center;
+              line-height: 22px;
+              opacity: 0.8;
+              padding: 0px 3px;
+              color: @C-F-default;
+              font-size: 14px;
             }
 
-            .default {
-              background-color: #0055EE;
+
+            .table-tag,
+            .table-dot {
+              &.green {
+                background-color: #13C4B0;
+              }
+
+              &.danger {
+                background-color: #F04864;
+              }
+
+              &.blue {
+                background-color: #0055EE;
+              }
+
+              &.orange {
+                background-color: #f81;
+              }
+
+              &.pink {
+                background-color: #FF99CC;
+              }
             }
 
-            .org {
-              background-color: #f81;
-            }
-
-            .primary {
-              background-color: #0055EE;
-            }
 
             .expend-link {
               color: #035ADE;

@@ -44,7 +44,8 @@ const a: ModuleWithProviders<RouterModule> = RouterModule.forRoot(routers)
   ],
   providers: [httpInterceptorProviders],
   entryComponents: [MyComponentComponent, ShareModalSelectItemComponent],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  // schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule { }
 

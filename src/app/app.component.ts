@@ -127,25 +127,5 @@ export class AppComponent {
   disItem = [{ id: "dd069861-f880-4925-911f-578a5f5fb461", datagramId: "", deviceCode: "01030201200262", },
   { id: "47528e1f-8b78-4b66-81c9-f2f9631695af", datagramId: "", deviceCode: "01030201200092", },
   { id: "4c8c5ab5-a042-4dd7-9e3f-04fa4d5818c4", datagramId: "", deviceCode: "01030200180060", }]
-  inItems: Array<TableItem> = [
-    { title: '选框', type: 'check', canFilter: false, styckyLeft: '0px' },
-    { title: '序号', type: 'serial', width: 60, canFilter: false, styckyLeft: '62px' },
-    { title: '时间', key: 'aidsCode', width: 220 },
-    { title: '变更内容', key: 'aidsName', width: 180 },
-    {
-      title: '报文类型', key: 'commModeCodeName', width: 180
-    },
-    { title: '操作用户', key: 'userName', width: 180 },
-    {
-      title: '执行结果', key: 'ifBind', width: 180, type: "tag", tagRule: [
-        { value: 0, text: '成功', tagType: 'success' },
-        { value: 1, text: '失败', tagType: 'danger' },
-        { value: 2, text: '队列中', tagType: 'default' },
-        { value: 3, text: '等待回复', tagType: 'default' },
-      ]
-    },
-    {
-      title: '参数详情', key: 'targetingName', type: "expend", ifShow: false, width: 180
-    },
-  ]
+
 }
