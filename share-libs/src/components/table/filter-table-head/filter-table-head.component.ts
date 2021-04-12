@@ -2,7 +2,7 @@ import { ComponentPortal, } from '@angular/cdk/portal';
 import { Component, ComponentFactoryResolver, ElementRef, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { ShareOverlayPosition, ShareOverlayService } from 'share-libs/src/services/share-overlay.service';
 import { ModalChange, ShareModalSelectItem, ShareModalSelectItemComponent } from '../../open-modals/modal-select-item/modal-select-item.component';
-import { MultiHeadItem, TableItem } from '../share-table.model';
+import { TableMultiHeadItem, TableItem } from '../share-table.model';
 
 @Component({
     selector: 'filter-head',
@@ -17,7 +17,7 @@ export class FilterTableHeadComponent implements OnInit {
     openFlag: boolean = false;
     native: HTMLElement;
     /** 输入表头数据 */
-    @Input() inItems: TableItem[] | MultiHeadItem[] = [];
+    @Input() inItems: TableItem[] | TableMultiHeadItem[] = [];
     @Input() inFilterKey: 'key' | 'keyCode' = 'key';
     /** 表格列的唯一key  单表头为key 多表头为keyCode */
     @Output() onChangeItemFilter: EventEmitter<any> = new EventEmitter();
@@ -32,14 +32,14 @@ export class FilterTableHeadComponent implements OnInit {
     ngOnInit(): void {
         if (this.inFilterKey == 'keyCode') {
             this.tableType = 'multi';
-            this.setMultiSelectItems(<MultiHeadItem[]>this.inItems);
+            this.setMultiSelectItems(<TableMultiHeadItem[]>this.inItems);
         } else {
             this.tableType = 'single';
             this.modalSelectItems = this.getSelectItems(<TableItem[]>this.inItems);
         }
     }
 
-    setMultiSelectItems(items: MultiHeadItem[]) {
+    setMultiSelectItems(items: TableMultiHeadItem[]) {
         let selectItems: ShareModalSelectItem[] = [];
         items.map(e => {
             let tableItems = e.heads;
@@ -93,7 +93,7 @@ export class FilterTableHeadComponent implements OnInit {
                         }
                     })
                 } else {
-                    (<MultiHeadItem[]>this.inItems).forEach(e => {
+                    (<TableMultiHeadItem[]>this.inItems).forEach(e => {
                         e.heads.forEach(head => {
                             if (head[this.inFilterKey] == _item.key) {
                                 head.ifShow = _item._checked;

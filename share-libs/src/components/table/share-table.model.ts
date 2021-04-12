@@ -90,16 +90,17 @@ export interface TableMultiItem extends TableItem {
     _keyCode?: string;
     /**多表头同列所有th隐藏才被隐藏 */
     _ifShow?: boolean;
+    _styckyLeft?: string;
 }
 //多表头html使用 ，heads表示表头 ， datas表示对应该表头的数据
-export interface MultiHeadItem {
+export interface TableMultiHeadItem {
     /**表头信息 */
     heads: TableMultiItem[];
     /**表格数据 */
     datas: any[];
 }
 
-export interface MultiAllItems {
+export interface TableMultiAllItems {
     [key: string]: TableMultiItem[]
 }
 

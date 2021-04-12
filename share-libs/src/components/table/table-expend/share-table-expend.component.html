@@ -34,8 +34,22 @@
                   </div>
                   <div *ngSwitchCase="'serial'"> {{(page.currentPage-1)*page.pageRecord+i+1}}</div>
                   <div *ngSwitchCase="'tag'">
-                    <span class="table-tag" [ngClass]="item.tagRule[data[item.key]].tagType">
-                      {{item.tagRule[data[item.key]].text}}
+                    <span class="table-tag" [ngClass]="data['_tagClass'+item.key] || item.cbTag(data,item).class"
+                      [ngStyle]="{'color':data['_tagColor'+item.key]  || item.cbTag(data,item).color}">
+                      {{ data['_tagText'+item.key]  || item.cbTag(data,item).text }}
+                    </span>
+                  </div>
+                  <div *ngSwitchCase="'dot'">
+                    <div class="table-dot" [ngClass]="data['_dotClass'+item.key] || item.cbDot(data,item).class">
+                    </div>
+                    <span class="table-dot-span"
+                      [ngStyle]="{'color':data['_dotColor'+item.key]  || item.cbDot(data,item).color}">
+                      {{ data['_dotText'+item.key]  || item.cbDot(data,item).text }}
+                    </span>
+                  </div>
+                  <div *ngSwitchCase="'text'">
+                    <span class="table-text">
+                      {{ data['_textText'+item.key] || item.cbText(data,item) }}
                     </span>
                   </div>
                   <div *ngSwitchCase="'expend'">

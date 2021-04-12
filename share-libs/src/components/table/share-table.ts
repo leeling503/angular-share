@@ -72,59 +72,56 @@ export class TableBase {
 
   ngAfterViewInit(): void {
     /**初次计算避免首次加载宽度与获得数据后计算的不统一 */
-    this.setTableWidth();
+    this.set_TableWidth();
     /**数据过多可能出现滚动条需要重新计算 */
     let $after = this.onCurDataChange.asObservable().subscribe(res => {
-      this.setTableWidth();
+      this.set_TableWidth();
       $after.unsubscribe();
     })
   }
 
-  setTableWidth() {
-    let allWith = 0, computeWidth = 0, len = this.inItems.length - 1;;
+  set_TableWidth() {
+    let tableWidth = this.nativeEl.querySelector('.share-table').clientWidth;
+    let tableMaxHeight = this.nativeEl.querySelector('.table-part').clientHeight;
+    let tableHeight = this.nativeEl.querySelector('table').clientHeight;
+    let allWith = 0, computeWidth = 0, len = 0;
     this.inItems.forEach(e => {
       if (e.ifShow !== false) {
+        len++;
         allWith += (e.width || e.widthMin || 60);
         if (!e.styckyLeft) {
           computeWidth += (e.width || e.widthMin || 60)
         }
       }
     })
-    setTimeout(() => {
-      let tableWidth = this.nativeEl.querySelector('.share-table').clientWidth;
-      let tableMaxHeight = this.nativeEl.querySelector('.table-part').clientHeight;
-      let tableHeight = this.nativeEl.querySelector('table').clientHeight;
-      /**-边框宽度 */
-      if (this.inClassNames.includes('border')) {
-        tableWidth -= (len + 2)
-      }
-      /**-侧边滚动条宽度 */
-      if (tableHeight > tableMaxHeight) {
-        tableWidth -= 6
-      }
-      if (tableWidth <= allWith) {
-        Promise.resolve().then(res => {
-          this.inItems.forEach(e => e._width = e.width || e.widthMin || 60)
+    /**-边框宽度 */
+    if (this.inClassNames.includes('border')) {
+      tableWidth -= (len + 2)
+    }
+    /**-侧边滚动条宽度 */
+    if (tableHeight > tableMaxHeight) {
+      tableWidth -= 6
+    }
+    if (tableWidth <= allWith) {
+      this.inItems.forEach(e => e._width = e.width || e.widthMin || 60)
+    } else if (tableWidth > allWith) {
+      let extraWidth = tableWidth, len = this.inItems.length - 1;
+      Promise.resolve().then(res => {
+        this.inItems.forEach((e, i) => {
+          if (e.ifShow === false) { e._width = 0; return }
+          let eWhidth = e.width || e.widthMin || 60;
+          if (i === len) {
+            e._width = extraWidth;
+          } else if (e.styckyLeft) {
+            e._width = eWhidth;
+          } else {
+            e._width = (extraWidth * eWhidth / computeWidth) | 0;
+            computeWidth -= eWhidth;
+          }
+          extraWidth -= e._width;
         })
-      } else if (tableWidth > allWith) {
-        let extraWidth = tableWidth, len = this.inItems.length - 1;
-        Promise.resolve().then(res => {
-          this.inItems.forEach((e, i) => {
-            if (e.ifShow === false) { e._width = 0; return }
-            let eWhidth = e.width || e.widthMin || 60;
-            if (i === len) {
-              e._width = extraWidth;
-            } else if (e.styckyLeft) {
-              e._width = eWhidth;
-            } else {
-              e._width = (extraWidth * eWhidth / computeWidth) | 0;
-              computeWidth -= eWhidth;
-            }
-            extraWidth -= e._width;
-          })
-        })
-      }
-    }, 10);
+      })
+    }
   }
 
   ngOnInit(): void {
@@ -222,7 +219,7 @@ export class TableBase {
     if (!flag) {
       /**改变每页条数可能出现滚动条，需要重新计算宽度 */
       let $after = this.onCurDataChange.asObservable().subscribe(res => {
-        this.setTableWidth();
+        this.set_TableWidth();
         $after.unsubscribe();
       })
     }
@@ -230,7 +227,7 @@ export class TableBase {
 
   /** 表头显示列有改变 */
   onChangeItemFilter() {
-    this.setTableWidth();
+    this.set_TableWidth();
   }
 
   //以下方案待优化
