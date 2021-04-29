@@ -5,9 +5,10 @@ import { SharePaginationModule } from './src/components/pagination/share-paginat
 import { ShareRadioModule } from './src/components/radio/share-radio.module';
 import { ShareSelectModule } from './src/components/select/share-select.module';
 import { ShareTableModule } from './src/components/table/share-table.module';
+import { ShareViewFlvModule } from './src/components/view-flv/share-view-flv.module';
 
 
-export { ShareDateModule, ShareSelectModule, ShareTableModule, ShareCheckboxModule, ShareButtonModule, ShareRadioModule, SharePaginationModule };
+export { ShareDateModule, ShareSelectModule, ShareTableModule, ShareCheckboxModule, ShareButtonModule, ShareRadioModule, SharePaginationModule, ShareViewFlvModule };
 export var MODULES = [
     ShareRadioModule,
     ShareDateModule,
@@ -15,5 +16,6 @@ export var MODULES = [
     ShareCheckboxModule,
     ShareButtonModule,
     SharePaginationModule,
-    ShareTableModule
+    ShareTableModule,
+    ShareViewFlvModule
 ];

@@ -38,7 +38,9 @@ export class SharePaginationComponent {
 
     ngAfterViewInit(): void {
         let ele: HTMLElement = this.el.nativeElement;
-        this.cdkConnectedOverlayWidth = ele.querySelector('.pagi-record').clientWidth + 2;
+        Promise.resolve().then(res => {
+            this.cdkConnectedOverlayWidth = ele.querySelector('.pagi-record').clientWidth + 2;
+        })
     }
 
 

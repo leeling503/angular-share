@@ -17,7 +17,7 @@ export class ExShareTableComponent implements OnInit {
 
 
   multiAllDatas: any[] = [
-    { "id": "bbd0d97c-1e32-4c48-b4b0-761d4328d261", "aidsTableCode": "1716.1", "aidsName": "501号灯船实体AIS航标", "locationAttr": "01", "typeCode": "0303", "aidsType": "实体AIS航标", "functionCode": "17", "functionName": "未定义航标类型", "position": "35°53’13.9” N 120°18’50.3”E", "location": "超大型船舶航道", "lightId": "994131628", "lightRange": "01", "managekey": "公用", "ownerUnitName": "青岛航标处", "authorityUnitName": "青岛航标处", "usageCode": "01", "usageName": "使用中", "levels": "level_4", }, { "id": "0151cb3f-6ef0-4a07-b08c-5074f1814c5b", "aidsTableCode": "", "aidsName": "上古林导航台", "locationAttr": "01", "typeCode": "0307", "aidsType": "导航台", "position": "38°50’11.6” N 117°30’17.5”E", "location": "滨州港", "lightRange": "", "managekey": "公用", "ownerUnitName": "天津航标处", "authorityUnitName": "天津航标处", "usageCode": "01", "usageName": "使用中", "remarks": "", "levels": "level_7", }, { "id": "0151cb3f-6ef0-4a07-b08c-5074f1814c5b", "aidsTableCode": "", "aidsName": "上古林导航台", "locationAttr": "01", "typeCode": "0307", "aidsType": "导航台", "position": "38°50’11.6” N 117°30’17.5”E", "location": "滨州港", "lightRange": "", "managekey": "公用", "ownerUnitName": "天津航标处", "authorityUnitName": "天津航标处", "usageCode": "01", "usageName": "使用中", "remarks": "", "levels": "level_7", }, { "id": "0151cb3f-6ef0-4a07-b08c-5074f1814c5b", "aidsTableCode": "", "aidsName": "上古林导航台", "locationAttr": "01", "typeCode": "0307", "aidsType": "导航台", "position": "38°50’11.6” N 117°30’17.5”E", "location": "滨州港", "lightRange": "", "managekey": "公用", "ownerUnitName": "天津航标处", "authorityUnitName": "天津航标处", "usageCode": "01", "usageName": "使用中", "remarks": "", "levels": "level_7", },
+    { "id": "bbd0d97c-1e32-4c48-b4b0-761d4328d261", "aidsTableCode": "1716.1", "aidsName": "501号灯船实体AIS航标", "locationAttr": "01", "typeCode": "0303", "aidsType": "实体AIS航标", "functionCode": "17", "functionName": "未定义航标类型", "position": "35°53’13.9” N 120°18’50.3”E", "location": "超大型船舶航道", "lightId": "994131628", "lightRange": "01", "managekey": "公用", "ownerUnitName": "青岛航标处", "authorityUnitName": "青岛航标处", "usageCode": "01", "usageName": "使用中", "levels": "level_4", }, { "id": "0151cb3f-6ef0-4a07-b08c-5074f1814c5b", "aidsTableCode": "", "aidsName": "上古林导航台", "locationAttr": "01", "typeCode": "0309", "aidsType": "导航台", "position": "38°50’11.6” N 117°30’17.5”E", "location": "滨州港", "lightRange": "", "managekey": "公用", "ownerUnitName": "天津航标处", "authorityUnitName": "天津航标处", "usageCode": "01", "usageName": "使用中", "remarks": "", "levels": "level_7", }, { "id": "0151cb3f-6ef0-4a07-b08c-5074f1814c5b", "aidsTableCode": "", "aidsName": "上古林导航台", "locationAttr": "01", "typeCode": "0307", "aidsType": "导航台", "position": "38°50’11.6” N 117°30’17.5”E", "location": "滨州港", "lightRange": "", "managekey": "公用", "ownerUnitName": "天津航标处", "authorityUnitName": "天津航标处", "usageCode": "01", "usageName": "使用中", "remarks": "", "levels": "level_7", }, { "id": "0151cb3f-6ef0-4a07-b08c-5074f1814c5b", "aidsTableCode": "", "aidsName": "上古林导航台", "locationAttr": "01", "typeCode": "0307", "aidsType": "导航台", "position": "38°50’11.6” N 117°30’17.5”E", "location": "滨州港", "lightRange": "", "managekey": "公用", "ownerUnitName": "天津航标处", "authorityUnitName": "天津航标处", "usageCode": "01", "usageName": "使用中", "remarks": "", "levels": "level_7", },
     { "id": "475ffda2-4e9e-44dc-a547-af263e62f8bf", "aidsTableCode": "1716.13", "aidsName": "青岛港507号实体AIS航标", "locationAttr": "01", "typeCode": "0303", "aidsType": "实体AIS航标", "functionCode": "06", "functionName": "右侧标", "position": "35°55’44.2” N 120°20’37.3”E", "location": "超大型船舶航道", "lightId": "994131630", "lightRange": "01", "managekey": "公用", "ownerUnitName": "青岛航标处", "authorityUnitName": "青岛航标处", "usageCode": "01", "usageName": "使用中", "levels": "level_4", },
     { "id": "04089f42-0e1c-4fc8-8b8a-eb21d1141a20", "aidsTableCode": "1716.15", "aidsName": "青岛港511号实体AIS航标", "locationAttr": "01", "typeCode": "0303", "aidsType": "实体AIS航标", "functionCode": "06", "functionName": "右侧标", "position": "35°57’30.3” N 120°21’55.4”E", "location": "超大型船舶航道", "lightId": "994131632", "lightRange": "01", "managekey": "公用", "ownerUnitName": "青岛航标处", "authorityUnitName": "青岛航标处", "usageCode": "01", "usageName": "使用中", "levels": "level_4", },
     { "id": "d86adb59-d180-49ef-8d2b-3bd2aa767bcf", "aidsTableCode": "1716.16", "aidsName": "青岛港512号实体AIS航标", "locationAttr": "01", "typeCode": "0303", "aidsType": "实体AIS航标", "functionCode": "05", "functionName": "左侧标", "position": "35°58’10.0” N 120°20’27.9”E", "location": "超大型船舶航道", "lightId": "994131633", "lightRange": "01", "managekey": "公用", "ownerUnitName": "青岛航标处", "authorityUnitName": "青岛航标处", "usageCode": "01", "usageName": "使用中", "levels": "level_4", },
@@ -50,7 +50,7 @@ export class ExShareTableComponent implements OnInit {
   multiAllItems: TableMultiAllItems = {
     "0307": [
       { title: '', type: 'check', width: 60, styckyLeft: '0px', keyCode: '1001', canFilter: false },
-      { title: '名称', type: 'serial', key: 'serial', width: 60, styckyLeft: '62px', keyCode: '1002', canFilter: false },
+      { title: '名称', type: 'serial', key: 'serial', width: 60, styckyLeft: '60px', keyCode: '1002', canFilter: false },
       { title: '身高', key: 'aidsName', width: 30, keyCode: '1003', canFilter: false },
       { title: '体重', key: 'locationAttr', width: 30, keyCode: '1004', },
       { title: '性别', key: 'typeCode', width: 30, keyCode: '1005' },
@@ -62,7 +62,7 @@ export class ExShareTableComponent implements OnInit {
     ],
     "0303": [
       { title: '', type: 'check', width: 60, keyCode: '1001', styckyLeft: '0px' },
-      { title: '名称', type: 'serial', width: 60, keyCode: '1002', styckyLeft: '62px' },
+      { title: '名称', type: 'serial', width: 60, keyCode: '1002', styckyLeft: '60px' },
       { title: '身高', key: 'aidsName', keyCode: '1003', width: 80 },
       { title: '体重', key: 'locationAttr', width: 30, keyCode: '1004' },
       { title: '性别', key: 'typeCode', keyCode: '1005', width: 30 },
@@ -74,7 +74,17 @@ export class ExShareTableComponent implements OnInit {
     ],
     "0306": [
       { title: '', type: 'check', width: 60, keyCode: '1001', styckyLeft: '0px' },
-      { title: '名称', type: 'serial', width: 60, keyCode: '1002', styckyLeft: '62px' },
+      { title: '名称', type: 'serial', width: 90, keyCode: '1002', styckyLeft: '60px' },
+      { title: '身高', key: 'aidsType', keyCode: '1003', width: 130 },
+      { title: '体重', key: 'aidsName', keyCode: '1004', width: 30 },
+      { title: '性别', key: 'locationAttr', keyCode: '1005', width: 50 },
+      { title: '学历', key: 'typeCode', keyCode: '1006', width: 50 },
+      { title: '姓名', key: 'position', keyCode: '1007', width: 50 },
+      { title: '中国', key: 'location', keyCode: '1011', type: "expend", width: 80 },
+    ],
+    "0309": [
+      { title: '', type: 'check', width: 60, keyCode: '1001', styckyLeft: '0px' },
+      { title: '名称09', type: 'serial', width: 60, keyCode: '1002', styckyLeft: '60px' },
       { title: '身高', key: 'aidsType', keyCode: '1003', width: 130 },
       { title: '体重', key: 'aidsName', keyCode: '1004', width: 30 },
       { title: '性别', key: 'locationAttr', keyCode: '1005', width: 50 },
@@ -101,35 +111,35 @@ export class ExShareTableComponent implements OnInit {
 
     this.items = [
       { title: '', type: 'check', width: 60, canFilter: false, styckyLeft: '0px' },
-      { title: '序号', type: 'serial', width: 60, canFilter: false, styckyLeft: '62px', },
-      { title: '时间', key: 'collectionTime', width: 250, canFilter: false },
+      { title: '序号', type: 'serial', width: 60, canFilter: false, styckyLeft: '60px', },
+      { title: '时间', key: 'collectionTime', width: 50, canFilter: false },
       {
-        title: '名称', key: 'aidsName', width: 230, type: "expend"
+        title: '名称', key: 'aidsName', width: 30, type: "expend"
       },
       {
-        title: '是否绑定', key: 'ifBind', type: 'dot', width: 230, cbDot: (data, item) => CbUtileDotFun(data, item,
+        title: '是否绑定', key: 'ifBind', type: 'dot', width: 30, cbDot: (data, item) => CbUtileDotFun(data, item,
           {
             get 0(): TagRule { console.log('getname'); return { value: '0', class: 'green', text: '未绑定', color: '#13C4B0' } },
             1: { value: '0', class: 'blue', text: '已绑定', color: 'orange' },
           })
       },
       {
-        title: '报警', key: 'ifAlarm', type: 'dot', width: 230, cbDot: (data, item) => CbUtileDotFun(data, item,
+        title: '报警', key: 'ifAlarm', type: 'dot', width: 30, cbDot: (data, item) => CbUtileDotFun(data, item,
           {
             get 0(): TagRule { console.log('getname'); return { value: '0', class: 'green', text: '正常', color: '#13C4B0' } },
             1: { value: '0', class: 'danger', text: '报警', color: '#F04864' },
           })
       },
-      { title: '站点名称', key: 'aidsName2', width: 230 },
+      { title: '站点名称', key: 'aidsName2', width: 30 },
       {
-        title: '执行结果', key: 'ifMark', type: "tag", width: 230, cbTag: (data, item) => CbUtileTagFun(data, item,
+        title: '执行结果', key: 'ifMark', type: "tag", width: 30, cbTag: (data, item) => CbUtileTagFun(data, item,
           {
             get success(): TagRule { console.log('getname'); return { value: '0', class: 'green', text: '成功', color: '#FFF' } },
             defeated: { value: '0', class: 'danger', text: '失败', color: 'blue' },
           })
       },
       {
-        title: '参数详情', key: 'commModeCodeName', type: "text", width: 220, cbText: (data, item) => CbUtileTextFun(data, item)
+        title: '参数详情', key: 'commModeCodeName', type: "text", width: 20, cbText: (data, item) => CbUtileTextFun(data, item)
       },
     ]
   }

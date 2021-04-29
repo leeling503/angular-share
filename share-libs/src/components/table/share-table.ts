@@ -84,19 +84,18 @@ export class TableBase {
     let tableWidth = this.nativeEl.querySelector('.share-table').clientWidth;
     let tableMaxHeight = this.nativeEl.querySelector('.table-part').clientHeight;
     let tableHeight = this.nativeEl.querySelector('table').clientHeight;
-    let allWith = 0, computeWidth = 0, len = 0;
+    let allWith = 0, computeWidth = 0;
     this.inItems.forEach(e => {
       if (e.ifShow !== false) {
-        len++;
         allWith += (e.width || e.widthMin || 60);
         if (!e.styckyLeft) {
           computeWidth += (e.width || e.widthMin || 60)
         }
       }
     })
-    /**-边框宽度 */
+    /**表格左侧的边框宽度  box-sizing:border-box */
     if (this.inClassNames.includes('border')) {
-      tableWidth -= (len + 2)
+      tableWidth -= (1)
     }
     /**-侧边滚动条宽度 */
     if (tableHeight > tableMaxHeight) {

@@ -1,0 +1,115 @@
+:host {
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+}
+
+.view-flv {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background-color: rgba(0, 0, 0, 0.9);
+
+  &.view-flv-full {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+    right: 0px;
+    z-index: 1000;
+  }
+
+  video {
+    width: 100%;
+    height: 100%;
+    outline: none;
+  }
+
+  video::-webkit-media-controls-panel {
+    display: none;
+  }
+
+  video:hover~.flv-controls {
+    animation: showControls 2000ms 1;
+  }
+
+  .flv-controls {
+    width: 100%;
+    position: absolute;
+    bottom: 0px;
+    height: 32px;
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0px 15px;
+
+    &:hover {
+      opacity: 1;
+    }
+
+    .flv-controls-left,
+    .flv-controls-right {
+      display: flex;
+      flex-wrap: nowrap;
+      align-items: center;
+
+      div {
+        width: 26px;
+        height: 26px;
+        cursor: pointer;
+        margin: 0px 10px;
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+
+      }
+    }
+
+    .flv-controls__pause {
+      background-image: url('/assets/img/monitor/flv_ctr_pause.png');
+    }
+
+    .flv-controls__play.flv-controls__pause {
+      background-image: url('/assets/img/monitor/flv_ctr_play.png');
+    }
+
+    .flv-controls__stop {
+      background-image: url('/assets/img/monitor/flv_ctr_stop.png');
+    }
+
+    .flv-controls__reload {
+      background-image: url('/assets/img/monitor/flv_ctr_reload.png');
+    }
+
+    .flv-controls__full {
+      background-image: url('/assets/img/monitor/flv-full-screen.png');
+    }
+
+    .flv-controls__full.flv-controls__exit {
+      background-image: url('/assets/img/monitor/flv-exit-screen.png');
+    }
+  }
+
+  .flv-error-tip {
+    font-size: 16px;
+    color: #FFF;
+    position: absolute;
+    width: 100%;
+    padding: 0px 20px;
+    text-align: center;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}
+
+@keyframes showControls {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}

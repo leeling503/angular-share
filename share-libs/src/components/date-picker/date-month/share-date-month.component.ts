@@ -11,8 +11,10 @@ export class ShareDateMonthComponent {
     @Input() inPlaceholder: string = "请选择";
     @ViewChild(CdkOverlayOrigin, { static: true }) cdkOverlayOrigin: CdkOverlayOrigin;
     @Input() modelMonth: string;
-    @Input() inAutoSet: boolean = true;//关闭月历框是否自动选择
-    @Input() inHasYear: boolean = false;//是否可选择 年
+    /**关闭月历框是否自动选择*/
+    @Input() inIfAuto: boolean = true;
+    /**是否可选择 年 */
+    @Input() inIfYear: boolean = false;//是否可选择 年
     @Input() inSetDefualt: boolean = true;//设置默认值
     @Output() modelMonthChange: EventEmitter<string> = new EventEmitter();
     viewMonth: string;
@@ -58,13 +60,13 @@ export class ShareDateMonthComponent {
             if (value > 13) {
                 this.yearValue = value;
                 this.monthValue = parseInt(this.modelMonth.split('-')[1]) || curMonth;
-                this.inHasYear = true;
+                this.inIfYear = true;
             } else {
                 this.yearValue = curYear;
                 this.monthValue = value;
             }
         } else {
-            if (this.inAutoSet || !openFlag) {
+            if (this.inIfAuto || !openFlag) {
                 this.monthValue = curMonth;
             }
             this.yearValue = curYear;
@@ -74,8 +76,9 @@ export class ShareDateMonthComponent {
 
     setModelMonth(month: DateMonth = undefined) {
         month = month || this.monthValues.filter(e => e.id == this.monthValue)[0];
-        this.viewMonth = this.modelMonth = this.inHasYear ? this.yearValue + '-' + month.value : month.value;
-        if (!this.inHasYear) {
+        this.yearValue = this.viewYear;
+        this.viewMonth = this.modelMonth = this.inIfYear ? this.yearValue + '-' + month.value : month.value;
+        if (!this.inIfYear) {
             this.viewMonth = month.name;
         }
         this.modelMonthChange.emit(this.modelMonth);
@@ -88,7 +91,7 @@ export class ShareDateMonthComponent {
     }
 
     autoSetMonth() {
-        if (this.inAutoSet || (this.viewYear != this.yearValue && this.monthValue)) {
+        if (this.inIfAuto || (this.viewYear != this.yearValue && this.monthValue)) {
             this.yearValue = this.viewYear;
             this.setModelMonth();
         }

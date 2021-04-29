@@ -13,7 +13,7 @@ import { ShareUpdataClassService } from '../../services/share-updata-class.servi
 })
 export class ShareButtonComponent implements OnInit {
   @Input() btnPara: ShareBtnPara;//按钮配置
-  @Input() btnPerIcon: string = "date-day-icon";//前置图标class
+  @Input() btnPerIcon: string;//前置图标class
   @Input() btnSufIcon: string;//后置图标class
   /**按钮类型 决定背景色，边框色 和字体颜色  */
   @Input() btnType: BtnType = 'default';

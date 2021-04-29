@@ -10,7 +10,7 @@
   [cdkConnectedOverlayBackdropClass]='"transparent-overlay-back"' [cdkConnectedOverlayOpen]="overlayOpen"
   [cdkConnectedOverlayOffsetY]='3' (backdropClick)="onClose()">
   <div class="month-plan overlay-plan">
-    <div class="month-year" *ngIf="inHasYear">
+    <div class="month-year" *ngIf="inIfYear">
       <div class="per-year" (click)="onGoYear(-1)"><i class="pull-down-icon-p"></i></div>
       <div class="year-cont"><span>{{viewYear}}</span></div>
       <div class="next-year" (click)="onGoYear(+1)"><i class="pull-down-icon-p"></i></div>

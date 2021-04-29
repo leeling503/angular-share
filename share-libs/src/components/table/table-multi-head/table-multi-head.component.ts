@@ -144,19 +144,18 @@ export class TableMultiHeadComponent extends TableComponent implements OnInit {
             let tableMaxHeight = this.nativeEl.querySelector('.table-part').clientHeight;
             let tableHeight = this.nativeEl.querySelector('table').clientHeight;
             /**设置的宽度小于实际宽度 */
-            let allWith = 0, computeWidth = 0, len = 0;
+            let allWith = 0, computeWidth = 0;
             head.forEach(e => {
                 if (e._ifShow !== false) {
                     allWith += e._width;
-                    len++;
                     if (!e.styckyLeft) {
                         computeWidth += e._width
                     }
                 }
             })
-            /**-边框宽度 */
+            /** -边框宽度 box-sizing:border-box  */
             if (this.inClassNames.includes('border')) {
-                tableWidth -= (len + 2)
+                tableWidth -= (1)
             }
             /**-侧边滚动条宽度 */
             if (tableHeight > tableMaxHeight) {
