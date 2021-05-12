@@ -1,7 +1,12 @@
-import { SimpleChanges } from "@angular/core";
 import { ShareInputType } from "../models";
 
-export function utilIsEmpty(value: any): boolean {
+/**undefined和null是返回true */
+export function UtilIsUndefined(value: any): boolean {
+    return value === undefined || value === null
+}
+
+/**空数组 undefined null 和 '' 返回true */
+export function UtilIsEmpty(value: any): boolean {
     if (Array.isArray(value)) {
         return value.length == 0
     } else if (value === undefined || value === null || value === '') {
@@ -12,7 +17,7 @@ export function utilIsEmpty(value: any): boolean {
 }
 
 /**判断是否相等 ， 传入uuid后就只比对对象的key的值是否相等 */
-export function utilIsEqual(cur, value, key?: string) {
+export function UtilIsEqual(cur, value, key?: string) {
     if (cur === value) {
         return true
     } else if (Array.isArray(value) && Array.isArray(cur)) {
@@ -31,13 +36,13 @@ export function utilIsEqual(cur, value, key?: string) {
     return false
 }
 
-export function utilArrayGetValueByKey<T>(arrs: T[], value: string, key: string = 'key'): T | undefined {
+export function UtilArrayGetValueByKey<T>(arrs: T[], value: string, key: string = 'key'): T | undefined {
     for (let i = 0, len = arrs.length; i < len; i++) {
         let data = arrs[i];
         if (data[key] == value) {
             return data
         } else if (data['children'] && data['children'].length > 0) {
-            let a = utilArrayGetValueByKey(data['children'], value, key);
+            let a = UtilArrayGetValueByKey(data['children'], value, key);
             if (a) {
                 return a as T;
             }
@@ -46,7 +51,7 @@ export function utilArrayGetValueByKey<T>(arrs: T[], value: string, key: string 
 }
 
 /**移除掉数组中指定的item  arr和item不能同时为sting*/
-export function utilArrayRemoveItem(arr: any[], item: any, key?: string) {
+export function UtilArrayRemoveItem(arr: any[], item: any, key?: string) {
     let index;
     if (key) {
         index = arr.findIndex(e => e == item || e[key] == item[key] || e[key] == item || e == item[key])
@@ -57,24 +62,12 @@ export function utilArrayRemoveItem(arr: any[], item: any, key?: string) {
 }
 
 /**不改变引用地址的清空数组 */
-export function utilArrayClear<T>(arr: T[]): T[] {
-    arr.splice(0, arr.length);
+export function UtilArrayClear<T>(arr: T[]): T[] {
+    arr.length = 0;
     return arr;
 }
 
-/**不是第一次改变且当前值存在时返回true */
-export function utilChangesNoFirst(c: SimpleChanges, key: string): boolean {
-    return c[key] && !c[key].firstChange && c[key].currentValue
-}
-/**改变且当前值存在时返回true */
-export function utilChanges(c: SimpleChanges, key: string): boolean {
-    return c[key] && c[key].currentValue
-}
 
-/**undefined和null是返回true */
-export function utilIsUndefined(value: any): boolean {
-    return value === undefined || value === null
-}
 
 export function utilValueType(value: any): ShareInputType {
     let T: ShareInputType;

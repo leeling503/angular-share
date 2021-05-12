@@ -25,10 +25,12 @@ export class TableMultiHeadComponent extends TableComponent implements OnInit {
 
     onChanges(changes: SimpleChanges) { }
     superInit() { }
-    superGetListAfter() { this.getTableMultiItems(); };
+    superGetListAfter() { this.get_TableMultiItems(); };
+    /**重写父类方法  防止重复计算 */
     ngAfterViewInit(): void { }
+
     /**获取数据后设置表头 */
-    getTableMultiItems() {
+    private get_TableMultiItems() {
         let datas = this.tableDatas, items = this.inAllItems, key = this.inItemKey, tableMultiItems: Array<TableMultiHeadItem> = [],
             values = [], valueData = {}, heads = [];
         datas.forEach(e => {
@@ -46,14 +48,15 @@ export class TableMultiHeadComponent extends TableComponent implements OnInit {
             }
         })
         this.tableMultiItems = tableMultiItems;
-        this.setMultiItems(heads);
-        this.setDataSerial();
-        this.set_ifShow();
+        /**判断为多表头时需要对多表头进行配置 */
+        heads.length > 1 && this.set_HeadItems();
+        this.set_DataSerial();
+        this.set_IfShow();
     }
 
-    /**数据排序 */
-    setDataSerial() {
-        let index = (this.page.currentPage - 1) * this.page.pageRecord + 1;
+    /**为数据设置序号 */
+    private set_DataSerial() {
+        let index = this.inIfPage ? (this.page.currentPage - 1) * this.page.pageRecord + 1 : 1;
         this.tableMultiItems.forEach(e => {
             e.datas.forEach(e => {
                 e.serial = index++;
@@ -61,14 +64,8 @@ export class TableMultiHeadComponent extends TableComponent implements OnInit {
         })
     }
 
-    setMultiItems(heads: Array<TableMultiItem[]>) {
-        let len = heads.length;
-        if (len > 1) {
-            this.configHeadItems()
-        }
-    }
-
-    configHeadItems() {
+    /**对多表头进行配置 */
+    private set_HeadItems() {
         let heads: Array<TableMultiItem[]> = [];
         /**表头最多的放在第一行 */
         this.tableMultiItems.sort((a, b) => { return (b.heads.length) - (a.heads.length); });
@@ -100,27 +97,28 @@ export class TableMultiHeadComponent extends TableComponent implements OnInit {
                         next[index]._keyCode = curCode;
                     }
                 }
-                this.swapHeadItem(next, index, j)
+                this.swap_HeadItem(next, index, j)
             }
         }
     }
 
-    swapHeadItem(datas: TableMultiItem[], index, j) {
+    private swap_HeadItem(datas: TableMultiItem[], index, j) {
         let item = datas[index];
         datas[index] = datas[j];
         datas[j] = item;
     }
 
-    /**设置宽度 */
+    /**设置表格的宽度 */
     set_TableWidth(heads?: Array<TableMultiItem[]>) {
         if (!heads) return;
         let allWith = 0, head = heads[0];
-        /**设置宽度为同列最大的宽度 */
+        /**先设置宽度_width为同列最大的宽度(设置了styckyLeft的优先级最高) */
         for (let j = 0, l = head.length; j < l; j++) {
             let _maxWidth = 0, flag = false, _styckyLeft;
             for (let i = 0, len = heads.length; i < len && !flag; i++) {
                 let item = heads[i][j];
-                let width = item.width || item.widthMin || 60;
+                let width = item.widthFixed || item.width || item.widthMin || 60;
+                width = width >= 60 ? width : 60;
                 if (!!item.styckyLeft) {
                     /**设置了固定属性 */
                     flag = true;
@@ -132,8 +130,8 @@ export class TableMultiHeadComponent extends TableComponent implements OnInit {
             }
             for (let i = 0, len = heads.length; i < len; i++) {
                 heads[i][j]._width = _maxWidth;
+                /**设置了固定属性 */
                 if (flag) {
-                    /**设置了固定属性 */
                     heads[i][j]._styckyLeft = _styckyLeft;
                 }
             }
@@ -144,13 +142,10 @@ export class TableMultiHeadComponent extends TableComponent implements OnInit {
             let tableMaxHeight = this.nativeEl.querySelector('.table-part').clientHeight;
             let tableHeight = this.nativeEl.querySelector('table').clientHeight;
             /**设置的宽度小于实际宽度 */
-            let allWith = 0, computeWidth = 0;
+            let computeWidth = 0;
             head.forEach(e => {
                 if (e._ifShow !== false) {
-                    allWith += e._width;
-                    if (!e.styckyLeft) {
-                        computeWidth += e._width
-                    }
+                    computeWidth += e._width;
                 }
             })
             /** -边框宽度 box-sizing:border-box  */
@@ -161,37 +156,35 @@ export class TableMultiHeadComponent extends TableComponent implements OnInit {
             if (tableHeight > tableMaxHeight) {
                 tableWidth -= 6
             }
-            // Promise.resolve().then(res => {
-                let extraWidth = tableWidth;
-                for (let j = 0, l = head.length - 1; j <= l; j++) {
-                    let item = head[j], eWidth = head[j]._width, width;
-                    if (item._ifShow === false) {
-                        for (let i = 0, len = heads.length; i < len; i++) {
-                            let item = heads[i][j];
-                            item._width = 0;
-                        }
-                    } else {
-                        if (j === l) {
-                            width = extraWidth;
-                        } else if (item.styckyLeft) {
-                            width = eWidth;
-                        } else {
-                            width = (extraWidth * eWidth / computeWidth) | 0;
-                            computeWidth -= eWidth;
-                        }
-                        for (let i = 0, len = heads.length; i < len; i++) {
-                            let item = heads[i][j];
-                            item._width = width;
-                        }
-                        extraWidth -= width;
+            let extraWidth = tableWidth;
+            for (let j = 0, l = head.length - 1; j <= l; j++) {
+                let item = head[j], eWidth = head[j]._width, width;
+                if (item._ifShow === false) {
+                    for (let i = 0, len = heads.length; i < len; i++) {
+                        let item = heads[i][j];
+                        item._width = 0;
                     }
+                } else {
+                    if (j === l) {
+                        width = extraWidth;
+                    } else if (item.styckyLeft) {
+                        width = eWidth;
+                    } else {
+                        width = (extraWidth * eWidth / computeWidth) | 0;
+                    }
+                    for (let i = 0, len = heads.length; i < len; i++) {
+                        let item = heads[i][j];
+                        item._width = width;
+                    }
+                    computeWidth -= eWidth;
+                    extraWidth -= width;
                 }
-            // })
+            }
         }
     }
 
     /**多表头整列是否隐藏并计算宽度 */
-    set_ifShow() {
+    private set_IfShow() {
         let heads: TableMultiItem[][] = [];
         this.tableMultiItems.forEach(e => heads.push(e.heads));
         for (let i = 0, len = heads[0].length; i < len; i++) {
@@ -207,7 +200,7 @@ export class TableMultiHeadComponent extends TableComponent implements OnInit {
     }
 
     onChangeItemFilter() {
-        this.set_ifShow();
+        this.set_IfShow();
     }
 }
 

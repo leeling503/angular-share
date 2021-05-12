@@ -5,7 +5,9 @@ import { ShareModalSelectItemComponent } from "./modal-select-item/modal-select-
 let components = [
     ShareModalSelectItemComponent
 ]
-
+/**
+ * 小弹窗
+ */
 @NgModule({
     declarations: [...components],
     imports: [CommonModule, ShareCheckboxModule],

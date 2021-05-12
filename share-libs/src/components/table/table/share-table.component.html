@@ -1,23 +1,25 @@
-<div class="share-table" share-loading [inLoading]="loadingFlag">
-  <ng-container>
+<div class="share-table">
+  <ng-container *ngIf="inIfFilter">
     <filter-head [inItems]="inItems" (onChangeItemFilter)="onChangeItemFilter()"></filter-head>
   </ng-container>
-  <div class="table-part" [class]="inClassNames">
+  <div class="table-part" [ngClass]="inClassNames">
     <table>
       <thead>
         <tr class="table-thead">
           <ng-container *ngFor="let item of inItems">
             <ng-container *ngIf="item.ifShow !== false">
               <td [ngClass]="{'is-sticky':item.styckyLeft}"
-                [ngStyle]="{'width': item._width+'px','left':item.styckyLeft}" [class]="item.classNames">
+                [ngStyle]="{'width': item._width+'px','left':item.styckyLeft}">
                 <ng-container [ngSwitch]="item.type">
-                  <div *ngSwitchCase="'check'">
-                    <share-checkbox [modelChecked]='headAllSelect()' [inIsOther]='headMix()' [inIsFather]="true"
-                      (onClick)="onCheckThead($event)">
-                    </share-checkbox>
-                  </div>
-                  <div *ngSwitchDefault>
-                    <span>{{item.title}}</span>
+                  <div class="content-container" [ngClass]="item.classNames">
+                    <ng-container *ngSwitchCase="'check'">
+                      <share-checkbox [modelChecked]='headAllSelect()' [inIsOther]='headMix()' [inIsFather]="true"
+                        (onClick)="onCheckThead($event)">
+                      </share-checkbox>
+                    </ng-container>
+                    <ng-container *ngSwitchDefault>
+                      <span>{{item.title}}</span>
+                    </ng-container>
                   </div>
                 </ng-container>
               </td>
@@ -31,37 +33,44 @@
             <ng-container *ngFor="let item of inItems">
               <ng-container *ngIf="item.ifShow !== false">
                 <td [ngClass]="{'is-sticky':item.styckyLeft}"
-                  [ngStyle]="{'width': item._width+'px','left':item.styckyLeft}" [class]="item.classNames">
+                  [ngStyle]="{'width': item._width+'px','left':item.styckyLeft}">
                   <ng-container [ngSwitch]="item.type">
-                    <div *ngSwitchCase="'check'">
-                      <share-checkbox [modelChecked]='getDataCheckStatus(data)'
-                        [inIsDisable]="getDataDisableStatus(data)" (onClick)="onCheckedData($event, data)">
-                      </share-checkbox>
-                    </div>
-                    <div *ngSwitchCase="'serial'"> {{(page.currentPage-1)*page.pageRecord+i+1}}</div>
-                    <div *ngSwitchCase="'tag'">
-                      <span class="table-tag" [ngClass]="data['_tagClass'+item.key] || item.cbTag(data,item).class"
-                        [ngStyle]="{'color':data['_tagColor'+item.key]  || item.cbTag(data,item).color}">
-                        {{ data['_tagText'+item.key]  || item.cbTag(data,item).text }}
-                      </span>
-                    </div>
-                    <div *ngSwitchCase="'dot'">
-                      <div class="table-dot" [ngClass]="data['_dotClass'+item.key] || item.cbDot(data,item).class">
+                    <div class="content-container" [ngClass]="item.classNames">
+                      <div class="content-main" [ngClass]='{"content-event":item.onClick}' (click)="onClick(data,item)">
+                        <ng-container *ngSwitchCase="'check'">
+                          <share-checkbox [modelChecked]='getDataCheckStatus(data)'
+                            [inIsDisable]="getDataDisableStatus(data)" (onClick)="onCheckedData($event, data)">
+                          </share-checkbox>
+                        </ng-container>
+                        <ng-container *ngSwitchCase="'serial'">
+                          {{inIfPage ? (page.currentPage-1)*page.pageRecord+i+1:i+1}}
+                        </ng-container>
+                        <ng-container *ngSwitchCase="'img'">
+                          <img [src]="data[item.key] || '../../../../../assets/img/icon/no-img.png'" />
+                        </ng-container>
+                        <ng-container *ngSwitchCase="'rule-tag'">
+                          <span class="table-tag" [ngClass]="item.ruleTags[data[item.key]].class"
+                            [ngStyle]="{'color':item.ruleTags[data[item.key]].color}">
+                            {{ item.ruleTags[data[item.key]].text }}
+                          </span>
+                        </ng-container>
+                        <ng-container *ngSwitchCase="'rule-dot'">
+                          <div class="table-dot" [ngClass]="item.ruleDots[data[item.key]].class"></div>
+                          <span class="table-dot-span" [ngStyle]="{'color':item.ruleDots[data[item.key]].color}">
+                            {{ item.ruleDots[data[item.key]].text }}
+                          </span>
+                        </ng-container>
+                        <ng-container *ngSwitchCase="'rule-text'">
+                          <span class="table-text">
+                            {{ item.ruleText[data[item.key]]}}
+                          </span>
+                        </ng-container>
+                        <ng-container *ngSwitchDefault>
+                          <span class="text-info">
+                            {{ data[item.key]}}
+                          </span>
+                        </ng-container>
                       </div>
-                      <span class="table-dot-span"
-                        [ngStyle]="{'color':data['_dotColor'+item.key]  || item.cbDot(data,item).color}">
-                        {{ data['_dotText'+item.key]  || item.cbDot(data,item).text }}
-                      </span>
-                    </div>
-                    <div *ngSwitchCase="'text'">
-                      <span class="table-text">
-                        {{ data['_textText'+item.key] || item.cbText(data,item) }}
-                      </span>
-                    </div>
-                    <div *ngSwitchDefault>
-                      <span class="text-info">
-                        {{ data[item.key]}}
-                      </span>
                     </div>
                   </ng-container>
                 </td>
@@ -69,18 +78,18 @@
             </ng-container>
           </tr>
         </ng-container>
-
       </tbody>
     </table>
   </div>
-  <ng-container *ngIf="tableDatas.length == 0">
-    <div class="no-data">
-      无数据
+  <ng-container *ngIf="tableDatas.length == 0 || loadingFlag">
+    <div class="no-data" [ngClass]="{'loading-data':loadingFlag}">
+      <div class="data-img"></div>
+      <div class="data-tip" *ngIf="!loadingFlag">~ 暂无数据 ~</div>
     </div>
   </ng-container>
-  <div class="pagination-part">
+  <div class="pagination-part" *ngIf="inIfPage">
     <share-pagination [paginPageRecord]="pageRecordOptions" [paginPage]="paginPage"
-      (emitPageChange)="pageChange($event)">
+      (onPageChange)="onPageChange($event)">
     </share-pagination>
   </div>
 </div>

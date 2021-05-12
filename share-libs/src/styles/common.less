@@ -9,6 +9,14 @@
   .share-icon-position(@iconUrl, @w, @h)
 }
 
+.share-icon-position(@iconUrl, @w: 16px, @h: @w) {
+  .share-icon(@iconUrl, @w: 16px, @h: @w);
+  position: absolute;
+  top: 50%;
+  right: 5px;
+  transform: translate(0, -50%);
+}
+
 .share-icon(@iconUrl, @w: 16px, @h: @w) {
   display: inline-block;
   width: @w;
@@ -19,33 +27,20 @@
   .background-image(@iconUrl);
 }
 
-.share-icon-position(@iconUrl, @w: 16px, @h: @w) {
-  display: inline-block;
-  width: @w;
-  height: @h;
-  min-width: @w;
-  min-height: @h;
-  cursor: pointer;
-  position: absolute;
-  top: 50%;
-  right: 5px;
-  transform: translate(0, -50%);
-  .background-image(@iconUrl);
-}
-
 .background-image(@iconUrl) {
-  .imag-url(@iconUrl);
+  .img-url(@iconUrl);
   background-size: 100% 100%;
   background-repeat: no-repeat;
   background-position: center;
 }
 
-.imag-url(@url) {
+.img-url(@url) {
   background-image: url('@{base-url}@{url}.png');
 }
 
 .Y-center() {
   max-height: 100%;
+
   &::before {
     content: '';
     height: 100%;

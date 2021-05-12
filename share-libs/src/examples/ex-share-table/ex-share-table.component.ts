@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { CbUtileDotFun, CbUtileTagFun, CbUtileTextFun, TableItem, TableMultiAllItems, TagRule, TagRules } from 'share-libs/src/components/table/share-table.model';
+import { TableItem, TableMultiAllItems, TagRule, TagRules } from 'share-libs/src/components/table/share-table.model';
+import { UtilTableRuleDots, UtilTableRuleTags, UtilTableRuleText } from 'share-libs/src/utils/util-table';
 
 @Component({
   selector: 'ex-share-table',
@@ -12,7 +13,12 @@ export class ExShareTableComponent implements OnInit {
   items: TableItem[];
   // apiUrl: string = '';
   apiUrl = 'api/Statuslist/getList';
-  selectedDatas = [{ aidsName: "曹妃甸B11#灯浮" }, { aidsName: '天津港3号灯浮' }, { aidsName: '站点99' }, { aidsName: '站点88' }, { aidsName: "天津港G1#活节式灯桩" }]
+  selectedDatas = [
+    { aidsName: "曹妃甸B11#灯浮" },
+    { aidsName: '天津港3号灯浮' },
+    { aidsName: '站点99' },
+    { aidsName: '站点88' },
+    { aidsName: "天津港G1#活节式灯桩" }]
   constructor() { }
 
 
@@ -51,46 +57,46 @@ export class ExShareTableComponent implements OnInit {
     "0307": [
       { title: '', type: 'check', width: 60, styckyLeft: '0px', keyCode: '1001', canFilter: false },
       { title: '名称', type: 'serial', key: 'serial', width: 60, styckyLeft: '60px', keyCode: '1002', canFilter: false },
-      { title: '身高', key: 'aidsName', width: 30, keyCode: '1003', canFilter: false },
-      { title: '体重', key: 'locationAttr', width: 30, keyCode: '1004', },
-      { title: '性别', key: 'typeCode', width: 30, keyCode: '1005' },
-      { title: '学历', key: 'aidsType', width: 50, keyCode: '1006' },
-      { title: '政治面貌', key: 'position', width: 50, keyCode: '1007' },
-      { title: '姓名', key: 'location', width: 80, keyCode: '1008' },
-      { title: '印度', key: 'managekey', width: 80, keyCode: '1009', },
-      { title: '美国', key: 'ownerUnitName', keyCode: '1010', type: "expend", width: 80 },
+      { title: '身高', key: 'aidsName', width: 3, keyCode: '1003', canFilter: false },
+      { title: '体重', key: 'locationAttr', width: 3, keyCode: '1004', },
+      { title: '性别', key: 'typeCode', width: 3, keyCode: '1005' },
+      { title: '学历', key: 'aidsType', width: 5, keyCode: '1006' },
+      { title: '政治面貌', key: 'position', width: 5, keyCode: '1007' },
+      { title: '姓名', key: 'location', width: 8, keyCode: '1008' },
+      { title: '印度', key: 'managekey', width: 8, keyCode: '1009', },
+      { title: '美国', key: 'ownerUnitName', keyCode: '1010', type: "expend", width: 8 },
     ],
     "0303": [
       { title: '', type: 'check', width: 60, keyCode: '1001', styckyLeft: '0px' },
       { title: '名称', type: 'serial', width: 60, keyCode: '1002', styckyLeft: '60px' },
-      { title: '身高', key: 'aidsName', keyCode: '1003', width: 80 },
-      { title: '体重', key: 'locationAttr', width: 30, keyCode: '1004' },
-      { title: '性别', key: 'typeCode', keyCode: '1005', width: 30 },
-      { title: '学历', key: 'aidsType', keyCode: '1006', width: 50 },
-      { title: '政治面貌', key: 'position', keyCode: '1007', width: 50, canFilter: false },
-      { title: '姓名', key: 'location', keyCode: '1008', width: 50 },
-      { title: '新加坡', key: 'managekey', keyCode: '1011', width: 80 },
-      { title: '美国', key: 'managekey', keyCode: '1010', type: "expend", width: 80 },
+      { title: '身高', key: 'aidsName', keyCode: '1003', width: 8 },
+      { title: '体重', key: 'locationAttr', width: 3, keyCode: '1004' },
+      { title: '性别', key: 'typeCode', keyCode: '1005', width: 3 },
+      { title: '学历', key: 'aidsType', keyCode: '1006', width: 5 },
+      { title: '政治面貌', key: 'position', keyCode: '1007', width: 5, canFilter: false },
+      { title: '姓名', key: 'location', keyCode: '1008', width: 5 },
+      { title: '新加坡', key: 'managekey', keyCode: '1011', width: 8 },
+      { title: '美国', key: 'managekey', keyCode: '1010', type: "expend", width: 8 },
     ],
     "0306": [
       { title: '', type: 'check', width: 60, keyCode: '1001', styckyLeft: '0px' },
       { title: '名称', type: 'serial', width: 90, keyCode: '1002', styckyLeft: '60px' },
-      { title: '身高', key: 'aidsType', keyCode: '1003', width: 130 },
-      { title: '体重', key: 'aidsName', keyCode: '1004', width: 30 },
-      { title: '性别', key: 'locationAttr', keyCode: '1005', width: 50 },
-      { title: '学历', key: 'typeCode', keyCode: '1006', width: 50 },
-      { title: '姓名', key: 'position', keyCode: '1007', width: 50 },
-      { title: '中国', key: 'location', keyCode: '1011', type: "expend", width: 80 },
+      { title: '身高', key: 'aidsType', keyCode: '1003', width: 13 },
+      { title: '体重', key: 'aidsName', keyCode: '1004', width: 3 },
+      { title: '性别', key: 'locationAttr', keyCode: '1005', width: 5 },
+      { title: '学历', key: 'typeCode', keyCode: '1006', width: 5 },
+      { title: '姓名', key: 'position', keyCode: '1007', width: 5 },
+      { title: '中国', key: 'location', keyCode: '1011', type: "expend", width: 8 },
     ],
     "0309": [
       { title: '', type: 'check', width: 60, keyCode: '1001', styckyLeft: '0px' },
       { title: '名称09', type: 'serial', width: 60, keyCode: '1002', styckyLeft: '60px' },
-      { title: '身高', key: 'aidsType', keyCode: '1003', width: 130 },
-      { title: '体重', key: 'aidsName', keyCode: '1004', width: 30 },
-      { title: '性别', key: 'locationAttr', keyCode: '1005', width: 50 },
-      { title: '学历', key: 'typeCode', keyCode: '1006', width: 50 },
-      { title: '姓名', key: 'position', keyCode: '1007', width: 50 },
-      { title: '中国', key: 'location', keyCode: '1011', type: "expend", width: 80 },
+      { title: '身高', key: 'aidsType', keyCode: '1003', width: 13 },
+      { title: '体重', key: 'aidsName', keyCode: '1004', width: 3 },
+      { title: '性别', key: 'locationAttr', keyCode: '1005', width: 5 },
+      { title: '学历', key: 'typeCode', keyCode: '1006', width: 5 },
+      { title: '姓名', key: 'position', keyCode: '1007', width: 5 },
+      { title: '中国', key: 'location', keyCode: '1011', type: "expend", width: 8 },
     ]
   };
 
@@ -111,36 +117,33 @@ export class ExShareTableComponent implements OnInit {
 
     this.items = [
       { title: '', type: 'check', width: 60, canFilter: false, styckyLeft: '0px' },
-      { title: '序号', type: 'serial', width: 60, canFilter: false, styckyLeft: '60px', },
-      { title: '时间', key: 'collectionTime', width: 50, canFilter: false },
+      { title: '序号', type: 'serial', width: 160, canFilter: false, styckyLeft: '60px', },
+      { title: '时间', key: 'collectionTime', classNames: ['color-blue', 'underline'], onClick: (data, item) => { console.log(data, item) }, widthFixed: 150, canFilter: false },
       {
-        title: '名称', key: 'aidsName', width: 30, type: "expend"
+        title: '名称', key: 'aidsName', width: 130, type: "expend"
       },
       {
-        title: '是否绑定', key: 'ifBind', type: 'dot', width: 30, cbDot: (data, item) => CbUtileDotFun(data, item,
-          {
-            get 0(): TagRule { console.log('getname'); return { value: '0', class: 'green', text: '未绑定', color: '#13C4B0' } },
-            1: { value: '0', class: 'blue', text: '已绑定', color: 'orange' },
-          })
+        title: '是否绑定', key: 'ifBind', type: 'rule-dot', width: 130, ruleDots: UtilTableRuleDots({
+          0: { value: '0', class: 'green', text: '未绑定', color: '#13C4B0' },
+          1: { value: '0', class: 'blue', text: '已绑定', color: 'orange' }
+        })
       },
-      {
-        title: '报警', key: 'ifAlarm', type: 'dot', width: 30, cbDot: (data, item) => CbUtileDotFun(data, item,
-          {
-            get 0(): TagRule { console.log('getname'); return { value: '0', class: 'green', text: '正常', color: '#13C4B0' } },
-            1: { value: '0', class: 'danger', text: '报警', color: '#F04864' },
-          })
-      },
-      { title: '站点名称', key: 'aidsName2', width: 30 },
-      {
-        title: '执行结果', key: 'ifMark', type: "tag", width: 30, cbTag: (data, item) => CbUtileTagFun(data, item,
-          {
-            get success(): TagRule { console.log('getname'); return { value: '0', class: 'green', text: '成功', color: '#FFF' } },
-            defeated: { value: '0', class: 'danger', text: '失败', color: 'blue' },
-          })
-      },
-      {
-        title: '参数详情', key: 'commModeCodeName', type: "text", width: 20, cbText: (data, item) => CbUtileTextFun(data, item)
-      },
+      // {
+      //   title: '报警', key: 'ifAlarm', type: 'rule-dot', width: 130, ruleDots: UtilTableRuleDots({
+      //     0: { value: '0', class: 'green', text: '正常', color: '#13C4B0' },
+      //     1: { value: '0', class: 'danger', text: '报警', color: '#F04864' },
+      //   })
+      // },
+      // { title: '站点名称', key: 'aidsName2', width: 230 },
+      // {
+      //   title: '执行结果', key: 'ifMark', type: "rule-tag", width: 230, ruleTags: UtilTableRuleTags({
+      //     get success(): TagRule { console.log('getname'); return { value: '0', class: 'green', text: '成功', color: '#FFF' } },
+      //     defeated: { value: '0', class: 'danger', text: '失败', color: 'blue' },
+      //   })
+      // },
+      // {
+      //   title: '参数详情', key: 'commModeCodeName', type: "rule-text", width: 220, ruleText: UtilTableRuleText({})
+      // },
     ]
   }
 

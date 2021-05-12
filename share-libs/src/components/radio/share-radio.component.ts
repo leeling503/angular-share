@@ -1,6 +1,7 @@
 import { EventEmitter, Output, SimpleChanges } from '@angular/core';
 import { Component, Input, OnInit } from '@angular/core';
-import { utilChanges, utilChangesNoFirst, utilIsEqual, utilIsUndefined } from 'share-libs/src/utils/util';
+import { UtilIsEqual, UtilIsUndefined } from 'share-libs/src/utils/util';
+import { UtilChanges, UtilChangesNoFirst } from 'share-libs/src/utils/util-component';
 import { RadioIconType, RadiosData, RadiosPara } from './share-radio.model';
 
 @Component({
@@ -16,8 +17,8 @@ export class ShareRadioComponent implements OnInit {
   /**按钮组数据 */
   @Input() inRadioDatas: RadiosData | RadiosData[];
   @Input() modelRadio: string | string[];
-  @Output() modelRadioChange: EventEmitter<any> = new EventEmitter();
   @Input() inUuid: string = 'key';
+  @Output() modelRadioChange: EventEmitter<any> = new EventEmitter();
 
   _datas: RadiosData[] = [];
   /**能否多选 */
@@ -29,14 +30,14 @@ export class ShareRadioComponent implements OnInit {
   _inputType: 'string' | 'array' = 'array';
   _outModel: string | string[];
   ngOnChanges(changes: SimpleChanges): void {
-    if (utilChangesNoFirst(changes, 'inRadioDatas')) {
+    if (UtilChangesNoFirst(changes, 'inRadioDatas')) {
       this.set_datas();
       this.set_checkRadio();
     }
-    if (utilChangesNoFirst(changes, 'modelRadio')) {
-      !utilIsEqual(this.modelRadio, this._outModel) && this.set_checkRadio()
+    if (UtilChangesNoFirst(changes, 'modelRadio')) {
+      !UtilIsEqual(this.modelRadio, this._outModel) && this.set_checkRadio()
     }
-    if (utilChanges(changes, 'inRadioPara')) {
+    if (UtilChanges(changes, 'inRadioPara')) {
       this.set_config()
     }
   }
@@ -54,7 +55,7 @@ export class ShareRadioComponent implements OnInit {
 
   /**设置选项数据 */
   set_datas() {
-    if (utilIsUndefined(this.inRadioDatas)) return;
+    if (UtilIsUndefined(this.inRadioDatas)) return;
     if (Array.isArray(this.inRadioDatas)) {
       this._datas = this.inRadioDatas
     } else {
@@ -64,7 +65,7 @@ export class ShareRadioComponent implements OnInit {
 
   /**设置勾选 */
   set_checkRadio() {
-    if (utilIsUndefined(this.modelRadio)) return;
+    if (UtilIsUndefined(this.modelRadio)) return;
     this._inputType = Array.isArray(this.modelRadio) ? 'array' : 'string';
     let modelRadio = this.modelRadio;
     !Array.isArray(this.modelRadio) && (modelRadio = this.modelRadio.split(','));
@@ -87,7 +88,7 @@ export class ShareRadioComponent implements OnInit {
       radio.ifCheck = true;
     }
     let values: string | string[] = this._datas.filter(e => e.ifCheck).map(e => e[this.inUuid]);
-    if (utilIsEqual(values, this.modelRadio)) {
+    if (UtilIsEqual(values, this.modelRadio)) {
       return
     } else {
       if (this._inputType == 'string') {

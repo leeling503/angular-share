@@ -1,9 +1,21 @@
-export type TableClassName = "border" | "simple-border" | "background-color";
+/**view-left居左  view-right居右  border 四周均有边框    simple-border  上下有边框    background-color   背景色交替*/
+export type TableClassName = "border" | "simple-border" | "background-color" | "view-left" | 'view-right' | 'view-center';
+/**view-left居左  view-right居右  border 四周均有边框  underline 下划线  */
+export type TdClassName = "view-left" | 'view-right' | 'view-center' | 'underline' | 'color-blue';
+/**check选框 serial序号 tag有背景色的小方块 dot带圆点 rule-text需要转换的文本 expend展开*/
+type TdType = 'check' | 'serial' | "rule-tag" | "rule-dot" | 'rule-text' | "expend";
+type TagType = 'green' | 'danger' | "blue" | 'orange' | "pink";
+type DotType = TagType;
+export type TagRules = { [key: string]: TagRule }
+export type DotRules = { [key: string]: DotRule }
+
 export interface TableItem {
     /**表头名称  */
-    title: string;//
+    title: string;
     /**宽度 */
-    width?: number;//宽度 
+    width?: number;
+    /**宽度固定（不会缩放，除非是最后一行） */
+    widthFixed?: number
     /**最小宽度 不设置最小为60px*/
     widthMin?: number;
     /**计算后的显示宽度 */
@@ -13,33 +25,21 @@ export interface TableItem {
     /** 对应data中的key取值 */
     key?: string;
     /** td的class view-left居左  view-right居右  is-sticky该列固定 */
-    classNames?: string;
+    classNames?: TdClassName[];
     /** 列固定居左的距离（设置该距离后会固定列） */
     styckyLeft?: string;
     /** 当列是否显示  只有设置为false才不显示*/
     ifShow?: boolean;
     /** 能否过滤掉该选列 只有设置为false才不能取消*/
     canFilter?: boolean;
-    /**text类型函数 */
-    cbText?: (data: any, item: TableItem) => string;
-    /**tag类型回调函数 */
-    cbTag?: (data: any, item: TableItem) => TagRule;
-    /**tag类型回调函数 */
-    cbDot?: (data: any, item: TableItem) => DotRule;
-}
-/** 
- * 'check'  选款   'serial'  序号   "tag" 拥有背景色的小方块 
- */
-type TdType = 'check' | 'serial' | "tag" | "dot" | 'text' | "expend";
-
-type TagType = 'green' | 'danger' | "blue" | 'orange' | "pink";
-type DotType = TagType;
-
-export interface TagRules {
-    [key: string]: TagRule
-}
-export interface DotRules {
-    [key: string]: DotRule
+    /**事件回调 */
+    onClick?: (data: any, item: TableItem) => any;
+    /**tag类型规则 最好采用UtilTableRuleTags生成 */
+    ruleTags?: TagRules;
+    /**dot类型规则 最好采用UtilTableRuleDots生成 */
+    ruleDots?: DotRules;
+    /**Text类型规则 最好采用UtilTableRuleText生成 */
+    ruleText?: object;
 }
 
 export interface TagRule {
@@ -52,7 +52,6 @@ export interface TagRule {
     /** 字体颜色*/
     color?: string;
 }
-
 export interface DotRule extends TagRule { }
 
 export class SharePage {
@@ -92,6 +91,7 @@ export interface TableMultiItem extends TableItem {
     _ifShow?: boolean;
     _styckyLeft?: string;
 }
+
 //多表头html使用 ，heads表示表头 ， datas表示对应该表头的数据
 export interface TableMultiHeadItem {
     /**表头信息 */
@@ -102,31 +102,4 @@ export interface TableMultiHeadItem {
 
 export interface TableMultiAllItems {
     [key: string]: TableMultiItem[]
-}
-
-
-
-
-
-
-export var CbUtileTagFun = function (data: any, item: TableItem, tags: TagRules, defualt?: TagRule): TagRule {
-    let key = data[item.key];
-    let tag = tags[key] || defualt || { value: '', text: '无数据', class: 'blue', color: '#FFF' };
-    data['_tagText' + key] = tag.text;
-    data['_tagClass' + key] = tag.class;
-    data['_tagColor' + key] = tag.color || '#FFF';
-    return tag;
-}
-export var CbUtileDotFun = function (data: any, item: TableItem, tags: DotRules, defualt?: DotRule): DotRule {
-    let key = data[item.key];
-    let tag = tags[key] || defualt || { value: '', text: '无数据', class: 'blue', color: '#333' };
-    data['_dotText' + key] = tag.text;
-    data['_dotClass' + key] = tag.class;
-    data['_dotColor' + key] = tag.color || '#333';
-    return tag;
-}
-
-export var CbUtileTextFun = function (data: any, item: TableItem) {
-    let text = data["_textText" + item.key] = data[item.key]
-    return text;
 }

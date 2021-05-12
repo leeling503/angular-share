@@ -1,8 +1,9 @@
 import { CdkOverlayOrigin } from '@angular/cdk/overlay';
 import { Component, OnInit, Input, ViewChild, ElementRef, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { SelectOption, SelectConfig, SelectModelInputs } from './share-select.model';
-import { utilArrayClear, utilArrayGetValueByKey, utilArrayRemoveItem, utilChanges, utilChangesNoFirst, utilIsEqual } from 'share-libs/src/utils/util';
+import { UtilArrayClear, UtilArrayGetValueByKey, UtilArrayRemoveItem, UtilIsEqual } from 'share-libs/src/utils/util';
 import { ShareInputType } from 'share-libs/src/models';
+import { UtilChanges, UtilChangesNoFirst } from 'share-libs/src/utils/util-component';
 
 @Component({
   selector: 'share-select',
@@ -47,19 +48,18 @@ export class ShareSelectComponent implements OnInit {
   cdkConnectedOverlayWidth: number | string;
   @ViewChild(CdkOverlayOrigin, { static: true }) cdkOverlayOrigin: CdkOverlayOrigin;
   ngOnChanges(changes: SimpleChanges): void {
-    if (utilChangesNoFirst(changes, 'modelOption')) {
-      if (utilIsEqual(this.modelOption, this._outOptions)) return;
+    if (UtilChangesNoFirst(changes, 'modelOption')) {
+      if (UtilIsEqual(this.modelOption, this._outOptions)) return;
       this.setCheckOptions();
       this.setCheckMixState()
     }
-    if (utilChangesNoFirst(changes, 'inOptions')) {
+    if (UtilChangesNoFirst(changes, 'inOptions')) {
       this.setCheckOptions();
       this.setCheckMixState()
     }
-    if (utilChanges(changes, 'inConfig')) {
+    if (UtilChanges(changes, 'inConfig')) {
       this.setConfig();
     }
-
   }
 
   ngOnInit() {
@@ -78,7 +78,7 @@ export class ShareSelectComponent implements OnInit {
       if (typeof value !== "object") {
         this._inputType = 'strings';
         this.checkOptions = [...option].map(e => {
-          let option = utilArrayGetValueByKey(this.inOptions, e as string, this.inUuid);
+          let option = UtilArrayGetValueByKey(this.inOptions, e as string, this.inUuid);
           return option
         }).filter(e => e !== undefined)
       } else {
@@ -90,18 +90,18 @@ export class ShareSelectComponent implements OnInit {
         this._inputType = 'string';
         let options = option.split(',');
         this.checkOptions = options.map(e => {
-          let option = utilArrayGetValueByKey(this.inOptions, e as string, this.inUuid);
+          let option = UtilArrayGetValueByKey(this.inOptions, e as string, this.inUuid);
           return option
         }).filter(e => e !== undefined)
       } else {
         this._inputType = 'object';
-        this.checkOptions = [utilArrayGetValueByKey(this.inOptions, option[this.inUuid], this.inUuid)].filter(e => e !== undefined);
+        this.checkOptions = [UtilArrayGetValueByKey(this.inOptions, option[this.inUuid], this.inUuid)].filter(e => e !== undefined);
       }
     }
     this.checkUuids = this.checkOptions.map(e => e[this.inUuid]);
     this.orgCheckOptions = [...this.checkOptions];
     if (this.checkUuids.length == 0 && this._leastOne && this.inOptions && this.inOptions.length > 0) {
-      utilArrayClear(this.checkOptions).push(this.inOptions[0]);
+      UtilArrayClear(this.checkOptions).push(this.inOptions[0]);
       this.checkUuids = [this.checkOptions[0][this.inUuid]];
     }
   }
@@ -168,7 +168,7 @@ export class ShareSelectComponent implements OnInit {
   clickClearNodes() {
     event.stopPropagation();
     let option = this.checkOptions[0];
-    utilArrayClear(this.checkOptions);
+    UtilArrayClear(this.checkOptions);
     this.checkUuids = [];
     if (this._leastOne) {
       this.addItem(option)
@@ -211,8 +211,8 @@ export class ShareSelectComponent implements OnInit {
       this.removeItem(option);
     } else {
       if (!this._multi) {
-        utilArrayClear(this.checkOptions)
-        utilArrayClear(this.checkUuids)
+        UtilArrayClear(this.checkOptions)
+        UtilArrayClear(this.checkUuids)
       }
       this.addItem(option)
     }
@@ -221,8 +221,8 @@ export class ShareSelectComponent implements OnInit {
   }
 
   removeItem(option: SelectOption): void {
-    utilArrayRemoveItem(this.checkUuids, option[this.inUuid]);
-    utilArrayRemoveItem(this.checkOptions, option);
+    UtilArrayRemoveItem(this.checkUuids, option[this.inUuid]);
+    UtilArrayRemoveItem(this.checkOptions, option);
     if (this.checkUuids.length == 0 && this._leastOne) {
       this.addItem(option)
     }
@@ -241,7 +241,7 @@ export class ShareSelectComponent implements OnInit {
 
   closeOptions() {
     this.optionsOpen = !1;
-    if (utilIsEqual(this.orgCheckOptions, this.checkOptions, this.inUuid)) return;
+    if (UtilIsEqual(this.orgCheckOptions, this.checkOptions, this.inUuid)) return;
     this.orgCheckOptions = [...this.checkOptions]
     let uuids = this.orgCheckOptions.map(e => e[this.inUuid])
     if (this._inputType == "string") {

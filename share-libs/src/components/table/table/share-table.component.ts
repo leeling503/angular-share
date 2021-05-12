@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { TableBase } from '../share-table';
+import { TableBase } from '../share-table.component';
 import { TableItem } from '../share-table.model';
 
 @Component({
@@ -9,11 +9,10 @@ import { TableItem } from '../share-table.model';
 })
 export class TableComponent extends TableBase implements OnInit {
 
-  onShowBc(data, item: TableItem) {
-    if (item.cbText && typeof item.cbText == 'function') {
-      return item.cbText(data, item)
+  onClick(data, item: TableItem) {
+    if (item.onClick && typeof item.onClick == 'function') {
+      item.onClick(data, item)
     }
-    return data[item.key];
   }
 }
 

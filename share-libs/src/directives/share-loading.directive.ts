@@ -13,8 +13,6 @@ export class ShareLoadingDirective {
     parentEl: HTMLElement;
     loadEl: HTMLElement;
     ngOnChanges(changes: SimpleChanges): void {
-        //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
-        //Add '${implements OnChanges}' to the class.
         if (changes.inLoading && !changes.inLoading.firstChange) {
             this.changeLoadingFlag()
         }

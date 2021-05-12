@@ -32,30 +32,6 @@
                       (onClick)="onCheckedData($event, data)">
                     </share-checkbox>
                   </div>
-                  <div *ngSwitchCase="'serial'"> {{(page.currentPage-1)*page.pageRecord+i+1}}</div>
-                  <div *ngSwitchCase="'tag'">
-                    <span class="table-tag" [ngClass]="data['_tagClass'+item.key] || item.cbTag(data,item).class"
-                      [ngStyle]="{'color':data['_tagColor'+item.key]  || item.cbTag(data,item).color}">
-                      {{ data['_tagText'+item.key]  || item.cbTag(data,item).text }}
-                    </span>
-                  </div>
-                  <div *ngSwitchCase="'dot'">
-                    <div class="table-dot" [ngClass]="data['_dotClass'+item.key] || item.cbDot(data,item).class">
-                    </div>
-                    <span class="table-dot-span"
-                      [ngStyle]="{'color':data['_dotColor'+item.key]  || item.cbDot(data,item).color}">
-                      {{ data['_dotText'+item.key]  || item.cbDot(data,item).text }}
-                    </span>
-                  </div>
-                  <div *ngSwitchCase="'text'">
-                    <span class="table-text">
-                      {{ data['_textText'+item.key] || item.cbText(data,item) }}
-                    </span>
-                  </div>
-                  <div *ngSwitchCase="'expend'">
-                    <div *ngIf="data[item.key]" (click)="expendLine(data[item.key],i)" class="expend-link">查看
-                    </div>
-                  </div>
                   <div *ngSwitchDefault>
                     {{data[item.key]}}
                   </div>
@@ -73,7 +49,7 @@
     </table>
   </div>
   <div class="pagination-part">
-    <share-pagination [paginPageRecord]="pageRecordOptions" [paginPage]="page" (emitPageChange)="pageChange($event)">
+    <share-pagination [paginPageRecord]="pageRecordOptions" [paginPage]="page" (onPageChange)="onPageChange($event)">
     </share-pagination>
   </div>
 </div>

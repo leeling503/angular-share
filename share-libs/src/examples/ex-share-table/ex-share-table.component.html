@@ -1,8 +1,10 @@
 <div class="ex-share-table">
-  <share-table [inUuid]="'aidsName'" [inSelectedDatas]="selectedDatas" [inAllDatas]="allDatas" [inItems]='items' [inApiUrl]="apiUrl"></share-table>
+  <share-table [inUuid]="'aidsName'" [inSelectedDatas]="selectedDatas" [inAllDatas]="allDatas" [inItems]='items'
+    [inApiUrl]="apiUrl" (onSelectChange)="onSelectChange($event)" (onCurDataChange)="onSelectChange($event)">
+  </share-table>
 </div>
 <div class="ex-share-table">
-  <share-table-multi-head [inSelectedDatas]="multiSelectedDatas" [inDisableDatas]="multiDisDatas"
+  <share-table-multi-head [inIfPage]="false" [inSelectedDatas]="multiSelectedDatas" [inDisableDatas]="multiDisDatas"
     [inAllDatas]="multiAllDatas" [inAllItems]="multiAllItems" (onSelectChange)="onSelectChange($event)">
   </share-table-multi-head>
 </div>

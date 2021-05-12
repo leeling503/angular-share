@@ -26,6 +26,10 @@ export class TableBase {
   @Input() inDisableDatas: Array<any> = [];
   /**表格样式  "border" | "simple-border" | "background-color"*/
   @Input() inClassNames: TableClassName[] = ["border", "background-color"];
+  /**是否分页 */
+  @Input() inIfPage: boolean = true;
+  /**是否过滤表头 */
+  @Input() inIfFilter: boolean = true;
 
   nativeEl: HTMLElement;
   /**表格数据 */
@@ -50,12 +54,12 @@ export class TableBase {
     if (changes.inSelectedDatas) {
       console.log('changes.inSelectedDatas')
       //传入选中数据
-      this.setSelectedDatas()
-      this.setTableSelectedUuidsByDatas()
+      this.set_SelectedDatas()
+      this.set_TableSelectedUuidsByDatas()
     }
     if (changes.inDisableDatas) {
       //传入禁用数据
-      this.setTableDisableUuidsByDatas()
+      this.set_TableDisableUuidsByDatas()
     }
     if (changes.inAllDatas && this.inAllDatas.length > 0) {
       //用户自己传入表格数据非后台查询
@@ -70,9 +74,18 @@ export class TableBase {
     this.superChanges(changes)
   }
 
+  ngOnInit(): void {
+    this.paginPage = Object.assign({}, this.page)
+    this.set_TableSelectedUuidsByDatas();
+    this.set_TableDisableUuidsByDatas();
+    this.getList();
+    this.superInitAfter();
+  }
+
+
   ngAfterViewInit(): void {
     /**初次计算避免首次加载宽度与获得数据后计算的不统一 */
-    this.set_TableWidth();
+    setTimeout(() => { this.set_TableWidth(); }, 10);
     /**数据过多可能出现滚动条需要重新计算 */
     let $after = this.onCurDataChange.asObservable().subscribe(res => {
       this.set_TableWidth();
@@ -84,13 +97,10 @@ export class TableBase {
     let tableWidth = this.nativeEl.querySelector('.share-table').clientWidth;
     let tableMaxHeight = this.nativeEl.querySelector('.table-part').clientHeight;
     let tableHeight = this.nativeEl.querySelector('table').clientHeight;
-    let allWith = 0, computeWidth = 0;
+    let allWith = 0;
     this.inItems.forEach(e => {
       if (e.ifShow !== false) {
-        allWith += (e.width || e.widthMin || 60);
-        if (!e.styckyLeft) {
-          computeWidth += (e.width || e.widthMin || 60)
-        }
+        allWith += (e.widthFixed || e.width || e.widthMin || 60);
       }
     })
     /**表格左侧的边框宽度  box-sizing:border-box */
@@ -106,32 +116,25 @@ export class TableBase {
     } else if (tableWidth > allWith) {
       let extraWidth = tableWidth, len = this.inItems.length - 1;
       Promise.resolve().then(res => {
+        let computeWidth = allWith;
         this.inItems.forEach((e, i) => {
           if (e.ifShow === false) { e._width = 0; return }
-          let eWhidth = e.width || e.widthMin || 60;
+          let eWhidth = e.widthFixed || e.width || e.widthMin || 60;
           if (i === len) {
             e._width = extraWidth;
-          } else if (e.styckyLeft) {
+          } else if (e.styckyLeft || e.widthFixed) {
             e._width = eWhidth;
           } else {
             e._width = (extraWidth * eWhidth / computeWidth) | 0;
-            computeWidth -= eWhidth;
           }
+          computeWidth -= eWhidth;
           extraWidth -= e._width;
         })
       })
     }
   }
 
-  ngOnInit(): void {
-    this.paginPage = Object.assign({}, this.page)
-    this.setTableSelectedUuidsByDatas();
-    this.setTableDisableUuidsByDatas();
-    this.getList();
-    this.superInitAfter();
-  }
-
-  setSelectedDatas() {
+  set_SelectedDatas() {
     let datas = this.inSelectedDatas.map(e => this.tableDatas.find(data => data[this.inUuid] == e[this.inUuid]) || e)
     datas.map(e => {
       if (!this.tableSelectedDatas.find(s => s[this.inUuid] == e[this.inUuid])) {
@@ -140,11 +143,11 @@ export class TableBase {
     })
   }
 
-  setTableSelectedUuidsByDatas() {
+  set_TableSelectedUuidsByDatas() {
     this.tableSelectedUuids = this.tableSelectedDatas.map(e => e[this.inUuid])
   }
 
-  setTableDisableUuidsByDatas() {
+  set_TableDisableUuidsByDatas() {
     this.tableDisableUuids = this.inDisableDatas.map(e => e[this.inUuid])
   }
 
@@ -209,7 +212,7 @@ export class TableBase {
     }
   }
 
-  pageChange(page: PaginationPage) {
+  onPageChange(page: PaginationPage) {
     let currentPage = page.currentPage, pageRecord = page.pageRecord;
     if (this.searchItem.currentPage == currentPage && this.searchItem.pageRecord == pageRecord) return;
     let flag = this.searchItem.pageRecord == pageRecord;
@@ -229,7 +232,7 @@ export class TableBase {
     this.set_TableWidth();
   }
 
-  //以下方案待优化
+  //以下选框状态方案待优化
   headMix(datas = this.tableDatas): boolean {
     let flag = datas.some(e => this.tableSelectedUuids.includes(e[this.inUuid]))
     return flag;

@@ -23,7 +23,7 @@ export class SharePaginationComponent {
     viewPageRecord: PageRecordView[] = [];
     cdkConnectedOverlayWidth: number | string;
     @ViewChild(CdkOverlayOrigin, { static: true }) cdkOverlayOrigin: CdkOverlayOrigin;
-    @Output() emitPageChange: EventEmitter<PaginationPage> = new EventEmitter();
+    @Output() onPageChange: EventEmitter<PaginationPage> = new EventEmitter();
 
     ngOnChanges(changes: SimpleChanges): void {
         if (changes.paginPage && !changes.paginPage.firstChange) {
@@ -128,7 +128,7 @@ export class SharePaginationComponent {
     }
 
     emitPage() {
-        this.emitPageChange.emit(this.paginPage);
+        this.onPageChange.emit(this.paginPage);
         console.log(this.paginPage)
     }
 
