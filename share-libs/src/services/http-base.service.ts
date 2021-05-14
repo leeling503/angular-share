@@ -1,13 +1,13 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { catchError } from "rxjs/operators";
-import { Observable, of } from "rxjs";
-import { ShareResult } from "../models";
+import { catchError, map } from "rxjs/operators";
+import { Observable, of, throwError } from "rxjs";
 import { OperatorFunction } from "rxjs/internal/types";
+import { HttpResult } from "../models";
 
 /**异常处理  照样返回给正常处理函数 */
 const disposeError: OperatorFunction<any, any> = catchError((error: HttpErrorResponse) => {
-    const result: ShareResult = {
+    const result: HttpResult = {
         info: error.status + error.statusText,
         rlt: 1,
         datas: error.error
@@ -17,16 +17,14 @@ const disposeError: OperatorFunction<any, any> = catchError((error: HttpErrorRes
 
 @Injectable({ providedIn: 'root' })
 /** 所有请求必须经过ShareBaseHttpService */
-export class ShareBaseHttpService {
+export class HttpBaseService {
     constructor(private http: HttpClient) { }
-    post(url: string, data): Observable<ShareResult> {
-        return this.http.post(url, data).pipe(
-            disposeError
-        )
+
+    post(url: string, data, options?): Observable<HttpResult> {
+        return this.http.post(url, data, options).pipe(disposeError)
     }
-    get(url: string): Observable<ShareResult> {
-        return this.http.get(url).pipe(
-            disposeError
-        )
+
+    get(url: string): Observable<HttpResult> {
+        return this.http.get(url).pipe(disposeError)
     }
 }
