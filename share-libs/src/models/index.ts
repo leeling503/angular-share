@@ -1,3 +1,2 @@
-export * from './share-base-search';
-export * from './share-result';
+export { HttpResult, HttpSearch } from './share-http';
 export * from './share-type';

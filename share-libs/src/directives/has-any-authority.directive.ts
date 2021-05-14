@@ -4,13 +4,13 @@ import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
  *
  * @使用示例
  * ```
- *     <some-element *slHasAnyAuthority="'ROLE_ADMIN'">...</some-element>
+ *     <ele *shareAuth="'ROLE_ADMIN'">...</ele>
  *
- *     <some-element *slHasAnyAuthority="['ROLE_ADMIN', 'ROLE_USER']">...</some-element>
+ *     <some-element *shareAuth="['ROLE_ADMIN', 'ROLE_USER']">...</some-element>
  * ```
  */
 @Directive({
-    selector: '[slHasAnyAuthority]'
+    selector: '[shareAuth]'
 })
 export class HasAnyAuthorityDirective {
     private authorities: string[];
@@ -21,8 +21,8 @@ export class HasAnyAuthorityDirective {
     }
 
     @Input()
-    set slHasAnyAuthority(value: string | string[]) {
-        this.authorities = typeof value === 'string' ? [<string>value] : <string[]>value;
+    set shareAuth(value: string | string[]) {
+        this.authorities = typeof value === 'string' ? [value] : value;
         this.updateView();
     }
 

@@ -1,0 +1,56 @@
+@import '../../../styles/index.less';
+
+:host,
+.layout-head {
+  width: 100%;
+  height: 100%;
+}
+
+.layout-head {
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.head-left {
+  width: 200px;
+}
+
+.head-menu {
+  flex-grow: 1;
+  display: flex;
+
+  .menu {
+    cursor: pointer;
+    width: 120px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: @C-F-white;
+
+    i {
+      margin: 0px 5px;
+    }
+
+    &:hover {
+      background-color: @C-blue-a;
+    }
+
+    &.active {
+      background-color: @C-blue-a;
+    }
+  }
+}
+
+.head-right {
+  width: 200px;
+
+  ul {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    li {}
+  }
+}

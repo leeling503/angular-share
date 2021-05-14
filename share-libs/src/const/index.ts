@@ -1,0 +1,1 @@
+export { REGEXP } from './regexp'

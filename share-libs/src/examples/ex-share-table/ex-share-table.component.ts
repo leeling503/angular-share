@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TableItem, TableMultiAllItems, TagRule, TagRules } from 'share-libs/src/components/table/share-table.model';
+import { UtilRouterGetUrl } from 'share-libs/src/utils/util-router';
 import { UtilTableRuleDots, UtilTableRuleTags, UtilTableRuleText } from 'share-libs/src/utils/util-table';
 
 @Component({
@@ -19,7 +21,8 @@ export class ExShareTableComponent implements OnInit {
     { aidsName: '站点99' },
     { aidsName: '站点88' },
     { aidsName: "天津港G1#活节式灯桩" }]
-  constructor() { }
+  constructor() {
+  }
 
 
   multiAllDatas: any[] = [
@@ -117,7 +120,7 @@ export class ExShareTableComponent implements OnInit {
 
     this.items = [
       { title: '', type: 'check', width: 60, canFilter: false, styckyLeft: '0px' },
-      { title: '序号', type: 'serial', width: 160, canFilter: false, styckyLeft: '60px', },
+      { title: '序号', type: 'serial', width: 60, canFilter: false, styckyLeft: '60px', },
       { title: '时间', key: 'collectionTime', classNames: ['color-blue', 'underline'], onClick: (data, item) => { console.log(data, item) }, widthFixed: 150, canFilter: false },
       {
         title: '名称', key: 'aidsName', width: 130, type: "expend"
@@ -128,22 +131,22 @@ export class ExShareTableComponent implements OnInit {
           1: { value: '0', class: 'blue', text: '已绑定', color: 'orange' }
         })
       },
-      // {
-      //   title: '报警', key: 'ifAlarm', type: 'rule-dot', width: 130, ruleDots: UtilTableRuleDots({
-      //     0: { value: '0', class: 'green', text: '正常', color: '#13C4B0' },
-      //     1: { value: '0', class: 'danger', text: '报警', color: '#F04864' },
-      //   })
-      // },
-      // { title: '站点名称', key: 'aidsName2', width: 230 },
-      // {
-      //   title: '执行结果', key: 'ifMark', type: "rule-tag", width: 230, ruleTags: UtilTableRuleTags({
-      //     get success(): TagRule { console.log('getname'); return { value: '0', class: 'green', text: '成功', color: '#FFF' } },
-      //     defeated: { value: '0', class: 'danger', text: '失败', color: 'blue' },
-      //   })
-      // },
-      // {
-      //   title: '参数详情', key: 'commModeCodeName', type: "rule-text", width: 220, ruleText: UtilTableRuleText({})
-      // },
+      {
+        title: '报警', key: 'ifAlarm', type: 'rule-dot', width: 130, ruleDots: UtilTableRuleDots({
+          0: { value: '0', class: 'green', text: '正常', color: '#13C4B0' },
+          1: { value: '0', class: 'danger', text: '报警', color: '#F04864' },
+        })
+      },
+      { title: '站点名称', key: 'aidsName2', width: 230 },
+      {
+        title: '执行结果', key: 'ifMark', type: "rule-tag", width: 230, ruleTags: UtilTableRuleTags({
+          get success(): TagRule { console.log('getname'); return { value: '0', class: 'green', text: '成功', color: '#FFF' } },
+          defeated: { value: '0', class: 'danger', text: '失败', color: 'blue' },
+        })
+      },
+      {
+        title: '参数详情', key: 'commModeCodeName', type: "rule-text", width: 220, ruleText: UtilTableRuleText({})
+      },
     ]
   }
 

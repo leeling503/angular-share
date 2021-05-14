@@ -1,7 +1,7 @@
 import { CdkOverlayOrigin } from '@angular/cdk/overlay';
 import { Component, OnInit, Input, ViewChild, ElementRef, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { SelectOption, SelectConfig, SelectModelInputs } from './share-select.model';
-import { UtilArrayClear, UtilArrayGetValueByKey, UtilArrayRemoveItem, UtilIsEqual } from 'share-libs/src/utils/util';
+import { UtilArrayClear, UtilArrayGetValueByKey, UtilArrayRemoveItem, UtilIsEqual } from 'share-libs/src/utils';
 import { ShareInputType } from 'share-libs/src/models';
 import { UtilChanges, UtilChangesNoFirst } from 'share-libs/src/utils/util-component';
 

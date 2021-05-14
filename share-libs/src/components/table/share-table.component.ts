@@ -1,11 +1,11 @@
 import { ElementRef, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
-import { ShareBaseSearch, ShareResult } from "share-libs/src/models";
-import { ShareBaseHttpService } from "share-libs/src/services";
+import { HttpSearch, HttpResult } from "share-libs/src/models";
+import { HttpBaseService } from "share-libs/src/services";
 import { PaginationPage } from "../pagination/share-pagination.model";
 import { SharePage, TableClassName, TableItem, TableSelect } from "./share-table.model";
 
 export class TableBase {
-  constructor(private http: ShareBaseHttpService, private el: ElementRef) {
+  constructor(private http: HttpBaseService, private el: ElementRef) {
     this.nativeEl = this.el.nativeElement
   }
   /**后台url路径 */
@@ -13,7 +13,7 @@ export class TableBase {
   /**后台异步获取数据时是否开启遮罩  默认true*/
   @Input() inLoading: boolean = true;
   /**后台异步获取数据时搜索条件 */
-  @Input() inSearchObj: ShareBaseSearch;
+  @Input() inSearchObj: HttpSearch;
   /**表头配置  true*/
   @Input() inItems: Array<TableItem> = [];
   /**表格数据的唯一标识key  默认id*/
@@ -43,7 +43,7 @@ export class TableBase {
   tableDisableUuids: Array<string> = [];
   page: SharePage = new SharePage();
   paginPage: SharePage = new SharePage();
-  searchItem: ShareBaseSearch = new ShareBaseSearch();
+  searchItem: HttpSearch = new HttpSearch();
   pageRecordOptions: number[] = [15, 20, 30, 50];
   loadingFlag: boolean = false;
   @Output() onSelectChange: EventEmitter<TableSelect> = new EventEmitter();
@@ -112,7 +112,7 @@ export class TableBase {
       tableWidth -= 6
     }
     if (tableWidth <= allWith) {
-      this.inItems.forEach(e => e._width = e.width || e.widthMin || 60)
+      this.inItems.forEach(e => e._width = e.widthFixed || e.width || e.widthMin || 60)
     } else if (tableWidth > allWith) {
       let extraWidth = tableWidth, len = this.inItems.length - 1;
       Promise.resolve().then(res => {
@@ -167,7 +167,7 @@ export class TableBase {
   }
 
   getDatasByHttp() {
-    this.http.post(this.inApiUrl, this.searchItem).subscribe((res: ShareResult) => {
+    this.http.post(this.inApiUrl, this.searchItem).subscribe((res: HttpResult) => {
       this.loadingFlag = false;
       if (res.rlt == 0) {
         this.page = res.datas;

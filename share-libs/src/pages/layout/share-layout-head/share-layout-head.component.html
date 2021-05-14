@@ -1,0 +1,20 @@
+<div class="layout-head">
+  <div class="head-left"></div>
+  <div class="head-menu">
+    <ng-container *ngFor="let menu of Menus">
+      <div class="menu" (click)="onMenuToPage(menu)">
+        <i [ngClass]="menu.icon"></i>
+        <span>{{menu.title}}</span>
+      </div>
+    </ng-container>
+  </div>
+  <div class="head-right">
+    <ng-container>
+      <ul>
+        <li *ngFor="let btn of headBtns" (click)="onClickBtn(btn)">
+          <i [class]="btn.icon"></i>
+        </li>
+      </ul>
+    </ng-container>
+  </div>
+</div>

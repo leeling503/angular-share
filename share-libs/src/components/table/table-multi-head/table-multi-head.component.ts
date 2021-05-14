@@ -1,6 +1,6 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, SimpleChanges } from "@angular/core";
-import { ShareBaseSearch } from "share-libs/src/models";
-import { ShareBaseHttpService } from "share-libs/src/services";
+import { HttpSearch } from "share-libs/src/models";
+import { HttpBaseService } from "share-libs/src/services";
 import { TableComponent } from "../table/share-table.component";
 import { TableMultiAllItems, TableMultiHeadItem, SharePage, TableItem, TableMultiItem, TableSelect } from "../share-table.model";
 
@@ -10,8 +10,8 @@ import { TableMultiAllItems, TableMultiHeadItem, SharePage, TableItem, TableMult
     styleUrls: ['./table-multi-head.component.less']
 })
 export class TableMultiHeadComponent extends TableComponent implements OnInit {
-    constructor(http: ShareBaseHttpService, el: ElementRef) {
-        super(http, el);
+    constructor(http_: HttpBaseService, el: ElementRef) {
+        super(http_, el);
     }
     /**表格对应数据value的表头的数据 */
     @Input() inAllItems: TableMultiAllItems = {}
@@ -19,7 +19,7 @@ export class TableMultiHeadComponent extends TableComponent implements OnInit {
     @Input() inItemKey: string = "typeCode";
     /**html页面使用的数据(含表头和数据) */
     tableMultiItems: Array<TableMultiHeadItem> = [];
-    searchItem: ShareBaseSearch = new ShareBaseSearch();
+    searchItem: HttpSearch = new HttpSearch();
     pageRecordOptions: number[] = [15, 20, 30, 50];
     @Output() onSelectChange: EventEmitter<TableSelect> = new EventEmitter();
 

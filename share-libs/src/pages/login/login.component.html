@@ -1,0 +1,60 @@
+<div class="login-container-bg">
+  <div class="l-title">
+    <i></i>
+    <h1>航标运行保障系统</h1>
+  </div>
+  <div class="login-content">
+    <div class="logintype-icon"><i (click)="switchQrPhone()"
+        [ngClass]="{'qr':user.submitType==1,'ph':user.submitType==2}" [title]="user.submitType==1?'扫描登录':'手机验证码登录'"></i>
+    </div>
+    <form action="" #loginForm="ngForm">
+      <ul>
+        <li class="lc-title">
+          <h2>欢迎登录</h2>
+        </li>
+        <ng-container *ngIf="user.submitType==1">
+          <li class="item phone">
+            <div>
+              <i></i>
+              <input loginValiate (focus)="onFocus(name.value)" (blur)="onBlur(name.value)"
+                onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')" autocomplete="off" type="text" name="username"
+                placeholder="请输入手机号" maxlength="11" minlength="11" [(ngModel)]="user.userName" style="width: 310px;"
+                required #name="ngModel">
+            </div>
+          </li>
+          <li class="item phone-code">
+            <div>
+              <i></i>
+              <input name="code" #codeElement autocomplete="off" maxlength="4" minlength="4" type="text"
+                onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')" placeholder="请输入验证码" [(ngModel)]="user.code"
+                style="width:160px" required #code="ngModel">
+              <a class="b" [class.active]="codeTime>0" href="javascript:void(0)"
+                [class.disabled]="name.invalid && codeTime==0"
+                (click)="getPcode(name.invalid || codeTime>0)">{{codeTime==0?'获取验证码':codeTime+'s'}}</a>
+            </div>
+          </li>
+          <li class="error-msg">
+            <span>{{validateInfo}}</span>
+            <span>{{loginInfo}}</span>
+          </li>
+          <li class="l-btn">
+            <div>
+              <input type="submit" [class.disabled]="name.invalid || code.invalid"
+                [disabled]="name.invalid || code.invalid || !loginState"
+                [value]="loginState?'登录':'正在登录...'" (click)="loginAndAuth()">
+            </div>
+          </li>
+        </ng-container>
+        <li class="qr-code" *ngIf="user.submitType==2">
+          <div class="box">
+            <!-- <img src="../../../assets/img/login/qr-code.png" alt=""> -->
+            <img #QRCodeEle alt="二维码">
+          </div>
+        </li>
+        <li class="copyright">
+          <p>——&nbsp;Copyright ©2019 天津航标处&nbsp;——</p>
+        </li>
+      </ul>
+    </form>
+  </div>
+</div>

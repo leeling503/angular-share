@@ -2,6 +2,7 @@ import { Injectable, OnDestroy, Injector } from '@angular/core';
 import { ActivatedRouteSnapshot, ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { UtilRouterGetUrl } from 'share-libs/src/utils';
 import { ReuseTabNotify, ReuseTabCached } from './reuse-tab';
 
 @Injectable()
@@ -162,27 +163,12 @@ export class ReuseTabService implements OnDestroy {
   clearTitleCached() {
     this._titleCached = {};
   }
-  getTruthRoute(route: ActivatedRouteSnapshot) {
-    let next = route;
-    while (next.firstChild) next = next.firstChild;
-    return next;
-  }
+  
   /**
    * 根据快照获取URL地址
    */
   getUrl(route: ActivatedRouteSnapshot): string {
-    let next = this.getTruthRoute(route);
-    const segments = [];
-    while (next) {
-      segments.push(next.url.join('/'));
-      next = next.parent;
-    }
-    const url =
-      '/' +
-      segments
-        .filter(i => i)
-        .reverse()
-        .join('/');
+    let url = UtilRouterGetUrl(route);
     return url;
   }
 

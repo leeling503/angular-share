@@ -1,5 +1,5 @@
 import { Component, OnInit, ElementRef, Renderer2, Input, Output, EventEmitter } from '@angular/core';
-import { ShareBaseHttpService } from 'share-libs/src/services';
+import { HttpBaseService } from 'share-libs/src/services';
 import { TableComponent } from '../table/share-table.component';
 
 @Component({
@@ -8,7 +8,7 @@ import { TableComponent } from '../table/share-table.component';
   styleUrls: ['./share-table-expend.component.less']
 })
 export class TableExpendComponent extends TableComponent implements OnInit {
-  constructor(http: ShareBaseHttpService, el: ElementRef) {
+  constructor(http: HttpBaseService, el: ElementRef) {
     super(http, el);
   }
   tableExpend: boolean = false;//是否有展开列

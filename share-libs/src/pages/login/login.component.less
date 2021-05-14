@@ -1,0 +1,266 @@
+.login-container-bg {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  background: url('../../../assets/login/login_bg.png') no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+  -webkit-background-size: cover;
+  -o-background-size: cover;
+  top: 0;
+  left: 0;
+  background-position-y: bottom;
+  font-family: MicrosoftYaHei;
+}
+
+.login-content {
+  width: 460px;
+  min-width: 460px;
+  height: 560px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .15);
+  background: #ffffff;
+  border-radius: 6px;
+  position: absolute;
+  top: 50%;
+  margin-top: -300px;
+
+  .logintype-icon {
+    overflow: auto;
+    margin-bottom: -30px;
+
+    i {
+      cursor: pointer;
+      float: right;
+      height: 100px;
+      width: 100px;
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
+
+      &.qr {
+        background-image: url('../../../assets/login/qr_code_sup.png');
+      }
+
+      &.ph {
+        background-image: url('../../../assets/login/phon_sup.png');
+      }
+    }
+  }
+
+  ul {
+    width: 100%;
+    height: 490px;
+    padding: 0 60px;
+
+    li {
+      display: block;
+
+      &.lc-title {
+        h2 {
+          color: #035ADE;
+          font-size: 40px;
+          text-align: center;
+        }
+      }
+
+      &.item {
+        padding-top: 35px;
+
+        div {
+          position: relative;
+          overflow: auto;
+          border-bottom: 1px solid #B4CEF6;
+
+          i {
+            width: 24px;
+            height: 30px;
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+            float: left;
+            margin-top: 10px;
+          }
+
+          input[type='number'],
+          input[type='text'] {
+            border: none;
+            outline: none;
+            float: left;
+            font-size: 20px;
+            padding: 0 20px;
+            height: 45px;
+            margin-top: 6px;
+          }
+
+          a.b {
+            border: 1px solid #035ADE;
+            border-radius: 22px 22px;
+            padding: 7px 0;
+            text-align: center;
+            width: 128px;
+            float: right;
+            background: #ffffff;
+            color: #035ADE;
+            font-size: 18px;
+
+            &.active {
+              background: #035ADE;
+              color: #fff;
+              cursor: default;
+            }
+
+            &.disabled {
+              background: #EFEFEF;
+              border: 1px solid #EFEFEF;
+              color: #333333;
+              cursor: default;
+            }
+          }
+        }
+
+        &.phone>div {
+          i {
+            background-image: url('../../../assets/login/phone_icon.png');
+          }
+        }
+
+        &.phone-code>div {
+          i {
+            background-image: url('../../../assets/login/pwd_icon.png');
+          }
+        }
+      }
+
+      &.error-msg {
+        padding-top: 8px;
+
+        span {
+          color: red;
+          float: left;
+        }
+      }
+
+      &.l-btn {
+        text-align: center;
+        padding: 65px 0 55px 0;
+
+        input[type='submit'] {
+          width: 250px;
+          height: 60px;
+          border-radius: 30px 30px;
+          outline: none;
+          border: 1px solid #035ADE;
+          color: #ffffff;
+          font-size: 24px;
+          background-color: #035ADE;
+          cursor: pointer;
+          font-weight: 300;
+
+          &.disabled {
+            // border: 1px solid #7fb3ff;
+            // background-color: #7fb3ff;
+            opacity: .7;
+            cursor: default;
+          }
+        }
+
+      }
+
+      &.qr-code {
+        text-align: center;
+
+        .box {
+          height: 320px;
+          width: 320px;
+          padding: 20px 10px;
+          display: inline-block;
+          user-select: none;
+
+          img {
+            width: 100%;
+            max-height: 100%;
+          }
+        }
+      }
+
+      &.copyright {
+        p {
+          text-align: center;
+          color: #A4A4A4;
+          font-size: 16px;
+        }
+      }
+    }
+  }
+}
+
+.l-title {
+  margin: 30px 80px;
+
+  i {
+    background: url('../../../assets/logo/logo2x.png') no-repeat;
+    height: 72px;
+    width: 72px;
+    background-size: 100% 100%;
+    float: left;
+  }
+
+  h1 {
+    float: left;
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 48px;
+    margin: 0;
+    padding-left: 20px;
+  }
+
+  &::after {
+    content: '';
+    display: block;
+    visibility: hidden;
+    height: 0;
+    clear: both;
+  }
+}
+
+.ng-valid[required],
+.ng-valid.required {
+  border: none !important;
+}
+
+.ng-invalid:not(form) {
+  &.ng-touched {
+    border: none !important;
+  }
+}
+
+@media screen and (min-width:1200px) {
+  .login-content {
+    right: 12%;
+  }
+}
+
+//1100分辨率（大于960px，小于1199px）
+@media screen and (min-width: 960px) and (max-width: 1199px) {
+  .login-content {
+    right: 10%;
+  }
+}
+
+//880分辨率（大于768px，小于959px） 
+@media screen and (min-width: 768px) and (max-width: 959px) {
+  .login-content {
+    right: 8%;
+  }
+}
+
+
+//720分辨率（大于480px，小于767px）
+@media only screen and (min-width: 480px) and (max-width: 767px) {
+  .login-content {
+    left: 50%;
+    margin-left: -230px;
+  }
+
+  .l-title {
+    margin: 20px 10px;
+  }
+}
