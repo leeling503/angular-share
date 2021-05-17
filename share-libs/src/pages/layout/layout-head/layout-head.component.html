@@ -1,8 +1,8 @@
 <div class="layout-head">
   <div class="head-left"></div>
   <div class="head-menu">
-    <ng-container *ngFor="let menu of Menus">
-      <div class="menu" (click)="onMenuToPage(menu)">
+    <ng-container *ngFor="let menu of menus">
+      <div class="menu" [ngClass]="{'menu-active':menu.active}" (click)="onMenuToPage(menu)" *ngIf="menu.ifShow">
         <i [ngClass]="menu.icon"></i>
         <span>{{menu.title}}</span>
       </div>

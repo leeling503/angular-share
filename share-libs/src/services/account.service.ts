@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { Account } from '../models/share-account';
 
+/**用户账号信息服务商 */
 @Injectable(
     { providedIn: 'root' }
 )
@@ -16,17 +17,17 @@ export class AccountService {
         return this.http.get('api/open/csrf')
     }
 
-    private getAccount(): Observable<any> {
+    private getNetAccount(): Observable<any> {
         return this.http.get('api/open/getAccount')
     }
 
     /**传入ture表示通过网络获取用户信息不读取缓存 */
-    get(network: boolean = false): Promise<Account> {
+    getAccount(network: boolean = false): Promise<Account> {
         return new Promise((resolve, reject) => {
             if (this._account && !network) {
                 resolve(this._account)
             } else {
-                resolve(this.getAccount().toPromise().then(res => {
+                resolve(this.getNetAccount().toPromise().then(res => {
                     if (res.rlt == 0) {
                         let account = res.datas;
                         account.organizeList = account.organize ? [account.organize] : [];
@@ -62,7 +63,8 @@ export class AccountService {
         return Promise.resolve(false);
     }
 
-    hasAuthority(menuCode) {
+    /**判断用户是否有该权限 */
+    hasAuthority(menuCode): boolean {
         if (!this._account) return false;
         let accunt = this._account;
         let roleCode: string = accunt.roleCode;
@@ -72,7 +74,6 @@ export class AccountService {
         let menuCodeList = (accunt && accunt.menuCodeList) || [];
         return menuCodeList.some((ele) => ele == menuCode);
     }
-
 
     clearAccount() {
         this._account = void 0;

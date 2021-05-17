@@ -9,7 +9,7 @@ import { Injectable } from '@angular/core';
 export class HttpAuthInterceptor implements HttpInterceptor {
     constructor(private auth: AuthService) { }
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        const authToken = this.auth.getAuthorizationToken();
+        const authToken = this.auth.getAuthToken();
         const authReq = req.clone({ setHeaders: { Authorization: authToken } });
         return next.handle(authReq);
     }

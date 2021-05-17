@@ -12,7 +12,7 @@ import { of } from 'rxjs';
  * 统一错误处理拦截 (当没有使用router时 必须要删除掉Router相关，否则不报错但无法发出http请求)
  */
 @Injectable({ providedIn: 'root' })
-export class HttpErrrorInterceptor implements HttpInterceptor {
+export class HttpErrorInterceptor implements HttpInterceptor {
     constructor(private router: Router) { }
     intercept(req: HttpRequest<any>, next: HttpHandler) {
         return next.handle(req).

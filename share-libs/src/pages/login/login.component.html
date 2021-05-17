@@ -34,14 +34,13 @@
             </div>
           </li>
           <li class="error-msg">
-            <span>{{validateInfo}}</span>
-            <span>{{loginInfo}}</span>
+            <span>{{errorInfo}}</span>
           </li>
           <li class="l-btn">
             <div>
               <input type="submit" [class.disabled]="name.invalid || code.invalid"
-                [disabled]="name.invalid || code.invalid || !loginState"
-                [value]="loginState?'登录':'正在登录...'" (click)="loginAndAuth()">
+                [disabled]="name.invalid || code.invalid || !loginState" [value]="loginState?'登录':'正在登录...'"
+                (click)="loginAndAuth()">
             </div>
           </li>
         </ng-container>

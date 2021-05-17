@@ -30,84 +30,79 @@ export class LoginComponent implements OnInit, OnDestroy {
   user: LoginUser = new LoginUser();
 
   codeTime = 0;//获取验证码间隔时间
-  loginInfo = ''; // 点击登录按钮后台提示的信息
-  validateInfo = '';// 前端校验信息
-  loginState: boolean;
+  errorInfo = '';//登录错误信息
+  loginState: boolean = true;//登录过程是否结束
   phoneValidateReg: RegExp;
   private websocketSub$: Subscription;
   @ViewChild('QRCodeEle', { read: ElementRef, static: false }) QRCodeEle: ElementRef;
-
   @ViewChild('codeElement', { static: false }) codeElement: ElementRef<HTMLInputElement>;
 
   ngOnInit() {
-    this.developmentTest();
     this.loginInit();
   }
 
   loginInit() {
     this.phoneValidateReg = REGEXP.phone.reg;
-    this.validateInfo = '';
-    this.loginInfo = '';
+    this.errorInfo = '';
     this.loginState = true;
     this.user.userName = localStorage.getItem('phone');
-    // if (!environment.production) {
-    //   this.user.code = '1234';
-    //   this.login(true)
-    // }
+    if (!environment.production) {
+      this.user.code = '1234';
+    }
   }
 
   onFocus(value) {
-    if (!UtilIsEmpty(value)) this.validateInfo = '';
+    if (!UtilIsEmpty(value)) this.errorInfo = '';
   }
 
   onBlur(value) {
-    this.validateInfo = '';
-    this.loginInfo = '';
+    this.errorInfo = '';
     this.isPhoneValidate(value);
   }
 
   isPhoneValidate(value: string) {
     if (!UtilIsEmpty(value)) {
       let result = value.match(this.phoneValidateReg) != null;
-      this.validateInfo = result ? '' : INFO.ERROR_PHONE_NUMBER;
+      this.errorInfo = result ? '' : INFO.ERROR_PHONE_NUMBER;
       return result;
     }
-    this.validateInfo = INFO.NULL_PHONE_NUMBER;
+    this.errorInfo = INFO.NULL_PHONE_NUMBER;
     return false;
   }
 
   //获取手机验证码
-  getPcode(validate) {
+  async getPcode(validate) {
     if (validate) return;
-    this.loginInfo = '';
-    this.login_.getPhoneCode(this.user.userName).then(res => {
-      if (res.rlt == 0) {
-        if (this.codeElement) this.codeElement.nativeElement.focus();
-        this.validateInfo = INFO.CODE_HAS_SEND;
-        interval(1000).pipe(
-          take(60),
-          map(e => 59 - e)
-        ).subscribe(num => {
-          this.codeTime = num;
-        })
-      } else {
-        this.user.code = '';
-        this.loginInfo = res.info ? res.info : INFO.CODE_SEND_ERROR;
-        this.codeTime = 0;// 不用计时
-      }
+    this.errorInfo = '';
+    this.codeTime = 60;
+    let $time = interval(1000).pipe(
+      take(60),
+      map(e => 59 - e)
+    ).subscribe(num => {
+      this.codeTime = num;
     })
+    let res = await this.login_.getPhoneCode(this.user.userName)
+    if (res.rlt == 0) {
+      if (this.codeElement) this.codeElement.nativeElement.focus();
+      this.errorInfo = INFO.CODE_HAS_SEND;
+    } else {
+      this.user.code = '';
+      this.errorInfo = res.info ? res.info : INFO.CODE_SEND_ERROR;
+      this.codeTime = 0;// 不用计时
+      $time.unsubscribe()
+    }
   }
 
   /**
    * 登录并授权  login true 手机号登录，false 手机端二维码扫描登录
    */
   async loginAndAuth(phone = true) {
-    this.validateInfo = '';
+    this.errorInfo = '';
     this.loginState = false;
     if (phone) {
       let res = await this.login();
       if (!res || res.rlt == 1) {
-        this.loginInfo = res && res.info || '系统异常';
+        this.errorInfo = res && res.info || '系统异常';
         this.loginState = true;
         return;
       }
@@ -129,16 +124,17 @@ export class LoginComponent implements OnInit, OnDestroy {
   /**
    * 切换登录模式
    */
-  switchQrPhone() {
-    this.user.submitType = this.user.submitType == 1 ? 2 : 1;
-    if (this.user.submitType == 2) { //二维码登录
-      this.login_.getQRCode().subscribe((res: any) => {
-        if (res && res.rlt == 0) {
-          let uuid = res.datas;
-          this.genQRCode(uuid);
-          this.websocketConnect(uuid);
-        }
-      })
+  async switchQrPhone() {
+    if (this.user.submitType == 1) {
+      this.user.submitType = 2; //切换为二维码登录
+      let res = await this.login_.getQRCode().toPromise();
+      if (res && res.rlt == 0) {
+        let uuid = res.datas;
+        this.genQRCode(uuid);
+        this.websocketConnect(uuid);
+      }
+    } else {
+      this.user.submitType = 1;
     }
   }
 
@@ -168,16 +164,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     //     console.error(err)
     //   })
   }
-  /**
-   * 开发模式下默认使用 13011111111 手机号
-   * 验证码 1234
-   */
-  private developmentTest() {
-    if (!environment.production) {
-      this.user.userName = '13011111111';
-      this.user.code = '1234';
-    }
-  }
+
   ngOnDestroy(): void {
     if (this.websocketSub$) {
       this.websocketSub$.unsubscribe();

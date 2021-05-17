@@ -54,7 +54,7 @@ export class LoginService {
 
   /**去掉鉴权  清空用户信息  路由快照待清除 */
   logout() {
-    this.auth_.logout().subscribe();
+    this.auth_.authorizeUnload();
     this.account_.clearAccount();
   }
 

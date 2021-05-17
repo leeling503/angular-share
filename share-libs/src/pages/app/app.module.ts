@@ -5,6 +5,7 @@ import { NgModule } from "@angular/core"
 import { BrowserModule } from "@angular/platform-browser"
 import { RouterModule } from "@angular/router"
 import { httpInterceptorProviders } from "share-libs/src/services/intercepters"
+import { RouteReuseModule } from "share-libs/src/services/route-reuse/route-reuse.module"
 import { AppMainComponent } from "./app.component"
 import { APPROUTER } from "./app.routing"
 
@@ -19,6 +20,7 @@ import { APPROUTER } from "./app.routing"
     RouterModule,
     OverlayModule,
     APPROUTER,
+    RouteReuseModule
   ],
   providers: [httpInterceptorProviders],
   entryComponents: [],

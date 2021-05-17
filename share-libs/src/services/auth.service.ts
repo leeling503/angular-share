@@ -6,14 +6,14 @@ import { HttpResult } from '../models';
 import { AccountService } from './account.service';
 import { HttpBaseService } from './http-base.service';
 
-@Injectable(
-  { providedIn: 'root' }
-)
+/**后台授权服务商 */
+@Injectable({ providedIn: 'root' })
 export class AuthService {
   constructor(
     private http_: HttpBaseService,
     private account_: AccountService
   ) { }
+  private _token = "some-auth-token"
 
   /**授权 接口不再401 并datas中返回用户信息*/
   authorization(credentials): Promise<HttpResult> {
@@ -22,16 +22,14 @@ export class AuthService {
     return this.http_.post('api/authentication', data, { headers }).toPromise();
   }
 
-  logout(): Observable<any> {
-    return this.http_.post('api/logout', {}).pipe(
-      map(res => {
-        this.account_.csrf().subscribe();
-        return res;
-      })
-    )
+  /**移除权限 */
+  async authorizeUnload(): Promise<void> {
+    await this.http_.post('api/logout', {}).subscribe()
+    await this.account_.csrf().subscribe();
   }
 
-  getAuthorizationToken() {
-    return 'some-auth-token';
+  /**获取授权的token */
+  getAuthToken() {
+    return this._token;
   }
 }

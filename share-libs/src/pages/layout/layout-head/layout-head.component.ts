@@ -4,19 +4,23 @@ import { Router } from '@angular/router';
 import { UtilIsFunction, UtilIsUndefined } from 'share-libs/src/utils';
 import { LoginService } from '../../login/login.service';
 import { MenuItem, SYSTEM_MENU } from '../layout-menu';
+import { LayoutMenuServer } from '../layout-menu.service';
 
 @Component({
-  selector: 'share-layout-head',
-  templateUrl: './share-layout-head.component.html',
-  styleUrls: ['./share-layout-head.component.less']
+  selector: 'layout-head',
+  templateUrl: './layout-head.component.html',
+  styleUrls: ['./layout-head.component.less']
 })
-export class ShareLayoutHeadComponent implements OnInit {
-  constructor(private router: Router, private login_: LoginService) { }
-  Menus: MenuItem[] = SYSTEM_MENU;
+export class LayoutHeadComponent implements OnInit {
+  constructor(private router: Router, private login_: LoginService, private layoutMenu_: LayoutMenuServer) { }
+  menus: MenuItem[];
   headBtns: HeadBtn[] = [
     { icon: 'menu-logout-icon', title: '退出', onClick: () => { this.onLogout() } }
   ]
-  ngOnInit() { }
+
+  ngOnInit() {
+    this.menus = this.layoutMenu_.getMenu();
+  }
 
   onMenuToPage(menu: MenuItem) {
     this.router.navigateByUrl(menu.url, { queryParams: {} })

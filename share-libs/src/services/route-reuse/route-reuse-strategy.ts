@@ -2,12 +2,22 @@ import { RouteReuseStrategy, ActivatedRouteSnapshot, DetachedRouteHandle } from 
 import { ReuseTabService } from './reuse-tab.service';
 
 /**
- * 复用路由策略
+ * 路由复用策略
  */
 export class CustomeRouteReuseStrategy implements RouteReuseStrategy {
 
-  constructor(private reuseTabService: ReuseTabService) {}
+  constructor(private reuseTabService: ReuseTabService) { }
 
+  /** 进入路由触发，判断是否同一路由 */
+  public shouldReuseRoute(future: ActivatedRouteSnapshot, curr: ActivatedRouteSnapshot): boolean {
+    return this.reuseTabService.shouldReuseRoute(future, curr);
+  }
+
+  /** 从缓存中获取快照，若无则返回null */
+  public retrieve(route: ActivatedRouteSnapshot): DetachedRouteHandle {
+    return this.reuseTabService.retrieve(route);
+  }
+  
   /** 表示对所有路由允许复用 如果你有路由不想利用可以在这加一些业务逻辑判断 */
   public shouldDetach(route: ActivatedRouteSnapshot): boolean {
     return this.reuseTabService.shouldDetach(route);
@@ -20,12 +30,6 @@ export class CustomeRouteReuseStrategy implements RouteReuseStrategy {
   public shouldAttach(route: ActivatedRouteSnapshot): boolean {
     return this.reuseTabService.shouldAttach(route);
   }
-  /** 从缓存中获取快照，若无则返回null */
-  public retrieve(route: ActivatedRouteSnapshot): DetachedRouteHandle {
-    return this.reuseTabService.retrieve(route);
-  }
-  /** 进入路由触发，判断是否同一路由 */
-  public shouldReuseRoute(future: ActivatedRouteSnapshot, curr: ActivatedRouteSnapshot): boolean {
-    return this.reuseTabService.shouldReuseRoute(future, curr);
-  }
+
+
 }

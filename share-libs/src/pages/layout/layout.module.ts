@@ -1,9 +1,10 @@
-import { Overlay, OverlayModule } from "@angular/cdk/overlay";
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
-import { RouterModule } from "@angular/router";
+import { Router, RouterModule } from "@angular/router";
 import { ExamplesModule } from "share-libs/src/examples/examples.module";
+import { RouteReuseModule } from "share-libs/src/services/route-reuse/route-reuse.module";
 import { COMPONENTS } from ".";
+import { LayoutMenuServer } from "./layout-menu.service";
 import { layoutRouterModule } from "./layout.routing";
 
 @NgModule({
@@ -12,7 +13,12 @@ import { layoutRouterModule } from "./layout.routing";
         CommonModule,
         RouterModule,
         layoutRouterModule,
-        ExamplesModule
-    ]
+        ExamplesModule,
+        // RouteReuseModule
+    ],
+    // providers: [{
+    //     provide: LayoutMenuServer,
+    //     deps:[Router]
+    // }]
 })
 export class LayoutModule { }

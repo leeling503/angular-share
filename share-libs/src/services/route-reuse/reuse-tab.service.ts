@@ -163,7 +163,7 @@ export class ReuseTabService implements OnDestroy {
   clearTitleCached() {
     this._titleCached = {};
   }
-  
+
   /**
    * 根据快照获取URL地址
    */
@@ -273,16 +273,15 @@ export class ReuseTabService implements OnDestroy {
     this._reuseTabCachedList = this._reuseTabCachedList.filter(
       w => !includeNonCloseable && !w.closable,
     );
-
     this.removeUrlBuffer = null;
-
     this._cachedChange.next({ active: 'clear', list: this._reuseTabCachedList });
-
     this.di('clear all catch');
   }
+
   private di(...args) {
     console.warn(...args);
   }
+
   ngOnDestroy(): void {
     this._reuseTabCachedList = [];
     this._cachedChange.unsubscribe();

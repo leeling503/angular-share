@@ -23,7 +23,6 @@ export class HttpLogInterceptor implements HttpInterceptor {
           const msg = `${req.method} '${req.urlWithParams}' ${state} in ${elapsed} ms.`;
           console.log(msg);
         }),
-        map(e => { console.log(e); return e })
       )
   }
 }

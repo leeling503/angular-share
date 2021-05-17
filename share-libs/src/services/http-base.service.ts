@@ -10,13 +10,14 @@ const disposeError: OperatorFunction<any, any> = catchError((error: HttpErrorRes
     const result: HttpResult = {
         info: error.status + error.statusText,
         rlt: 1,
+        error: true,
         datas: error.error
     }
     return of(result)
 })
 
+/** Http请求服务商 所有请求必须经过HttpBaseService*/
 @Injectable({ providedIn: 'root' })
-/** 所有请求必须经过ShareBaseHttpService */
 export class HttpBaseService {
     constructor(private http: HttpClient) { }
 
