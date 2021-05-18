@@ -1,30 +1,18 @@
-
-function UtilArrayGetValueByKey<T>(arrs: T[], value: string, key: string = 'key'): T | undefined {
-    for (let i = 0, len = arrs.length; i < len; i++) {
-        let data = arrs[i];
-        if (data[key] == value) {
-            return data
-        } else if (data['children'] && data['children'].length > 0) {
-            let a = UtilArrayGetValueByKey(data['children'], value, key);
-            if (a) {
-                return a as T;
-            }
-        }
-    }
-}
-
-/**移除掉数组中指定的item  arr和item不能同时为sting*/
+/**移除数组指定item，不改变引用地址*/
 function UtilArrayRemoveItem(arr: any[], item: any, key?: string) {
-    let index;
-    if (key) {
-        index = arr.findIndex(e => e == item || e[key] == item[key] || e[key] == item || e == item[key])
-    } else {
-        index = arr.findIndex(e => e == item);
+    if (UtilArrayIsNonNull) {
+        let index;
+        if (key) {
+            index = arr.findIndex(e => e == item || e[key] == item[key] || e[key] == item || e == item[key])
+        } else {
+            index = arr.findIndex(e => e == item);
+        }
+        arr.splice(index, 1)
     }
-    arr.splice(index, 1)
+    return arr;
 }
 
-/**不改变引用地址的清空数组 */
+/**清空数组，不改变引用地址*/
 function UtilArrayClear<T>(arr: T[]): T[] {
     arr.length = 0;
     return arr;
@@ -39,8 +27,8 @@ function UtilArrayIsArray(arr: Array<any>): boolean {
     }
 }
 
-/**判读数组是否不为空  length > 0*/
-function UtilArrayNonNull(arr: Array<any>): boolean {
+/**对象是数组且length > 0*/
+function UtilArrayIsNonNull(arr: Array<any>): boolean {
     return UtilArrayIsArray(arr) && arr.length > 0
 }
 
@@ -48,7 +36,7 @@ function UtilArrayNonNull(arr: Array<any>): boolean {
  * arr 为数组   key为要设置的key  value为要设置值   children 为子数组所在的key
  */
 function UtilArraySetKeyValue(arr: Array<any>, key: string, value: any, children: string = 'children') {
-    if (UtilArrayNonNull(arr)) {
+    if (UtilArrayIsNonNull(arr)) {
         for (let i = 0, len = arr.length; i < len; i++) {
             let el = arr[i];
             el[key] = value;
@@ -57,40 +45,39 @@ function UtilArraySetKeyValue(arr: Array<any>, key: string, value: any, children
     }
 }
 
-/**当某一条数据的key为指定value时， 将该数据及其祖先数据的key设置为指定的value  
- * arr 为数组   key为和value比较的  value为值   
- * attr为设置的key  value为设置的值  children 为子数组所在的key
- */
-function UtilArraySetKeyValueByValue(
-    arr: Array<any>, key: string, value: any, attr: string, data: any, children: string = 'children'
-) {
-    if (UtilArrayNonNull(arr)) {
+/**当数组中某一条数据的key为指定value时
+* 将该数据及其所有祖先的attr设置为指定的data  children为子数组所在的key
+* 返回该条数据
+*/
+function UtilArraySetKeyValueByValue<T>(
+    arr: Array<T>, key: string, value: any, attr: string, data: any, children: string = 'children'
+): T {
+    if (UtilArrayIsNonNull(arr)) {
         for (let i = 0, len = arr.length; i < len; i++) {
             let el = arr[i];
             if (el[key] == value) {
                 el[attr] = data;
-                return true;
+                return el;
             } else {
-                let flag = UtilArraySetKeyValueByValue(el[children], key, value, attr, data);
-                if (flag) {
+                let el_c: T = UtilArraySetKeyValueByValue(el[children], key, value, attr, data);
+                if (el_c) {
                     el[attr] = data;
+                    return el_c
                 }
             }
         }
     }
 }
 
-/**
- * 获取数组中key的value为指定值的对象
- */
-function UtilArrayGetOByValue<T>(arr: Array<T>, key: string, value: any, children: string = 'children'): T {
-    if (UtilArrayNonNull(arr)) {
+/**获取数组中key为指定value的对象（单个）*/
+function UtilArrayGetObjByValue<T>(arr: Array<T>, key: string, value: any, children: string = 'children'): T {
+    if (UtilArrayIsNonNull(arr)) {
         for (let i = 0, len = arr.length; i < len; i++) {
             let el = arr[i];
             if (el[key] == value) {
                 return el;
             } else {
-                let obj: T = UtilArrayGetOByValue(el[children], key, value);
+                let obj: T = UtilArrayGetObjByValue(el[children], key, value);
                 if (obj) {
                     return obj;
                 }
@@ -99,17 +86,33 @@ function UtilArrayGetOByValue<T>(arr: Array<T>, key: string, value: any, childre
     }
 }
 
-/**
- * 通过指定值获取数组中的祖先, key为比对的属性value为指定值
- */
+/** 获取数组中key为指定value的对象数组（多个）*/
+function UtilArrayGetArrByValue<T>(arr: Array<T>, key: string, value: any, children: string = 'children'): T[] {
+    let values = [];
+    if (UtilArrayIsNonNull(arr)) {
+        for (let i = 0, len = arr.length; i < len; i++) {
+            let el = arr[i];
+            if (el[key] == value) {
+                values.push(el);
+            }
+            if (UtilArrayIsNonNull(el[children])) {
+                let datas: T[] = UtilArrayGetArrByValue(el[children], key, value);
+                values.push(...datas);
+            }
+        }
+    }
+    return values
+}
+
+/** 获取数组中key为指定value的祖先对象*/
 function UtilArrayGetAncestorByValue<T>(arr: Array<T>, key: string, value: any, children: string = 'children'): T {
-    if (UtilArrayNonNull(arr)) {
+    if (UtilArrayIsNonNull(arr)) {
         for (let i = 0, len = arr.length; i < len; i++) {
             let el = arr[i];
             if (el[key] == value) {
                 return el;
             } else {
-                let obj: T = UtilArrayGetOByValue(el[children], key, value);
+                let obj: T = UtilArrayGetAncestorByValue(el[children], key, value);
                 if (obj) {
                     return el;
                 }
@@ -118,4 +121,4 @@ function UtilArrayGetAncestorByValue<T>(arr: Array<T>, key: string, value: any, 
     }
 }
 
-export { UtilArrayClear, UtilArrayRemoveItem, UtilArrayGetValueByKey, UtilArrayIsArray, UtilArrayNonNull, UtilArraySetKeyValue, UtilArraySetKeyValueByValue, UtilArrayGetOByValue, UtilArrayGetAncestorByValue }
+export { UtilArrayClear, UtilArrayRemoveItem, UtilArrayIsArray, UtilArrayIsNonNull, UtilArraySetKeyValue, UtilArraySetKeyValueByValue, UtilArrayGetObjByValue, UtilArrayGetAncestorByValue, UtilArrayGetArrByValue }

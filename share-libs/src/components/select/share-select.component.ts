@@ -1,7 +1,7 @@
 import { CdkOverlayOrigin } from '@angular/cdk/overlay';
 import { Component, OnInit, Input, ViewChild, ElementRef, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { SelectOption, SelectConfig, SelectModelInputs } from './share-select.model';
-import { UtilArrayClear, UtilArrayGetValueByKey, UtilArrayRemoveItem, UtilIsEqual } from 'share-libs/src/utils';
+import { UtilArrayClear, UtilArrayGetObjByValue, UtilArrayRemoveItem, UtilIsEqual } from 'share-libs/src/utils';
 import { ShareInputType } from 'share-libs/src/models';
 import { UtilChanges, UtilChangesNoFirst } from 'share-libs/src/utils/util-component';
 
@@ -78,7 +78,7 @@ export class ShareSelectComponent implements OnInit {
       if (typeof value !== "object") {
         this._inputType = 'strings';
         this.checkOptions = [...option].map(e => {
-          let option = UtilArrayGetValueByKey(this.inOptions, e as string, this.inUuid);
+          let option = UtilArrayGetObjByValue(this.inOptions, this.inUuid, e as string);
           return option
         }).filter(e => e !== undefined)
       } else {
@@ -90,12 +90,12 @@ export class ShareSelectComponent implements OnInit {
         this._inputType = 'string';
         let options = option.split(',');
         this.checkOptions = options.map(e => {
-          let option = UtilArrayGetValueByKey(this.inOptions, e as string, this.inUuid);
+          let option = UtilArrayGetObjByValue(this.inOptions, this.inUuid, e as string);
           return option
         }).filter(e => e !== undefined)
       } else {
         this._inputType = 'object';
-        this.checkOptions = [UtilArrayGetValueByKey(this.inOptions, option[this.inUuid], this.inUuid)].filter(e => e !== undefined);
+        this.checkOptions = [UtilArrayGetObjByValue(this.inOptions, this.inUuid, option[this.inUuid])].filter(e => e !== undefined);
       }
     }
     this.checkUuids = this.checkOptions.map(e => e[this.inUuid]);

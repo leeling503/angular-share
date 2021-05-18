@@ -1,31 +1,10 @@
-@menu-color: #FFF;
-@item-color: #6677AA;
-@all-bg-color: #222255;
-
-#icon-size {
-  width: 16px;
-  height: 16px;
-  min-width: 16px;
-  min-height: 16px;
-}
-
-.icon(@imgName, @w, @h) {
-  display: inline-block;
-  background-image: url("/assets/img_gs/icon/@{imgName}.png");
-  background-repeat: no-repeat;
-  background-size: 100% 100%; //等比例缩小
-  width: @w;
-  height: @h;
-}
-
+@import "../../../styles/index.less";
 
 .sidebar-scroll {
   position: relative;
   user-select: none;
-  height: calc(100% - 64px); // 头部64 + 页脚41 + 标题41
-  background-image: url(/assets/img_gs/icon/left_bg_img.png);
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
+  height: 100%;
+  .Back-img("menu/menu_side");
 
   .sidebar-title {
     height: 41px;
@@ -39,75 +18,52 @@
 
     .title-icon {
       cursor: pointer;
-      .icon("left_menu_list_close", 16px, 16px)
+      .Icon("menu/menu_ctr_close", 16px, 16px)
     }
   }
 
 }
 
-.al-sidebar-list {
+.sidebar-list {
   list-style: none;
   padding: 10px;
   max-height: 100%;
   overflow: auto;
+  color: #FFF;
+  font-size: 16px;
 
   .menu {
-    .menu-control {
-      margin-top: 10px;
-      margin-left: 20px;
-      cursor: pointer;
-      height: 48px;
-      font-size: 16px;
-      color: @item-color;
-      display: flex;
-      align-items: center;
+    padding-left: 1em;
+  }
 
-      .control-icon {
-        margin-left: 10px;
-        .icon("left_menu_expend", 12px, 8px)
-      }
+  .menu-item {
+    width: 100%;
+    max-width: 100%;
+    cursor: pointer;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
 
-      .close-expend {
-        transform: rotateZ(180deg);
+    &.menu-active {
+      color: @C-blue-c
+    }
+
+    .menu-icon {
+      margin-right: 5px
+    }
+
+    .open-sub {
+      .Icon("menu/menu_ctr_open_sub", 12px, 8px);
+      transform: rotateZ(180deg);
+
+      &.close-sub {
+        // animation: animations 500ms linear 100ms 1 both;
+        transform: rotateZ(00deg);
       }
     }
 
-    .menu-item {
-      &.selected-menu {
-        background-color: #035ADE;
-      }
-
-      &:hover {
-        background-color: #035ADE;
-      }
-
-      margin-top: 10px;
-      font-size: 16px;
-      display: flex;
-      color: @menu-color;
-      align-items: center;
-      border-radius: 15px;
-      height: 35px;
-      cursor: pointer;
-
-      .menu-icon {
-        background-repeat: no-repeat;
-        background-size: 100% 100%; //等比例缩小
-      }
-
-      i {
-        margin-left: 40px;
-        display: inline-block;
-        #icon-size;
-      }
-
-      span {
-        margin-left: 20px;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        word-break: break-all;
-        white-space: nowrap;
-      }
+    .menu-name {
+      flex-grow: 1;
     }
   }
 }
@@ -120,94 +76,16 @@
   font-size: 13px;
 }
 
-.menu(@index, @childIndex , @text) {
-
-  .menu:nth-child(@{index}) .menu-item:nth-child(@{childIndex}):hover::after {
-    content: "@{text}";
+@keyframes animations {
+  0% {
+    transform: rotateZ(0deg);
   }
 
-  // .menu:nth-child(@{index}) .menu-item:nth-child(@{childIndex})::after {
-  //   content: "@{text}";
-  // }
-}
-
-.sidebar-scroll.close-list {
-  .al-sidebar-list {
-
-    .menu-item::after {
-      background-image: url("/assets/img_gs/icon/left_tip_bg.png");
-      background-size: 100% 100%;
-      background-repeat: no-repeat;
-      line-height: 30px;
-      display: block;
-      left: 60px;
-      text-align: center;
-      width: 100px;
-      height: 30px;
-      position: absolute;
-      z-index: 1000;
-      padding-left: 10px;
-    }
-
-    .menu(1, 2, '工况一览');
-    .menu(1, 3, '设备分配');
-    .menu(2, 2, '公司管理');
-    .menu(2, 3, '用户管理');
-    .menu(2, 4, '角色管理');
-    .menu(2, 5, '灯质管理');
-    .menu(3, 2, '用户日志');
-    .menu(3, 3, '操作日志');
-    .menu(3, 4, '系统日志');
-    .menu(3, 5, '北斗实况');
-    .menu(3, 6, '设备卡号');
-    .menu(3, 7, '北斗使用率');
-    .menu(3, 8, '字典配置');
+  50% {
+    transform: rotateZ(90deg);
   }
 
-  .sidebar-title {
-    .title-icon {
-      transform: rotateZ(180deg);
-    }
-  }
-
-  .al-sidebar-list {
-    .menu {
-
-      .menu-control {
-        margin-left: 0px;
-
-        .control-icon {
-          margin: 0px auto;
-        }
-      }
-
-      .menu-item {
-        width: 35px;
-        border-radius: 50%;
-
-        .menu-icon {
-          margin: 0px auto;
-        }
-      }
-    }
-
-  }
-
-}
-.sidebar-scroll.close-list.lang-us{
-  .al-sidebar-list {
-    .menu(1, 2, 'Overview');
-    .menu(1, 3, 'Assignment');
-    .menu(2, 2, 'Company');
-    .menu(2, 3, 'User');
-    .menu(2, 4, 'Role');
-    .menu(2, 5, 'Flash code');
-    .menu(3, 2, '用户日志');
-    .menu(3, 3, '操作日志');
-    .menu(3, 4, '系统日志');
-    .menu(3, 5, '北斗实况');
-    .menu(3, 6, '设备卡号');
-    .menu(3, 7, '北斗使用率');
-    .menu(3, 8, '字典配置');
+  100% {
+    transform: rotateZ(180deg);
   }
 }

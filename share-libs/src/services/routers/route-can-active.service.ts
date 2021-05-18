@@ -6,7 +6,7 @@ import { AccountService } from "../account.service";
 export class RouteCanActive implements CanActivateChild {
     constructor(private account_: AccountService) { }
     canActivateChild(childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
-        return this.account_.getAccount().then(res => true)
+        return this.account_.getAccount().then(res => !!res)
     }
 
 }

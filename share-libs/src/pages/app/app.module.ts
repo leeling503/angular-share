@@ -19,8 +19,7 @@ import { APPROUTER } from "./app.routing"
     HttpClientModule,
     RouterModule,
     OverlayModule,
-    APPROUTER,
-    RouteReuseModule
+    APPROUTER
   ],
   providers: [httpInterceptorProviders],
   entryComponents: [],

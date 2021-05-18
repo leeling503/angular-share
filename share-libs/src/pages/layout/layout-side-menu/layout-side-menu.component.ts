@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
+import { MenuItem } from '../layout-menu';
 import { LayoutMenuServer } from '../layout-menu.service';
 
 @Component({
@@ -8,40 +9,38 @@ import { LayoutMenuServer } from '../layout-menu.service';
   styleUrls: ['./layout-side-menu.component.less']
 })
 export class LayoutSideMenuComponent implements OnInit {
-  constructor(private router: Router, private menu_: LayoutMenuServer) {
-  }
-  menuList: any;
+  constructor(private router: Router, private menu_: LayoutMenuServer) { }
+  /**侧边栏菜单 */
+  sideMenus: MenuItem[];
+  /**菜单栏状态 */
   listClose: boolean = false;
-  s_menu: any;
-  expendShow: Array<any> = [];
-
+  /**展开的菜单id */
+  openMenus: any = {};
   ngOnInit(): void {
-   this.menu_.getSideMenu()
-  }
-
-  getMenuByUrl(url) {
-    let menu = [];
-    this.menuList.forEach(element => {
-      let e = element.menus.filter(e => e.path == url)
-      if (e.length > 0) {
-        menu.push(...e);
-      }
-    });
-    return menu[0]
+    this.menu_.getSideMenu().subscribe(menus => { this.sideMenus = menus; });
   }
 
   setMenuWidth() {
     this.listClose = !this.listClose;
   }
 
-  ngOnDestroy(): void {
+  /**菜单点击事件 */
+  onSelectMenu(event: MouseEvent, menu: MenuItem) {
+    event.stopPropagation();
+    let name = (<HTMLElement>event.target).className;
+    let url = menu.url;
+    if (name.includes('open-sub')) {
+      menu.openSub = !menu.openSub;
+      return;
+    }
+    if (name !== "menu-name" || !url) {
+      menu.openSub = !menu.openSub;
+    }
+    if (url) {
+      this.router.navigateByUrl(url)
+    }
   }
 
-  onRouteJump(item) {
-    this.s_menu = item;
-    if (item.path) {
-      this.router.navigateByUrl(item.path);
-    }
-    return false;
-  }
+  ngOnDestroy(): void { }
+
 }

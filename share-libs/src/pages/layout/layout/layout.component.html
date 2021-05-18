@@ -1,17 +1,24 @@
 <div class="layout-page">
+  <!-- 头部菜单 -->
   <div class="page-head">
     <layout-head></layout-head>
   </div>
+  <!-- 中部页面 -->
   <div class="page-main">
-    <!-- <div class="main-left-menu">
+    <!-- 左侧菜单控件 -->
+    <div class="main-left-menu">
       <layout-side-menu></layout-side-menu>
-    </div> -->
+    </div>
+    <!-- 中间主要内容 -->
     <div class="main-content">
-      <!-- <div class="content-router">
-
-      </div> -->
+      <!-- 路由缓存控制组件 -->
+      <div class="content-router">
+        <layout-cache-ctr></layout-cache-ctr>
+      </div>
+      <!-- 路由输出部分 -->
       <router-outlet></router-outlet>
     </div>
   </div>
+  <!-- 底部说明 -->
   <div class="page-footer"></div>
 </div>

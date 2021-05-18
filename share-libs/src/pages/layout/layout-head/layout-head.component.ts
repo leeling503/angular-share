@@ -12,17 +12,20 @@ import { LayoutMenuServer } from '../layout-menu.service';
   styleUrls: ['./layout-head.component.less']
 })
 export class LayoutHeadComponent implements OnInit {
-  constructor(private router: Router, private login_: LoginService, private layoutMenu_: LayoutMenuServer) { }
+  constructor(private router: Router, private login_: LoginService, private menu_: LayoutMenuServer) {
+  
+  }
   menus: MenuItem[];
   headBtns: HeadBtn[] = [
     { icon: 'menu-logout-icon', title: '退出', onClick: () => { this.onLogout() } }
   ]
 
   ngOnInit() {
-    this.menus = this.layoutMenu_.getMenu();
+    this.menus = this.menu_.getMenu();
   }
 
   onMenuToPage(menu: MenuItem) {
+    this.menu_.setSideMenu(menu);
     this.router.navigateByUrl(menu.url, { queryParams: {} })
   }
 

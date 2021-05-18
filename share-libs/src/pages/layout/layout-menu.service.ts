@@ -1,24 +1,29 @@
-import { Injectable, OnDestroy, OnInit } from "@angular/core";
-import { ActivatedRoute, NavigationEnd, NavigationStart, Router } from "@angular/router";
-import { BehaviorSubject, Subscription } from "rxjs";
+import { Injectable, OnDestroy } from "@angular/core";
+import { NavigationEnd, Router } from "@angular/router";
+import { BehaviorSubject, Observable, Subscription } from "rxjs";
 import { filter } from "rxjs/operators";
-import { Account } from "share-libs/src/models/share-account";
 import { AccountService } from "share-libs/src/services/account.service";
-import { UtilArrayGetAncestorByValue, UtilArrayGetOByValue, UtilArrayNonNull, UtilArraySetKeyValue, UtilArraySetKeyValueByValue } from "share-libs/src/utils/util-array";
+import { UtilArrayGetAncestorByValue, UtilArrayGetObjByValue, UtilArrayIsNonNull, UtilArraySetKeyValue, UtilArraySetKeyValueByValue } from "share-libs/src/utils/util-array";
 import { MenuItem, SYSTEM_MENU } from "./layout-menu";
 
-/**不要在模块中注册，退出模块后不会再次运行constructor无法再次监听路由事件 */
-@Injectable({providedIn:'root'})
+/**不要在模块中注册，退出模块后不会再次运行constructor无法再次监听路由事件
+ *菜单服务 设置菜单的激活状态 权限  获取二级菜单  根菜单
+ */
+@Injectable({ providedIn: 'root' })
 export class LayoutMenuServer implements OnDestroy {
     constructor(private account_: AccountService, private router: Router) {
-        this.set_MenuShowByAuth(this._menus);
+        this.setMenuShowByAuth(this._menus);
         this._router$ = this.router.events.pipe(
             filter(event => event instanceof NavigationEnd),
         ).subscribe((navigation: NavigationEnd) => {
             let curUrl = navigation.urlAfterRedirects;
-            this.go_HasAuthPage(this._menus, curUrl);
-            this.set_MenuActiveStatus(this._menus, curUrl);
-            this._ancestor = UtilArrayGetAncestorByValue(this._menus, 'url', curUrl)
+            let ifAuth = this.goHasAuthPage(this._menus, curUrl);
+            if (ifAuth) {
+                this._activeMenu && (this._activeMenu.active = false);
+                this._activeMenu = UtilArrayGetObjByValue(this._menus, 'url', curUrl);
+                this._activeMenu.active = true;
+                this.setSideMenu(this._activeMenu)
+            }
         })
     }
     private _router$: Subscription;
@@ -26,60 +31,79 @@ export class LayoutMenuServer implements OnDestroy {
     private _menus = SYSTEM_MENU;
     /**激活的祖先菜单 */
     private _ancestor: MenuItem;
-    sideMenu$: BehaviorSubject<any> = new BehaviorSubject([]);
+    /**激活的最小子菜单 */
+    private _activeMenu: MenuItem;
+    /**二级菜单订阅主体 */
+    private _sideMenu$: BehaviorSubject<MenuItem[]> = new BehaviorSubject([]);
 
-    /**获取菜单 */
+    /**获取主菜单 */
     getMenu(): MenuItem[] {
         return this._menus;
     }
 
-    getSideMenu(): MenuItem[] {
-        return this._ancestor.children;
+    /**二级菜单的订阅 */
+    getSideMenu(): Observable<MenuItem[]> {
+        return this._sideMenu$
     }
 
-    /**根据用户信息设置菜单的显隐 */
-    set_MenuShowByAuth(menus: MenuItem[]): void {
-        if (UtilArrayNonNull(menus)) {
+    /**根菜单变化设置二级菜单和根路由激活状态*/
+    setSideMenu(menu: MenuItem) {
+        let ancestor = UtilArrayGetAncestorByValue(this._menus, 'url', menu.url);
+        if (ancestor && this._ancestor !== ancestor) {
+            this._ancestor && (this._ancestor.active = false);
+            this._ancestor = ancestor;
+            this._ancestor.active = true;
+            let sideMenu = ancestor.children;
+            this._sideMenu$.next(sideMenu);
+        }
+    }
+
+    /**根据用户权限设置菜单的显隐 */
+    setMenuShowByAuth(menus: MenuItem[]): void {
+        if (UtilArrayIsNonNull(menus)) {
             for (let i = 0, len = menus.length; i < len; i++) {
                 let el = menus[i];
-                el.ifShow = this.account_.hasAuthority(el.authCode);
+                el.ifShow = el.ifShow === undefined ? this.account_.hasAuthority(el.authCode) : el.ifShow;
                 if (el.ifShow) {
-                    this.set_MenuShowByAuth(el.children);
+                    this.setMenuShowByAuth(el.children);
                 }
             }
         }
     }
 
-    /**设置菜单激活状态 */
-    set_MenuActiveStatus(menus: MenuItem[], url): void {
-        UtilArraySetKeyValue(menus, 'active', false);
-        UtilArraySetKeyValueByValue(menus, 'url', url, 'active', true)
-    }
-
-    /**判断当前路由是否有权限， 没有权限就获取有权限路由菜单进行跳转 */
-    go_HasAuthPage(menus: MenuItem[], url) {
-        let menu = UtilArrayGetOByValue(menus, 'url', url);
+    /**判断当前路由是否有权限，没有权限就跳转打有权限路由*/
+    goHasAuthPage(menus: MenuItem[], url): boolean {
+        let menu = UtilArrayGetObjByValue(menus, 'url', url);
         let auth = menu.ifShow;
         if (!auth) {
-            menu = this.get_MenuByAuth(menus);
+            menu = this.getMenuByAuth(menus);
             this.router.navigateByUrl(menu.url)
         }
+        return auth;
     }
 
-    get_MenuByAuth(arr: Array<MenuItem>): MenuItem {
-        if (UtilArrayNonNull(arr)) {
+    /**获取到有权限并且设置了url的菜单 */
+    getMenuByAuth(arr: Array<MenuItem>): MenuItem {
+        if (UtilArrayIsNonNull(arr)) {
             for (let i = 0, len = arr.length; i < len; i++) {
                 let el = arr[i];
                 if (el && el.ifShow == true && el.url) {
                     return el;
                 } else {
-                    let obj = this.get_MenuByAuth(el.children);
+                    let obj = this.getMenuByAuth(el.children);
                     if (obj) {
                         return obj;
                     }
                 }
             }
         }
+    }
+
+    /**设置整条匹配路径菜单激活状态 */
+    setMenuActiveStatus(menus: MenuItem[], url): MenuItem {
+        UtilArraySetKeyValue(menus, 'active', false);
+        let s_menu = UtilArraySetKeyValueByValue(menus, 'url', url, 'active', true)
+        return s_menu;
     }
 
     ngOnDestroy() {
