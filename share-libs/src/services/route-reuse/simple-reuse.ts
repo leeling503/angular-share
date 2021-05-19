@@ -28,11 +28,6 @@ export class SimpleReuseStrategy implements RouteReuseStrategy {
         return future.routeConfig === curr.routeConfig;
     }
 
-    getTruthRoute(route: ActivatedRouteSnapshot) {
-        let next = route;
-        while (next.firstChild) next = next.firstChild;
-        return next;
-    }
     /**
      * 根据快照获取URL地址
      */

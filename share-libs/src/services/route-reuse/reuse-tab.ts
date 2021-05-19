@@ -1,43 +1,49 @@
 
 import { ActivatedRouteSnapshot } from "@angular/router";
-export interface ReuseTabCached {
+
+class RouteData {
+  /**复用路由的标题 */
   title: string;
-  url: string;
-  /** 是否可关闭，默认：`true` */
-  closable?: boolean;
-  _snapshot: ActivatedRouteSnapshot;
-  _handle: any;
+  /**说明路由是否复用 */
+  reuse: boolean;
+  /**复用路由能否被关闭 */
+  reuseClosable: boolean;
+  constructor() { }
 }
 
-export interface ReuseTabNotify {
-  /** 事件类型 */
-  active: string;
+export interface ReuseTabCached {
+  /**标签名 */
+  title: string;
+  /**url路径 */
+  url: string;
+  /** 是否可关闭，默认：`true` */
+  closable: boolean;
+  /**是否是激活状态 */
+  active?: boolean;
+  /**最右侧的路由*/
+  ifRight?: boolean;
+  /**最左侧的路由*/
+  ifLeft?: boolean;
+  /**离开路由时缓存的数据 */
+  _handle?: any;
+}
 
-  [key: string]: any;
+export class ReuseCacheNotify {
+  /** 事件类型 */
+  action: 'add' | 'close' | 'closable' | 'closeRight' | 'clear';
+  list: ReuseTabCached[];
 }
 
 export type CloseType = 'close' | 'closeOther' | 'closeRight' | 'clear' | null;
 
-export interface ReuseContextCloseEvent {
+export interface ContextMenuEvent {
   type: CloseType;
-  item: TabComponent;
-  includeNonCloseable: boolean;
+  item: ReuseTabCached;
+  /**按住ctrl强制关闭不可关闭 */
+  coerceClose: boolean;
 }
 
 export interface ReuseContextEvent {
   event: MouseEvent;
-  item: TabComponent;
-  // comp?: ReuseTabContextComponent;
-}
-
-export class TabComponent {
-  index?: number;//下标
-  label?: string;//
-  title?: string;//标题
-  active?: boolean;//是否是激活（选中）状态
-  disabled?: boolean;//是否禁用
-  closable?: boolean;//是否可以关闭
-  url?: string;
-  last?: boolean;//是否最后一个tab
-  constructor() { }
+  item: ReuseTabCached;
 }

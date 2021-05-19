@@ -34,7 +34,6 @@ export class ShareOverlayService {
         let modalRef = this.overlayRef.attach(overlayContext);
         overlay['modalRef'] = modalRef;
         overlay['overlayRef'].backdropClick().subscribe(res => {
-            console.log(res);
             this.overlayRef.detach()
         })
         return overlay;
@@ -117,7 +116,7 @@ export class ShareOverlayService {
 }
 
 export class ShareOverlayConfig extends OverlayConfig {
-    hasBackdrop = true;
+    hasBackdrop = false;
     backdropClass = 'transparent';
     positionStrategy?: PositionStrategy;
     scrollStrategy?: ScrollStrategy;
@@ -144,7 +143,7 @@ export class ShareOverlayPosition {
     withPositions?: ConnectedPosition[] = [{
         originX: 'end',
         originY: 'bottom',
-        overlayX: 'end',
+        overlayX: 'start',
         overlayY: 'top',
     }]
 }

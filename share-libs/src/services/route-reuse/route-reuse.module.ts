@@ -1,23 +1,19 @@
 import { NgModule } from '@angular/core';
-import { RouteReuseStrategy } from '@angular/router';
-import { CustomeRouteReuseStrategy } from './route-reuse-strategy';
-import { ReuseTabService } from './reuse-tab.service';
-import { SimpleReuseStrategy } from './simple-reuse';
+import { Router, RouteReuseStrategy } from '@angular/router';
+import { CustomStrategy } from './custom-strategy.service';
+import { CustomReuseStrategy } from './custom-reuse-strategy';
 
 /**
  * 路由复用策略
  */
 @NgModule({
-  imports: [],
-  declarations: [],
   providers: [
-    ReuseTabService,
     {
       provide: RouteReuseStrategy,
-      useClass: CustomeRouteReuseStrategy,
-      deps: [ReuseTabService]
+      useClass: CustomReuseStrategy,
+      deps: [CustomStrategy]
     },
     // { provide: RouteReuseStrategy, useClass: SimpleReuseStrategy }
-  ]
+  ],
 })
 export class RouteReuseModule { }

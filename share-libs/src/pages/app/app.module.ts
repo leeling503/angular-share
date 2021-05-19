@@ -17,9 +17,11 @@ import { APPROUTER } from "./app.routing"
     BrowserModule,
     CommonModule,
     HttpClientModule,
-    RouterModule,
     OverlayModule,
-    APPROUTER
+    RouterModule,
+    APPROUTER,
+    // 路由复用策略模块
+    RouteReuseModule
   ],
   providers: [httpInterceptorProviders],
   entryComponents: [],

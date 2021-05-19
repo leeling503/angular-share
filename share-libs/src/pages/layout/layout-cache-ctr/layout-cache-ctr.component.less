@@ -6,4 +6,24 @@
 
 .layout-cache-ctr {
   background-color: #fafafa;
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.reuse-list {
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.reuse-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 170px;
+  border: 1px solid #333;
+  background-color: azure;
+
+  &.active-item {
+    background-color: #99CCFF;
+  }
 }

@@ -1,0 +1,36 @@
+ul.menu-context {
+    font-size: 14px;
+    line-height: 1.5;
+    box-sizing: border-box;
+    li {
+        padding: 0 16px;
+        font-size: 14px;
+        line-height: 40px;
+        height: 40px;
+        margin-top: 4px;
+        margin-bottom: 4px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        cursor: pointer;
+        margin: 0;
+        position: relative;
+        display: block;
+        white-space: nowrap;
+        transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), border-color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), background 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), padding 0.15s cubic-bezier(0.645, 0.045, 0.355, 1);
+        &.menu-item-disabled {
+            color: rgba(0, 0, 0, 0.25) !important;
+            cursor: not-allowed;
+            background: none;
+            border-color: transparent !important;
+        }
+        &:hover {
+            color: #1890ff;
+        }
+        &.menu-item-disabled {
+            color: rgba(0, 0, 0, 0.25) !important;
+            cursor: not-allowed;
+            background: none;
+            border-color: transparent !important;
+        }
+    }
+}

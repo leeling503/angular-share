@@ -16,7 +16,7 @@ export class LayoutMenuServer implements OnDestroy {
         this._router$ = this.router.events.pipe(
             filter(event => event instanceof NavigationEnd),
         ).subscribe((navigation: NavigationEnd) => {
-            let curUrl = navigation.urlAfterRedirects;
+            let curUrl = navigation.urlAfterRedirects.split('?')[0];
             let ifAuth = this.goHasAuthPage(this._menus, curUrl);
             if (ifAuth) {
                 this._activeMenu && (this._activeMenu.active = false);
@@ -49,10 +49,10 @@ export class LayoutMenuServer implements OnDestroy {
     /**根菜单变化设置二级菜单和根路由激活状态*/
     setSideMenu(menu: MenuItem) {
         let ancestor = UtilArrayGetAncestorByValue(this._menus, 'url', menu.url);
+        ancestor.active = true;
         if (ancestor && this._ancestor !== ancestor) {
             this._ancestor && (this._ancestor.active = false);
             this._ancestor = ancestor;
-            this._ancestor.active = true;
             let sideMenu = ancestor.children;
             this._sideMenu$.next(sideMenu);
         }

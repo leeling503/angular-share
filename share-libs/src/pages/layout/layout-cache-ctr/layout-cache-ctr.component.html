@@ -1,3 +1,10 @@
 <div class="layout-cache-ctr">
-
+  <div class="reuse-list">
+    <ng-container *ngFor="let reuse of reuseList">
+      <div class="reuse-item" [context-menu]="reuse" (onChange)="onContextMenuChange($event)" [ngClass]="{'active-item':reuse.active}"
+        (click)="goReuseRoute(reuse)">
+        {{reuse.title}}
+      </div>
+    </ng-container>
+  </div>
 </div>
