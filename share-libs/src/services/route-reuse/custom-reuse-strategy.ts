@@ -1,12 +1,10 @@
 import { RouteReuseStrategy, ActivatedRouteSnapshot, DetachedRouteHandle } from '@angular/router';
 import { CustomStrategy } from './custom-strategy.service';
 
-/**
- * 路由复用策略
- */
+/**路由复用策略 */
 export class CustomReuseStrategy implements RouteReuseStrategy {
 
-  constructor(private reuse_: CustomStrategy) { }
+  constructor(/**自定义路由复用策略*/private reuse_: CustomStrategy) { }
 
   /**  决定是否复用路由，根据切换的future curr的节点层级依次调用，返回值为true时表示当前节点层级路由复用，然后继续下一路由节点调用，入参为切换的下一级路由（子级）的future curr路由的节点，返回值为false时表示不在复用路由，并且不再继续调用此方法（future路由不再复用，其子级路由也不会复用，所以不需要再询问下去），root路由节点调用一次，非root路由节点调用两次这个方法，第一次比较父级节点，第二次比较当前节点*/
   public shouldReuseRoute(future: ActivatedRouteSnapshot, curr: ActivatedRouteSnapshot): boolean {

@@ -3,6 +3,7 @@ import { ActivatedRouteSnapshot } from '@angular/router';
 import { UtilRouterGetUrl } from 'share-libs/src/utils';
 import { CacheCtrService } from './cache-ctr.service';
 
+/**自定义路由复用策略 */
 @Injectable({ providedIn: 'root' })
 export class CustomStrategy {
   constructor(private reuseCtr_: CacheCtrService) { }

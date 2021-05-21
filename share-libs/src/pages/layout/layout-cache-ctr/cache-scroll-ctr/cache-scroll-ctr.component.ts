@@ -2,6 +2,7 @@ import { Component, ElementRef, Input, OnInit, SimpleChanges, ViewChild } from '
 import { ReuseCachedCtr } from 'share-libs/src/services/route-reuse/reuse-tab';
 import { UtilChanges } from 'share-libs/src/utils';
 
+/**复用按钮滑动控制组件 */
 @Component({
   selector: 'cache-scroll-ctr',
   templateUrl: './cache-scroll-ctr.component.html',
@@ -10,22 +11,28 @@ import { UtilChanges } from 'share-libs/src/utils';
 export class CacheScrollCtrComponent implements OnInit {
 
   constructor() { }
-  @Input() inActive: ReuseCachedCtr;
+  @Input() inChange: ReuseCachedCtr;
   /**滚动控制按钮的显影 */
   showScrollCtr: boolean = false;
-  disableScrollBefore: boolean = true;
-  disableScrollAfter: boolean = true;
+  /**禁用前一个 */
+  disableBefore: boolean = false;
+  /**禁用后一个 */
+  disableAfter: boolean = false;
   /**X的偏移量*/
   offX: number = 0;
   /**X的偏移量*/
   moveSize: number = 200;
   @ViewChild('viewEl', { static: true, read: ElementRef }) viewEl: ElementRef;
   @ViewChild('scrollEl', { static: true, read: ElementRef }) scrollEl: ElementRef;
+
+  /**可视区域宽度 */
   get viewWidth() {
     let navEl: HTMLElement = this.viewEl.nativeElement;
-    return navEl.clientWidth
+    return navEl.clientWidth - 39 * 2
   }
-  get scrollWidth() {
+
+  /**所有复用路由总宽度 */
+  get allWidth() {
     let navEl: HTMLElement = this.scrollEl.nativeElement;
     return navEl.clientWidth
   }
@@ -36,22 +43,22 @@ export class CacheScrollCtrComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (UtilChanges(changes, 'inActive')) {
-      // this.moveOnActive()
+    if (UtilChanges(changes, 'inChange')) {
+      setTimeout(() => { this.reuseRouteChange(); }, 10);
     }
   }
+
   ngOnInit() { }
-  ngAfterContentInit(): void {
-    this.contentWidthChange()
-  }
 
-  ngAfterContentChecked(): void {
-    this.contentWidthChange();
-    this.moveOnActive()
-  }
-
-  moveOnActive() {
-    if (!this.activeEl || this.coerec) { this.coerec = false; return }
+  /**路由缓存按钮组有变化 */
+  reuseRouteChange() {
+    if (!this.activeEl || this.viewWidth > this.allWidth) {
+      /**可视区域足够 */
+      this.showScrollCtr = false;
+      this.offX = 0;
+      return
+    }
+    this.showScrollCtr = true;
     let offx = this.activeEl.offsetLeft, width = this.activeEl.clientWidth;
     if (this.offX + this.viewWidth < offx + width) {
       /**激活tab右侧超出右边界*/
@@ -63,25 +70,25 @@ export class CacheScrollCtrComponent implements OnInit {
       /**激活tab左侧超出右边界*/
       this.offX = offx;
     }
-  }
-  coerec: boolean = false;
-  onScrollMove(type: string) {
-    this.coerec = true;
-    if (type === 'after') {
-      let x = this.scrollWidth - this.viewWidth - this.offX;
-      this.offX = this.offX + (x > this.moveSize ? this.moveSize : x);
-    } else if (type === "before") {
-      let x = this.offX - this.moveSize;
-      this.offX = x > 0 ? x : 0;
-    }
+    /**设置滑动按钮状态 */
+    this.disableAfter = false;
+    this.disableBefore = false;
+    if (this.offX === 0) { this.disableBefore = true; }
+    if (this.offX + this.viewWidth >= this.allWidth) { this.disableAfter = true; }
   }
 
-  /**决定是否显示控制按钮 */
-  contentWidthChange() {
-    if (this.viewWidth < this.scrollWidth) {
-      this.showScrollCtr = true;
-    } else {
-      this.showScrollCtr = false;
+  /**页面点击滑动按钮 */
+  onScrollMove(type: string) {
+    if (type === 'after' && !this.disableAfter) {
+      let x = this.allWidth - this.viewWidth - this.offX;
+      this.offX = this.offX + (x > this.moveSize ? this.moveSize : x);
+      this.disableBefore = false;
+      this.disableAfter = x <= this.moveSize;
+    } else if (type === "before" && !this.disableBefore) {
+      let x = this.offX - this.moveSize;
+      this.offX = x > 0 ? x : 0;
+      this.disableBefore = this.offX == 0;
+      this.disableAfter = false;
     }
   }
 }

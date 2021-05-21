@@ -1,10 +1,12 @@
 import { Component, ElementRef } from "@angular/core";
 import { ActivatedRoute, ActivatedRouteSnapshot, NavigationEnd, Router } from "@angular/router";
+import { Subject } from "rxjs";
 import { filter } from "rxjs/operators";
 import { CacheCtrService } from "share-libs/src/services/route-reuse/cache-ctr.service";
 import { ReuseMenuEvent, ReuseCacheNotify, ReuseCachedCtr } from "share-libs/src/services/route-reuse/reuse-tab";
 import { UtilArraySetKeyValue, UtilRouterGetUrl } from "share-libs/src/utils";
 
+/**复用路由缓存控制按钮组件 */
 @Component({
     selector: 'layout-cache-ctr',
     templateUrl: './layout-cache-ctr.component.html',
@@ -27,6 +29,8 @@ export class LayoutCacheCtrComponent {
     activeRoute: ReuseCachedCtr;
     /**关闭事件后的下一个路由 */
     private _nextRoute: ReuseCachedCtr;
+    /**复用按钮组变化 */
+    changeReuseRoute: Symbol;
 
     /**生成缓存按钮组 */
     genReuseList() {
@@ -50,6 +54,7 @@ export class LayoutCacheCtrComponent {
         let len = this.reuseRouteList.length;
         this.reuseRouteList[len - 1].ifRight = true;
         this.reuseRouteList[0].ifLeft = true;
+        this.changeReuseRoute = Symbol('change');
     }
 
     /**缓存改变通知改变按钮组 */

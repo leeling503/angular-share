@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, HostListener } from '@a
 import { Subject } from 'rxjs';
 import { CloseType, ReuseMenuEvent, ReuseCachedCtr } from 'share-libs/src/services/route-reuse/reuse-tab';
 
-
+/**复用路由右键菜单组件 */
 @Component({
   selector: 'cache-ctr-context-menu',
   templateUrl: './cache-ctr-context-menu.component.html',

@@ -1,5 +1,5 @@
 <div class="layout-cache-ctr">
-  <cache-scroll-ctr [inActive]="activeRoute">
+  <cache-scroll-ctr [inChange]="changeReuseRoute">
     <div class="reuse-list">
       <ng-container *ngFor="let route of reuseRouteList">
         <div ngPreserveWhitespaces class="reuse-item" [context-menu]="route" (onChange)="onContextMenuChange($event)"

@@ -1,3 +1,5 @@
+@import "../../../../styles/index.less";
+
 :host,
 .cache-scroll {
   width: 100%;
@@ -12,11 +14,24 @@
 
 .btn-prev,
 .btn-next {
+  cursor: pointer;
   min-width: 39px;
   flex-shrink: 0;
   flex-grow: 0;
   background-color: aliceblue;
   z-index: 10;
+  .F-center();
+
+  .tabs-btn-icon {
+    .Icon("icon/com_pre_gray")
+  }
+}
+
+.btn-next {
+  .tabs-btn-icon {
+    .Icon("icon/com_pre_gray");
+    transform: rotateZ(180deg);
+  }
 }
 
 .ctr-btns {

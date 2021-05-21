@@ -6,11 +6,12 @@ import { filter } from "rxjs/operators";
 import { UtilRouterGetUrl } from "share-libs/src/utils";
 import { ReuseCachedCtr, ReuseCacheNotify } from "./reuse-tab";
 
+/**复用路由缓存控制服务 */
 @Injectable({ providedIn: "root" })
 export class CacheCtrService {
     constructor() { }
     private _cachedChange: BehaviorSubject<ReuseCacheNotify> = new BehaviorSubject<ReuseCacheNotify>(null);
-    /**认为关闭的缓存url */
+    /**用户关闭的缓存url */
     closeUrl: string;
     /**被复用的路由数据 */
     reuseCachedList: ReuseCachedCtr[] = [];

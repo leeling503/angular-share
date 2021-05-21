@@ -1,16 +1,14 @@
-<div class="cache-scroll">
-  <span class="btn-prev" *ngIf="showScrollCtr" [class.tabs-tab-btn-disabled]="disableScrollBefore"
-    (click)="onScrollMove('before') ">
-    <i class="app-icon tab-angle-left tabs-tab-prev-icon"></i>
+<div class="cache-scroll" #viewEl>
+  <span class="btn-prev" *ngIf="showScrollCtr" [class.el-disabled]="disableBefore" (click)="onScrollMove('before') ">
+    <i class=" tabs-btn-icon"></i>
   </span>
-  <div class="ctr-btns" #viewEl>
+  <div class="ctr-btns">
     <div class="btns-list-scroll" #scrollEl [style]="{'transform':'translateX('+-offX+'px)'}">
       <ng-content>
       </ng-content>
     </div>
   </div>
-  <span class="btn-next" *ngIf="showScrollCtr" [class.tabs-tab-btn-disabled]="disableScrollAfter"
-    (click)="onScrollMove('after') ">
-    <i class="app-icon tab-angle-right tabs-tab-next-icon"></i>
+  <span class="btn-next" *ngIf="showScrollCtr" [class.el-disabled]="disableAfter" (click)="onScrollMove('after') ">
+    <i class="tabs-btn-icon"></i>
   </span>
 </div>
