@@ -1,10 +1,14 @@
 <div class="layout-cache-ctr">
-  <div class="reuse-list">
-    <ng-container *ngFor="let reuse of reuseList">
-      <div class="reuse-item" [context-menu]="reuse" (onChange)="onContextMenuChange($event)" [ngClass]="{'active-item':reuse.active}"
-        (click)="goReuseRoute(reuse)">
-        {{reuse.title}}
-      </div>
-    </ng-container>
-  </div>
+  <cache-scroll-ctr [inActive]="activeRoute">
+    <div class="reuse-list">
+      <ng-container *ngFor="let route of reuseRouteList">
+        <div ngPreserveWhitespaces class="reuse-item" [context-menu]="route" (onChange)="onContextMenuChange($event)"
+          [ngClass]="{'active-item':route.active}" (click)="goReuseRoute(route)">
+          <div class="status-dot"></div>
+          {{route.title}}
+          <i class="reuse-route-close" *ngIf="route.closable" (click)="onCloseReuseRoute(route)"></i>
+        </div>
+      </ng-container>
+    </div>
+  </cache-scroll-ctr>
 </div>

@@ -9,7 +9,7 @@ import { MenuItem, SYSTEM_MENU } from "./layout-menu";
 /**不要在模块中注册，退出模块后不会再次运行constructor无法再次监听路由事件
  *菜单服务 设置菜单的激活状态 权限  获取二级菜单  根菜单
  */
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class LayoutMenuServer implements OnDestroy {
     constructor(private account_: AccountService, private router: Router) {
         this.setMenuShowByAuth(this._menus);
@@ -74,7 +74,7 @@ export class LayoutMenuServer implements OnDestroy {
     /**判断当前路由是否有权限，没有权限就跳转打有权限路由*/
     goHasAuthPage(menus: MenuItem[], url): boolean {
         let menu = UtilArrayGetObjByValue(menus, 'url', url);
-        let auth = menu.ifShow;
+        let auth = menu && menu.ifShow;
         if (!auth) {
             menu = this.getMenuByAuth(menus);
             this.router.navigateByUrl(menu.url)
@@ -107,6 +107,7 @@ export class LayoutMenuServer implements OnDestroy {
     }
 
     ngOnDestroy() {
-        this._router$.unsubscribe()
+        this._router$.unsubscribe();
+        UtilArraySetKeyValue(this._menus, 'active', false);
     }
 }

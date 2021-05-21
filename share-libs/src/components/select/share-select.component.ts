@@ -78,7 +78,7 @@ export class ShareSelectComponent implements OnInit {
       if (typeof value !== "object") {
         this._inputType = 'strings';
         this.checkOptions = [...option].map(e => {
-          let option = UtilArrayGetObjByValue(this.inOptions, this.inUuid, e as string);
+          let option = UtilArrayGetObjByValue(this.inOptions, this.inUuid as keyof SelectOption, e as string);
           return option
         }).filter(e => e !== undefined)
       } else {
@@ -90,12 +90,12 @@ export class ShareSelectComponent implements OnInit {
         this._inputType = 'string';
         let options = option.split(',');
         this.checkOptions = options.map(e => {
-          let option = UtilArrayGetObjByValue(this.inOptions, this.inUuid, e as string);
+          let option = UtilArrayGetObjByValue(this.inOptions, this.inUuid as keyof SelectOption, e as string);
           return option
         }).filter(e => e !== undefined)
       } else {
         this._inputType = 'object';
-        this.checkOptions = [UtilArrayGetObjByValue(this.inOptions, this.inUuid, option[this.inUuid])].filter(e => e !== undefined);
+        this.checkOptions = [UtilArrayGetObjByValue(this.inOptions, this.inUuid as keyof SelectOption, option[this.inUuid])].filter(e => e !== undefined);
       }
     }
     this.checkUuids = this.checkOptions.map(e => e[this.inUuid]);

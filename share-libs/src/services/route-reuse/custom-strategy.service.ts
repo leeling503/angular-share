@@ -34,7 +34,7 @@ export class CustomStrategy {
   shouldDetach(route: ActivatedRouteSnapshot): boolean {
     if (this.hasInValidRoute(route)) return false;
     const url = this.getUrl(route);
-    if (url === this.reuseCtr_.removeUrl) return false;
+    if (url === this.reuseCtr_.closeUrl) return false;
     if (route.data && typeof route.data.reuse === 'boolean')
       return route.data.reuse;
     return true;
@@ -42,7 +42,7 @@ export class CustomStrategy {
 
   /**存储快照*/
   store(_snapshot: ActivatedRouteSnapshot, _handle: any) {
-    this.reuseCtr_.store(_snapshot, _handle);
+    this.reuseCtr_.onStore(_snapshot, _handle);
   }
 
   /**决定是否允许应用缓存数据*/

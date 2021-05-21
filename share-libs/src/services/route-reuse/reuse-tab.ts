@@ -1,17 +1,20 @@
-
-import { ActivatedRouteSnapshot } from "@angular/router";
-
-class RouteData {
+/**复用路由数据 */
+export class ReuseRouteData {
   /**复用路由的标题 */
   title: string;
   /**说明路由是否复用 */
   reuse: boolean;
   /**复用路由能否被关闭 */
-  reuseClosable: boolean;
-  constructor() { }
+  closeable: boolean;
+  constructor(title?: string, reuse: boolean = true, closeable: boolean = true) {
+    this.title = title;
+    this.reuse = reuse;
+    this.closeable = closeable
+  }
 }
 
-export interface ReuseTabCached {
+/**复用缓存控制类 */
+export interface ReuseCachedCtr {
   /**标签名 */
   title: string;
   /**url路径 */
@@ -28,22 +31,20 @@ export interface ReuseTabCached {
   _handle?: any;
 }
 
-export class ReuseCacheNotify {
+/**复用路由事件通知 */
+export interface ReuseCacheNotify {
   /** 事件类型 */
-  action: 'add' | 'close' | 'closable' | 'closeRight' | 'clear';
-  list: ReuseTabCached[];
+  action: 'change';
+  list: ReuseCachedCtr[];
 }
 
-export type CloseType = 'close' | 'closeOther' | 'closeRight' | 'clear' | null;
-
-export interface ContextMenuEvent {
+/**复用右键菜单事件 */
+export interface ReuseMenuEvent {
   type: CloseType;
-  item: ReuseTabCached;
+  item: ReuseCachedCtr;
   /**按住ctrl强制关闭不可关闭 */
   coerceClose: boolean;
 }
 
-export interface ReuseContextEvent {
-  event: MouseEvent;
-  item: ReuseTabCached;
-}
+/**关闭类型 */
+export type CloseType = 'close' | 'closeOther' | 'closeRight' | 'clear' | null;

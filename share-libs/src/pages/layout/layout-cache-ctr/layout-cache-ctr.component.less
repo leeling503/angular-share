@@ -1,3 +1,5 @@
+@import "../../../styles/index.less";
+
 :host,
 .layout-cache-ctr {
   width: 100%;
@@ -16,14 +18,40 @@
 }
 
 .reuse-item {
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   min-width: 170px;
-  border: 1px solid #333;
-  background-color: azure;
+  border: 1px solid @C-blue-3;
+  border-left-width: 0px;
+  background-color: @C-gray-a;
+  position: relative;
+
+  .status-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: @C-gray-c;
+    margin: 0px 5px;
+  }
 
   &.active-item {
-    background-color: #99CCFF;
+    background-color: @C-gray-b;
+
+    .status-dot {
+      background-color: @C-blue-c;
+    }
+  }
+}
+
+.reuse-route-close {
+  .Icon("icon/com_close", 12px, 12px);
+  position: absolute;
+  top: 5px;
+  right: 5px;
+
+  &:hover {
+    .Back-img("icon/com_close_red");
   }
 }

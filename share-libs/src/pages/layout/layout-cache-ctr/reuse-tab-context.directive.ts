@@ -1,5 +1,5 @@
 import { Directive, Input, HostListener, Output, EventEmitter } from '@angular/core';
-import { ContextMenuEvent, ReuseTabCached } from 'share-libs/src/services/route-reuse/reuse-tab';
+import { ReuseMenuEvent, ReuseCachedCtr } from 'share-libs/src/services/route-reuse/reuse-tab';
 import { ContextMenuService } from '../../../services/context-menu-context.service';
 import { CacheCtrContextMenuComponent } from './ctr-context-menu/cache-ctr-context-menu.component';
 
@@ -8,8 +8,8 @@ import { CacheCtrContextMenuComponent } from './ctr-context-menu/cache-ctr-conte
 })
 export class ReuseTabContextDirective {
   constructor(private contextMenu_: ContextMenuService) { }
-  @Input('context-menu') item: ReuseTabCached;
-  @Output() onChange: EventEmitter<ContextMenuEvent> = new EventEmitter()
+  @Input('context-menu') item: ReuseCachedCtr;
+  @Output() onChange: EventEmitter<ReuseMenuEvent> = new EventEmitter();
   menuInstance: CacheCtrContextMenuComponent;
 
 

@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, HostListener } from '@angular/core';
 import { Subject } from 'rxjs';
-import { CloseType, ContextMenuEvent, ReuseTabCached } from 'share-libs/src/services/route-reuse/reuse-tab';
+import { CloseType, ReuseMenuEvent, ReuseCachedCtr } from 'share-libs/src/services/route-reuse/reuse-tab';
 
 
 @Component({
@@ -10,16 +10,16 @@ import { CloseType, ContextMenuEvent, ReuseTabCached } from 'share-libs/src/serv
   preserveWhitespaces: false
 })
 export class CacheCtrContextMenuComponent implements OnInit {
-  @Input() item: ReuseTabCached;
+  @Input() item: ReuseCachedCtr;
   @Input() event: MouseEvent;
   constructor() { }
-  closeAction: Subject<ContextMenuEvent> = new Subject()
+  closeAction: Subject<ReuseMenuEvent> = new Subject()
 
   get coerceClose() {
     return this.event.ctrlKey;
   }
 
-  private notify(type: CloseType, item: ReuseTabCached) {
+  private notify(type: CloseType, item: ReuseCachedCtr) {
     this.closeAction.next({
       type,
       item: this.item,

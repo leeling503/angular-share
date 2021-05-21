@@ -1,5 +1,5 @@
 /**移除数组指定item，不改变引用地址*/
-function UtilArrayRemoveItem(arr: any[], item: any, key?: string) {
+function UtilArrayRemoveItem<T>(arr: T[], item: T, key?: string): T[] {
     if (UtilArrayIsNonNull) {
         let index;
         if (key) {
@@ -35,7 +35,7 @@ function UtilArrayIsNonNull(arr: Array<any>): boolean {
 /**将数组及其子数组中的 指定的key的值设置为 value
  * arr 为数组   key为要设置的key  value为要设置值   children 为子数组所在的key
  */
-function UtilArraySetKeyValue(arr: Array<any>, key: string, value: any, children: string = 'children') {
+function UtilArraySetKeyValue<T>(arr: Array<T>, key: keyof T, value: any, children: string = 'children') {
     if (UtilArrayIsNonNull(arr)) {
         for (let i = 0, len = arr.length; i < len; i++) {
             let el = arr[i];
@@ -50,7 +50,7 @@ function UtilArraySetKeyValue(arr: Array<any>, key: string, value: any, children
 * 返回该条数据
 */
 function UtilArraySetKeyValueByValue<T>(
-    arr: Array<T>, key: string, value: any, attr: string, data: any, children: string = 'children'
+    arr: Array<T>, key: keyof T, value: any, attr: keyof T, data: any, children: string = 'children'
 ): T {
     if (UtilArrayIsNonNull(arr)) {
         for (let i = 0, len = arr.length; i < len; i++) {
@@ -70,7 +70,7 @@ function UtilArraySetKeyValueByValue<T>(
 }
 
 /**获取数组中key为指定value的对象（单个）*/
-function UtilArrayGetObjByValue<T>(arr: Array<T>, key: string, value: any, children: string = 'children'): T {
+function UtilArrayGetObjByValue<T>(arr: Array<T>, key: keyof T, value: any, children: string = 'children'): T {
     if (UtilArrayIsNonNull(arr)) {
         for (let i = 0, len = arr.length; i < len; i++) {
             let el = arr[i];
@@ -87,7 +87,7 @@ function UtilArrayGetObjByValue<T>(arr: Array<T>, key: string, value: any, child
 }
 
 /** 获取数组中key为指定value的对象数组（多个）*/
-function UtilArrayGetArrByValue<T>(arr: Array<T>, key: string, value: any, children: string = 'children'): T[] {
+function UtilArrayGetArrByValue<T>(arr: Array<T>, key: keyof T, value: any, children: string = 'children'): T[] {
     let values = [];
     if (UtilArrayIsNonNull(arr)) {
         for (let i = 0, len = arr.length; i < len; i++) {
@@ -105,7 +105,7 @@ function UtilArrayGetArrByValue<T>(arr: Array<T>, key: string, value: any, child
 }
 
 /** 获取数组中key为指定value的祖先对象*/
-function UtilArrayGetAncestorByValue<T>(arr: Array<T>, key: string, value: any, children: string = 'children'): T {
+function UtilArrayGetAncestorByValue<T>(arr: Array<T>, key: keyof T, value: any, children: string = 'children'): T {
     if (UtilArrayIsNonNull(arr)) {
         for (let i = 0, len = arr.length; i < len; i++) {
             let el = arr[i];

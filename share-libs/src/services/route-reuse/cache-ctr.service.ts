@@ -4,33 +4,22 @@ import { Observable } from "rxjs";
 import { BehaviorSubject } from "rxjs";
 import { filter } from "rxjs/operators";
 import { UtilRouterGetUrl } from "share-libs/src/utils";
-import { ReuseTabCached, ReuseCacheNotify } from "./reuse-tab";
+import { ReuseCachedCtr, ReuseCacheNotify } from "./reuse-tab";
 
 @Injectable({ providedIn: "root" })
 export class CacheCtrService {
-    constructor(private injector: Injector) { }
+    constructor() { }
     private _cachedChange: BehaviorSubject<ReuseCacheNotify> = new BehaviorSubject<ReuseCacheNotify>(null);
-    /**缓存路由列表 */
-    private _reuseCachedList: ReuseTabCached[] = [];
-    private _cacheTitle: { [url: string]: string } = {};
-    private _cacheClosable: { [url: string]: boolean } = {};
-    private _closeUrl: string;
+    /**认为关闭的缓存url */
+    closeUrl: string;
+    /**被复用的路由数据 */
+    reuseCachedList: ReuseCachedCtr[] = [];
 
-    /** 当前路由地址 */
-    private get _curUrl(): string {
-        return this.getUrl(this.injector.get(ActivatedRoute).snapshot);
-    }
     /** 获取当前缓存的路由总数 */
     private get count(): number {
-        return this._reuseCachedList.length;
+        return this.reuseCachedList.length;
     }
-    get reuseCachedList(): ReuseTabCached[] {
-        return this._reuseCachedList;
-    }
-    /** 刚刚被移除的缓存路由地址 */
-    get removeUrl(): string {
-        return this._closeUrl;
-    }
+
     /** 订阅缓存变更通知 */
     get change(): Observable<ReuseCacheNotify> {
         return this._cachedChange.asObservable()
@@ -38,68 +27,47 @@ export class CacheCtrService {
     }
 
     /**离开时存储到缓存*/
-    store(_snapshot: ActivatedRouteSnapshot, _handle: any) {
+    onStore(_snapshot: ActivatedRouteSnapshot, _handle: any) {
         // 超出最大存储范围之后
-        // if (this.count >= this._max) this._reuseCachedList.shift();
+        // if (this.count >= this._max) this.reuseCachedList.shift();
         const url = this.getUrl(_snapshot);
         const index = this.index(url);
         let item;
         if (index === -1) {
             item = this.genReuseTabCached(url, _snapshot);
-            this._reuseCachedList.push(item);
+            this.reuseCachedList.push(item);
         } else {
-            item = this._reuseCachedList[index];
+            item = this.reuseCachedList[index];
         }
         item._handle = _handle;
         item.active = false;
-        this._closeUrl = null;
-        this._cachedChange.next({ action: 'add', list: this._reuseCachedList });
+        this.closeUrl = null;
     }
 
     /**生成缓存对象*/
-    genReuseTabCached(url: string, _snapshot: ActivatedRouteSnapshot): ReuseTabCached {
+    genReuseTabCached(url: string, _snapshot: ActivatedRouteSnapshot): ReuseCachedCtr {
         let snap = _snapshot;
-        const title = this._cacheTitle[url] || (snap && snap.data && snap.data.title);
-        const closable = this._cacheClosable[url] || !(snap && snap.data && snap.data.reuseClosable === false);
+        const title = (snap && snap.data && snap.data.title) || '无标题';
+        const closable = !(snap && snap.data && snap.data.closeable === false);
         let item = { title, closable, url, active: false };
         return item;
     }
 
-    /**关闭tab  coerce强制关闭 _closeUrl 主动关闭的标签不缓存*/
-    close(url: string, coerce = false): any {
-        this._closeUrl = url;
+    /**关闭tab  coerce强制关闭 closeUrl 主动关闭的标签不缓存*/
+    close(url: string, coerce = false): void {
+        this.closeUrl = url;
         this.remove(url, coerce);
-        this._cachedChange.next({ action: 'close', list: this._reuseCachedList });
-        return true;
+        this._cachedChange.next({ action: 'change', list: this.reuseCachedList });
     }
 
     /** 获取指定路径缓存所在位置，`-1` 表示无缓存 */
     index(url: string): number {
-        return this._reuseCachedList.findIndex(w => w.url === url);
-    }
-
-    /** 获取指定路径缓存是否存在 */
-    exists(url: string): boolean {
-        return this.index(url) !== -1;
+        return this.reuseCachedList.findIndex(w => w.url === url);
     }
 
     /** 获取指定路径缓存 */
-    getReuseCached(url: string): ReuseTabCached {
-        return url ? this._reuseCachedList.find(w => w.url === url) || null : null;
-    }
-
-    /**获取 closable 状态*/
-    getClosable(url: string, route?: ActivatedRouteSnapshot): boolean {
-        if (typeof this._cacheClosable[url] !== 'undefined')
-            return this._cacheClosable[url];
-        if (route && route.data && typeof route.data.reuseClosable === 'boolean')
-            return route.data.reuseClosable;
-        return true;
-    }
-
-    /** 清除标题缓存*/
-    clearTitleCached() {
-        this._cacheTitle = {};
+    getReuseCached(url: string): ReuseCachedCtr {
+        return url ? this.reuseCachedList.find(w => w.url === url) || null : null;
     }
 
     /**
@@ -111,39 +79,36 @@ export class CacheCtrService {
     }
 
     /**移除url  coerce 表示强制移除不管路由配置*/
-    private remove(url: string | number, coerce: boolean): boolean {
+    private remove(url: string | number, coerce: boolean): void {
         const idx = typeof url === 'string' ? this.index(url) : url;
-        const item = idx !== -1 ? this._reuseCachedList[idx] : null;
+        const item = idx !== -1 ? this.reuseCachedList[idx] : null;
         if (!item || (!coerce && !item.closable)) {
-            return false;
+            return;
         }
         this.destroy(item._handle);
-        this._reuseCachedList.splice(idx, 1);
-        delete this._cacheTitle[url];
-        return true;
+        this.reuseCachedList.splice(idx, 1);
     }
 
     /**清除右边tab 标签页 */
-    closeRight(url: string, coerce = false) {
+    closeRight(url: string, coerce = false): void {
         const start = this.index(url);
         for (let i = this.count - 1; i > start; i--) {
             this.remove(i, coerce);
         }
-        this._closeUrl = null;
-        this._cachedChange.next({ action: 'closeRight', list: this._reuseCachedList });
-        return true;
+        this.closeUrl = null;
+        this._cachedChange.next({ action: 'change', list: this.reuseCachedList });
     }
 
     /**清除所有缓存（清除所有tab）coerce 强制清除包含不可关闭*/
     clear(coerce = false) {
-        this._reuseCachedList.forEach(w => {
+        this.reuseCachedList.forEach(w => {
             if (!coerce && w.closable) this.destroy(w._handle);
         });
-        this._reuseCachedList = this._reuseCachedList.filter(
+        this.reuseCachedList = this.reuseCachedList.filter(
             w => !coerce && !w.closable,
         );
-        this._closeUrl = null;
-        this._cachedChange.next({ action: 'clear', list: this._reuseCachedList });
+        this.closeUrl = null;
+        this._cachedChange.next({ action: 'change', list: this.reuseCachedList });
     }
 
     /**组件销毁*/
@@ -153,7 +118,7 @@ export class CacheCtrService {
     }
 
     ngOnDestroy(): void {
-        this._reuseCachedList = [];
+        this.reuseCachedList = [];
         this._cachedChange.unsubscribe();
     }
 }
