@@ -1,19 +1,19 @@
 export class SelectConfig {
-    /**是否显示control标签 */
+    /**是否显示control标签 true*/
     ifFlag: boolean = true;
-    /**是否显示选项多选框  */
+    /**是否显示选项多选框  true*/
     ifCheck: boolean = true;
-    /**是否显示清空按钮 */
+    /**是否显示清空按钮 true*/
     ifClear: boolean = true;
-    /**是否是多选 */
+    /**是否是多选 false*/
     ifMulti: boolean = false;
-    /**是否拥有激活项状态 */
+    /**是否拥有激活项状态 false*/
     ifActive: boolean = false;
-    /**提示语 */
+    /**提示语 请选择*/
     placeholder: string = '请选择';
-    /**下拉无数据提示 */
+    /**下拉无数据提示 暂无数据*/
     noneTip: string = '暂无数据';
-    /**至少选择一个，默认选中第一个 */
+    /**至少选择一个，默认选中第一个 false*/
     leastOne: boolean = false;
     openWidth: number | string;
 }

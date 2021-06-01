@@ -1,0 +1,36 @@
+<div class="ex-share-date">
+  <div class="share-ex">
+    <div class="share-date">
+      <share-date-day [(modelDay)]='day'></share-date-day>
+    </div>
+    <div>
+      {{day |json}}
+    </div>
+  </div>
+  <div class="share-ex">
+    <div class="share-date">
+      <share-date-day [(modelDay)]='day' [inIfSingle]="true" [inIfAutoApply]="true"></share-date-day>
+    </div>
+    <div>
+      {{day |json}}
+    </div>
+  </div>
+  <div class="share-ex">
+    <div class="share-date">
+      <share-date-month [inIfDefualt]='true' [inIfYear]='true' [(modelMonth)]="month"
+        (modelMonthChange)="onModelMonthChange($event)">
+      </share-date-month>
+    </div>
+    <div>
+      {{month}}
+    </div>
+  </div>
+  <div class="share-ex">
+    <div class="share-date">
+      <share-date-year [(modelYear)]="year"></share-date-year>
+    </div>
+    <div>
+      {{year}}
+    </div>
+  </div>
+</div>

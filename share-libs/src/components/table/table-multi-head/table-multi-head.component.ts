@@ -1,8 +1,8 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, SimpleChanges } from "@angular/core";
 import { HttpSearch } from "share-libs/src/models";
-import { HttpBaseService } from "share-libs/src/services";
 import { TableComponent } from "../table/share-table.component";
 import { TableMultiAllItems, TableMultiHeadItem, SharePage, TableItem, TableMultiItem, TableSelect } from "../share-table.model";
+import { HttpBaseService } from "share-libs/src/services/http-base.service";
 
 @Component({
     selector: 'share-table-multi-head',

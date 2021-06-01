@@ -77,6 +77,12 @@ export class FilterTableHeadComponent implements OnInit {
         let position = new ShareOverlayPosition();
         position.type = 'ele';
         position.element = this.native.querySelector('.filter-table-head');
+        position.withPositions = [{
+            originX: 'end',
+            originY: 'bottom',
+            overlayX: 'end',
+            overlayY: 'top',
+        }]
         let overlay = this.shareOverlay.showComponent(modalSelect, position);
         this.shareOverlay.instanceComponent(overlay, {
             inItems: this.modalSelectItems,

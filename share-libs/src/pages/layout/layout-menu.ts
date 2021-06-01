@@ -101,7 +101,36 @@ export const SYSTEM_MENU: MenuItem[] = [
         title: '组件示例',
         icon: 'menu-report-icon',
         url: example,
-        ifShow: true
+        ifShow: true,
+        children: [
+            {
+                title: '表格',
+                children: [
+                    {
+                        title: '普通表格',
+                        url: `${example}/table`,
+                    }, {
+                        title: '多表头表格',
+                        url: `${example}/multi-table`,
+                    }
+                ]
+            },
+            {
+                title: '多种选框',
+                url: `${example}/box`
+            }, {
+                title: '选择框',
+                url: `${example}/select`
+            }
+            , {
+                title: '时间日期',
+                url: `${example}/date-time`
+            }
+            , {
+                title: '视频控件',
+                url: `${example}/flv`
+            }
+        ]
     },
     {
         title: '系统设置',

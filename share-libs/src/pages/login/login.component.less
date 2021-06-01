@@ -1,8 +1,11 @@
+@import "../../styles/index.less";
+
 .login-container-bg {
   width: 100%;
   height: 100%;
   position: fixed;
-  background: url('../../../assets/login/login_bg.png') no-repeat;
+  .Img-url("login/login_bg");
+  background-repeat: no-repeat;
   background-attachment: fixed;
   background-size: cover;
   -webkit-background-size: cover;
@@ -37,11 +40,11 @@
       background-repeat: no-repeat;
 
       &.qr {
-        background-image: url('../../../assets/login/qr_code_sup.png');
+        .Img-url("login/qr_code_sup");
       }
 
       &.ph {
-        background-image: url('../../../assets/login/phon_sup.png');
+        .Img-url("login/phon_sup");
       }
     }
   }
@@ -118,13 +121,13 @@
 
         &.phone>div {
           i {
-            background-image: url('../../../assets/login/phone_icon.png');
+            .Img-url("login/phone_icon");
           }
         }
 
         &.phone-code>div {
           i {
-            background-image: url('../../../assets/login/pwd_icon.png');
+            .Img-url("login/pwd_icon");
           }
         }
       }
@@ -196,7 +199,8 @@
   margin: 30px 80px;
 
   i {
-    background: url('../../../assets/logo/logo2x.png') no-repeat;
+    .Img-url("logo/logo2x");
+    background-repeat: no-repeat;
     height: 72px;
     width: 72px;
     background-size: 100% 100%;

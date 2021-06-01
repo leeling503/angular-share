@@ -13,6 +13,7 @@ import { UtilArraySetKeyValue, UtilRouterGetUrl } from "share-libs/src/utils";
     styleUrls: ['./layout-cache-ctr.component.less']
 })
 export class LayoutCacheCtrComponent {
+    asdd: string = "aaaaa"
     constructor(private router: Router, private active: ActivatedRoute, private cacheCtr_: CacheCtrService) {
         this.router.events.pipe(
             filter(event => event instanceof NavigationEnd)
@@ -22,6 +23,9 @@ export class LayoutCacheCtrComponent {
         this.cacheCtr_.change.subscribe((change) => {
             this.changeReuseList(change)
         })
+        setTimeout(() => {
+            this.asdd ="bbbbb"
+        }, 3000);
     }
     /**路由按钮组 */
     reuseRouteList: ReuseCachedCtr[] = [];

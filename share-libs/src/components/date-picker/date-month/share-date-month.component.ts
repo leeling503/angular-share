@@ -15,7 +15,8 @@ export class ShareDateMonthComponent {
     @Input() inIfAuto: boolean = true;
     /**是否可选择 年 */
     @Input() inIfYear: boolean = false;//是否可选择 年
-    @Input() inSetDefualt: boolean = true;//设置默认值
+    /**是否设置默认值 */
+    @Input() inIfDefualt: boolean = true;//设置默认值
     @Output() modelMonthChange: EventEmitter<string> = new EventEmitter();
     viewMonth: string;
     viewYear: number;
@@ -39,7 +40,7 @@ export class ShareDateMonthComponent {
     ]
 
     ngOnInit(): void {
-        if (this.inSetDefualt) {
+        if (this.inIfDefualt) {
             this.initMonth(false);
             Promise.resolve().then(() => {
                 this.setModelMonth();

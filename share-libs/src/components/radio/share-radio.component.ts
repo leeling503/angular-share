@@ -1,7 +1,7 @@
 import { EventEmitter, Output, SimpleChanges } from '@angular/core';
 import { Component, Input, OnInit } from '@angular/core';
-import { UtilIsEqual, UtilIsUndefined } from 'share-libs/src/utils/util';
-import { UtilChanges, UtilChangesNoFirst } from 'share-libs/src/utils/util-component';
+import { UtilGetAttrValue, UtilIsEmpty, UtilIsEqual, UtilIsFalse, UtilIsUndefined } from 'share-libs/src/utils/util';
+import { UtilChangesValue, UtilChangesNoFirstValue } from 'share-libs/src/utils/util-component';
 import { RadioIconType, RadiosData, RadiosPara } from './share-radio.model';
 
 @Component({
@@ -13,31 +13,34 @@ export class ShareRadioComponent implements OnInit {
 
   constructor() { }
   /**按钮组参数 */
-  @Input() inRadioPara: RadiosPara;
+  @Input() inRadioPara: RadiosPara = {};
   /**按钮组数据 */
   @Input() inRadioDatas: RadiosData | RadiosData[];
   @Input() modelRadio: string | string[];
-  @Input() inUuid: string = 'key';
   @Output() modelRadioChange: EventEmitter<any> = new EventEmitter();
 
   _datas: RadiosData[] = [];
-  /**能否多选 */
+  /**取值的属性名 */
+  _key: string = 'key';
+  /**多选 */
   _multi: boolean = false;
-  /**能否一个都不选 */
+  /**可以一个都不选 */
   _clear: boolean = false;
   /**图标组类型 */
   _iconType: RadioIconType = 'radio';
+  /**单选是禁用的能否被取消*/
+  _disCancel: boolean = true;
   _inputType: 'string' | 'array' = 'array';
   _outModel: string | string[];
   ngOnChanges(changes: SimpleChanges): void {
-    if (UtilChangesNoFirst(changes, 'inRadioDatas')) {
+    if (UtilChangesNoFirstValue(changes, 'inRadioDatas')) {
       this.set_datas();
       this.set_checkRadio();
     }
-    if (UtilChangesNoFirst(changes, 'modelRadio')) {
+    if (UtilChangesNoFirstValue(changes, 'modelRadio')) {
       !UtilIsEqual(this.modelRadio, this._outModel) && this.set_checkRadio()
     }
-    if (UtilChanges(changes, 'inRadioPara')) {
+    if (UtilChangesValue(changes, 'inRadioPara')) {
       this.set_config()
     }
   }
@@ -50,7 +53,9 @@ export class ShareRadioComponent implements OnInit {
   set_config() {
     this._multi = this.inRadioPara.multi;
     this._clear = this.inRadioPara.clear;
-    this._iconType = this.inRadioPara.iconType || 'radio';
+    this._key = this.inRadioPara.valueKey || this._key;
+    this._disCancel = UtilGetAttrValue(this.inRadioPara, 'disCancel', this._disCancel);
+    this._iconType = UtilGetAttrValue(this.inRadioPara, 'iconType', this._iconType);
   }
 
   /**设置选项数据 */
@@ -70,30 +75,34 @@ export class ShareRadioComponent implements OnInit {
     let modelRadio = this.modelRadio;
     !Array.isArray(this.modelRadio) && (modelRadio = this.modelRadio.split(','));
     this._datas.map(e => {
-      modelRadio.includes(e[this.inUuid]) && (e.ifCheck = true);
+      modelRadio.includes(e[this._key]) && (e.ifCheck = true);
     })
   }
 
   tiggerCheck(radio: RadiosData) {
     if (radio.ifDis) return;
-    /**能否多选的判断 */
+    /**单选 */
     if (!this._multi) {
       let flag = radio.ifCheck;
-      this._datas.map(e => e.ifCheck = false);
+      this._datas.map(e => {
+        /**禁用能否取消判断 */
+        if (!e.ifDis || this._disCancel !== false) {
+          e.ifCheck = false
+        }
+      });
       radio.ifCheck = flag;
     }
     radio.ifCheck = !radio.ifCheck
     /**至少要勾选一个的判断 */
-    if (this._datas.every(e => e.ifCheck === false) && !this._clear) {
+    if (this._datas.every(e => UtilIsFalse(e.ifCheck)) && !this._clear) {
       radio.ifCheck = true;
     }
-    let values: string | string[] = this._datas.filter(e => e.ifCheck).map(e => e[this.inUuid]);
+    let values: string | string[] = this._datas.filter(e => e.ifCheck).map(e => e[this._key]);
+    if (this._inputType == 'string') {
+      values = values.join(',')
+    }
     if (UtilIsEqual(values, this.modelRadio)) {
       return
-    } else {
-      if (this._inputType == 'string') {
-        values = values.join(',')
-      }
     }
     this._outModel = values;
     this.modelRadioChange.emit(this._outModel)

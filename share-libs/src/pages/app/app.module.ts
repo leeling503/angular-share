@@ -18,7 +18,6 @@ import { APPROUTER } from "./app.routing"
     CommonModule,
     HttpClientModule,
     OverlayModule,
-    RouterModule,
     APPROUTER,
     // 路由复用策略模块
     RouteReuseModule

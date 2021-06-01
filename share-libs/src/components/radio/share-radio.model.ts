@@ -1,12 +1,16 @@
 
-export class RadiosPara {
+export type RadioIconType = 'radio' | 'check' | 'cricle';
+export interface RadiosPara {
     /**可多选 */
     multi?: boolean;
-    /**能否取消 */
+    /**取那个属性的值 */
+    valueKey?: string;
+    /**能否全部去勾选 */
     clear?: boolean;
     /**图标类型 */
     iconType?: RadioIconType;
-    /** */
+    /**禁用按钮能否被单选去勾选 默认可以*/
+    disCancel?: boolean;
 }
 export class RadiosData {
     /**按钮的唯一标识 */
@@ -24,4 +28,3 @@ export class RadiosData {
         this.ifDis = data.ifDis;
     }
 }
-export type RadioIconType = 'radio' | 'check' | 'cricle';

@@ -1,0 +1,22 @@
+<div class="ex-share-radio">
+  <span>默认</span>
+  <share-radio [(modelRadio)]='modelRadioA' (modelRadioChange)="onModelChangeA($event)" [inRadioPara]='radioParaA'
+    [inRadioDatas]="radioDatasA"></share-radio>
+  <span>{{modelRadioA}}</span><br />
+  <span>单选，禁用不能被去勾选，能够全部去勾选</span>
+  <share-radio [(modelRadio)]='modelRadioB' (modelRadioChange)="onModelChangeB($event)" [inRadioPara]='radioParaB'
+    [inRadioDatas]="radioDatasB"></share-radio>
+  <span>{{modelRadioB}}</span><br />
+  <span>单选，禁用能被去勾选，能够全部去勾选</span>
+  <share-radio [(modelRadio)]='modelRadioC' (modelRadioChange)="onModelChangeC($event)" [inRadioPara]='radioParaC'
+    [inRadioDatas]="radioDatasC"></share-radio>
+  <span>{{modelRadioC}}</span><br />
+  <span>多选，能够全部去勾选</span>
+  <share-radio [(modelRadio)]='modelRadioD' (modelRadioChange)="onModelChangeD($event)" [inRadioPara]='radioParaD'
+    [inRadioDatas]="radioDatasD"></share-radio>
+  <span>{{modelRadioD}}</span><br />
+  <span>多选，至少勾选一个</span>
+  <share-radio [(modelRadio)]='modelRadioE' (modelRadioChange)="onModelChangeE($event)" [inRadioPara]='radioParaE'
+    [inRadioDatas]="radioDatasE"></share-radio>
+  <span>{{modelRadioE}}</span><br />
+</div>

@@ -1,6 +1,6 @@
 import { ElementRef, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
 import { HttpSearch, HttpResult } from "share-libs/src/models";
-import { HttpBaseService } from "share-libs/src/services";
+import { HttpBaseService } from "share-libs/src/services/http-base.service";
 import { PaginationPage } from "../pagination/share-pagination.model";
 import { SharePage, TableClassName, TableItem, TableSelect } from "./share-table.model";
 

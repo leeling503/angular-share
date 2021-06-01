@@ -1,6 +1,6 @@
-import { Component, ElementRef, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Attribute, Component, ElementRef, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { ReuseCachedCtr } from 'share-libs/src/services/route-reuse/reuse-tab';
-import { UtilChanges } from 'share-libs/src/utils';
+import { UtilChangesValue } from 'share-libs/src/utils';
 
 /**复用按钮滑动控制组件 */
 @Component({
@@ -18,9 +18,9 @@ export class CacheScrollCtrComponent implements OnInit {
   disableBefore: boolean = false;
   /**禁用后一个 */
   disableAfter: boolean = false;
-  /**X的偏移量*/
+  /**X方向的总偏移量*/
   offX: number = 0;
-  /**X的偏移量*/
+  /**每次X方向的偏移量*/
   moveSize: number = 200;
   @ViewChild('viewEl', { static: true, read: ElementRef }) viewEl: ElementRef;
   @ViewChild('scrollEl', { static: true, read: ElementRef }) scrollEl: ElementRef;
@@ -28,13 +28,13 @@ export class CacheScrollCtrComponent implements OnInit {
   /**可视区域宽度 */
   get viewWidth() {
     let navEl: HTMLElement = this.viewEl.nativeElement;
-    return navEl.clientWidth - 39 * 2
+    return navEl.offsetWidth - 39 * 2
   }
 
   /**所有复用路由总宽度 */
   get allWidth() {
     let navEl: HTMLElement = this.scrollEl.nativeElement;
-    return navEl.clientWidth
+    return navEl.offsetWidth
   }
 
   get activeEl(): HTMLElement {
@@ -43,7 +43,7 @@ export class CacheScrollCtrComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (UtilChanges(changes, 'inChange')) {
+    if (UtilChangesValue(changes, 'inChange')) {
       setTimeout(() => { this.reuseRouteChange(); }, 10);
     }
   }
@@ -59,7 +59,7 @@ export class CacheScrollCtrComponent implements OnInit {
       return
     }
     this.showScrollCtr = true;
-    let offx = this.activeEl.offsetLeft, width = this.activeEl.clientWidth;
+    let offx = this.activeEl.offsetLeft, width = this.activeEl.offsetWidth;
     if (this.offX + this.viewWidth < offx + width) {
       /**激活tab右侧超出右边界*/
       this.offX = this.offX + (offx + width - this.offX - this.viewWidth);

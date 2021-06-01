@@ -116,7 +116,7 @@ export class ShareOverlayService {
 }
 
 export class ShareOverlayConfig extends OverlayConfig {
-    hasBackdrop = false;
+    hasBackdrop = true;
     backdropClass = 'transparent';
     positionStrategy?: PositionStrategy;
     scrollStrategy?: ScrollStrategy;

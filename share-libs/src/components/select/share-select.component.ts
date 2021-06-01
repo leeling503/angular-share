@@ -1,9 +1,9 @@
 import { CdkOverlayOrigin } from '@angular/cdk/overlay';
 import { Component, OnInit, Input, ViewChild, ElementRef, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { SelectOption, SelectConfig, SelectModelInputs } from './share-select.model';
-import { UtilArrayClear, UtilArrayGetObjByValue, UtilArrayRemoveItem, UtilIsEqual } from 'share-libs/src/utils';
+import { UtilArrayClear, UtilArrayGetObjByValue, UtilArrayRemoveItem, UtilArraySetKeyValue, UtilIsEqual } from 'share-libs/src/utils';
 import { ShareInputType } from 'share-libs/src/models';
-import { UtilChanges, UtilChangesNoFirst } from 'share-libs/src/utils/util-component';
+import { UtilChangesValue, UtilChangesNoFirstValue } from 'share-libs/src/utils/util-component';
 
 @Component({
   selector: 'share-select',
@@ -17,7 +17,7 @@ export class ShareSelectComponent implements OnInit {
   nativeEl: HTMLElement
   /**配置 */
   @Input() inConfig: SelectConfig = new SelectConfig();
-  /**选项 */
+  /**所有选项 */
   @Input() inOptions: SelectOption[] = [];
   /**已选中 */
   @Input() modelOption: SelectModelInputs;
@@ -48,21 +48,22 @@ export class ShareSelectComponent implements OnInit {
   cdkConnectedOverlayWidth: number | string;
   @ViewChild(CdkOverlayOrigin, { static: true }) cdkOverlayOrigin: CdkOverlayOrigin;
   ngOnChanges(changes: SimpleChanges): void {
-    if (UtilChangesNoFirst(changes, 'modelOption')) {
+    if (UtilChangesNoFirstValue(changes, 'modelOption')) {
       if (UtilIsEqual(this.modelOption, this._outOptions)) return;
       this.setCheckOptions();
       this.setCheckMixState()
     }
-    if (UtilChangesNoFirst(changes, 'inOptions')) {
+    if (UtilChangesNoFirstValue(changes, 'inOptions')) {
       this.setCheckOptions();
       this.setCheckMixState()
     }
-    if (UtilChanges(changes, 'inConfig')) {
+    if (UtilChangesValue(changes, 'inConfig')) {
       this.setConfig();
     }
   }
 
   ngOnInit() {
+    this.setConfig();
     this.setCheckOptions();
     this.setCheckMixState();
     this.setOpenWidth();
@@ -70,7 +71,7 @@ export class ShareSelectComponent implements OnInit {
       this.closeOptions();
     })
   }
-
+  /**设置选中 */
   setCheckOptions() {
     let option = this.modelOption || [];
     let value = option[0];
@@ -121,19 +122,9 @@ export class ShareSelectComponent implements OnInit {
 
   /**设置选项状态 */
   setOptionsState() {
-    this.mixStateClear();
+    /**清除mix状态 */
+    UtilArraySetKeyValue(this.inOptions, '_mix', false)
     this.setCheckMixState();
-  }
-
-  /**清除mix状态 */
-  mixStateClear(options?: SelectOption[]) {
-    options = options || this.inOptions || [];
-    options.forEach(e => {
-      e._mix = false;
-      if (e.children && e.children.length > 0) {
-        this.mixStateClear(e.children)
-      }
-    })
   }
 
   /**设置选中和mix状态 */

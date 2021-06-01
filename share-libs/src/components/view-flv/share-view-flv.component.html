@@ -1,19 +1,19 @@
 <div class="view-flv" [ngClass]="{'view-flv-full':fullScreenFlag}">
-    <video #videoelement id="videoElement" controls x5-video-player-fullscreen="true"
-        x5-video-orientation="landscape">Your browser is too old to support HTML5 video.</video>
-    <div class="flv-controls">
-        <div class="flv-controls-left">
-            <div class="flv-controls__pause" [title]="flvPauseFlag?'播放':'暂停'"
-                [ngClass]="{'flv-controls__play':flvPauseFlag}" (click)="flvPlayCtr()"></div>
-            <div class="flv-controls__stop" title='停止' (click)="stoppush()"></div>
-            <div class="flv-controls__reload" title='刷新' (click)="reloadFlv()"></div>
-        </div>
-        <div class="flv-controls-right">
-            <div class="flv-controls__full" [title]="fullScreenFlag?'退出':'全屏'"
-                [ngClass]="{'flv-controls__exit':fullScreenFlag}" (click)="screenControl()"></div>
-        </div>
+  <video #videoelement id="videoElement" controls x5-video-player-fullscreen="true"
+    x5-video-orientation="landscape">Your browser is too old to support HTML5 video.</video>
+  <div class="flv-controls">
+    <div class="flv-controls-left">
+      <div class="flv-controls__pause" [title]="flvPauseFlag?'播放':'暂停'" [ngClass]="{'flv-controls__play':flvPauseFlag}"
+        (click)="onFlvPlayCtr()"></div>
+      <div class="flv-controls__stop" title='停止' (click)="stoppush()"></div>
+      <div class="flv-controls__reload" title='刷新' (click)="reloadFlv()"></div>
     </div>
-    <div class="flv-error-tip" *ngIf="netError">
-        请检查网络环境或设备供电是否正常,确认后点击刷新
+    <div class="flv-controls-right">
+      <div class="flv-controls__full" [title]="fullScreenFlag?'退出':'全屏'"
+        [ngClass]="{'flv-controls__exit':fullScreenFlag}" (click)="onScreenControl()"></div>
     </div>
+  </div>
+  <div class="flv-error-tip" *ngIf="netError">
+    请检查网络环境或设备供电是否正常,确认后点击刷新
+  </div>
 </div>

@@ -1,3 +1,4 @@
+@import "../../../styles/index.less";
 @trheight: 34px;
 @c-thead-tr: #E4EFFF;
 @c-tbody-tr: #F6FAFF;
@@ -34,14 +35,14 @@
     .data-img {
       width: 120px;
       height: 100px;
-      background-image: url("../../../../assets/icon/data_none.png");
+      .Img-url("icon/data_none");
       background-size: 100% 100%;
     }
 
     &.loading-data .data-img {
       width: 300px;
       height: 260px;
-      background-image: url("../../../../assets/icon/data_loading.gif");
+      .Img-url-suffix("icon/data_loading.gif");
       background-size: 100% 100%;
     }
 

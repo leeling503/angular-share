@@ -4,32 +4,39 @@ import * as moment from 'moment';
 import * as $ from 'jquery';
 import { TimeRange } from './share-date-picker.model';
 @Directive({
-    selector: '[appDateRangePicker]'
+    selector: '[dateRangePicker]'
 })
 export class DateRangePickerDirective implements OnInit, OnChanges, OnDestroy {
-    @Input() rangePickerOpt: daterangepicker.Options;
+    constructor(private elementRef: ElementRef) {
+        this.el = this.el || this.elementRef.nativeElement;
+    }
+    @Input() inPickerOpt: daterangepicker.Options;
     @Input() el: HTMLElement;
-    @Input() inClearView: Symbol;
-    @Output() onDateChange: EventEmitter<TimeRange> = new EventEmitter();
+    @Input() inShow: boolean;
+    @Input() modelDay: string | TimeRange;
+    @Output() modelDayChange: EventEmitter<string | TimeRange> = new EventEmitter();
+    /**已经初始化 */
+    initFlag: boolean = false;
     input: HTMLElement;
     private datepicker: any;
     private daterangepicker: daterangepicker;
     private dateRange: TimeRange;
-    constructor(private elementRef: ElementRef) {
-        this.el = this.el || this.elementRef.nativeElement;
-    }
-    ngOnChanges(changes: SimpleChanges): void {
-        if (changes.inClearView && this.inClearView) {
-            this.cancelTime();
-        }
-    }
+    _single: boolean;
+
+    ngOnChanges(changes: SimpleChanges): void { }
+
     ngOnInit(): void {
-        this.input = this.el.querySelector('input');
-        this.init();
+        $(this.el).on("click", () => {
+            if (this.initFlag) { return };
+            this.init();
+            $(this.el).trigger('click.daterangepicker');
+        })
     }
 
     private init() {
-        let opt = this.rangePickerOpt;
+        this.initFlag = true;
+        let opt = this.inPickerOpt;
+        this._single = opt.singleDatePicker;
         this.datepicker = $(this.el).daterangepicker(opt, (start, end, label) => {
             console.log(start)
         });
@@ -39,64 +46,56 @@ export class DateRangePickerDirective implements OnInit, OnChanges, OnDestroy {
         let endDate = moment(opt.endDate || undefined).format(opt.locale.format);
         this.daterangepicker.setStartDate(startDate);
         this.daterangepicker.setEndDate(endDate);
-
-        if (!opt.startDate) {
-            $(this.input).val('');
-        } else {
+        if (opt.startDate) {
             this.dateRange = {
                 start: startDate,
                 end: endDate
             }
-            this.setViewVal()
         }
         this.datepicker.on('show.daterangepicker', (ev, picker) => { })
         if (opt.autoApply) {
-            this.datepicker.on('hide.daterangepicker', (ev, picker) => { this.changeTime(picker) })
+            this.datepicker.on('hide.daterangepicker', (ev, picker) => {
+                this.changeTime(picker);
+                this.destroyPicker();
+            })
         } else {
-            this.datepicker.on('hide.daterangepicker', (ev, picker) => { })
-            this.datepicker.on('apply.daterangepicker', (ev, picker) => { this.changeTime(picker) })
+            this.datepicker.on('apply.daterangepicker', (ev, picker: daterangepicker.DateRangePicker) => {
+                this.changeTime(picker);
+                this.destroyPicker();
+            })
+            this.datepicker.on('hide.daterangepicker', (ev, picker) => {
+                // this.destroyPicker();
+            })
         }
-        this.datepicker.on('cancel.daterangepicker', (ev, picker) => { this.cancelTime() })
+        this.datepicker.on('cancel.daterangepicker', (ev, picker) => {
+            this.cancelTime();
+        })
     }
 
-    changeTime(picker, emit: boolean = true) {
-        let format = this.rangePickerOpt.locale.format;
+    changeTime(picker: daterangepicker.DateRangePicker) {
+        let format = this.inPickerOpt.locale.format;
         let start = picker.startDate.format(format);
         let end = picker.endDate.format(format);
         if (this.dateRange && this.dateRange.start == start && this.dateRange.end == end) {
             return;
         }
         this.dateRange = { start, end }
-        this.setViewVal(this.dateRange);
-        if (emit) {
-            this.onDateChange.emit(this.dateRange)
-        }
+        let time = this._single ? this.dateRange.start : this.dateRange;
+        this.modelDayChange.emit(time)
     }
 
-    //删除时间
+    //取消选定时间
     cancelTime() {
-        let format = this.rangePickerOpt.locale.format;
-        let now = moment().format(format);
-        this.dateRange = { start: '', end: '' };
-        this.daterangepicker.setStartDate(now);
-        this.daterangepicker.setEndDate(now);
-        this.setViewVal(null);
-        this.onDateChange.emit(this.dateRange)
-    }
-
-    setViewVal(dateRange: TimeRange = this.dateRange) {
-        let viewVal = !dateRange ? '' : this.rangePickerOpt.singleDatePicker || !dateRange.start ? dateRange.start : dateRange.start + ' - ' + dateRange.end;
-        if (this.input) {
-            $(this.input).val(viewVal);
-        } else {
-            setTimeout(() => {
-                $(this.input).val(viewVal);
-            }, 10);
-        }
+        this.modelDayChange.emit(this.dateRange)
     }
 
     ngOnDestroy(): void {
-        this.daterangepicker.remove();
+        this.destroyPicker()
+    }
+
+    destroyPicker() {
+        this.initFlag = false;
+        this.daterangepicker && this.daterangepicker.remove();
         this.datepicker = null;
     }
 

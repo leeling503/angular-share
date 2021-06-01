@@ -1,5 +1,5 @@
 import { Component, OnInit, ElementRef, Renderer2, Input, Output, EventEmitter } from '@angular/core';
-import { HttpBaseService } from 'share-libs/src/services';
+import { HttpBaseService } from 'share-libs/src/services/http-base.service';
 import { TableComponent } from '../table/share-table.component';
 
 @Component({

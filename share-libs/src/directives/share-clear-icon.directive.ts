@@ -1,4 +1,5 @@
-import { Directive, ElementRef, EventEmitter, HostListener, Input, Output, Renderer2 } from "@angular/core";
+import { Directive, ElementRef, EventEmitter, HostListener, Input, Output, Renderer2, SimpleChanges } from "@angular/core";
+import { UtilChangesNoFirstValue } from "../utils";
 
 
 @Directive({
@@ -6,10 +7,11 @@ import { Directive, ElementRef, EventEmitter, HostListener, Input, Output, Rende
 })
 export class ShareClearIconDirective {
     constructor(private el: ElementRef, private render2: Renderer2) { }
-    @Input() inHasValue: boolean = false;
+    @Input() inViewVal: boolean = false;
     @Input() inRightPx: number = 25;
     @Output() onClearValue: EventEmitter<any> = new EventEmitter();
     clearEl: HTMLElement;
+
     ngOnInit(): void {
         this.clearEl = this.render2.createElement('i')
         this.render2.addClass(this.clearEl, 'icon-clear-p');
@@ -23,9 +25,19 @@ export class ShareClearIconDirective {
         }
     }
 
-    @HostListener('mouseenter')
+    ngOnChanges(changes: SimpleChanges): void {
+        if (UtilChangesNoFirstValue(changes, "inViewVal")) {
+            if (this.inViewVal) {
+                this.render2.setStyle(this.clearEl, 'display', 'inline-block')
+            } else {
+                this.render2.setStyle(this.clearEl, 'display', 'none')
+            }
+        }
+    }
+
+    @HostListener('mousemove')
     mouseEnter() {
-        if (!!this.inHasValue) {
+        if (this.inViewVal) {
             this.render2.setStyle(this.clearEl, 'display', 'inline-block')
         }
     }

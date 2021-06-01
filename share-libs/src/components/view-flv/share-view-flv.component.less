@@ -1,3 +1,5 @@
+@import '../../styles/index.less';
+
 :host {
   width: 100%;
   height: 100%;
@@ -68,27 +70,27 @@
     }
 
     .flv-controls__pause {
-      background-image: url('/assets/img/monitor/flv_ctr_pause.png');
+      .Img-url("video/flv_ctr_pause");
     }
 
     .flv-controls__play.flv-controls__pause {
-      background-image: url('/assets/img/monitor/flv_ctr_play.png');
+      .Img-url("video/flv_ctr_play");
     }
 
     .flv-controls__stop {
-      background-image: url('/assets/img/monitor/flv_ctr_stop.png');
+      .Img-url("video/flv_ctr_stop");
     }
 
     .flv-controls__reload {
-      background-image: url('/assets/img/monitor/flv_ctr_reload.png');
+      .Img-url("video/flv_ctr_reload");
     }
 
     .flv-controls__full {
-      background-image: url('/assets/img/monitor/flv-full-screen.png');
+      .Img-url("video/flv_full_screen");
     }
 
     .flv-controls__full.flv-controls__exit {
-      background-image: url('/assets/img/monitor/flv-exit-screen.png');
+      .Img-url("video/flv_exit_screen");
     }
   }
 

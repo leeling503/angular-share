@@ -1,26 +1,36 @@
-import { Component, Input, Output, EventEmitter, ElementRef } from "@angular/core";
+import { Component, Input, Output, EventEmitter, ElementRef, SimpleChanges, HostListener } from "@angular/core";
 import * as moment from 'moment';
 import { TimeRange } from '../share-date-picker.model';
+import { UtilChangesHasValue } from "share-libs/src/utils";
 @Component({
     selector: 'share-date-day',
     templateUrl: './share-date-day.component.html',
     styleUrls: ['./share-date-day.component.less'],
 })
 export class ShareDateDayComponent {
+    constructor(private elementRef: ElementRef) {
+        this.el = this.elementRef.nativeElement;
+    }
+    el: HTMLElement;
+    input: HTMLElement;
     /**初始时间 */
     @Input() modelDay: string | TimeRange;
+    /**默认提示语 */
     @Input() inPlaceholder: string;
     /**是否是单日期选择器如果传入对象会强制改为双日期 boolean*/
-    @Input() inIfSingle: boolean = true;
+    @Input() inIfSingle: boolean = false;
     /**是否自动确认日期 boolean*/
-    @Input() inIfAutoApply: boolean = true;
+    @Input() inIfAutoApply: boolean = false;
     /**是否设置默认时间  boolean */
     @Input() inIfDefualt: boolean = false;
+    /**日期控件配置 */
     @Input() inOptions: daterangepicker.Options = {};
+    /**日期控件本地化 */
     @Input() inLocale: daterangepicker.Locale;
-    //使用默认范围选择
+    /**使用默认范围选择 false*/
     @Input() inUseRanges: boolean = false;
-    @Input() inRanges;//自定义范围选择
+    /**自定义范围选择*/
+    @Input() inRanges;
     defaultOptions: daterangepicker.Options = {
         parentEl: 'body',//挂载节点
         showWeekNumbers: false,//true将会在选择面板显示本年第几周
@@ -65,15 +75,24 @@ export class ShareDateDayComponent {
         monthNames: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
     }
     @Output() modelDayChange: EventEmitter<string | TimeRange> = new EventEmitter();
-    el: HTMLElement;
-    input: HTMLInputElement;
-    hasVal: boolean = false;
-    constructor(private element: ElementRef) {
-        this.el = this.element.nativeElement;
-        this.input = this.el.querySelector('input');
+    viewVal: string;
+    ngOnChanges(changes: SimpleChanges): void {
+        if (UtilChangesHasValue(changes, 'modelDay')) {
+            if (typeof this.modelDay == 'string') {
+                this.inIfSingle = true;
+            } else {
+                this.inIfSingle = false;
+            }
+            this.setViewVal()
+            this.init();
+        }
     }
 
     ngOnInit(): void {
+        this.init();
+    }
+
+    init() {
         let locale = Object.assign(this.defaultlocale, this.inLocale);
         this.inOptions = Object.assign(this.inOptions, { locale });
         let ranges = this.inRanges ? this.inRanges : this.inUseRanges == true ? this.defaultRanges : null;
@@ -81,12 +100,6 @@ export class ShareDateDayComponent {
             this.inOptions = Object.assign(this.inOptions, { ranges });
         }
         this.inOptions = Object.assign({}, this.defaultOptions, this.inOptions);
-        //判定并设置是否是单日期选款
-        if (typeof this.modelDay == "object" || this.inIfSingle == false) {
-            this.inIfSingle = false;
-        } else {
-            this.inIfSingle = true;
-        }
         this.inOptions.singleDatePicker = this.inIfSingle;
         this.inPlaceholder = this.inPlaceholder || (this.inIfSingle ? '请选择日期' : '请选择日期范围')
         //设置默认值
@@ -99,15 +112,7 @@ export class ShareDateDayComponent {
                 })
             }
         }
-        if (typeof this.modelDay == "object") {
-            this.inOptions.startDate = this.modelDay && this.modelDay.start;
-            this.inOptions.endDate = this.modelDay && this.modelDay.end;
-        } else {
-            this.inOptions.startDate = this.modelDay;
-            this.inOptions.endDate = this.modelDay;
-        }
         //判断是否选择了日期
-        this.hasVal = !!this.inOptions.startDate;
         this.inOptions.autoApply = this.inIfAutoApply;//是否自动确认日期
         if (locale.format.includes('HH')) {
             this.inOptions.timePicker = true
@@ -116,14 +121,27 @@ export class ShareDateDayComponent {
         }
     }
 
-    onDateChange($event: TimeRange) {
-        this.modelDay = this.inIfSingle ? $event.start : $event;
-        this.hasVal = !!$event.start;
+    setViewVal() {
+        let dateRange = this.modelDay, viewVal;
+        if (typeof dateRange === 'string' || typeof dateRange === 'undefined') {
+            viewVal = dateRange
+            this.inOptions.startDate = dateRange;
+            this.inOptions.endDate = dateRange;
+        } else {
+            viewVal = dateRange.start ? dateRange.start + ' - ' + dateRange.end : dateRange;
+            this.inOptions.startDate = dateRange.start;
+            this.inOptions.endDate = dateRange.end;
+        }
+        this.viewVal = viewVal;
+    }
+
+    onModelDayChange($event: any) {
+        this.modelDay = $event;
+        this.setViewVal();
         this.modelDayChange.emit(this.modelDay)
     }
 
-    clearValue: Symbol;
-    onClearValue() {
-        this.clearValue = Symbol('true');
+    onClearValue($event) {
+        this.onModelDayChange(undefined);
     }
 }

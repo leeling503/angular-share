@@ -1,5 +1,5 @@
 import { CdkOverlayOrigin } from "@angular/cdk/overlay";
-import { Component, EventEmitter, HostListener, Input, Output, SimpleChanges, ViewChild } from "@angular/core";
+import { Component, EventEmitter,  Input, Output, SimpleChanges, ViewChild } from "@angular/core";
 
 @Component({
     selector: 'share-date-year',
@@ -9,7 +9,7 @@ import { Component, EventEmitter, HostListener, Input, Output, SimpleChanges, Vi
 export class ShareDateYearComponent {
     @Input() inPlaceholder: string = "请选择";
     @Input() inAutoSet: boolean = true;//关闭选款自动设置
-    @Input() inSetDefault: boolean = true;//设置默认值
+    @Input() inIfDefault: boolean = true;//设置默认值
     @Input() modelYear: number;
     @Output() modelYearChange: EventEmitter<string> = new EventEmitter();
     @ViewChild(CdkOverlayOrigin, { static: true }) cdkOverlayOrigin: CdkOverlayOrigin;
@@ -28,7 +28,7 @@ export class ShareDateYearComponent {
 
     ngOnInit(): void {
         let curYear = this.modelYear || new Date().getFullYear();
-        if (this.inSetDefault) {
+        if (this.inIfDefault) {
             this.viewYear = this.modelYear = curYear;
             Promise.resolve().then(() => {
                 this.modelYearChange.emit(this.modelYear.toString())

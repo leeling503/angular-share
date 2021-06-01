@@ -5,6 +5,11 @@ function UtilIsUndefined(value: any): boolean {
     return value === undefined || value === null
 }
 
+/**undefined\null\false\ '' 返回true */
+function UtilIsFalse(value: any): boolean {
+    return value === undefined || value === null || value === false || value === ""
+}
+
 /**空数组 undefined null 和 '' 返回true */
 function UtilIsEmpty(value: any): boolean {
     if (Array.isArray(value)) {
@@ -36,6 +41,15 @@ function UtilIsEqual(cur, value, key?: string) {
     return false
 }
 
+/**当对象的属性为undefined或null时返回默认值value */
+function UtilGetAttrValue(obj: any, key: string, value) {
+    if (obj[key] === undefined || obj[key] === null) {
+        return value
+    } else {
+        return obj[key]
+    }
+}
+
 function UtilValueType(value: any): ShareInputType {
     let T: ShareInputType;
     if (Array.isArray(value)) {
@@ -60,4 +74,4 @@ function UtilIsFunction(v) {
 }
 
 
-export { UtilIsUndefined, UtilIsEmpty, UtilIsEqual, UtilValueType, UtilIsFunction }
+export { UtilIsUndefined, UtilIsFalse, UtilIsEmpty, UtilIsEqual, UtilGetAttrValue, UtilValueType, UtilIsFunction }

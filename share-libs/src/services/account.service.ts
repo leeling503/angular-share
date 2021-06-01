@@ -65,6 +65,7 @@ export class AccountService {
 
     /**判断用户是否有该权限 */
     hasAuthority(menuCode): boolean {
+        if (menuCode === undefined) return true;
         if (!this._account) return false;
         let accunt = this._account;
         let roleCode: string = accunt.roleCode;
