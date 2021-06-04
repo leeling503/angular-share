@@ -6,9 +6,11 @@ import { ShareRadioModule } from './src/components/radio/share-radio.module';
 import { ShareSelectModule } from './src/components/select/share-select.module';
 import { ShareTableModule } from './src/components/table/share-table.module';
 import { ShareViewFlvModule } from './src/components/view-flv/share-view-flv.module';
+import { ShareFileUploadModule } from './src/components/upload-file/share-file-upload.module';
+import { Share3DModule } from './src/components/three-model/three-model.module';
 
 
-export { ShareDateModule, ShareSelectModule, ShareTableModule, ShareCheckboxModule, ShareButtonModule, ShareRadioModule, SharePaginationModule, ShareViewFlvModule };
+export { ShareDateModule, ShareSelectModule, ShareTableModule, ShareCheckboxModule, ShareButtonModule, ShareRadioModule, SharePaginationModule, ShareViewFlvModule, ShareFileUploadModule, Share3DModule };
 export var MODULES = [
     ShareRadioModule,
     ShareDateModule,
@@ -17,5 +19,7 @@ export var MODULES = [
     ShareButtonModule,
     SharePaginationModule,
     ShareTableModule,
-    ShareViewFlvModule
+    ShareViewFlvModule,
+    ShareFileUploadModule,
+    Share3DModule
 ];

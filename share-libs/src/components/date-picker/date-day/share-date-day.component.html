@@ -1,5 +1,5 @@
 <div class="share-date-picker" dateRangePicker shareClearIcon [inPickerOpt]="inOptions" [modelDay]="modelDay"
-  [inViewVal]="modelDay" (modelDayChange)="onModelDayChange($event)" (onClearValue)="onClearValue($event)">
+  [inViewVal]="modelDay" (modelDayChange)="onModelDayChange($event)" (onClearValue)="onClearValue()">
   <input type="text" [ngModel]="viewVal" [placeholder]="inPlaceholder">
   <div class="function-icons" [ngClass]="'has-split-line'">
     <i class="date-day-icon-p"></i>

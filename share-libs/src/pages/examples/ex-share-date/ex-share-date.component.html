@@ -1,18 +1,18 @@
 <div class="ex-share-date">
   <div class="share-ex">
     <div class="share-date">
-      <share-date-day [(modelDay)]='day'></share-date-day>
+      <share-date-day [(modelDay)]='dayA'></share-date-day>
     </div>
     <div>
-      {{day |json}}
+      {{dayA |json}}
     </div>
   </div>
   <div class="share-ex">
     <div class="share-date">
-      <share-date-day [(modelDay)]='day' [inIfSingle]="true" [inIfAutoApply]="true"></share-date-day>
+      <share-date-day [(modelDay)]='dayB' [inIfSingle]="false" [inIfAutoApply]="false"></share-date-day>
     </div>
     <div>
-      {{day |json}}
+      {{dayB |json}}
     </div>
   </div>
   <div class="share-ex">

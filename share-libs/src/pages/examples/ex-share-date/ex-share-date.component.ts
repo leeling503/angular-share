@@ -9,10 +9,11 @@ export class ExShareDateComponent implements OnInit {
 
   constructor() { }
   month = "2020-07";
-  day
+  dayA;
+  dayB;
   year = "2020";
   inOptions = {
-    autoApply:false,
+    autoApply: false,
   }
   ngOnInit() { }
   onModelMonthChange($event) {

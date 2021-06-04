@@ -121,14 +121,18 @@ export const SYSTEM_MENU: MenuItem[] = [
             }, {
                 title: '选择框',
                 url: `${example}/select`
-            }
-            , {
+            }, {
                 title: '时间日期',
                 url: `${example}/date-time`
-            }
-            , {
+            }, {
                 title: '视频控件',
                 url: `${example}/flv`
+            }, {
+                title: '文件上传',
+                url: `${example}/file`
+            }, {
+                title: '3d模型',
+                url: `${example}/3d`
             }
         ]
     },

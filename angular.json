@@ -36,7 +36,10 @@
               "src/styles.less",
               "share-libs/share-libs.less"
             ],
-            "scripts": []
+            "scripts": [
+              "share-libs/assets/3D/js/three.min.js",
+              "share-libs/assets/3D/js/OrbitControls.js"
+            ]
           },
           "configurations": {
             "production": {

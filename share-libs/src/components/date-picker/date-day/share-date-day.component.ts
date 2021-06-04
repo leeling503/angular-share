@@ -18,11 +18,11 @@ export class ShareDateDayComponent {
     /**默认提示语 */
     @Input() inPlaceholder: string;
     /**是否是单日期选择器如果传入对象会强制改为双日期 boolean*/
-    @Input() inIfSingle: boolean = false;
+    @Input() inIfSingle: boolean = true;
     /**是否自动确认日期 boolean*/
-    @Input() inIfAutoApply: boolean = false;
+    @Input() inIfAutoApply: boolean = true;
     /**是否设置默认时间  boolean */
-    @Input() inIfDefualt: boolean = false;
+    @Input() inIfDefualt: boolean = true;
     /**日期控件配置 */
     @Input() inOptions: daterangepicker.Options = {};
     /**日期控件本地化 */
@@ -75,8 +75,10 @@ export class ShareDateDayComponent {
         monthNames: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
     }
     @Output() modelDayChange: EventEmitter<string | TimeRange> = new EventEmitter();
+    /**可视的时间日期数据 */
     viewVal: string;
     ngOnChanges(changes: SimpleChanges): void {
+        /**异步更改 */
         if (UtilChangesHasValue(changes, 'modelDay')) {
             if (typeof this.modelDay == 'string') {
                 this.inIfSingle = true;
@@ -141,7 +143,7 @@ export class ShareDateDayComponent {
         this.modelDayChange.emit(this.modelDay)
     }
 
-    onClearValue($event) {
+    onClearValue() {
         this.onModelDayChange(undefined);
     }
 }

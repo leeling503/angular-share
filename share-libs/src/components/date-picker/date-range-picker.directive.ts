@@ -76,7 +76,15 @@ export class DateRangePickerDirective implements OnInit, OnChanges, OnDestroy {
         let format = this.inPickerOpt.locale.format;
         let start = picker.startDate.format(format);
         let end = picker.endDate.format(format);
-        if (this.dateRange && this.dateRange.start == start && this.dateRange.end == end) {
+        let dayStart, dayEnd;
+        if (this._single) {
+            dayStart = this.modelDay;
+            dayEnd = this.modelDay;
+        } else {
+            dayStart = this.modelDay && (<TimeRange>this.modelDay).start
+            dayStart = this.modelDay && (<TimeRange>this.modelDay).end
+        }
+        if (this.dateRange && dayStart == start && dayEnd == end) {
             return;
         }
         this.dateRange = { start, end }
@@ -86,7 +94,7 @@ export class DateRangePickerDirective implements OnInit, OnChanges, OnDestroy {
 
     //取消选定时间
     cancelTime() {
-        this.modelDayChange.emit(this.dateRange)
+        this.modelDayChange.emit(this.modelDay)
     }
 
     ngOnDestroy(): void {
