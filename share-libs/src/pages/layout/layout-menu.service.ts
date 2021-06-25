@@ -6,9 +6,7 @@ import { AccountService } from "share-libs/src/services/account.service";
 import { UtilArrayGetAncestorByValue, UtilArrayGetObjByValue, UtilArrayIsNonNull, UtilArraySetKeyValue, UtilArraySetKeyValueByValue } from "share-libs/src/utils/util-array";
 import { MenuItem, SYSTEM_MENU } from "./layout-menu";
 
-/**不要在模块中注册，退出模块后不会再次运行constructor无法再次监听路由事件
- *菜单服务 设置菜单的激活状态 权限  获取二级菜单  根菜单
- */
+/**菜单服务 设置菜单的激活状态 权限  获取二级菜单  根菜单*/
 @Injectable()
 export class LayoutMenuServer implements OnDestroy {
     constructor(private account_: AccountService, private router: Router) {

@@ -1,0 +1,43 @@
+<div class="share-select-add" cdkOverlayOrigin (click)="openOptions()">
+  <ng-container *ngIf="(!checkOptions || checkOptions.length==0)">
+    <div class="selected-node text_placeholder">
+      <span>{{_placeholder}}</span>
+    </div>
+  </ng-container>
+  <ng-container *ngFor="let node of checkOptions;last as last">
+    <span>{{node.showName || node.value}}</span><span *ngIf="!last">、</span>
+  </ng-container>
+</div>
+<ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="cdkOverlayOrigin" [cdkConnectedOverlayHasBackdrop]="true"
+  [cdkConnectedOverlayOpen]="optionsOpen" [cdkConnectedOverlayOffsetY]='3'
+  [cdkConnectedOverlayWidth]='cdkConnectedOverlayWidth' [cdkConnectedOverlayBackdropClass]="'transparent-overlay-back'"
+  (backdropClick)="closeOpenNode()">
+  <div class="open-panel">
+    <div class="open-nodes">
+      <ng-container *ngFor="let option of options">
+        <div class="option-node">
+          <div share-checkbox class="option-check" [modelChecked]="option._check"
+            (onClick)="onOptionCheck($event,option)"></div>
+          {{option.value}}
+        </div>
+      </ng-container>
+      <ng-container *ngFor="let option of addOptions">
+        <div class="add-node">
+          <div share-checkbox [inIsDisable]="!option.value" [modelChecked]="option._check" class="option-check"
+            (onClick)="onOptionCheck($event,option)">
+          </div>
+          <input [(ngModel)]="option.value" placeholder="请输入" />
+        </div>
+      </ng-container>
+      <ng-container *ngIf="_ifAdd">
+        <div class="option-add">
+          <span (click)="onAddOption()">+ 添加选项</span>
+        </div>
+      </ng-container>
+    </div>
+    <div class="open-btns">
+      <div class="btn-sure" (click)="onBtnClick()">确定</div>
+      <div class="btn-off" (click)="onBtnClick(true)">取消</div>
+    </div>
+  </div>
+</ng-template>

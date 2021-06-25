@@ -13,7 +13,7 @@ export class ExShareSelectComponent implements OnInit {
   constructor() { }
   default = [
     {
-      key: '1', value: 'A', children:
+      key: '1', value: 'A', showName: '改变显示的值', children:
         [{
           key: '11', value: 'Aa', children:
             [{ key: '111', value: 'Aaa' }, { key: '112', value: 'Aab' }]

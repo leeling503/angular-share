@@ -117,7 +117,7 @@ export class TableMultiHeadComponent extends TableComponent implements OnInit {
             let _maxWidth = 0, flag = false, _styckyLeft;
             for (let i = 0, len = heads.length; i < len && !flag; i++) {
                 let item = heads[i][j];
-                let width = item.widthFixed || item.width || item.widthMin || 60;
+                let width = item.widthFix || item.width || item.widthMin || 60;
                 width = width >= 60 ? width : 60;
                 if (!!item.styckyLeft) {
                     /**设置了固定属性 */

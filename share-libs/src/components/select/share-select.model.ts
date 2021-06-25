@@ -1,4 +1,4 @@
-export class SelectConfig {
+class SelectConfig {
     /**是否显示control标签 true*/
     ifFlag: boolean = true;
     /**是否显示选项多选框  true*/
@@ -9,6 +9,8 @@ export class SelectConfig {
     ifMulti: boolean = false;
     /**是否拥有激活项状态 false*/
     ifActive: boolean = false;
+    /**是否拥有激活项状态 false*/
+    ifInput: boolean = true;
     /**提示语 请选择*/
     placeholder: string = '请选择';
     /**下拉无数据提示 暂无数据*/
@@ -18,7 +20,7 @@ export class SelectConfig {
     openWidth: number | string;
 }
 
-export class SelectOption {
+interface SelectOption {
     key?: string;
     value?: string;
     /**选中后显示在框内Name */
@@ -32,4 +34,24 @@ export class SelectOption {
     /**有子项被勾选 */
     _mix?: boolean;
 }
-export type SelectModelInputs = string[] | SelectOption[] | string | SelectOption
+type SelectModelInputs = string[] | SelectOption[] | string | SelectOption;
+
+class SelectAddConfig extends SelectConfig {
+    /**开启默认勾选（默认选中第一个）*/
+    defualt: boolean;
+    /**能否新增选项 */
+    ifAdd: boolean;
+}
+interface SelectAddOption {
+    key?: string;
+    value?: string;
+    /**选中后显示在框内Name */
+    showName?: string;
+    /**本身被勾选 */
+    _check?: boolean;
+}
+
+export {
+    SelectConfig, SelectOption, SelectModelInputs,
+    SelectAddConfig, SelectAddOption
+}

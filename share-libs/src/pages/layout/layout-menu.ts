@@ -133,6 +133,9 @@ export const SYSTEM_MENU: MenuItem[] = [
             }, {
                 title: '3d模型',
                 url: `${example}/3d`
+            }, {
+                title: '地图',
+                url: `${example}/map`
             }
         ]
     },

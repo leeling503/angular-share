@@ -33,12 +33,15 @@
               }
             ],
             "styles": [
+              "./node_modules/leaflet/dist/leaflet.css",
               "src/styles.less",
               "share-libs/share-libs.less"
             ],
             "scripts": [
+              "./node_modules/leaflet/dist/leaflet-src.js",
               "share-libs/assets/3D/js/three.min.js",
-              "share-libs/assets/3D/js/OrbitControls.js"
+              "share-libs/assets/3D/js/OrbitControls.js",
+              "share-libs/assets/leaflet/leaflet-net-map.js"
             ]
           },
           "configurations": {

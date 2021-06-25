@@ -32,48 +32,9 @@
           <tr>
             <ng-container *ngFor="let item of inItems">
               <ng-container *ngIf="item.ifShow !== false">
-                <td [ngClass]="{'is-sticky':item.styckyLeft}"
-                  [ngStyle]="{'width': item._width+'px','left':item.styckyLeft}">
-                  <ng-container [ngSwitch]="item.type">
-                    <div class="content-container" [ngClass]="item.classNames">
-                      <div class="content-main" [ngClass]='{"content-event":item.onClick}' (click)="onClick(data,item)">
-                        <ng-container *ngSwitchCase="'check'">
-                          <share-checkbox [modelChecked]='getDataCheckStatus(data)'
-                            [inIsDisable]="getDataDisableStatus(data)" (onClick)="onCheckedData($event, data)">
-                          </share-checkbox>
-                        </ng-container>
-                        <ng-container *ngSwitchCase="'serial'">
-                          {{inIfPage ? (page.currentPage-1)*page.pageRecord+i+1:i+1}}
-                        </ng-container>
-                        <ng-container *ngSwitchCase="'img'">
-                          <img [src]="data[item.key] || '../../../../../assets/img/icon/no-img.png'" />
-                        </ng-container>
-                        <ng-container *ngSwitchCase="'rule-tag'">
-                          <span class="table-tag" [ngClass]="item.ruleTags[data[item.key]].class"
-                            [ngStyle]="{'color':item.ruleTags[data[item.key]].color}">
-                            {{ item.ruleTags[data[item.key]].text }}
-                          </span>
-                        </ng-container>
-                        <ng-container *ngSwitchCase="'rule-dot'">
-                          <div class="table-dot" [ngClass]="item.ruleDots[data[item.key]].class"></div>
-                          <span class="table-dot-span" [ngStyle]="{'color':item.ruleDots[data[item.key]].color}">
-                            {{ item.ruleDots[data[item.key]].text }}
-                          </span>
-                        </ng-container>
-                        <ng-container *ngSwitchCase="'rule-text'">
-                          <span class="table-text">
-                            {{ item.ruleText[data[item.key]]}}
-                          </span>
-                        </ng-container>
-                        <ng-container *ngSwitchDefault>
-                          <span class="text-info">
-                            {{ data[item.key]}}
-                          </span>
-                        </ng-container>
-                      </div>
-                    </div>
-                  </ng-container>
-                </td>
+                <ng-template
+                  *ngTemplateOutlet="tdEl;context:{item:item,data:data,datas:tableDatas,key:item.key,i:i,value:data[item.key]}">
+                </ng-template>
               </ng-container>
             </ng-container>
           </tr>
@@ -93,3 +54,51 @@
     </share-pagination>
   </div>
 </div>
+
+<!-- item=列表项  data=该行数据  key=item.key  value=data[item.key]  -->
+<ng-template #tdEl let-item="item" let-data="data" let-datas="datas" let-key="key" let-value="value" let-i="i">
+  <td [ngClass]="{'is-sticky':item.styckyLeft}" [ngStyle]="{'width': item._width+'px','left':item.styckyLeft}">
+    <ng-container [ngSwitch]="item.type">
+      <div class="content-container" [ngClass]="item.classNames">
+        <div class="content-main" [ngClass]='{"content-event":item.onClick}' (click)="onClick(data,item)">
+          <ng-container *ngSwitchCase="'check'">
+            <share-checkbox [modelChecked]='getDataCheckStatus(data)' [inIsDisable]="getDataDisableStatus(data)"
+              (onClick)="onCheckedData($event, data)">
+            </share-checkbox>
+          </ng-container>
+          <ng-container *ngSwitchCase="'serial'">
+            {{inIfPage ? (page.currentPage-1)*page.pageRecord+i+1:i+1}}
+          </ng-container>
+          <ng-container *ngSwitchCase="'img'">
+            <img [src]="value || '../../../../../assets/img/icon/no-img.png'" />
+          </ng-container>
+          <ng-container *ngSwitchCase="'rule-tag'">
+            <span class="table-tag" [ngClass]="item.ruleTags[value].class"
+              [ngStyle]="{'color':item.ruleTags[value].color}">
+              {{ item.ruleTags[value].text }}
+            </span>
+          </ng-container>
+          <ng-container *ngSwitchCase="'rule-dot'">
+            <div class="table-dot" [ngClass]="item.ruleDots[value].class"></div>
+            <span class="table-dot-span" [ngStyle]="{'color':item.ruleDots[value].color}">
+              {{ item.ruleDots[value].text }}
+            </span>
+          </ng-container>
+          <ng-container *ngSwitchCase="'rule-btns'">
+            <ng-container *ngFor="let btn of data._ruleBtns || onRuleBtns(data,item)">
+              <div class="rule-btn" (click)="onRuleBtnClick(data,item,btn,datas )">
+                <i [class]="btn.icon"></i>
+                <span>{{btn.text}}</span>
+              </div>
+            </ng-container>
+          </ng-container>
+          <ng-container *ngSwitchDefault>
+            <span class="text-info">
+              {{ value}}
+            </span>
+          </ng-container>
+        </div>
+      </div>
+    </ng-container>
+  </td>
+</ng-template>

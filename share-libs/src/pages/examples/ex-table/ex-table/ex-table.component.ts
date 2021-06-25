@@ -12,7 +12,7 @@ import { UtilTableRuleDots, UtilTableRuleTags, UtilTableRuleText } from 'share-l
 export class ExTableComponent implements OnInit {
   /**表格数据*/
   allDatas: any[];
-  items: TableItem[];
+  items: TableItem<ItemData>[];
   // apiUrl: string = '';
   apiUrl = 'api/Statuslist/getList';
   inUuid = 'aidsName';
@@ -36,7 +36,7 @@ export class ExTableComponent implements OnInit {
     this.items = [
       { title: '', type: 'check', width: 60, canFilter: false, styckyLeft: '0px' },
       { title: '序号', type: 'serial', width: 60, canFilter: false, styckyLeft: '60px', },
-      { title: '时间', key: 'collectionTime', classNames: ['color-blue', 'underline'], onClick: (data, item) => { console.log(data, item) }, widthFixed: 150, canFilter: false },
+      { title: '时间', key: 'collectionTime', classNames: ['color-blue', 'underline'], onClick: (data, item) => { console.log(data, item) }, widthFix: 150, canFilter: false },
       {
         title: '是否绑定', key: 'ifBind', type: 'rule-dot', width: 130, ruleDots: UtilTableRuleDots({
           0: { value: '0', class: 'green', text: '未绑定', color: '#13C4B0' },
@@ -51,13 +51,24 @@ export class ExTableComponent implements OnInit {
         })
       },
       {
-        title: '执行结果', key: 'functionCode', type: "rule-tag", width: 230, ruleTags: UtilTableRuleTags({
+        title: '执行结果', key: 'functionCode', type: "rule-tag", width: 100, ruleTags: UtilTableRuleTags({
           get '01'(): TagRule { console.log('getname'); return { value: '0', class: 'green', text: '成功', color: '#FFF' } },
           '02': { value: '0', class: 'danger', text: '失败', color: 'orange' },
         })
       },
-      { title: '站点名称', key: 'aidsName2', width: 230 },
-      { title: '参数详情', key: 'commModeCodeName', type: "rule-text", width: 220, ruleText: UtilTableRuleText({}) },
+      {
+        title: "操作", key: 'opertion', type: "rule-btns", widthFix: 100, ruleBtns: (data) => {
+          if (data.functionCode == '01') {
+            return [
+              { text: '操作01', onClick: (data, item, datas) => { console.log(data, item, datas) } }
+            ]
+          } else {
+            return [
+              { text: '操作02', onClick: (data, item, datas) => { console.log(data, item, datas) } }
+            ]
+          }
+        }
+      }
     ]
   }
 
@@ -65,4 +76,45 @@ export class ExTableComponent implements OnInit {
     console.log($event)
   }
 
+}
+
+
+
+class ItemData {
+  aidsCode: string;
+  aidsName: string;
+  alarmLastTime: string;
+  atonId: string;
+  batteryVoltage: string;
+  cardNumber: string;
+  chargingCurrent: string;
+  collectionTime: string;
+  commModeCode: string;
+  commModeCodeName: string;
+  coordinates: string;
+  datagramId: string;
+  deviceCode: string;
+  dutyStateCode: string;
+  functionCode: string;
+  id: string;
+  ifAlarm: string;
+  ifBind: string;
+  ifIgnore: string;
+  ifMark: string;
+  ifOnline: string;
+  ifStandby: string;
+  latitude: string;
+  lightColor: string;
+  lightQualityName: string;
+  lightUp: string;
+  lightUpName: string;
+  lightWorkCurrent: string;
+  lightWorkVoltage: string;
+  longitude: string;
+  remainingBattery: string;
+  shiftDistance: string;
+  targeting: string;
+  targetingName: string;
+  thumbnail: string;
+  typeCode: string;
 }

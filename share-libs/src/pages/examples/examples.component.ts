@@ -1,15 +1,13 @@
-import { style } from "@angular/animations";
 import { Component } from "@angular/core";
+import { GLID, GLNAME, GlobalEventService } from "share-libs/src/services/global-event.service";
 
 @Component({
     selector: 'ex-main',
     template: `<div class="ex-main"><router-outlet></router-outlet></div>`,
-    styles: [`:host,
-    .ex-main{
-        width:100%;
-        height:100%;
-    },
-    .ex-main{      padding:20px;}`]
+    styleUrls:['./examples.component.less']
 
 })
-export class ExMain { }
+export class ExMain {
+    constructor() { }
+    ngOnInit(): void { }
+}

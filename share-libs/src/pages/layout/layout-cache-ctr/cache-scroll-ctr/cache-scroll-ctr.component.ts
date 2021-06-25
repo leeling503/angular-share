@@ -50,7 +50,7 @@ export class CacheScrollCtrComponent implements OnInit {
 
   ngOnInit() { }
 
-  /**路由缓存按钮组有变化 */
+  /**缓存按钮组有变化 */
   reuseRouteChange() {
     if (!this.activeEl || this.viewWidth > this.allWidth) {
       /**可视区域足够 */
@@ -70,7 +70,11 @@ export class CacheScrollCtrComponent implements OnInit {
       /**激活tab左侧超出右边界*/
       this.offX = offx;
     }
-    /**设置滑动按钮状态 */
+    this.setBtnStatus()
+  }
+
+  /**设置滑动按钮状态 */
+  setBtnStatus() {
     this.disableAfter = false;
     this.disableBefore = false;
     if (this.offX === 0) { this.disableBefore = true; }

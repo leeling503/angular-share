@@ -1,6 +1,6 @@
 import { CdkOverlayOrigin } from '@angular/cdk/overlay';
 import { Component, OnInit, Input, ViewChild, ElementRef, Output, EventEmitter, SimpleChanges } from '@angular/core';
-import { SelectOption, SelectConfig, SelectModelInputs } from './share-select.model';
+import { SelectOption, SelectConfig, SelectModelInputs } from '../share-select.model';
 import { UtilArrayClear, UtilArrayGetObjByValue, UtilArrayRemoveItem, UtilArraySetKeyValue, UtilIsEqual } from 'share-libs/src/utils';
 import { ShareInputType } from 'share-libs/src/models';
 import { UtilChangesValue, UtilChangesNoFirstValue } from 'share-libs/src/utils/util-component';
@@ -21,24 +21,35 @@ export class ShareSelectComponent implements OnInit {
   @Input() inOptions: SelectOption[] = [];
   /**已选中 */
   @Input() modelOption: SelectModelInputs;
-  checkUuids: string[];
-  checkOptions: SelectOption[] = [];
   /**已选中的对比uuid */
   @Input() inUuid: string = 'key';
+  /**选中项发生改变 */
   @Output() modelOptionChange: EventEmitter<SelectModelInputs> = new EventEmitter();
   /**改变激活项 */
   @Output() onActiveChange: EventEmitter<SelectOption> = new EventEmitter();
+  checkUuids: string[];
+  checkOptions: SelectOption[] = [];
 
   /**配置项 */
   _config: SelectConfig;
+  /**多选*/
   _multi: boolean;
+  /**显示选项多选框*/
   _showCheck: boolean;
+  /**至少选择一个*/
   _leastOne: boolean;
+  /**清空按钮*/
   _showClear: boolean;
+  /**显示control标签*/
   _showFlag: boolean;
+  /**提示语*/
   _placeholder: string;
+  /**无数据提示*/
   _noneTip: string;
+  /**拥有激活项 */
   _hasActive: boolean;
+  /**可输入选款 */
+  _ifInput: boolean;
 
   _inputType: ShareInputType = 'string';
   _outOptions: SelectModelInputs;
@@ -47,6 +58,7 @@ export class ShareSelectComponent implements OnInit {
   optionsOpen: boolean = false;
   cdkConnectedOverlayWidth: number | string;
   @ViewChild(CdkOverlayOrigin, { static: true }) cdkOverlayOrigin: CdkOverlayOrigin;
+
   ngOnChanges(changes: SimpleChanges): void {
     if (UtilChangesNoFirstValue(changes, 'modelOption')) {
       if (UtilIsEqual(this.modelOption, this._outOptions)) return;
@@ -57,7 +69,7 @@ export class ShareSelectComponent implements OnInit {
       this.setCheckOptions();
       this.setCheckMixState()
     }
-    if (UtilChangesValue(changes, 'inConfig')) {
+    if (UtilChangesNoFirstValue(changes, 'inConfig')) {
       this.setConfig();
     }
   }
@@ -71,6 +83,7 @@ export class ShareSelectComponent implements OnInit {
       this.closeOptions();
     })
   }
+
   /**设置选中 */
   setCheckOptions() {
     let option = this.modelOption || [];
@@ -118,6 +131,7 @@ export class ShareSelectComponent implements OnInit {
     this._noneTip = this._config.noneTip;
     this._showFlag = this._config.ifFlag;
     this._hasActive = this._config.ifActive;
+    this._ifInput = this._config.ifInput;
   }
 
   /**设置选项状态 */
@@ -250,5 +264,8 @@ export class ShareSelectComponent implements OnInit {
   backdropClick() {
     this.closeOptions();
   }
-
+  inputValue
+  onInputValueChange() {
+    console.log(this.inputValue)
+  }
 }

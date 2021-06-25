@@ -3,6 +3,7 @@ import { ReuseMenuEvent, ReuseCachedCtr } from 'share-libs/src/services/route-re
 import { ContextMenuService } from '../../../services/context-menu-context.service';
 import { CacheCtrContextMenuComponent } from './ctr-context-menu/cache-ctr-context-menu.component';
 
+/**复用路由按钮组右键菜单 */
 @Directive({
   selector: '[context-menu]'
 })

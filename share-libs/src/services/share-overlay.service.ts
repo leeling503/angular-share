@@ -2,6 +2,7 @@ import { Overlay, OverlayRef, OverlayConfig, ScrollStrategy, PositionStrategy, C
 import { Injectable, ElementRef, ComponentRef, EmbeddedViewRef } from '@angular/core';
 import { ComponentPortal, TemplatePortal } from '@angular/cdk/portal';
 
+/**弹窗服务 */
 @Injectable({
     providedIn: 'root'
 })
@@ -116,30 +117,52 @@ export class ShareOverlayService {
 }
 
 export class ShareOverlayConfig extends OverlayConfig {
+    /** */
     hasBackdrop = true;
+    /** */
     backdropClass = 'transparent';
+    /** */
     positionStrategy?: PositionStrategy;
+    /** */
     scrollStrategy?: ScrollStrategy;
+    /** */
     panelClass = 'share-overlay-panel';
+    /** */
     width?: number | string;
+    /** */
     height?: number | string;
+    /** */
     minWidth?: number | string;
+    /** */
     minHeight?: number | string;
+    /** */
     maxWidth?: number | string;
+    /** */
     maxHeight?: number | string;
+    /** */
     disposeOnNavigation?: boolean;
 }
 
 export class ShareOverlayPosition {
-    type?: 'event' | 'ele' | 'body' = 'body';//相对鼠标或指定元素或body进行定位
-    event?: MouseEvent;//鼠标事件event
-    element?: HTMLElement;//指定元素
-    centerHorizontally?: boolean = true;//水平居中
-    centerVertically?: boolean = true;//垂直居中
-    x?: number = 0;//x方位偏移量正数向右偏移
-    y?: number = 0;//y方位偏移量正数向下偏移
-    width?: string;//宽
-    height?: string;//高
+    /**相对 鼠标 | 指定元素 | body 进行定位*/
+    type?: 'event' | 'ele' | 'body' = 'body';
+    /**鼠标事件event*/
+    event?: MouseEvent;
+    /**指定元素*/
+    element?: HTMLElement;
+    /**水平居中*/
+    centerHorizontally?: boolean = true;
+    /**垂直居中 */
+    centerVertically?: boolean = true;
+    /**x方位偏移量正数向右偏移 */
+    x?: number = 0;
+    /**y方位偏移量正数向下偏移 */
+    y?: number = 0;
+    /**宽 */
+    width?: string;
+    /**高 */
+    height?: string;
+    /**定位点链接位 */
     withPositions?: ConnectedPosition[] = [{
         originX: 'end',
         originY: 'bottom',

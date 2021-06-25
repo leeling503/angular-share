@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
-import { shareDirectives } from '.';
+import { SHAREDIRECTIVES } from '.';
 
 @NgModule({
     declarations: [
-        ...shareDirectives
+        ...SHAREDIRECTIVES
     ],
-    exports: [...shareDirectives],
+    exports: [...SHAREDIRECTIVES],
 })
 export class ShareDirectiveModule { }

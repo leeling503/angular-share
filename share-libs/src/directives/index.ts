@@ -1,11 +1,13 @@
 import { HasAnyAuthorityDirective } from './has-any-authority.directive';
-import { ShareInputNumberDirective } from './input-number.directive';
+import { InputNoNullDirective } from './input-no-null.directive';
+import { InputNumberDirective } from './input-number.directive';
 import { ShareClearIconDirective } from './share-clear-icon.directive';
 import { ShareLoadingDirective } from './share-loading.directive';
 
-export let shareDirectives=[
+export const SHAREDIRECTIVES = [
+    InputNumberDirective,
+    InputNoNullDirective,
     HasAnyAuthorityDirective,
-    ShareInputNumberDirective,
     ShareLoadingDirective,
     ShareClearIconDirective
 ]

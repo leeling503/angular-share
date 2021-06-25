@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter, ElementRef, SimpleChanges, HostListener } from "@angular/core";
 import * as moment from 'moment';
 import { TimeRange } from '../share-date-picker.model';
-import { UtilChangesHasValue } from "share-libs/src/utils";
+import { UtilChanges, UtilChangesHasValue, UtilChangesValue } from "share-libs/src/utils";
 @Component({
     selector: 'share-date-day',
     templateUrl: './share-date-day.component.html',
@@ -79,12 +79,8 @@ export class ShareDateDayComponent {
     viewVal: string;
     ngOnChanges(changes: SimpleChanges): void {
         /**异步更改 */
-        if (UtilChangesHasValue(changes, 'modelDay')) {
-            if (typeof this.modelDay == 'string') {
-                this.inIfSingle = true;
-            } else {
-                this.inIfSingle = false;
-            }
+        if (UtilChangesValue(changes, 'modelDay')) {
+            this.inIfSingle = typeof this.modelDay == 'string';
             this.setViewVal()
             this.init();
         }

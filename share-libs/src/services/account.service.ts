@@ -82,7 +82,6 @@ export class AccountService {
 
     setAccount(account: Account) {
         this._account = account;
-
     }
 
     getNext(): Observable<any> {

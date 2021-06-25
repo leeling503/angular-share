@@ -100,7 +100,7 @@ export class TableBase {
     let allWith = 0;
     this.inItems.forEach(e => {
       if (e.ifShow !== false) {
-        allWith += (e.widthFixed || e.width || e.widthMin || 60);
+        allWith += (e.widthFix || e.width || e.widthMin || 60);
       }
     })
     /**表格左侧的边框宽度  box-sizing:border-box */
@@ -112,18 +112,18 @@ export class TableBase {
       tableWidth -= 6
     }
     if (tableWidth <= allWith) {
-      this.inItems.forEach(e => e._width = e.widthFixed || e.width || e.widthMin || 60)
+      this.inItems.forEach(e => e._width = e.widthFix || e.width || e.widthMin || 60)
     } else if (tableWidth > allWith) {
       let extraWidth = tableWidth, len = this.inItems.length - 1;
       Promise.resolve().then(res => {
         let computeWidth = allWith;
         this.inItems.forEach((e, i) => {
           if (e.ifShow === false) { e._width = 0; return }
-          let eWhidth = e.widthFixed || e.width || e.widthMin || 60;
-          if (i === len) {
-            e._width = extraWidth;
-          } else if (e.styckyLeft || e.widthFixed) {
+          let eWhidth = e.widthFix || e.width || e.widthMin || 60;
+          if (e.styckyLeft || e.widthFix) {
             e._width = eWhidth;
+          } else if (i === len) {
+            e._width = extraWidth;
           } else {
             e._width = (extraWidth * eWhidth / computeWidth) | 0;
           }

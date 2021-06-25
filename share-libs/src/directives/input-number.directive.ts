@@ -1,16 +1,16 @@
 import { Directive, ElementRef, Input } from "@angular/core";
 
 @Directive({
-    selector: 'input[share-input-number] , input.share-input-number',
+    selector: 'input[input-number] , input.input-number',
     host: {
         "(input)": 'input()'
     }
 })
-export class ShareInputNumberDirective {
+export class InputNumberDirective {
     constructor(private el: ElementRef) {
-        this.native = this.el.nativeElement;
+        this.nativeEl = this.el.nativeElement;
     }
-    private native: HTMLInputElement;
+    private nativeEl: HTMLInputElement;
     @Input() min: number = -Infinity;
     @Input() max: number = Infinity;
     @Input() isInteger: boolean = true;
@@ -20,10 +20,8 @@ export class ShareInputNumberDirective {
     }
 
     input() {
-        let value: string | number = this.native.value;
-        if (value == '') {
-            return
-        }
+        let value: string | number = this.nativeEl.value;
+        if (value == '') { return }
         if (this.isInteger) {
             value = value.replace(/[^\d-]/g, "");
         } else {
@@ -37,6 +35,6 @@ export class ShareInputNumberDirective {
         value = Number.parseFloat(value);
         value = this.max > value ? value : this.max;
         value = this.min < value ? value : this.min;
-        this.native.value = value.toString();
+        this.nativeEl.value = value.toString();
     }
 }

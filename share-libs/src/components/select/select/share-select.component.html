@@ -1,7 +1,7 @@
 <div class="share-select" cdkOverlayOrigin (click)='clickToggleOpen()'
   [ngClass]="{'select-has-border':checkOptions.length > 1,'select-has-control':_showFlag }">
   <div class="selected-nodes">
-    <ng-container *ngIf="!checkOptions || checkOptions.length==0 ">
+    <ng-container *ngIf="(!checkOptions || checkOptions.length==0) && !_ifInput">
       <div class="selected-node placeholder-text">
         <span>{{_placeholder}}</span>
       </div>
@@ -10,6 +10,11 @@
       <div class="selected-node node-data-text">
         <span>{{node.showName || node.value}}</span>
         <i class="select-clear" *ngIf="_showClear" (click)="clickClearNode(node)"></i>
+      </div>
+    </ng-container>
+    <ng-container *ngIf=" _ifInput &&  (_multi || (checkOptions && checkOptions.length == 0))  ">
+      <div class="selected-input input-text">
+        <input [placeholder]="_placeholder" [(ngModel)]="inputValue" (ngModelChange)="onInputValueChange()" />
       </div>
     </ng-container>
   </div>

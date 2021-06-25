@@ -6,11 +6,11 @@ import { decryptAES, encryptAES } from 'share-libs/src/services/aes.service';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 //加密
-@Injectable({providedIn:'root'})
+@Injectable({ providedIn: 'root' })
 export class HttpEncryptInterceptor implements HttpInterceptor {
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         let cloneReq: HttpRequest<any> = req.clone();
-        if (environment.production) {
+        if (environment.ase) {
             if (typeof (req.body) == 'string') {
                 cloneReq = req.clone({ responseType: 'text' });
             } else {
@@ -21,7 +21,7 @@ export class HttpEncryptInterceptor implements HttpInterceptor {
         }
         return next.handle(cloneReq).pipe(
             map(res => {
-                if (environment.production) {
+                if (environment.ase) {
                     if (res['body']) {
                         res['body'] = JSON.parse(decryptAES(res['body']))
                     }
