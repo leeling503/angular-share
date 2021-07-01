@@ -1,6 +1,8 @@
-import { BtnType, BtnSize, ShareBtnPara } from './share-buttom';
 import { Component, OnInit, Input, ElementRef, RendererFactory2, Renderer2, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { ShareUpdataClassService } from '../../services/share-updata-class.service';
+import { IconClass } from 'share-libs/src/enum/icon.enum';
+import { ShareBtn } from './share-buttom';
+import { BtnSize, BtnType } from 'share-libs/src/enum';
 
 @Component({
   selector: 'share-button,[share-button]',
@@ -12,55 +14,35 @@ import { ShareUpdataClassService } from '../../services/share-updata-class.servi
   }
 })
 export class ShareButtonComponent implements OnInit {
-  @Input() btnPara: ShareBtnPara;//按钮配置
-  @Input() btnPerIcon: string;//前置图标class
-  @Input() btnSufIcon: string;//后置图标class
-  /**按钮类型 决定背景色，边框色 和字体颜色  */
-  @Input() btnType: BtnType = 'default';
-  /**决定按钮的最小宽高度 'small' | 'default' | 'large'  65-28| 75-30 | 85-32  */
-  @Input() btnSize: BtnSize = 'default';//按钮大小
-  /**设置宽高 ， 优先级高于size */
-  @Input() btnWidth: number | string;
-  @Input() btnHeight: number | string;
-  /**按钮文字*/
-  @Input() btnText: string;
-  /**是否禁用*/
-  @Input() btnDisable: boolean;
-  @Input() btnClick: () => {};
-  nativeEl: HTMLElement;
-  renderer2: Renderer2;
-  classMap: any = {};
+
   constructor(private el: ElementRef, private rendeFactory: RendererFactory2, private upElClass: ShareUpdataClassService) {
     this.nativeEl = this.el.nativeElement;
     this.renderer2 = this.rendeFactory.createRenderer(null, null)
   }
 
+  @Input() inPara: ShareBtn;//按钮配置
+  @Input() btnClick: () => {};
+  nativeEl: HTMLElement;
+  renderer2: Renderer2;
+  classMap: any = {};
+  /**前置图标class*/
+  _iconPer: IconClass;
+  /**后置图标class*/
+  _iconSuf: IconClass;
+
+  _type: BtnType;
+  _size: BtnSize;
+  /**设置宽高 ，优先级高于size */
+  _width: number;
+  _height: number;
+  _text: string;
+  _disable: boolean;
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.btnPara && this.btnPara) {
-      this.btnPara = Object.assign({}, this.btnPara);
-      this.btnClick = this.btnPara.btnClick;
-      this.btnSize = this.btnPara.btnSize || 'default';
-      this.btnType = this.btnPara.btnType || 'default';
-      this.btnDisable = this.btnPara.btnDisable;
-      this.btnPerIcon = this.btnPara.btnPerIcon;
-      this.btnSufIcon = this.btnPara.btnSufIcon;
-      this.btnText = this.btnPara.btnText;
+    if (changes.inPara && this.inPara) {
+      this.inPara = Object.assign({}, this.inPara);
+      this.btnClick = this.inPara.click;
       this.setClassMap();
-    }
-    if (changes.btnSize || changes.btnDisable || changes.btnDisable) {
-      this.setClassMap();
-    }
-    if (changes.btnWidth || changes.btnHeight) {
-      if (typeof this.btnWidth === 'number') {
-        this.renderer2.setStyle(this.nativeEl.querySelector(".share-button"), "width", this.btnWidth + 'px')
-      } else {
-        this.renderer2.setStyle(this.nativeEl.querySelector(".share-button"), "width", this.btnWidth)
-      }
-      if (typeof this.btnHeight === 'number') {
-        this.renderer2.setStyle(this.nativeEl.querySelector(".share-button"), "height", this.btnHeight + 'px')
-      } else {
-        this.renderer2.setStyle(this.nativeEl.querySelector(".share-button"), "height", this.btnHeight)
-      }
+      this.setConfig();
     }
   }
 
@@ -70,20 +52,28 @@ export class ShareButtonComponent implements OnInit {
   }
 
   setConfig() {
-
+    this._size = this.inPara.size || BtnSize.default;
+    this._type = this.inPara.type || BtnType.default;
+    this._disable = this.inPara.disable;
+    this._iconPer = this.inPara.iconPer;
+    this._iconSuf = this.inPara.iconSuf;
+    this._text = this.inPara.text;
+    this._width = this.inPara.width;
+    this._height = this.inPara.height;
   }
+
 
   setClassMap() {
     let classMap = {
-      [`sl-button-size-${this.btnSize}`]: true,
-      [`sl-button-type-${this.btnType}`]: true,
-      [`sl-button-type-disable`]: this.btnDisable,
+      [`sl-button-size-${this._size}`]: true,
+      [`sl-button-type-${this._type}`]: true,
+      [`E_D`]: this._disable,
     }
     this.upElClass.updateElClass(this.nativeEl.querySelector(".share-button"), classMap)
   }
 
   triggerClick() {
-    !this.btnDisable && this.btnClick && this.btnClick();
+    !this._disable && this.btnClick && this.btnClick();
   }
 
 }

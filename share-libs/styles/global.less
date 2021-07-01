@@ -1,0 +1,61 @@
+/**
+* E:标识节点 element  全局样式标识
+* BD:边框  border  
+* BC:背景色 background-color
+* C:文本色 color
+* D:标识禁用
+* F:Flex 
+* T:文本
+* TF:transform 过度动画
+*/
+/**全局禁用样式*/
+.E_D,
+.E_D * {
+  .E_D();
+}
+
+.E_D_drop,
+.E_D_drop * {
+  .E_D_drop()
+}
+
+/**边框*/
+.E_BD {
+  .E_BD()
+}
+
+/**下拉打开选择弹窗的动画*/
+.E_TF {
+  .E_TF()
+}
+
+/**Flex模式水平垂直居中*/
+.E_F {
+  .E_F();
+}
+
+
+/**水平垂直居中*/
+.E_F_center {
+  .E_F_center()
+}
+
+/**全局的文本样式*/
+.E_T_placeholder {
+  .E_T_placeholder()
+}
+
+
+/**分割线*/
+.E_split_line {
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    height: 100%;
+    width: 1px;
+    right: 23px;
+    border-left: 1px solid @C-B-default;
+  }
+}

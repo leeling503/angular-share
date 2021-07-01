@@ -1,3 +1,4 @@
+import { data } from "jquery";
 import { ShareInputType } from "../models";
 
 /**undefined和null是返回true */
@@ -49,7 +50,7 @@ function UtilGetAttrValue(obj: any, key: string, value) {
         return obj[key]
     }
 }
-
+/**判断value是字符串还是对象或者数组 */
 function UtilValueType(value: any): ShareInputType {
     let T: ShareInputType;
     if (Array.isArray(value)) {
@@ -71,6 +72,11 @@ function UtilValueType(value: any): ShareInputType {
 /**存在并且是function */
 function UtilIsFunction(v) {
     return v && typeof v === 'function'
+}
+
+/**第一个值不为undefined则返回第一个值 */
+function UtilSetValue(data1, data2) {
+    return data1 === undefined ? data2 : data1
 }
 
 

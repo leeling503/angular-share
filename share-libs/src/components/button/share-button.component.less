@@ -1,6 +1,14 @@
 @import "../../styles/index.less";
 @gap-size: 5px;
 
+.sl-button-per-icon {
+  margin-right: @gap-size;
+}
+
+.sl-button-suf-icon {
+  margin-left: @gap-size;
+}
+
 .share-button {
   display: flex;
   align-items: center;
@@ -9,7 +17,6 @@
 
 .sl-button-type(@b-color, @color , @c-border : @b-color ) {
   cursor: pointer;
-  box-sizing: border-box;
   background-color: @b-color;
   border: 1px solid @c-border;
   text-align: center;
@@ -24,14 +31,7 @@
   border-radius: @radius;
 }
 
-.sl-button-per-icon {
-  margin-right: @gap-size;
-}
-
-.sl-button-suf-icon {
-  margin-left: @gap-size;
-}
-
+/**按钮大小*/
 .sl-button-size-small {
   .sl-button-size(65px, 28px)
 }
@@ -44,6 +44,7 @@
   .sl-button-size(85px, 32px)
 }
 
+/**按钮类型决定背景色 ， 字体色 ， 边框色*/
 .sl-button-type-primary {
   .sl-button-type(@C-BG-primary, @C-F-white);
 }
@@ -58,12 +59,4 @@
 
 .sl-button-type-default {
   .sl-button-type(@C-white, @C-blue-c, @C-blue-c);
-}
-
-.sl-button-type-disable {
-  cursor: default;
-
-  i {
-    cursor: default !important;
-  }
 }

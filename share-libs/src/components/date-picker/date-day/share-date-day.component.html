@@ -1,7 +1,8 @@
-<div class="share-date-picker" dateRangePicker shareClearIcon [inPickerOpt]="inOptions" [modelDay]="modelDay"
-  [inViewVal]="modelDay" (modelDayChange)="onModelDayChange($event)" (onClearValue)="onClearValue()">
+<div class="share-date-picker el_split_line" dateRangePicker shareClearIcon [inPickerOpt]="inOptions"
+  [modelDay]="modelDay" [inViewVal]="modelDay" (modelDayChange)="onModelDayChange($event)"
+  (onClearValue)="onClearValue()">
   <input type="text" [ngModel]="viewVal" [placeholder]="inPlaceholder">
-  <div class="function-icons" [ngClass]="'has-split-line'">
+  <div class="function-icons">
     <i class="date-day-icon-p"></i>
   </div>
 </div>

@@ -104,6 +104,9 @@ export const SYSTEM_MENU: MenuItem[] = [
         ifShow: true,
         children: [
             {
+                title: '按钮',
+                url: `${example}/button`
+            }, {
                 title: '表格',
                 children: [
                     {

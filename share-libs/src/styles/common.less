@@ -1,6 +1,11 @@
 //如果写了实体的.claaName{} ； 打包时所有引入了改less的less文件都会有该className
 @base-url: '../../assets/images/';
 
+.E_I {
+  display: inline-block;
+  
+}
+
 /**i标签作为图标的基本设置*/
 .Icon(@iconUrl, @w: 16px, @h: @w) {
   .Share-icon(@iconUrl, @w, @h)
@@ -61,13 +66,6 @@
   }
 
   vertical-align: middle;
-}
-
-/**弹性盒子居中*/
-.F-center() {
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 /**动画过程*/

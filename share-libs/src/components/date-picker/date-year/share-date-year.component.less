@@ -23,14 +23,14 @@
   position: relative;
 
   input {
-    .B();
+    border: 1px solid @C-B-default;
     width: 100%;
     height: 100%;
   }
 }
 
 .year-plan {
-  .B();
+  border: 1px solid @C-B-default;
   display: flex;
   max-width: 200px;
   min-width: 100px;
@@ -73,19 +73,19 @@
     background-color: #FFF;
 
     .item {
-      .B();
+      border: 1px solid @C-B-default;
       padding: 3px;
       border-radius: 2px;
       cursor: pointer;
 
       &:hover {
-        .B(@C-blue-a);
+        border: 1px solid @C-blue-a;
         color: @C-blue-a;
       }
     }
 
     &.active-item .item {
-      .B(@C-active);
+      border: 1px solid @C-active;
       color: @C-active;
     }
   }

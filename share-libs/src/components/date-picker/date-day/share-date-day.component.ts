@@ -40,7 +40,7 @@ export class ShareDateDayComponent {
         maxYear: 2100,//下拉选择框最大年份
         singleDatePicker: false,//单日期选择器
         timePicker: false,//小时和分钟选择器，需在local中设置format
-        timePicker24Hour: false,//24小时制
+        timePicker24Hour: true,//24小时制
         timePickerIncrement: 5,//分钟间隔
         timePickerSeconds: false,//秒选择器
         maxSpan: {

@@ -1,14 +1,21 @@
-export class ShareBtnPara {
-    btnClick?: () => {};
-    btnSize?: BtnSize = "default";
-    btnType?: BtnType = "primary";
+import { BtnSize, BtnType, IconClass } from "share-libs/src/enum";
+
+export class ShareBtn {
+    click?: () => {};
+    size?: BtnSize = BtnSize.default;
+    /**按钮 */
+    type?: BtnType = BtnType.primary;
     /**前置图标class*/
-    btnPerIcon?: string;
+    iconPer?: IconClass;
     /**后置图标class*/
-    btnSufIcon?: string;
-    /** 是否禁用*/
-    btnDisable?: boolean;
-    btnText?: string;
+    iconSuf?: IconClass;
+    /**是否禁用*/
+    disable?: boolean;
+
+    text?: string;
+    /**按钮宽（优先级>size） */
+    width?: number;
+    /**按钮高（优先级>size） */
+    height?: number;
+
 }
-export type BtnType = 'primary' | 'danger' | 'default' | 'gray';
-export type BtnSize = 'small' | 'default' | 'large';

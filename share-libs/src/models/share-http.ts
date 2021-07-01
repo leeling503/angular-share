@@ -5,6 +5,7 @@ interface HttpResult {
     info?: string;
     /**是否属于异常 */
     error?: boolean;
+    /**数据 */
     datas?: any;
 }
 

@@ -166,7 +166,7 @@ export class ShareSelectComponent implements OnInit {
     } else {
       this.nativeEl = this.nativeEl.querySelector('.share-select')
       let rect = this.nativeEl.getBoundingClientRect();
-      this.cdkConnectedOverlayWidth = rect.width;
+      this.cdkConnectedOverlayWidth = rect.width ;
     }
   }
 

@@ -1,5 +1,3 @@
-import { UtilTableRuleTags } from "share-libs/src/utils";
-
 /**view-left居左  view-right居右  border 四周均有边框    simple-border  上下有边框    background-color   背景色交替*/
 export type TableClassName = "border" | "simple-border" | "background-color" | "view-left" | 'view-right' | 'view-center';
 /**view-left居左  view-right居右  border 四周均有边框  underline 下划线  */
@@ -71,7 +69,7 @@ export class SharePage {
     pageRecord?: number = 15;//页容量
     recordCount?: number = 0;//总数
     pageCount?: number = 0;//总页数
-    pageSize?: string;// 适应getMarkPaging 这个接口
+    pageSize?: string;
     result?: any;
     datas?: any;
 }

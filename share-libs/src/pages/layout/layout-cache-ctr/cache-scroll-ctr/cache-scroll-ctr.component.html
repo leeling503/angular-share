@@ -1,5 +1,5 @@
 <div class="cache-scroll" #viewEl>
-  <span class="btn-prev" *ngIf="showScrollCtr" [class.el-disabled]="disableBefore" (click)="onScrollMove('before') ">
+  <span class="btn-prev" *ngIf="showScrollCtr" [class.el_disabled]="disableBefore" (click)="onScrollMove('before') ">
     <i class=" tabs-btn-icon"></i>
   </span>
   <div class="ctr-btns">
@@ -8,7 +8,7 @@
       </ng-content>
     </div>
   </div>
-  <span class="btn-next" *ngIf="showScrollCtr" [class.el-disabled]="disableAfter" (click)="onScrollMove('after') ">
+  <span class="btn-next" *ngIf="showScrollCtr" [class.el_disabled]="disableAfter" (click)="onScrollMove('after') ">
     <i class="tabs-btn-icon"></i>
   </span>
 </div>

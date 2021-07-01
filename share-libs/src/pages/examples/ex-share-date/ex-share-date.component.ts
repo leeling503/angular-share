@@ -15,6 +15,8 @@ export class ExShareDateComponent implements OnInit {
   inOptions = {
     autoApply: false,
   }
+
+  localA = { format: 'YYYY-MM-DD HH:mm' }
   ngOnInit() { }
   onModelMonthChange($event) {
     this.month = $event

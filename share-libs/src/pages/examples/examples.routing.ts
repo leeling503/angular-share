@@ -1,4 +1,5 @@
 import { RouterModule, Routes } from "@angular/router";
+import { ExShareButtonsComponent } from "./ex-share-buttons/ex-share-buttons.component";
 import { ExShareDateComponent } from "./ex-share-date/ex-share-date.component";
 import { ExShareFileComponent } from "./ex-share-file/ex-share-file.component";
 import { ExShareFlvComponent } from "./ex-share-flv/ex-share-flv.component";
@@ -14,6 +15,7 @@ let routes: Routes = [
     {
         path: '', component: ExMain, children: [
             { path: '', pathMatch: 'full', redirectTo: 'table' },
+            { path: 'button', component: ExShareButtonsComponent, data: { title: '按钮' } },
             { path: 'table', component: ExTableComponent, data: { title: '普通表格' } },
             { path: 'multi-table', component: ExMultiTableComponent, data: { title: '多表头表格' } },
             { path: 'box', component: ExShareRadioComponent, data: { title: '多种选框' } },

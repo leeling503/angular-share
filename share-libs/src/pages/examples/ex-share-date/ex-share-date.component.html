@@ -9,6 +9,14 @@
   </div>
   <div class="share-ex">
     <div class="share-date">
+      <share-date-day [(modelDay)]='dayA' [inLocale]="localA"></share-date-day>
+    </div>
+    <div>
+      {{dayA |json}}
+    </div>
+  </div>
+  <div class="share-ex">
+    <div class="share-date">
       <share-date-day [(modelDay)]='dayB' [inIfSingle]="false" [inIfAutoApply]="false"></share-date-day>
     </div>
     <div>
