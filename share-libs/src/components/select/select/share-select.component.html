@@ -41,7 +41,7 @@
           [ngClass]='{"open-children-icon":option.showChild}'></i>
       </ng-container>
       <ng-container *ngIf="_showCheck">
-        <share-checkbox [modelChecked]='option._check' [inIsOther]='option._mix' (onClick)="onCheckChange( option)">
+        <share-checkbox [modelChecked]='option._check' [inIfOther]='option._mix' (onClick)="onCheckChange( option)">
         </share-checkbox>
       </ng-container>
       <div class="node-content-text"><span>{{option.value}}</span></div>

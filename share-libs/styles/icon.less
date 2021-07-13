@@ -1,74 +1,97 @@
-.Share-I {
-  display: inline-block;
+/**后缀图标 同时也用于确认清除图标的位置*/
+.E_suffer_icon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 100%;
 }
 
-// -p  表示带定位且垂直居中 ， 
+.E_split_line {
+  border-left: 1px solid @C-B-default;
+}
+
+/**icon的大小 E_ICON_SIZE_ */
+.E_I_S_s {
+  .e_i(12px)
+}
+
+.E_I_S,
+.E_I_S_d {
+  .e_i()
+}
+
+.E_I_S_l {
+  .e_i(20px)
+}
+
+.E_I_S_A {
+  .e_i(16px, 12px)
+}
+
 //下拉三角形
-.icon-pull-down {
-  .Icon('icon/pull_down', 12px, 8px);
-}
-
-.pull-down-icon-p {
-  .Icon-P('icon/pull_down', 12px, 8px);
+.E_I_pull_down {
+  .e_b_i('icon/pull_down');
 }
 
 //日期图标
-.date-day-icon-p {
-  .Icon-P('date/date_day');
-}
-
-.date-day-icon {
-  .Icon('date/date_day');
+.E_I_date_day {
+  .e_b_i('date/date_day');
 }
 
 //清楚图标 X
-.icon-clear-p {
-  .Icon-P('icon/com_clear');
-  display: none;
+.E_I_clear_p {
+  .e_b_i('icon/com_clear');
+}
+
+// 菜单图标集合
+.e_icon_big(@url) {
+  .e_i(22px);
+  .e_b_i(@url);
+}
+
+.e_icon(@url) {
+  .e_i(16px);
+  .e_b_i(@url);
 }
 
 .menu-logout-icon {
-  .Icon-big('layout/layout_menu_logout');
-}
-
-
-// 菜单图标集合
-.Icon-big(@url) {
-  .Icon(@url, 22px);
+  .e_icon_big('layout/layout_menu_logout');
 }
 
 .menu-setting-icon {
-  .Icon-big('menu/menu_main_setting');
+  .e_icon_big('menu/menu_main_setting');
 }
 
 .menu-report-icon {
-  .Icon-big('menu/menu_main_report');
+  .e_icon_big('menu/menu_main_report');
 }
 
 .menu-monitor-icon {
-  .Icon-big('menu/menu_main_monitor');
+  .e_icon_big('menu/menu_main_monitor');
 }
 
 .menu-daily-icon {
-  .Icon-big('menu/menu_main_daily');
+  .e_icon_big('menu/menu_main_daily');
 }
 
 .menu-bench-icon {
-  .Icon('menu/menu_icon_bdcard');
+  .e_icon('menu/menu_icon_bdcard');
 }
 
 .menu-base-icon {
-  .Icon('menu/menu_icon_bdinfo');
+  .e_icon('menu/menu_icon_bdinfo');
 }
 
 .menu-base-buoy-icon {
-  .Icon('menu/menu_icon_bdstatus');
+  .e_icon('menu/menu_icon_bdstatus');
 }
 
 .menu-base-buoy-form-icon {
-  .Icon('menu/menu_icon_detail');
+  .e_icon('menu/menu_icon_detail');
 }
 
 .menu-base-buoy-change-icon {
-  .Icon('menu/menu_icon_dict');
+  .e_icon('menu/menu_icon_dict');
 }

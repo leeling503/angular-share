@@ -1,10 +1,6 @@
 @import '../../../styles/index.less';
 @C-B: @C-B-default;
-@C-BG: @C-BG-white ;
-
-.Icon(@path) {
-  .Share-icon(@path)
-}
+@C-BG: @C-BG-default ;
 
 /**动画过程*/
 .Transition() {
@@ -105,7 +101,7 @@
   }
 
   .select-clear {
-    .Share-icon('icon/com_clear');
+    .e_icon('icon/com_clear');
     position: absolute;
     right: 0px;
     display: none;
@@ -113,7 +109,7 @@
 
 
   .select-control {
-    .Share-icon('icon/pull_down');
+    .e_icon('icon/pull_down');
     background-size: auto;
     cursor: pointer;
     display: none;
@@ -200,7 +196,7 @@
 }
 
 .children-icon {
-  .Share-icon('icon/pull_down');
+  .e_icon('icon/pull_down');
   background-size: auto;
   flex-shrink: 0;
 

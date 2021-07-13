@@ -11,7 +11,7 @@ export enum BtnSize {
 export enum BtnType {
     /** */
     primary = 'primary',
-    danger = 'primary',
-    default = 'primary',
-    gray = 'primary',
+    danger = 'danger',
+    default = 'default',
+    gray = 'gray',
 }

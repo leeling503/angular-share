@@ -3,20 +3,33 @@ import { UtilChangesNoFirstValue } from "../utils";
 
 
 @Directive({
-    selector: '[shareClearIcon],share-clear-icon'
+    selector: '[shareClearIcon]'
 })
 export class ShareClearIconDirective {
-    constructor(private el: ElementRef, private render2: Renderer2) { }
+    constructor(private el: ElementRef, private render2: Renderer2) {
+        this.nativeEl = this.el.nativeElement;
+    }
+    nativeEl: HTMLElement
     @Input() inViewVal: boolean = false;
-    @Input() inRightPx: number = 25;
     @Output() onClearValue: EventEmitter<any> = new EventEmitter();
     clearEl: HTMLElement;
 
-    ngOnInit(): void {
-        this.clearEl = this.render2.createElement('i')
-        this.render2.addClass(this.clearEl, 'icon-clear-p');
-        this.render2.setStyle(this.clearEl, 'right', this.inRightPx + 'px')
-        this.render2.appendChild(this.el.nativeElement, this.clearEl);
+    ngOnChanges(changes: SimpleChanges): void { }
+
+    ngOnInit(): void { }
+
+    /**创建清楚图标 */
+    creatEl() {
+        this.clearEl = this.render2.createElement('i');
+        this.render2.addClass(this.clearEl, 'E_I_clear_p');
+        this.render2.setStyle(this.clearEl, 'margin-right', '5px');
+        this.render2.setStyle(this.clearEl, 'cursor', 'pointer');
+        let el = this.nativeEl.querySelector('.E_suffer_icon');
+        if (el) {
+            this.render2.insertBefore(this.nativeEl, this.clearEl, this.nativeEl.querySelector('.E_suffer_icon'));
+        } else {
+            this.render2.appendChild(this.nativeEl, this.clearEl);
+        }
         let that = this;
         this.clearEl.onclick = function (this: GlobalEventHandlers, event: MouseEvent): any {
             event.stopPropagation();
@@ -25,25 +38,21 @@ export class ShareClearIconDirective {
         }
     }
 
-    ngOnChanges(changes: SimpleChanges): void {
-        if (UtilChangesNoFirstValue(changes, "inViewVal")) {
-            if (this.inViewVal) {
-                this.render2.setStyle(this.clearEl, 'display', 'inline-block')
-            } else {
-                this.render2.setStyle(this.clearEl, 'display', 'none')
-            }
-        }
-    }
 
     @HostListener('mousemove')
     mouseEnter() {
         if (this.inViewVal) {
+            !this.clearEl && this.creatEl();
             this.render2.setStyle(this.clearEl, 'display', 'inline-block')
+        } else if (this.clearEl) {
+            this.render2.setStyle(this.clearEl, 'display', 'none')
         }
     }
 
     @HostListener('mouseleave')
     mouseLeave() {
-        this.render2.setStyle(this.clearEl, 'display', 'none')
+        if (this.clearEl) {
+            this.render2.setStyle(this.clearEl, 'display', 'none')
+        }
     }
 }

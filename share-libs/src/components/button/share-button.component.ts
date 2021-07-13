@@ -2,7 +2,8 @@ import { Component, OnInit, Input, ElementRef, RendererFactory2, Renderer2, Simp
 import { ShareUpdataClassService } from '../../services/share-updata-class.service';
 import { IconClass } from 'share-libs/src/enum/icon.enum';
 import { ShareBtn } from './share-buttom';
-import { BtnSize, BtnType } from 'share-libs/src/enum';
+import { BtnSize, BtnType, ColorEnum } from 'share-libs/src/enum';
+import { UtilChanges, UtilChangesUndefined, UtilChangesValue } from 'share-libs/src/utils';
 
 @Component({
   selector: 'share-button,[share-button]',
@@ -10,7 +11,7 @@ import { BtnSize, BtnType } from 'share-libs/src/enum';
   styleUrls: ['./share-button.component.less'],
   providers: [ShareUpdataClassService],
   host: {
-    "(click)": "triggerClick()"
+    "(click)": "triggerClick($event)"
   }
 })
 export class ShareButtonComponent implements OnInit {
@@ -19,30 +20,78 @@ export class ShareButtonComponent implements OnInit {
     this.nativeEl = this.el.nativeElement;
     this.renderer2 = this.rendeFactory.createRenderer(null, null)
   }
-
-  @Input() inPara: ShareBtn;//按钮配置
-  @Input() btnClick: () => {};
+  /**按钮配置*/
+  @Input() inPara: ShareBtn = new ShareBtn();
+  @Input() inIconPer: IconClass;
+  @Input() inIconSuf: IconClass;
+  @Input() inType: BtnType = BtnType.default;
+  @Input() inSize: BtnSize = BtnSize.default;
+  @Input() inWidth: number;
+  @Input() inHeight: number;
+  @Input() inText: string;
+  @Input() inDisable: boolean;
+  @Input() inColor: ColorEnum;
+  @Input() inColorBG: ColorEnum;
+  @Input() inColorBD: ColorEnum;
+  @Input() inClickPer: (event?: MouseEvent) => any;
+  @Input() inClick: (event?: MouseEvent) => any;
+  @Input() inClickSuf: (event?: MouseEvent) => any;
+  @Output() onClick: EventEmitter<any> = new EventEmitter();
   nativeEl: HTMLElement;
   renderer2: Renderer2;
   classMap: any = {};
   /**前置图标class*/
-  _iconPer: IconClass;
   /**后置图标class*/
+  _iconPer: IconClass;
   _iconSuf: IconClass;
-
-  _type: BtnType;
-  _size: BtnSize;
-  /**设置宽高 ，优先级高于size */
+  _type: BtnType = BtnType.default;
+  _size: BtnSize = BtnSize.default;
   _width: number;
   _height: number;
   _text: string;
   _disable: boolean;
+  _color: ColorEnum;
+  _colorBG: ColorEnum;
+  _colorBD: ColorEnum;
+  _clickPer: (event?: MouseEvent) => any;
+  _click: (event?: MouseEvent) => any;
+  _clickSuf: (event?: MouseEvent) => any;
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.inPara && this.inPara) {
-      this.inPara = Object.assign({}, this.inPara);
-      this.btnClick = this.inPara.click;
-      this.setClassMap();
+    if (UtilChangesValue(changes, 'inPara')) {
       this.setConfig();
+      this.setClassMap();
+      this.setStyleByPara();
+    }
+    if (UtilChanges(changes, 'inIconPer')) {
+      this._iconPer = this.inIconPer;
+    }
+    if (UtilChanges(changes, 'inIconSuf')) {
+      this._iconSuf = this.inIconSuf;
+    }
+    if (UtilChangesValue(changes, 'inText')) {
+      this._text = this.inText
+    }
+    if (UtilChanges(changes, 'inType') || UtilChanges(changes, 'inSize') || UtilChanges(changes, 'inDisable')) {
+      this._type = this.inType;
+      this._size = this.inSize;
+      this.setClassMap()
+    }
+    if (UtilChanges(changes, 'inWidth') || UtilChanges(changes, 'inHeight') || UtilChanges(changes, 'inColor') || UtilChanges(changes, 'inColorBG') || UtilChanges(changes, 'inColorBD')) {
+      this._width = this.inWidth;
+      this._height = this.inHeight;
+      this._color = this.inColor;
+      this._colorBG = this.inColorBG;
+      this._colorBD = this.inColorBD;
+      this.setStyleByPara();
+    }
+    if (UtilChangesValue(changes, 'inClickPer')) {
+      this._clickPer = this.inClickPer
+    }
+    if (UtilChangesValue(changes, 'inClick')) {
+      this._click = this.inClick
+    }
+    if (UtilChangesValue(changes, 'inClickSuf')) {
+      this._clickSuf = this.inClickSuf
     }
   }
 
@@ -52,14 +101,37 @@ export class ShareButtonComponent implements OnInit {
   }
 
   setConfig() {
-    this._size = this.inPara.size || BtnSize.default;
-    this._type = this.inPara.type || BtnType.default;
-    this._disable = this.inPara.disable;
-    this._iconPer = this.inPara.iconPer;
-    this._iconSuf = this.inPara.iconSuf;
-    this._text = this.inPara.text;
-    this._width = this.inPara.width;
-    this._height = this.inPara.height;
+    this._size = this.inSize || this.inPara.size;
+    this._type = this.inType || this.inPara.type;
+    this._disable = this.inDisable || this.inPara.disable;
+    this._iconPer = this.inIconPer || this.inPara.iconPer;
+    this._iconSuf = this.inIconSuf || this.inPara.iconSuf;
+    this._text = this.inText || this.inPara.text;
+    this._width = this.inWidth || this.inPara.width;
+    this._height = this.inHeight || this.inPara.height;
+    this._color = this.inColor || this.inPara.color;
+    this._colorBG = this.inColorBG || this.inPara.colorBG;
+    this._colorBD = this.inColorBD || this.inPara.colorBD;
+    this._click = this.inClick || this.inPara.click;
+    this._clickPer = this.inClickPer || this.inPara.clickPer;
+  }
+
+  setStyleByPara() {
+    if (typeof this._width === 'number') {
+      this.renderer2.setStyle(this.nativeEl.querySelector(".share-button"), "width", this._width + 'px')
+    }
+    if (typeof this._height === 'number') {
+      this.renderer2.setStyle(this.nativeEl.querySelector(".share-button"), "height", this._height + 'px')
+    }
+    if (this._colorBG) {
+      this.renderer2.setStyle(this.nativeEl.querySelector(".share-button"), "background-color", this._colorBG);
+    }
+    if (this._colorBD || this._colorBG) {
+      this.renderer2.setStyle(this.nativeEl.querySelector(".share-button"), "border-color", this._colorBD || this._colorBG);
+    }
+    if (this._color) {
+      this.renderer2.setStyle(this.nativeEl.querySelector(".share-button"), "color", this._color)
+    }
   }
 
 
@@ -72,8 +144,22 @@ export class ShareButtonComponent implements OnInit {
     this.upElClass.updateElClass(this.nativeEl.querySelector(".share-button"), classMap)
   }
 
-  triggerClick() {
-    !this._disable && this.btnClick && this.btnClick();
+  triggerClick($event: MouseEvent) {
+    if (this._disable) return;
+    this._click && this._click($event);
+    this.onClick.emit($event)
   }
 
+  onElClickPer($event: MouseEvent) {
+    if (this._clickPer) {
+      $event.stopPropagation()
+      this._clickPer($event);
+    }
+  }
+  onElClickSuf($event: MouseEvent) {
+    if (this._clickSuf) {
+      $event.stopPropagation()
+      this._clickSuf($event);
+    }
+  }
 }

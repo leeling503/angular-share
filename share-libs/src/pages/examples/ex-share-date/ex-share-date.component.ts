@@ -9,6 +9,7 @@ export class ExShareDateComponent implements OnInit {
 
   constructor() { }
   month = "2020-07";
+  monthB = "";
   dayA;
   dayB;
   year = "2020";
@@ -17,8 +18,15 @@ export class ExShareDateComponent implements OnInit {
   }
 
   localA = { format: 'YYYY-MM-DD HH:mm' }
-  ngOnInit() { }
+  ngOnInit() {
+    setTimeout(() => {
+      this.monthB = ''
+    }, 3000);
+  }
   onModelMonthChange($event) {
     this.month = $event
+  }
+  onModelMonthChangeB($event) {
+    this.monthB = $event
   }
 }

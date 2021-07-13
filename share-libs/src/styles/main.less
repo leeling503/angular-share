@@ -9,61 +9,45 @@
 * TF:transform 过度动画
 */
 /**全局禁用样式*/
-.E_D() {
+.e_d() {
   pointer-events: none;
   opacity: 0.5;
 }
 
-.E_D_drop() {
+.e_d_drop() {
   opacity: 0.5;
   cursor: no-drop !important;
 }
 
 /**边框*/
-.E_BD() {
+.e_bd() {
   border: 1px solid @C-B-default;
   border-radius: 3px;
-
-  &:hover {
-    border: 1px solid @C-B-active;
-  }
 }
 
 /**全局的文本样式*/
-.E_T_placeholder() {
+.e_t_placeholder() {
   color: #cccccc;
 }
 
 /**下拉打开选择弹窗的动画*/
-.E_TF() {
+.e_tf() {
   /**动画过程*/
   transform: translate(-50%, -50%) rotate(-90deg);
   transition: 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
 }
 
 /**Flex模式水平垂直居中*/
-.E_F() {
+.e_f() {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-wrap: wrap;
 }
 
 /**水平垂直居中*/
-.E_F_center() {
+.e_f_center() {
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-/**分割线*/
-.E_split_line() {
-  position: relative;
-  &::after {
-    content: '';
-    position: absolute;
-    height: 100%;
-    width: 1px;
-    right: 23px;
-    border-left: 1px solid @C-B-default;
-  }
 }

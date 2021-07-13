@@ -1,10 +1,2 @@
-<input type="text" [ngModel]="value" class="share-input input-size-{{inputSize}}" (keydown)="eventKeyDown($event)"
-  (keydown)="eventKeyUp($event)" (change)="eventChange($event)"/>
-  <input type="checkbox" id="jack" value="Jack" [(ngModel)]="checkedNames">
-  <label for="jack">Jack</label>
-  <input type="checkbox" id="john" value="John" [(ngModel)]="checkedNames">
-  <label for="john">John</label>
-  <input type="checkbox" id="mike" value="Mike" [(ngModel)]="checkedNames">
-  <label for="mike">Mike</label>
-  <br>
-  <span>Checked names: {{ checkedNames }}</span>
+<input type="text" class="share-input input-size-{{inSize}} E_BD E_BD_hover" [ngModel]="model"
+  (ngModelChange)="onEventChange($event)" />

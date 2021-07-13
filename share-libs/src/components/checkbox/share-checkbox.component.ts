@@ -12,9 +12,8 @@ import { Component, OnInit, Input, ElementRef, SimpleChanges, Output, EventEmitt
 })
 export class ShareCheckboxComponent implements OnInit {
   @Input() modelChecked: boolean = false;//是否选中
-  @Input() inIsOther: boolean = false;//是否属于第三种other状态(modelChecked为false才会显示为第三种状态)
-  @Input() inIsDisable: boolean = false;
-  @Input() inIsFather: boolean = false;
+  @Input() inIfOther: boolean = false;//是否属于第三种other状态(modelChecked为false才会显示为第三种状态)
+  @Input() inIfDisable: boolean = false;
   @Output() onClick: EventEmitter<any> = new EventEmitter();
   @Output() modelCheckedChange: EventEmitter<any> = new EventEmitter();
   classMap: any = {};
@@ -23,7 +22,7 @@ export class ShareCheckboxComponent implements OnInit {
     this.nativeEl = this.el.nativeElement;
   }
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.modelChecked || changes.inIsOther || changes.inIsDisable) {
+    if (changes.modelChecked || changes.inIfOther || changes.inIfDisable) {
       this.upClass()
     }
   }
@@ -33,10 +32,8 @@ export class ShareCheckboxComponent implements OnInit {
   }
 
   tiggerClick() {
-    if (this.inIsDisable) return;
-    // if (this.inIsFather) { this.onClick.emit(!this.modelChecked); return }
+    if (this.inIfDisable) return;
     this.modelChecked = !this.modelChecked;
-    // this.upClass();
     this.modelCheckedChange.emit(this.modelChecked);
     this.onClick.emit(this.modelChecked);
     this.upClass();
@@ -45,9 +42,9 @@ export class ShareCheckboxComponent implements OnInit {
   upClass() {
     let classMap = {
       "share-check-default": !this.modelChecked,
-      "share-check-other": this.inIsOther,
+      "share-check-other": this.inIfOther,
       "share-check-selected": this.modelChecked,
-      "share-check-disable": this.inIsDisable
+      "share-check-disable": this.inIfDisable
     }
     this.upEl.updateElClass(this.nativeEl.querySelector('.share-cheack-box'), classMap);
   }

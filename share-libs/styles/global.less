@@ -1,61 +1,66 @@
 /**
 * E:标识节点 element  全局样式标识
 * BD:边框  border  
-* BC:背景色 background-color
-* C:文本色 color
+* BGC:背景色 background-color  color.less
+* C:文本色 color  color.less
 * D:标识禁用
 * F:Flex 
 * T:文本
 * TF:transform 过度动画
 */
+/**全局禁选样式*/
+.E_D_S {
+  user-select: none;
+}
+
 /**全局禁用样式*/
 .E_D,
 .E_D * {
-  .E_D();
+  .e_d();
 }
 
 .E_D_drop,
 .E_D_drop * {
-  .E_D_drop()
+  .e_d_drop()
 }
 
 /**边框*/
 .E_BD {
-  .E_BD()
+  .e_bd()
+}
+
+/**hover激活的边框颜色*/
+.E_BD_hover {
+  &:hover {
+    border-color: @C-B-hover;
+
+    * {
+      border-color: @C-B-hover  !important;
+    }
+  }
 }
 
 /**下拉打开选择弹窗的动画*/
 .E_TF {
-  .E_TF()
+  .e_tf()
 }
 
 /**Flex模式水平垂直居中*/
 .E_F {
-  .E_F();
+  .e_f();
 }
 
 
 /**水平垂直居中*/
 .E_F_center {
-  .E_F_center()
+  .e_f_center()
 }
 
 /**全局的文本样式*/
 .E_T_placeholder {
-  .E_T_placeholder()
+  .e_t_placeholder()
 }
 
-
-/**分割线*/
-.E_split_line {
-  position: relative;
-
-  &::after {
-    content: '';
-    position: absolute;
-    height: 100%;
-    width: 1px;
-    right: 23px;
-    border-left: 1px solid @C-B-default;
-  }
+.E_overlay_plan {
+  background-color: #FFF;
 }

@@ -1,5 +1,5 @@
 import { CdkOverlayOrigin } from "@angular/cdk/overlay";
-import { Component, EventEmitter,  Input, Output, SimpleChanges, ViewChild } from "@angular/core";
+import { Component, EventEmitter, Input, Output, SimpleChanges, ViewChild } from "@angular/core";
 
 @Component({
     selector: 'share-date-year',
@@ -17,8 +17,6 @@ export class ShareDateYearComponent {
     overlayOpen: boolean = false;
     yearValues: number[] = [];
     ngOnChanges(changes: SimpleChanges): void {
-        //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
-        //Add '${implements OnChanges}' to the class.
         if (changes.modelYear && this.modelYear) {
             if (typeof this.modelYear === 'string') {
                 this.modelYear = parseInt(this.modelYear)

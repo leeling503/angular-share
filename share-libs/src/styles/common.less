@@ -1,74 +1,33 @@
 //如果写了实体的.claaName{} ； 打包时所有引入了改less的less文件都会有该className
-@base-url: '../../assets/images/';
-
-.E_I {
-  display: inline-block;
-  
-}
-
-/**i标签作为图标的基本设置*/
-.Icon(@iconUrl, @w: 16px, @h: @w) {
-  .Share-icon(@iconUrl, @w, @h)
-}
-
-/**i标签作为图标且垂直居中的基本设置*/
-.Icon-P(@iconUrl, @w: 16px, @h: @w) {
-  .Share-icon-position(@iconUrl, @w, @h)
-}
-
-/**i标签作为图标且垂直居中的基本设置*/
-.Share-icon-position(@iconUrl, @w: 16px, @h: @w) {
-  .Share-icon(@iconUrl, @w: 16px, @h: @w);
-  position: absolute;
-  top: 50%;
-  right: 5px;
-  transform: translate(0, -50%);
-}
-
-/**i标签作为图标的基本设置*/
-.Share-icon(@iconUrl, @w: 16px, @h: @w) {
+@base-url: '/assets/images/';
+/**I标签的大小*/
+.e_i(@w: 16px, @y: @w) {
   display: inline-block;
   width: @w;
-  height: @h;
+  height: @y;
   min-width: @w;
-  min-height: @h;
-  cursor: pointer;
-  .Back-img(@iconUrl);
+  min-height: @y;
+}
+
+/**背景图片路径*/
+.e_i_u(@url) {
+  background-image: url('@{base-url}@{url}.png');
+}
+
+/**带后缀背景图片路径*/
+.e_i_u_suffix(@url) {
+  background-image: url('@{base-url}@{url}');
 }
 
 /**背景*/
-.Back-img(@iconUrl) {
-  .Img-url(@iconUrl);
+.e_b_i(@iconUrl) {
+  .e_i_u(@iconUrl);
   background-size: 100% 100%;
   background-repeat: no-repeat;
   background-position: center;
 }
 
-/**背景图片路径*/
-.Img-url(@url) {
-  background-image: url('@{base-url}@{url}.png');
-}
-
-/**背景图片路径*/
-.Img-url-suffix(@url) {
-  background-image: url('@{base-url}@{url}');
-}
-
-/**利用vertical-align垂直居中*/
-.Y-center() {
-  max-height: 100%;
-
-  &::before {
-    content: '';
-    height: 100%;
-    width: 0px;
-    vertical-align: middle;
-  }
-
-  vertical-align: middle;
-}
-
-/**动画过程*/
-.Transition() {
-  transition: 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+.e_icon(@url, @W: 16px, @H: @W) {
+  .e_i(@W, @H);
+  .e_b_i(@url);
 }

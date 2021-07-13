@@ -1,9 +1,9 @@
-import { BtnSize, BtnType, IconClass } from "share-libs/src/enum";
+import { BtnSize, BtnType, ColorEnum, IconClass } from "share-libs/src/enum";
 
-export class ShareBtn {
-    click?: () => {};
+export class ShareBtn<T = any> {
+    /**按钮预设大小 */
     size?: BtnSize = BtnSize.default;
-    /**按钮 */
+    /**按钮背景色*/
     type?: BtnType = BtnType.primary;
     /**前置图标class*/
     iconPer?: IconClass;
@@ -11,11 +11,19 @@ export class ShareBtn {
     iconSuf?: IconClass;
     /**是否禁用*/
     disable?: boolean;
-
+    /**文字*/
     text?: string;
     /**按钮宽（优先级>size） */
     width?: number;
     /**按钮高（优先级>size） */
     height?: number;
-
+    /**背景色 */
+    colorBG?: ColorEnum;
+    /**边框颜色 */
+    colorBD?: ColorEnum;
+    /**文字颜色 */
+    color?: ColorEnum;
+    click?: () => any;
+    clickPer?: () => any;
+    clickSuf?: () => any;
 }

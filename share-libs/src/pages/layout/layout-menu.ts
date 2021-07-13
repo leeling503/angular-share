@@ -139,6 +139,12 @@ export const SYSTEM_MENU: MenuItem[] = [
             }, {
                 title: '地图',
                 url: `${example}/map`
+            }, {
+                title: '输入框',
+                url: `${example}/input`
+            }, {
+                title: '弹窗',
+                url: `${example}/modal`
             }
         ]
     },

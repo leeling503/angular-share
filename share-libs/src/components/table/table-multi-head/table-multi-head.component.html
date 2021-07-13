@@ -14,8 +14,8 @@
                   [ngStyle]="{'width': item._width+'px','left':item.styckyLeft}" [class]="item.classNames">
                   <ng-container [ngSwitch]="item.type" *ngIf="item.ifShow !== false">
                     <div *ngSwitchCase="'check'">
-                      <share-checkbox [modelChecked]='headAllSelect(tableItems.datas)' [inIsFather]="true"
-                        [inIsOther]='headMix(tableItems.datas)' (onClick)="onCheckThead($event,tableItems.datas)">
+                      <share-checkbox [modelChecked]='headAllSelect(tableItems.datas)'
+                        [inIfOther]='headMix(tableItems.datas)' (onClick)="onCheckThead($event,tableItems.datas)">
                       </share-checkbox>
                     </div>
                     <div *ngSwitchDefault>
@@ -36,7 +36,7 @@
                     <ng-container [ngSwitch]="item.type" *ngIf="item.ifShow !== false">
                       <div *ngSwitchCase="'check'">
                         <share-checkbox [modelChecked]='getDataCheckStatus(data)'
-                          [inIsDisable]="getDataDisableStatus(data)" (onClick)="onCheckedData($event, data)">
+                          [inIfDisable]="getDataDisableStatus(data)" (onClick)="onCheckedData($event, data)">
                         </share-checkbox>
                       </div>
                       <div *ngSwitchCase="'serial'"> {{data.serial}}</div>

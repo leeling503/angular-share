@@ -1,11 +1,11 @@
 <div class="modal-select-item">
   <div *ngIf="inHasAll" class="select-item">
-    <share-checkbox [modelChecked]="allSelectItem._checked" [inIsOther]='allSelectItem._mix'
+    <share-checkbox [modelChecked]="allSelectItem._checked" [inIfOther]='allSelectItem._mix'
       (onClick)="acceptCheckAll($event)"></share-checkbox>
     <span>{{allSelectItem.value}}</span>
   </div>
   <div *ngFor="let item of inItems" class="select-item">
-    <share-checkbox [modelChecked]="item._checked" [inIsDisable]="!item.canChange" (onClick)="acceptCheck($event,item)">
+    <share-checkbox [modelChecked]="item._checked" [inIfDisable]="!item.canChange" (onClick)="acceptCheck($event,item)">
     </share-checkbox>
     <span>{{item.value}}</span>
   </div>

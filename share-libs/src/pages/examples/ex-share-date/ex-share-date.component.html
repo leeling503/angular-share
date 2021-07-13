@@ -25,12 +25,22 @@
   </div>
   <div class="share-ex">
     <div class="share-date">
-      <share-date-month [inIfDefualt]='true' [inIfYear]='true' [(modelMonth)]="month"
+      <share-date-month [inIfDefualt]='false' [inIfYear]='true' [(modelMonth)]="month"
         (modelMonthChange)="onModelMonthChange($event)">
       </share-date-month>
     </div>
     <div>
       {{month}}
+    </div>
+  </div>
+  <div class="share-ex">
+    <div class="share-date">
+      <share-date-month [inIfDefualt]='true' [inIfYear]='false' [(modelMonth)]="monthB"
+        (modelMonthChange)="onModelMonthChangeB($event)">
+      </share-date-month>
+    </div>
+    <div>
+      {{monthB}}
     </div>
   </div>
   <div class="share-ex">

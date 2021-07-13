@@ -21,11 +21,11 @@
   height: 100%;
   display: flex;
   position: relative;
+  align-items: center;
 
   input {
-    border: 1px solid @C-B-default;
-    width: 100%;
-    height: 100%;
+    border: 0px solid @C-B-default;
+    flex-grow: 1;
   }
 }
 
@@ -48,7 +48,6 @@
       position: absolute;
       top: 50%;
       left: 50%;
-      .Icon('icon/pull_down', 12px, 8px);
     }
   }
 
@@ -70,23 +69,24 @@
     flex-grow: 1;
     width: 33%;
     height: 30px;
+    margin: 5px 0px;
     background-color: #FFF;
 
     .item {
-      border: 1px solid @C-B-default;
       padding: 3px;
-      border-radius: 2px;
       cursor: pointer;
 
       &:hover {
-        border: 1px solid @C-blue-a;
-        color: @C-blue-a;
+        background-color: @C-BG-hover;
+        border: 1px solid @C-B-hover;
+        color: @C-F-white;
       }
     }
 
     &.active-item .item {
-      border: 1px solid @C-active;
-      color: @C-active;
+      background-color: @C-BG-active;
+      border: 1px solid @C-B-active;
+      color: @C-F-white;
     }
   }
 }

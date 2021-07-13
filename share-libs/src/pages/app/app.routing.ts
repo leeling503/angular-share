@@ -7,7 +7,7 @@ let routes: Routes = [
     { path: 'error', loadChildren: () => import('../error/error.module').then(m => m.ErrorModule) },
     {
         path: 'layout',
-        canActivateChild: [RouteCanActive],
+        // canActivateChild: [RouteCanActive],
         loadChildren: () => import('../layout/layout.module').then(m => m.LayoutModule)
     },
     { path: '**', redirectTo: 'layout' }

@@ -23,7 +23,7 @@
       </ng-container>
       <ng-container *ngFor="let option of addOptions">
         <div class="add-node">
-          <div share-checkbox [inIsDisable]="!option.value" [modelChecked]="option._check" class="option-check"
+          <div share-checkbox [inIfDisable]="!option.value" [modelChecked]="option._check" class="option-check"
             (onClick)="onOptionCheck($event,option)">
           </div>
           <input [(ngModel)]="option.value" placeholder="请输入" />

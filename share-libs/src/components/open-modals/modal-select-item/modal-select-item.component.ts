@@ -15,8 +15,6 @@ export class ShareModalSelectItemComponent {
     allMixStatus: boolean = false;
     allSelectItem: ShareModalSelectItem = { value: '全选/反选', key: '_all', _checked: false, _mix: false }
     ngOnChanges(changes: SimpleChanges): void {
-        //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
-        //Add '${implements OnChanges}' to the class.
         if (changes.inCheckKey || changes.inItems) {
             this.setCheckedItem()
         }

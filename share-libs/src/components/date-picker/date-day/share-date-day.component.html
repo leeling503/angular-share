@@ -1,8 +1,7 @@
-<div class="share-date-picker el_split_line" dateRangePicker shareClearIcon [inPickerOpt]="inOptions"
-  [modelDay]="modelDay" [inViewVal]="modelDay" (modelDayChange)="onModelDayChange($event)"
-  (onClearValue)="onClearValue()">
-  <input type="text" [ngModel]="viewVal" [placeholder]="inPlaceholder">
-  <div class="function-icons">
-    <i class="date-day-icon-p"></i>
+<div class="share-date-picker E_BD E_BD_hover" dateRangePicker [inPickerOpt]="inOptions" [modelDay]="modelDay"
+  (modelDayChange)="onModelDayChange($event)" (onClearValue)="onClearValue()" shareClearIcon [inViewVal]="modelDay">
+  <input type="text" [ngModel]="viewVal" [placeholder]="inPlaceholder" readonly>
+  <div class="E_suffer_icon E_split_line">
+    <i class="E_I_date_day"></i>
   </div>
 </div>

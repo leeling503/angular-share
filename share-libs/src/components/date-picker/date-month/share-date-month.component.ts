@@ -1,5 +1,6 @@
 import { CdkOverlayOrigin } from "@angular/cdk/overlay";
-import { Component, EventEmitter, HostListener, Input, Output, ViewChild } from "@angular/core";
+import { Component, EventEmitter, HostListener, Input, Output, SimpleChanges, ViewChild } from "@angular/core";
+import { UtilChanges, UtilChangesValue } from "share-libs/src/utils";
 import { DateMonth } from "../share-date-picker.model";
 
 @Component({
@@ -18,13 +19,17 @@ export class ShareDateMonthComponent {
     /**是否设置默认值 */
     @Input() inIfDefualt: boolean = true;//设置默认值
     @Output() modelMonthChange: EventEmitter<string> = new EventEmitter();
+    /**主框显示的（年）月份 */
     viewMonth: string;
+    /**弹框显示的年份*/
     viewYear: number;
-
     overlayOpen: boolean = false;
-    monthValue: number;
+    /**年 */
     yearValue: number;
-    monthValues: DateMonth[] = [
+    monthValue: number;
+    dateMonth: DateMonth;
+    /**月历表*/
+    dateMonths: DateMonth[] = [
         { id: 1, value: '01', name: '一月' },
         { id: 2, value: '02', name: '二月' },
         { id: 3, value: '03', name: '三月' },
@@ -39,9 +44,32 @@ export class ShareDateMonthComponent {
         { id: 12, value: '12', name: '十二月' },
     ]
 
+    ngOnChanges(changes: SimpleChanges): void {
+        if (UtilChanges(changes, 'modelMonth')) {
+            this.viewMonth = this.modelMonth;
+            if (this.modelMonth) {
+                let value = parseInt(this.modelMonth.split('-')[0]);
+                if (value > 13) {
+                    this.inIfYear = true;
+                    this.viewYear = this.yearValue = value;
+                    this.monthValue = parseInt(this.modelMonth.split('-')[1]);
+                } else {
+                    this.yearValue = null;
+                    this.monthValue = value;
+                }
+                this.setDataMonth();
+            } else {
+                this.viewMonth = this.modelMonth = "";
+                this.viewYear = this.yearValue = this.monthValue = null;
+            }
+        }
+    }
+
     ngOnInit(): void {
-        if (this.inIfDefualt) {
-            this.initMonth(false);
+        if (this.inIfDefualt && !this.modelMonth) {
+            this.monthValue = new Date().getMonth() + 1;
+            this.viewYear = new Date().getUTCFullYear();
+            this.setDataMonth();
             Promise.resolve().then(() => {
                 this.setModelMonth();
             })
@@ -50,33 +78,16 @@ export class ShareDateMonthComponent {
 
     onToggleOpen() {
         this.overlayOpen = !this.overlayOpen;
-        this.initMonth();
     }
 
-    initMonth(openFlag: boolean = true) {
-        let curMonth = this.monthValue || new Date().getMonth() + 1;
-        let curYear = this.yearValue || new Date().getUTCFullYear();
-        if (this.modelMonth) {
-            let value = parseInt(this.modelMonth.split('-')[0]);
-            if (value > 13) {
-                this.yearValue = value;
-                this.monthValue = parseInt(this.modelMonth.split('-')[1]) || curMonth;
-                this.inIfYear = true;
-            } else {
-                this.yearValue = curYear;
-                this.monthValue = value;
-            }
-        } else {
-            if (this.inIfAuto || !openFlag) {
-                this.monthValue = curMonth;
-            }
-            this.yearValue = curYear;
-        }
-        this.viewYear = this.yearValue;
+    /**设置选中的月份模型 */
+    setDataMonth(month: DateMonth = undefined) {
+        this.dateMonth = month || this.dateMonths.filter(e => e.id == this.monthValue)[0];
     }
 
-    setModelMonth(month: DateMonth = undefined) {
-        month = month || this.monthValues.filter(e => e.id == this.monthValue)[0];
+    /**设置年和月份 , 并改变model */
+    setModelMonth() {
+        let month = this.dateMonth;
         this.yearValue = this.viewYear;
         this.viewMonth = this.modelMonth = this.inIfYear ? this.yearValue + '-' + month.value : month.value;
         if (!this.inIfYear) {
@@ -85,9 +96,10 @@ export class ShareDateMonthComponent {
         this.modelMonthChange.emit(this.modelMonth);
     }
 
+    /**页面选择月份 */
     onSelectMonth(month: DateMonth) {
-        this.monthValue = month.id;
-        this.setModelMonth(month);
+        this.setDataMonth(month);
+        this.setModelMonth();
         this.closeOverlay();
     }
 
@@ -98,22 +110,24 @@ export class ShareDateMonthComponent {
         }
     }
 
+    /**年份更改 */
     onGoYear(num: number) {
         this.viewYear = this.viewYear + num;
+    }
+
+    /**点击遮罩关闭 */
+    onClose() {
+        this.closeOverlay();
+        this.autoSetMonth();
     }
 
     closeOverlay() {
         this.overlayOpen = false;
     }
 
-    onClose() {
-        this.closeOverlay();
-        this.autoSetMonth();
-    }
-
     onClearValue() {
         this.viewMonth = this.modelMonth = "";
-        this.yearValue = this.monthValue = null;
+        this.dateMonth = this.yearValue = this.monthValue = null;
         this.modelMonthChange.emit(this.modelMonth);
     }
 }

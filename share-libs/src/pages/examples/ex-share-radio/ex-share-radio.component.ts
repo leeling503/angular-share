@@ -20,7 +20,7 @@ export class ExShareRadioComponent implements OnInit {
     valueKey: 'value',
     disCancel: false,
     clear: false
-  };;
+  };
   radioParaC: RadiosPara = {
     multi: false,
     iconType: 'radio',
