@@ -4,6 +4,7 @@ import { SelectOption, SelectConfig, SelectModelInputs } from '../share-select.m
 import { UtilArrayClear, UtilArrayGetObjByValue, UtilArrayRemoveItem, UtilArraySetKeyValue, UtilIsEqual } from 'share-libs/src/utils';
 import { ShareInputType } from 'share-libs/src/models';
 import { UtilChangesValue, UtilChangesNoFirstValue } from 'share-libs/src/utils/util-component';
+import { IfStmt } from '@angular/compiler';
 
 @Component({
   selector: 'share-select',
@@ -50,9 +51,13 @@ export class ShareSelectComponent implements OnInit {
   _hasActive: boolean;
   /**可输入选款 */
   _ifInput: boolean;
+  /**开启可输入后用户输入的值 */
+  inputValue: string;
 
   _inputType: ShareInputType = 'string';
+  /**emit出去的选中数据*/
   _outOptions: SelectModelInputs;
+  /**选中*/
   orgCheckOptions: SelectOption[] = [];
   activeOption: SelectOption = {};
   optionsOpen: boolean = false;
@@ -78,10 +83,23 @@ export class ShareSelectComponent implements OnInit {
     this.setConfig();
     this.setCheckOptions();
     this.setCheckMixState();
-    this.setOpenWidth();
     Promise.resolve().then(() => {
       this.closeOptions();
     })
+  }
+
+  /**设置配置项 */
+  setConfig() {
+    this._config = Object.assign(new SelectConfig(), this.inConfig)
+    this._multi = this._config.ifMulti;
+    this._showCheck = this._config.ifCheck;
+    this._leastOne = this._config.leastOne;
+    this._placeholder = this._config.placeholder;
+    this._showClear = this._config.ifClear;
+    this._noneTip = this._config.noneTip;
+    this._showFlag = this._config.ifFlag;
+    this._hasActive = this._config.ifActive;
+    this._ifInput = this._config.ifInput;
   }
 
   /**设置选中 */
@@ -120,20 +138,6 @@ export class ShareSelectComponent implements OnInit {
     }
   }
 
-  /**设置配置项 */
-  setConfig() {
-    this._config = Object.assign(new SelectConfig(), this.inConfig)
-    this._multi = this._config.ifMulti;
-    this._showCheck = this._config.ifCheck;
-    this._leastOne = this._config.leastOne;
-    this._placeholder = this._config.placeholder;
-    this._showClear = this._config.ifClear;
-    this._noneTip = this._config.noneTip;
-    this._showFlag = this._config.ifFlag;
-    this._hasActive = this._config.ifActive;
-    this._ifInput = this._config.ifInput;
-  }
-
   /**设置选项状态 */
   setOptionsState() {
     /**清除mix状态 */
@@ -160,17 +164,21 @@ export class ShareSelectComponent implements OnInit {
     father && father.splice(father.length - 1, 1)
   }
 
+  ngAfterViewInit(): void { }
+
+  /**设置弹窗宽度 */
   setOpenWidth() {
     if (this.inConfig.openWidth) {
       this.cdkConnectedOverlayWidth = this.inConfig.openWidth;
     } else {
-      this.nativeEl = this.nativeEl.querySelector('.share-select')
-      let rect = this.nativeEl.getBoundingClientRect();
-      this.cdkConnectedOverlayWidth = rect.width ;
+      let el = this.nativeEl.querySelector('.share-select')
+      let rect = el.getBoundingClientRect();
+      this.cdkConnectedOverlayWidth = rect.width || undefined;
     }
   }
 
-  clickClearNodes() {
+  /**清空 */
+  onClickClearNodes() {
     event.stopPropagation();
     let option = this.checkOptions[0];
     UtilArrayClear(this.checkOptions);
@@ -182,7 +190,8 @@ export class ShareSelectComponent implements OnInit {
     this.closeOptions();
   }
 
-  clickClearNode(option: SelectOption) {
+  /**删除选中 */
+  onClickClearNode(option: SelectOption) {
     event.stopPropagation();
     this.removeItem(option);
     this.setOptionsState();
@@ -190,6 +199,7 @@ export class ShareSelectComponent implements OnInit {
   }
 
   clickToggleOpen() {
+    this.cdkConnectedOverlayWidth || this.setOpenWidth();
     this.optionsOpen = !this.optionsOpen;
   }
 
@@ -238,7 +248,7 @@ export class ShareSelectComponent implements OnInit {
     this.checkOptions.push(option)
   }
 
-  /**子项的显影 */
+  /**子项的显隐 */
   onClickOptionChild(option: SelectOption) {
     event.stopPropagation();
     option.showChild = !option.showChild;
@@ -247,16 +257,16 @@ export class ShareSelectComponent implements OnInit {
   closeOptions() {
     this.optionsOpen = !1;
     if (UtilIsEqual(this.orgCheckOptions, this.checkOptions, this.inUuid)) return;
-    this.orgCheckOptions = [...this.checkOptions]
-    let uuids = this.orgCheckOptions.map(e => e[this.inUuid])
+    let original = this.orgCheckOptions = [...this.checkOptions]
+    let uuids = original.map(e => e[this.inUuid])
     if (this._inputType == "string") {
       this._outOptions = uuids.join(',');
     } else if (this._inputType == "strings") {
       this._outOptions = uuids;
     } else if (this._inputType == 'object') {
-      this._outOptions = this.orgCheckOptions[0]
+      this._outOptions = original[0]
     } else {
-      this._outOptions = this.orgCheckOptions;
+      this._outOptions = original;
     }
     this.modelOptionChange.emit(this._outOptions);
   }
@@ -264,8 +274,19 @@ export class ShareSelectComponent implements OnInit {
   backdropClick() {
     this.closeOptions();
   }
-  inputValue
-  onInputValueChange() {
-    console.log(this.inputValue)
+
+  /**用户输入结束 */
+  onInputValueEnd() {
+    let value = this.inputValue;
+    if (!value) { return }
+    let option: SelectOption = UtilArrayGetObjByValue(this.inOptions, 'value', value);
+    if (option) {
+      option._check = true;
+    } else {
+      option = { key: value, value, showName: value, _check: true }
+      this.inOptions.push(option);
+    }
+    this.inputValue = null;
+    this.onCheckChange(option);
   }
 }

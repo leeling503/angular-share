@@ -5,8 +5,9 @@ import { NgModule } from '@angular/core';
 import { ShareCheckboxModule } from '../checkbox/share-checkbox.module';
 import { ShareSelectComponent } from './select/share-select.component';
 import { ShareSelectAdd } from './select-add/share-select-add.component';
+import { ShareDirectiveModule } from 'share-libs/src/directives/share-directive.module';
 @NgModule({
-    imports: [CommonModule, FormsModule, OverlayModule, ShareCheckboxModule],
+    imports: [CommonModule, FormsModule, OverlayModule, ShareDirectiveModule, ShareCheckboxModule],
     declarations: [ShareSelectComponent, ShareSelectAdd],
     providers: [],
     exports: [ShareSelectComponent, ShareSelectAdd]

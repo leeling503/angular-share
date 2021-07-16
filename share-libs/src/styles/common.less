@@ -1,5 +1,6 @@
 //如果写了实体的.claaName{} ； 打包时所有引入了改less的less文件都会有该className
 @base-url: '/assets/images/';
+
 /**I标签的大小*/
 .e_i(@w: 16px, @y: @w) {
   display: inline-block;
@@ -27,7 +28,9 @@
   background-position: center;
 }
 
+/**图标*/
 .e_icon(@url, @W: 16px, @H: @W) {
+  cursor: pointer;
   .e_i(@W, @H);
   .e_b_i(@url);
 }

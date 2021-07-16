@@ -11,7 +11,7 @@ import { SelectAddConfig, SelectAddOption } from "../share-select.model";
 export class ShareSelectAdd {
     constructor(private el: ElementRef) { this.nativeEl = this.el.nativeElement }
     @Input() inConfig: SelectAddConfig;
-    @Input() inOptions: SelectAddOption[] = [{ key: '', value: '焊接A' }, { key: '', value: '焊接B' }, { key: '', value: '焊接X' }, { key: '', value: '焊接C' }];
+    @Input() inOptions: SelectAddOption[] = [];
     @Input() modelOptions: SelectAddOption[];
     @Output() modelOptionsChange: EventEmitter<any> = new EventEmitter();
     @ViewChild(CdkOverlayOrigin, { static: true }) cdkOverlayOrigin: CdkOverlayOrigin;
@@ -24,6 +24,8 @@ export class ShareSelectAdd {
     checkOptions: SelectAddOption[];
     /**选项 */
     options: SelectAddOption[];
+    /**显示的项 */
+    showText: string;
     /**配置 */
     /**多选框 */
     _ifCheck: boolean = true;
@@ -37,22 +39,22 @@ export class ShareSelectAdd {
     _ifAdd: boolean = true;
     /**无数据提示语 */
     _placeholder: string = "请选择";
+    _activeOption: SelectAddOption;
     ngOnChanges(changes: SimpleChanges): void {
-        if (changes.inOptions) {
-            this.options = this.inOptions;
-        }
         if (changes.inConfig && this.inConfig) {
             this.setConfig()
         }
+        if (changes.inOptions) {
+            this.options = this.inOptions;
+            this.setCheckByModel();
+        }
         if (changes.modelOptions && this.modelOptions) {
-            this.checkOptions = this.modelOptions;
             this.setCheckByModel();
         }
     }
 
     ngOnInit(): void {
         this.options = this.inOptions;
-        this.setOpenWidth();
     }
 
     setConfig() {
@@ -72,33 +74,64 @@ export class ShareSelectAdd {
         if (this.inConfig && this.inConfig.openWidth) {
             this.cdkConnectedOverlayWidth = this.inConfig.openWidth;
         } else {
-            this.nativeEl = this.nativeEl.querySelector('.share-select-add')
-            let rect = this.nativeEl.getBoundingClientRect();
-            this.cdkConnectedOverlayWidth = rect.width;
+            let el = this.nativeEl.querySelector('.share-select-add')
+            let rect = el.getBoundingClientRect();
+            this.cdkConnectedOverlayWidth = rect.width || 200;
         }
     }
 
     onOptionCheck(flag: boolean, option) {
+        if (!this._ifMulti) {
+            this._activeOption && (this._activeOption._check = false)
+        }
+        this._activeOption = option;
         option._check = flag;
     }
 
     onAddOption() {
-        let flag = this.addOptions.every(e => e.value !== undefined && e.value !== '' && e.value !== null)
-        if (flag) {
+        let flag = this.addOptions.some(e => e.value == '')
+        if (!flag) {
             this.addOptions.push({ key: '', value: '' })
         }
     }
 
+    onInputValueEnd(value: string) {
+        console.log(value)
+    }
+
     /**设置勾选通过选中对象 */
-    setCheckByModel(modelOptions: SelectAddOption[] = this.modelOptions) {
-        this.addOptions = [];
+    setCheckByModel(modelOptions: SelectAddOption[] = this.modelOptions || []) {
+        if (typeof modelOptions == 'string') {
+            let options = (<string>modelOptions).split(',')
+            modelOptions = [];
+            options.forEach(e => {
+                modelOptions.push({ key: e, value: e })
+            })
+        }
+        this.checkOptions = modelOptions;
+        this.showText = modelOptions.map((e) => e.showName || e.key).join('、')
+        let options = this.options || [], addOptions = [], flag = true; this.addOptions = [];
         this.clearAllCheck();
+        /**添加没有的 */
         modelOptions.forEach(e => {
-            this.options.map(option => {
+            let addFlag = options.some(option => option.key && e.key == option.key || option.value && e.value == option.value)
+            if (!addFlag) {
+                addOptions.push(e)
+            }
+        })
+        options.push(...addOptions)
+        /**勾选选中的 */
+        modelOptions.forEach(e => {
+            for (let i = 0, len = options.length; i < len && flag; i++) {
+                const option = options[i];
                 if (option.key && e.key == option.key || option.value && e.value == option.value) {
                     option._check = true;
+                    if (!this._ifMulti) {
+                        this._activeOption = option;
+                        flag = false;
+                    }
                 }
-            })
+            }
         })
     }
 
@@ -111,7 +144,7 @@ export class ShareSelectAdd {
     onBtnClick(flag: boolean = false) {
         this.closeOpenNode();
         if (flag) { this.setCheckByModel(); return };
-        let checkOptions = this.checkOptions = [];
+        let checkOptions: SelectAddOption[] = this.checkOptions = [];
         this.options.push(...this.addOptions);
         this.options.forEach(e => {
             if (e._check == true) {
@@ -120,11 +153,13 @@ export class ShareSelectAdd {
         })
         this.setCheckByModel(checkOptions);
         this.modelOptions = checkOptions;
+        this.showText = checkOptions.map((e) => e.showName || e.value).join('、')
         this.modelOptionsChange.emit(checkOptions)
     }
 
     openOptions() {
         this.optionsOpen = true;
+        this.cdkConnectedOverlayWidth || this.setOpenWidth();
     }
 
     closeOpenNode() {

@@ -1,48 +1,70 @@
-import { Overlay, OverlayRef } from '@angular/cdk/overlay';
-import { ShareOverlayService } from '../../services/share-overlay.service';
+import { Overlay } from '@angular/cdk/overlay';
+import { ShareOverlayConfig, ShareOverlayPosition, ShareOverlayService } from '../../services/share-overlay.service';
 
-import { Injectable, ComponentRef } from '@angular/core';
-import { ShareModalPara } from './share-modal.model';
-import { ShareModalComponent } from './modal.component';
+import { Injectable } from '@angular/core';
+import { ShareModalPara, ShareModalTip } from './share-modal.model';
+import { ShareModalComponent } from './modal/modal.component';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { ShareModalRef } from './modalRef.service';
+import { ShareModalTipComponent } from './modal-tip/modal-tip.component';
 @Injectable({
     providedIn: 'root'
 })
 export class ShareModalService {
-    private overlayRef: OverlayRef
-    private modalRef: ComponentRef<ShareModalComponent<any>> | null; // Modal ComponentRef, "null" means it has been destroyed
     constructor(private shareOverlayer: ShareOverlayService, private overlay: Overlay) { }
 
-    getOverlayRef(): OverlayRef {
-        return this.overlayRef;
+    /**打开弹窗 , 返回弹窗的实例*/
+    openModal<T>(para: ShareModalPara<T> = {}): ShareModalRef<T> {
+        this.setModalPara(para);
+        this.setPosition(para);
+        this.setOverlayer(para);
+        let modalRef = this.createModal(para);
+        /**关闭的回调 */
+        para.onCbClose && modalRef.emitAfterClose.subscribe(res => {
+            para.onCbClose(res)
+        })
+        return modalRef;
     }
 
-    getModalRef<T>(): ComponentRef<ShareModalComponent<T>> {
-        return this.modalRef;
+    /**打开提示类型弹窗 , 返回弹窗的实例*/
+    openTipModal(tip: ShareModalTip = new ShareModalTip()): ShareModalRef<ShareModalTipComponent> {
+        let data: Partial<ShareModalTipComponent> = {
+            type: tip.type,
+            info: tip.info
+        }, para: ShareModalPara<ShareModalTipComponent> = {}, modal = new ShareModalTip();
+        modal.overlayer.width = 370, modal.overlayer.height = 220, modal.overlayer.backdropClick = false, modal.overlayer.backdropClass = 'E_O_shade';
+        para.component = ShareModalTipComponent;
+        para.componentPara = data;
+        tip.overlayer = Object.assign(modal.overlayer, tip.overlayer);
+        para = Object.assign(para, tip);
+        return this.openModal(para)
     }
 
-    /**
-     * 打开弹窗
-     * @param para ShareModalPara
-     */
-    openModal(para: ShareModalPara = {}): ShareModalRef {
-        para.modalPara = para.modalPara || {};
-        this.overlayRef && this.overlayRef.detach();
-        this.createModal(para);
-        return this.modalRef.instance;
+    /**设置弹窗组件的属性 */
+    private setModalPara(para: ShareModalPara) {
+        let m = Object.assign(para.modalPara || {}, para);
+        para.modalPara = m;
     }
 
-    private createModal<T>(para: ShareModalPara<T>): void {
-        let config = para.overlayerConfig || {};
-        let showOverlay = this.shareOverlayer.showComponent(new ComponentPortal(ShareModalComponent), undefined, config);
-        this.modalRef = showOverlay.modalRef;
-        para.modalPara.overlayRef = showOverlay.overlayRef;
-        if (para.modalComponent) {
-            para.modalPara.modalComponent = para.modalComponent;
-            para.modalPara.modalComponentPara = para.modalComponentPara || {};
-        }
-        this.shareOverlayer.instanceComponent(showOverlay, para.modalPara);
+    /**设置弹窗的属性 */
+    private setOverlayer(para: ShareModalPara) {
+        let p = Object.assign(para.overlayer || {}, para);
+        let o = new ShareOverlayConfig(p);
+        para.overlayer = o;
+    }
+
+    /**设置弹窗的位置 */
+    private setPosition(para: ShareModalPara) {
+        let o = Object.assign(para.position || {}, para);
+        let p = new ShareOverlayPosition(o);
+        para.position = p;
+    }
+
+    private createModal<T>(para: ShareModalPara<T>): ShareModalRef {
+        let show = this.shareOverlayer.showComponent(new ComponentPortal(ShareModalComponent), para.position, para.overlayer);
+        para.modalPara.overlayRef = show.overlayRef;
+        this.shareOverlayer.instanceComponent(show, para.modalPara);
+        return show.modalRef.instance
     }
 
 }

@@ -13,7 +13,6 @@
 }
 
 .share-select {
-  box-sizing: border-box;
   width: 100%;
   height: 100%;
   min-height: 29px;
@@ -37,7 +36,7 @@
   &.select-has-border {
     .node-data-text {
       border: 1px solid @C-B;
-      padding-left: 2px;
+      padding: 0px 2px;
       margin: 0px 2px;
       border-radius: 2px;
     }
@@ -60,16 +59,6 @@
     }
   }
 
-  &.select-has-control {
-    .select-clear {
-      right: 16px;
-    }
-
-    .select-control {
-      display: inline-block;
-    }
-  }
-
   .selected-nodes {
     flex-grow: 1;
     overflow: auto;
@@ -83,7 +72,7 @@
 
     .selected-node {
       display: inline-block;
-      flex-grow: 1;
+      flex-shrink: 0;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -91,7 +80,9 @@
     }
 
     .selected-input {
-      flex-grow: 1;
+      flex-shrink: 0;
+      min-width: 100px;
+      width: 100px;
 
       input {
         width: 100%;
@@ -106,20 +97,6 @@
     right: 0px;
     display: none;
   }
-
-
-  .select-control {
-    .e_icon('icon/pull_down');
-    background-size: auto;
-    cursor: pointer;
-    display: none;
-
-    &.select-control-on {
-      transform: rotateZ(180deg);
-      .Transition();
-    }
-  }
-
 }
 
 .open-nodes {
@@ -195,12 +172,11 @@
   }
 }
 
-.children-icon {
-  .e_icon('icon/pull_down');
+.E_I_pull_down {
   background-size: auto;
-  flex-shrink: 0;
+  display: inline-block;
 
-  &.open-children-icon {
+  &.pull_down-on {
     transform: rotateZ(180deg);
     .Transition();
   }

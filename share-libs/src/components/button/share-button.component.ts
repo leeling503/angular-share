@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ElementRef, RendererFactory2, Renderer2, Simp
 import { ShareUpdataClassService } from '../../services/share-updata-class.service';
 import { IconClass } from 'share-libs/src/enum/icon.enum';
 import { ShareBtn } from './share-buttom';
-import { BtnSize, BtnType, ColorEnum } from 'share-libs/src/enum';
+import { SizeBtn, TypeBtn, ColorEnum } from 'share-libs/src/enum';
 import { UtilChanges, UtilChangesUndefined, UtilChangesValue } from 'share-libs/src/utils';
 
 @Component({
@@ -24,8 +24,8 @@ export class ShareButtonComponent implements OnInit {
   @Input() inPara: ShareBtn = new ShareBtn();
   @Input() inIconPer: IconClass;
   @Input() inIconSuf: IconClass;
-  @Input() inType: BtnType = BtnType.default;
-  @Input() inSize: BtnSize = BtnSize.default;
+  @Input() inType: TypeBtn;
+  @Input() inSize: SizeBtn;
   @Input() inWidth: number;
   @Input() inHeight: number;
   @Input() inText: string;
@@ -44,8 +44,8 @@ export class ShareButtonComponent implements OnInit {
   /**后置图标class*/
   _iconPer: IconClass;
   _iconSuf: IconClass;
-  _type: BtnType = BtnType.default;
-  _size: BtnSize = BtnSize.default;
+  _type: TypeBtn = TypeBtn.default;
+  _size: SizeBtn = SizeBtn.default;
   _width: number;
   _height: number;
   _text: string;
@@ -101,8 +101,8 @@ export class ShareButtonComponent implements OnInit {
   }
 
   setConfig() {
-    this._size = this.inSize || this.inPara.size;
-    this._type = this.inType || this.inPara.type;
+    this._size = this.inSize || this.inPara.size || this._size;
+    this._type = this.inType || this.inPara.type || this._type;
     this._disable = this.inDisable || this.inPara.disable;
     this._iconPer = this.inIconPer || this.inPara.iconPer;
     this._iconSuf = this.inIconSuf || this.inPara.iconSuf;

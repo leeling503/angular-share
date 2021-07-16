@@ -9,7 +9,7 @@ export class ShareLoadingDirective {
     }
     @Input() inLoading: boolean = false;
     native: HTMLElement;
-    key = "share-loading-flag";
+    key = "E_loading";
     parentEl: HTMLElement;
     loadEl: HTMLElement;
     ngOnChanges(changes: SimpleChanges): void {

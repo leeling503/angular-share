@@ -64,3 +64,75 @@
 .E_overlay_plan {
   background-color: #FFF;
 }
+
+.e_o_shade() {
+  background-color: rgba(51, 51, 51, 0.35);
+  // background-color: @C-black-e;
+  // opacity: 0.25;
+}
+
+//半透明遮罩
+.E_O_shade {
+  .e_o_shade()
+}
+
+//透明遮罩
+.E_O_transparent {
+  background-color: transparent;
+}
+
+.E_O_panel {
+  background-color: #FFF;
+  border: 1px solid @C-blue-b;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+//加载中 share-loading
+.E_loading {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+
+  &::before {
+    content: 'loading...';
+    font-size: 18px;
+    color: @C-blue-d;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .e_o_shade();
+  }
+
+  &::after {
+    content: '';
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    border-bottom: 2px solid @C-blue-b;
+    border-top: 2px solid @C-blue-b;
+    border-radius: 50%;
+    animation: loading 1000ms linear 0ms infinite normal;
+  }
+
+}
+
+@keyframes loading {
+  0% {
+    transform: translate(-50%, -50%) rotateZ(0deg);
+  }
+
+  50% {
+    transform: translate(-50%, -50%) rotateZ(180deg);
+  }
+
+  100% {
+    transform: translate(-50%, -50%) rotateZ(360deg);
+  }
+}
+

@@ -80,4 +80,4 @@ function UtilSetValue(data1, data2) {
 }
 
 
-export { UtilIsUndefined, UtilIsFalse, UtilIsEmpty, UtilIsEqual, UtilGetAttrValue, UtilValueType, UtilIsFunction }
+export { UtilIsUndefined, UtilIsFalse, UtilIsEmpty, UtilIsEqual, UtilGetAttrValue, UtilValueType, UtilIsFunction, UtilSetValue }

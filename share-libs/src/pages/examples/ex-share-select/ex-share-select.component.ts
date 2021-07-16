@@ -1,6 +1,7 @@
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { Component, OnInit } from '@angular/core';
 import * as _ from 'lodash';
+import { ShareModalRef } from 'share-libs/src/components/modal/modalRef.service';
 import { SelectConfig, SelectOption } from 'share-libs/src/components/select/share-select.model';
 
 @Component({

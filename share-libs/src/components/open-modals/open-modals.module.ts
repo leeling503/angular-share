@@ -3,7 +3,7 @@ import { NgModule } from "@angular/core";
 import { ShareCheckboxModule } from "../checkbox/share-checkbox.module";
 import { ShareModalSelectItemComponent } from "./modal-select-item/modal-select-item.component";
 let components = [
-    ShareModalSelectItemComponent
+    ShareModalSelectItemComponent,
 ]
 /**
  * 小弹窗

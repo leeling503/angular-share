@@ -1,5 +1,5 @@
-<div class="share-date-year  E_BD E_BD_hover" cdkOverlayOrigin (click)="onToggleOpen()" shareClearIcon
-  (onClearValue)="onClearValue()" [inViewVal]="modelYear">
+<div class="share-date-year  E_BD E_BD_hover" cdkOverlayOrigin (click)="onToggleOpen()" shareIcon
+  (onIconClick)="onClearValue()" [inView]="modelYear">
   <input type="text" [ngModel]="viewYear" [placeholder]="inPlaceholder">
   <div class="E_suffer_icon E_split_line">
     <i class="E_I_date_day"></i>
@@ -7,9 +7,9 @@
 </div>
 
 <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="cdkOverlayOrigin" [cdkConnectedOverlayHasBackdrop]="true"
-  [cdkConnectedOverlayBackdropClass]='"transparent-overlay-back"' [cdkConnectedOverlayOpen]="overlayOpen"
+  [cdkConnectedOverlayBackdropClass]='"E_O_transparent"' [cdkConnectedOverlayOpen]="overlayOpen"
   [cdkConnectedOverlayOffsetY]='3' (backdropClick)="onClose()">
-  <div class="year-plan E_overlay_plan">
+  <div class="year-plan E_BD">
     <div class="per-year" (click)="onGoYear(-9)"> <i class="E_I_pull_down  E_I_S_A"></i></div>
     <div class="year-items">
       <div class="year-item" [ngClass]="{'active-item':year === modelYear}" *ngFor="let year of yearValues">

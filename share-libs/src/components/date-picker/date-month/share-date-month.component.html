@@ -1,5 +1,5 @@
-<div class="share-date-month  E_BD E_BD_hover" cdkOverlayOrigin (click)="onToggleOpen()" shareClearIcon
-  (onClearValue)="onClearValue()" [inViewVal]="modelMonth">
+<div class="share-date-month  E_BD E_BD_hover" cdkOverlayOrigin (click)="onToggleOpen()" shareIcon
+  (onIconClick)="onClearValue()" [inView]="modelMonth">
   <input type="text" [ngModel]="viewMonth" [placeholder]="inPlaceholder" readonly>
   <div class="E_suffer_icon E_split_line">
     <i class="E_I_date_day"></i>
@@ -7,9 +7,9 @@
 </div>
 
 <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="cdkOverlayOrigin" [cdkConnectedOverlayHasBackdrop]="true"
-  [cdkConnectedOverlayBackdropClass]='"transparent-overlay-back"' [cdkConnectedOverlayOpen]="overlayOpen"
+  [cdkConnectedOverlayBackdropClass]='"E_O_transparent"' [cdkConnectedOverlayOpen]="overlayOpen"
   [cdkConnectedOverlayOffsetY]='3' (backdropClick)="onClose()">
-  <div class="month-plan E_overlay_plan E_BD">
+  <div class="month-plan E_BD">
     <div class="month-year" *ngIf="inIfYear">
       <div class="per-year" (click)="onGoYear(-1)"><i class="E_I_pull_down E_I_S_A"></i></div>
       <div class="year-cont"><input [(ngModel)]="viewYear"></div>

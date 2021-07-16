@@ -1,0 +1,14 @@
+<div class="share-modal">
+  <div class="modal-title">
+    <div class="title-text">{{title}}</div>
+    <div class="E_I_close E_I_S_l share-modal-close" (click)="closeModal()"></div>
+  </div>
+  <div class="modal-content">
+    <ng-template #bodyContainer></ng-template>
+  </div>
+  <div class="modal-footer" *ngIf="footerBtns&&footerBtns.length > 0">
+    <ng-container *ngFor="let btn of footerBtns">
+      <share-button [inPara]="btn"></share-button>
+    </ng-container>
+  </div>
+</div>

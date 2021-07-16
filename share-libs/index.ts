@@ -10,9 +10,10 @@ import { ShareFileUploadModule } from './src/components/upload-file/share-file-u
 import { Share3DModule } from './src/components/three-model/three-model.module';
 import { ShareMapModule } from './src/components/map/share-map.module';
 import { ShareInputModule } from './src/components/input/share-input.module';
+import { ShareModalModule } from './src/components/modal/modal.module';
 
 
-export { ShareDateModule, ShareSelectModule, ShareTableModule, ShareCheckboxModule, ShareButtonModule, ShareRadioModule, SharePaginationModule, ShareViewFlvModule, ShareFileUploadModule, Share3DModule, ShareMapModule, ShareInputModule };
+export { ShareDateModule, ShareSelectModule, ShareTableModule, ShareCheckboxModule, ShareButtonModule, ShareRadioModule, SharePaginationModule, ShareViewFlvModule, ShareFileUploadModule, Share3DModule, ShareMapModule, ShareInputModule, ShareModalModule };
 export const MODULES = [
     ShareRadioModule,
     ShareDateModule,
@@ -24,5 +25,6 @@ export const MODULES = [
     ShareViewFlvModule,
     ShareFileUploadModule,
     Share3DModule,
-    ShareInputModule
+    ShareInputModule,
+    ShareModalModule
 ];

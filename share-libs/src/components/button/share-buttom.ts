@@ -1,10 +1,10 @@
-import { BtnSize, BtnType, ColorEnum, IconClass } from "share-libs/src/enum";
+import { SizeBtn, TypeBtn, ColorEnum, IconClass } from "share-libs/src/enum";
 
 export class ShareBtn<T = any> {
     /**按钮预设大小 */
-    size?: BtnSize = BtnSize.default;
+    size?: SizeBtn = SizeBtn.default;
     /**按钮背景色*/
-    type?: BtnType = BtnType.primary;
+    type?: TypeBtn = TypeBtn.primary;
     /**前置图标class*/
     iconPer?: IconClass;
     /**后置图标class*/

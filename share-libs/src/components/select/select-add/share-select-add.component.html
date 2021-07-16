@@ -1,16 +1,21 @@
-<div class="share-select-add" cdkOverlayOrigin (click)="openOptions()">
-  <ng-container *ngIf="(!checkOptions || checkOptions.length==0)">
-    <div class="selected-node text_placeholder">
-      <span>{{_placeholder}}</span>
-    </div>
-  </ng-container>
-  <ng-container *ngFor="let node of checkOptions;last as last">
-    <span>{{node.showName || node.value}}</span><span *ngIf="!last">、</span>
-  </ng-container>
+<div class="share-select-add share-select" cdkOverlayOrigin (click)="openOptions()">
+  <div class="selected-nodes">
+    <ng-container *ngIf="(!checkOptions || checkOptions.length==0)">
+      <div class="selected-node text_placeholder">
+        <span>{{_placeholder}}</span>
+      </div>
+    </ng-container>
+    <ng-container *ngFor="let node of checkOptions;last as last">
+      <span>{{node.showName || node.value}}</span><span *ngIf="!last">、</span>
+    </ng-container>
+  </div>
+  <div class="E_suffer_icon E_split_line">
+    <i class="E_I_pull_down" [ngClass]=" {'pull_down-on':optionsOpen}"></i>
+  </div>
 </div>
 <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="cdkOverlayOrigin" [cdkConnectedOverlayHasBackdrop]="true"
   [cdkConnectedOverlayOpen]="optionsOpen" [cdkConnectedOverlayOffsetY]='3'
-  [cdkConnectedOverlayWidth]='cdkConnectedOverlayWidth' [cdkConnectedOverlayBackdropClass]="'transparent-overlay-back'"
+  [cdkConnectedOverlayWidth]='cdkConnectedOverlayWidth' [cdkConnectedOverlayBackdropClass]="'E_O_transparent'"
   (backdropClick)="closeOpenNode()">
   <div class="open-panel">
     <div class="open-nodes">
@@ -18,7 +23,9 @@
         <div class="option-node">
           <div share-checkbox class="option-check" [modelChecked]="option._check"
             (onClick)="onOptionCheck($event,option)"></div>
-          {{option.value}}
+          <span [title]="option.value">
+            {{option.value}}
+          </span>
         </div>
       </ng-container>
       <ng-container *ngFor="let option of addOptions">
@@ -26,7 +33,8 @@
           <div share-checkbox [inIfDisable]="!option.value" [modelChecked]="option._check" class="option-check"
             (onClick)="onOptionCheck($event,option)">
           </div>
-          <input [(ngModel)]="option.value" placeholder="请输入" />
+          <input [(ngModel)]="option.value" (keydown.enter)="onInputValueEnd(option.value)"
+            (blur)="onInputValueEnd(option.value)" placeholder="请输入" />
         </div>
       </ng-container>
       <ng-container *ngIf="_ifAdd">

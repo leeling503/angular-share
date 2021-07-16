@@ -1,0 +1,55 @@
+@import '../../../styles/index.less';
+
+:host {
+  width: 100%;
+  height: 100%;
+}
+
+.share-modal {
+  background-color: @C-BG-default;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.modal-title {
+  width: 100%;
+  height: 39px;
+  padding: 0px 15px;
+  background-color: @C-BG-primary;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+
+  .title-text {
+    flex-grow: 1;
+    text-align: left;
+    font-size: 18px;
+    color: white;
+  }
+}
+
+.modal-content {
+  width: 100%;
+  flex-grow: 1;
+  overflow: auto;
+  padding: 10px;
+}
+
+.modal-footer {
+  width: 100%;
+  height: 39px;
+  padding: 0px 15px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  share-button {
+    margin: 0px 15px;
+  }
+}

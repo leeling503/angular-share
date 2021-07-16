@@ -1,5 +1,6 @@
 <div class="share-select" cdkOverlayOrigin (click)='clickToggleOpen()'
-  [ngClass]="{'select-has-border':checkOptions.length > 1,'select-has-control':_showFlag }">
+  [ngClass]="{'select-has-border':checkOptions.length > 1}" shareIcon [inView]="_showClear && checkOptions.length"
+  (onIconClick)="onClickClearNodes()">
   <div class="selected-nodes">
     <ng-container *ngIf="(!checkOptions || checkOptions.length==0) && !_ifInput">
       <div class="selected-node placeholder-text">
@@ -9,21 +10,24 @@
     <ng-container *ngFor="let node of checkOptions">
       <div class="selected-node node-data-text">
         <span>{{node.showName || node.value}}</span>
-        <i class="select-clear" *ngIf="_showClear" (click)="clickClearNode(node)"></i>
+        <i class="select-clear" *ngIf="_showClear" (click)="onClickClearNode(node)"></i>
       </div>
     </ng-container>
+    <!-- 是否显示输入框  （用户传入显示且  多选或者 单选时未选择 ）-->
     <ng-container *ngIf=" _ifInput &&  (_multi || (checkOptions && checkOptions.length == 0))  ">
       <div class="selected-input input-text">
-        <input [placeholder]="_placeholder" [(ngModel)]="inputValue" (ngModelChange)="onInputValueChange()" />
+        <input [placeholder]="_placeholder" [(ngModel)]="inputValue" (keydown.enter)="onInputValueEnd()"
+          (blur)="onInputValueEnd()" />
       </div>
     </ng-container>
   </div>
-  <i class="select-clear" *ngIf="_showClear && checkOptions.length" (click)='clickClearNodes()'></i>
-  <i class="select-control" [ngClass]=" {'select-control-on':optionsOpen}"></i>
+  <div class="E_suffer_icon E_split_line" *ngIf="_showFlag">
+    <i class="E_I_pull_down" [ngClass]=" {'pull_down-on':optionsOpen}"></i>
+  </div>
 </div>
 <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="cdkOverlayOrigin" [cdkConnectedOverlayHasBackdrop]="true"
   [cdkConnectedOverlayOpen]="optionsOpen" [cdkConnectedOverlayOffsetY]='3'
-  [cdkConnectedOverlayWidth]='cdkConnectedOverlayWidth' [cdkConnectedOverlayBackdropClass]="'transparent-overlay-back'"
+  [cdkConnectedOverlayWidth]='cdkConnectedOverlayWidth' [cdkConnectedOverlayBackdropClass]="'E_O_transparent'"
   (backdropClick)="backdropClick()">
   <div class="open-nodes">
     <div class="open-node" *ngIf="inOptions.length == 0"> {{_noneTip}}</div>
@@ -37,8 +41,7 @@
       [ngClass]='{"node-content-check": option._check ,"node-content-active": option[inUuid] == activeOption[inUuid] }'
       (click)="onClickOptionNode(option)">
       <ng-container *ngIf="option.children && option.children.length > 0">
-        <i (click)="onClickOptionChild(option)" class="children-icon"
-          [ngClass]='{"open-children-icon":option.showChild}'></i>
+        <i (click)="onClickOptionChild(option)" class="E_I_pull_down" [ngClass]='{"pull_down-on":option.showChild}'></i>
       </ng-container>
       <ng-container *ngIf="_showCheck">
         <share-checkbox [modelChecked]='option._check' [inIfOther]='option._mix' (onClick)="onCheckChange( option)">

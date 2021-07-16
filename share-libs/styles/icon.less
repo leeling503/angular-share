@@ -1,4 +1,4 @@
-/**后缀图标 同时也用于确认清除图标的位置*/
+/**后缀图标*/
 .E_suffer_icon {
   flex-shrink: 0;
   display: flex;
@@ -32,17 +32,48 @@
 
 //下拉三角形
 .E_I_pull_down {
-  .e_b_i('icon/pull_down');
+  .e_icon('icon/pull_down', 16px, 12px);
 }
 
 //日期图标
 .E_I_date_day {
-  .e_b_i('date/date_day');
+  .e_icon('date/date_day');
 }
 
-//清楚图标 X
-.E_I_clear_p {
-  .e_b_i('icon/com_clear');
+//清除图标 X
+.E_I_clear {
+  .e_icon('icon/com_close_red');
+}
+
+//关闭图标 ✖
+.E_I_close {
+  .e_icon('icon/com_close');
+}
+
+//确定图标 ✔
+.E_I_confirm {
+  .e_icon('icon/com_confirm');
+}
+
+//弹窗modal的tip提示图标
+.E_I_m_success {
+  .e_icon('icon/modal/success');
+}
+
+.E_I_m_error {
+  .e_icon('icon/modal/error');
+}
+
+.E_I_m_confirm {
+  .e_icon('icon/modal/confirm');
+}
+
+.E_I_m_tip {
+  .e_icon('icon/modal/tip');
+}
+
+.E_I_m_warning {
+  .e_icon('icon/modal/warning');
 }
 
 // 菜单图标集合

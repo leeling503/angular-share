@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Icon } from 'leaflet';
 import { ShareBtn } from 'share-libs/src/components/button/share-buttom';
-import { BtnType, IconClass } from 'share-libs/src/enum';
+import { TypeBtn, IconClass } from 'share-libs/src/enum';
 import { ColorEnum } from 'share-libs/src/enum/color.enum';
 
 @Component({
@@ -24,8 +24,6 @@ export class ExShareButtonsComponent implements OnInit {
   btnParaB: ShareBtn = new ShareBtn();
   ngOnInit() {
     setTimeout(() => {
-
-
       this.btnParaA.width = 100;
       this.btnParaA = Object.assign({}, this.btnParaA)
     }, 3000);
