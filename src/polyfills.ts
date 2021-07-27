@@ -40,7 +40,7 @@ import 'core-js/es/regexp';
 import 'core-js/es/map';
 import 'core-js/es/weak-map';
 import 'core-js/es/set';
-
+import 'core-js/es/set';
 /** IE10 and IE11 requires the following for the Reflect API. */
 import 'core-js/es/reflect';
 /**

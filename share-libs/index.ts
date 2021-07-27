@@ -5,7 +5,6 @@ import { SharePaginationModule } from './src/components/pagination/share-paginat
 import { ShareRadioModule } from './src/components/radio/share-radio.module';
 import { ShareSelectModule } from './src/components/select/share-select.module';
 import { ShareTableModule } from './src/components/table/share-table.module';
-import { ShareViewFlvModule } from './src/components/view-flv/share-view-flv.module';
 import { ShareFileUploadModule } from './src/components/upload-file/share-file-upload.module';
 import { Share3DModule } from './src/components/three-model/three-model.module';
 import { ShareMapModule } from './src/components/map/share-map.module';
@@ -13,7 +12,7 @@ import { ShareInputModule } from './src/components/input/share-input.module';
 import { ShareModalModule } from './src/components/modal/modal.module';
 
 
-export { ShareDateModule, ShareSelectModule, ShareTableModule, ShareCheckboxModule, ShareButtonModule, ShareRadioModule, SharePaginationModule, ShareViewFlvModule, ShareFileUploadModule, Share3DModule, ShareMapModule, ShareInputModule, ShareModalModule };
+export { ShareDateModule, ShareSelectModule, ShareTableModule, ShareCheckboxModule, ShareButtonModule, ShareRadioModule, SharePaginationModule, ShareFileUploadModule, Share3DModule, ShareMapModule, ShareInputModule, ShareModalModule };
 export const MODULES = [
     ShareRadioModule,
     ShareDateModule,
@@ -22,7 +21,6 @@ export const MODULES = [
     ShareButtonModule,
     SharePaginationModule,
     ShareTableModule,
-    ShareViewFlvModule,
     ShareFileUploadModule,
     Share3DModule,
     ShareInputModule,

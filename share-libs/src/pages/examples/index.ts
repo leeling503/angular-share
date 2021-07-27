@@ -1,7 +1,6 @@
 import { ExShareButtonsComponent } from "./ex-share-buttons/ex-share-buttons.component";
 import { ExShareDateComponent } from "./ex-share-date/ex-share-date.component";
 import { ExShareFileComponent } from "./ex-share-file/ex-share-file.component";
-import { ExShareFlvComponent } from "./ex-share-flv/ex-share-flv.component";
 import { ExShareInputComponent } from "./ex-share-input/ex-share-input.component";
 import { ExShareMapComponent } from "./ex-share-map/ex-share-map.component";
 import { ExShareModalComponent } from "./ex-share-modal/ex-share-modal.component";
@@ -20,10 +19,9 @@ export const exComponents = [
     ExShareSelectComponent,
     ExShareDateComponent,
     ExShareButtonsComponent,
-    ExShareFlvComponent,
     ExShareFileComponent,
     ExShareThreeModelComponent,
-    ExShareMapComponent,
     ExShareInputComponent,
-    ExShareModalComponent
+    ExShareModalComponent,
+    ExShareMapComponent,
 ]

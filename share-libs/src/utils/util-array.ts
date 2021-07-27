@@ -45,13 +45,11 @@ function UtilArraySetKeyValue<T>(arr: Array<T>, key: keyof T, value: any, childr
     }
 }
 
-/**当数组中某一条数据的key为指定value时
-* 将该数据及其所有祖先的attr设置为指定的data  children为子数组所在的key
+/**当数组arr中某条数据key为指定value时，将该数据及其所有祖先的attr设置为指定的data  
+* children为子数组所在的key
 * 返回该条数据
 */
-function UtilArraySetKeyValueByValue<T>(
-    arr: Array<T>, key: keyof T, value: any, attr: keyof T, data: any, children: string = 'children'
-): T {
+function UtilArraySetKeyValueByValue<T>(arr: Array<T>, key: keyof T, value: any, attr: keyof T, data: any, children: string = 'children'): T {
     if (UtilArrayIsNonNull(arr)) {
         for (let i = 0, len = arr.length; i < len; i++) {
             let el = arr[i];
@@ -69,24 +67,7 @@ function UtilArraySetKeyValueByValue<T>(
     }
 }
 
-/**获取数组中key为指定value的对象（单个）*/
-function UtilArrayGetObjByValue<T>(arr: Array<T>, key: keyof T, value: any, children: string = 'children'): T {
-    if (UtilArrayIsNonNull(arr)) {
-        for (let i = 0, len = arr.length; i < len; i++) {
-            let el = arr[i];
-            if (el[key] == value) {
-                return el;
-            } else {
-                let obj: T = UtilArrayGetObjByValue(el[children], key, value);
-                if (obj) {
-                    return obj;
-                }
-            }
-        }
-    }
-}
-
-/** 获取数组中key为指定value的对象数组（多个）*/
+/** 获取数组中key为指定value的对象数组*/
 function UtilArrayGetArrByValue<T>(arr: Array<T>, key: keyof T, value: any, children: string = 'children'): T[] {
     let values = [];
     if (UtilArrayIsNonNull(arr)) {
@@ -104,7 +85,24 @@ function UtilArrayGetArrByValue<T>(arr: Array<T>, key: keyof T, value: any, chil
     return values
 }
 
-/** 获取数组中key为指定value的祖先对象*/
+/**获取数组中key为指定value的对象*/
+function UtilArrayGetObjByValue<T>(arr: Array<T>, key: keyof T, value: any, children: string = 'children'): T {
+    if (UtilArrayIsNonNull(arr)) {
+        for (let i = 0, len = arr.length; i < len; i++) {
+            let el = arr[i];
+            if (el[key] == value) {
+                return el;
+            } else {
+                let obj: T = UtilArrayGetObjByValue(el[children], key, value);
+                if (obj) {
+                    return obj;
+                }
+            }
+        }
+    }
+}
+
+/** 获取数组arr中key为指定value的始祖对象*/
 function UtilArrayGetAncestorByValue<T>(arr: Array<T>, key: keyof T, value: any, children: string = 'children'): T {
     if (UtilArrayIsNonNull(arr)) {
         for (let i = 0, len = arr.length; i < len; i++) {

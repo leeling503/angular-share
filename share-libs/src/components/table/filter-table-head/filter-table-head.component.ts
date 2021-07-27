@@ -1,6 +1,6 @@
 import { ComponentPortal, } from '@angular/cdk/portal';
 import { Component, ComponentFactoryResolver, ElementRef, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
-import { ShareOverlayPosition, ShareOverlayService } from 'share-libs/src/services/share-overlay.service';
+import { ShareOverlayConfig, ShareOverlayPosition, ShareOverlayService } from 'share-libs/src/services/share-overlay.service';
 import { ModalChange, ShareModalSelectItem, ShareModalSelectItemComponent } from '../../open-modals/modal-select-item/modal-select-item.component';
 import { TableMultiHeadItem, TableItem } from '../share-table.model';
 
@@ -73,8 +73,8 @@ export class FilterTableHeadComponent implements OnInit {
     }
 
     openOverlay() {
-        let modalSelect = new ComponentPortal(ShareModalSelectItemComponent);
-        let position = new ShareOverlayPosition();
+        let modalSelect = new ComponentPortal(ShareModalSelectItemComponent), position = new ShareOverlayPosition(), config = new ShareOverlayConfig();
+        config.width = null, config.height = null;
         position.type = 'ele';
         position.element = this.native.querySelector('.filter-table-head');
         position.withPositions = [{
@@ -83,7 +83,7 @@ export class FilterTableHeadComponent implements OnInit {
             overlayX: 'end',
             overlayY: 'top',
         }]
-        let overlay = this.shareOverlay.showComponent(modalSelect, position);
+        let overlay = this.shareOverlay.showComponent(modalSelect, position, config);
         this.shareOverlay.instanceComponent(overlay, {
             inItems: this.modalSelectItems,
             inHasAll: true

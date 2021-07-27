@@ -7,11 +7,11 @@ import { UtilChangesValue, UtilChangesNoFirstValue } from 'share-libs/src/utils/
 import { IfStmt } from '@angular/compiler';
 
 @Component({
-  selector: 'share-select',
-  templateUrl: './share-select.component.html',
-  styleUrls: ['./share-select.component.less']
+  selector: 'share-select-panel',
+  templateUrl: './share-select-panel.component.html',
+  styleUrls: ['./share-select-panel.component.less']
 })
-export class ShareSelectComponent implements OnInit {
+export class ShareSelectPanelComponent implements OnInit {
   constructor(private el: ElementRef) {
     this.nativeEl = this.el.nativeElement;
   }
@@ -52,7 +52,6 @@ export class ShareSelectComponent implements OnInit {
   _hasActive: boolean;
   /**可输入选款 */
   _ifInput: boolean;
-  _ifSonCheck: boolean;
   /**开启可输入后用户输入的值 */
   inputValue: string;
 
@@ -101,7 +100,6 @@ export class ShareSelectComponent implements OnInit {
     this._showFlag = _config.ifFlag;
     this._hasActive = _config.ifActive;
     this._ifInput = _config.ifInput;
-    this._ifSonCheck = _config.ifSonCheck;
   }
 
   /**设置选中 并判断model的类型 string | object | strings | objects */

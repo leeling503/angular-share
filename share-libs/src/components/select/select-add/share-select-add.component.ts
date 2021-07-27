@@ -145,7 +145,9 @@ export class ShareSelectAdd {
         this.closeOpenNode();
         if (flag) { this.setCheckByModel(); return };
         let checkOptions: SelectAddOption[] = this.checkOptions = [];
-        this.options.push(...this.addOptions);
+        this.addOptions.forEach(e => {
+            e.value && this.options.push(e);
+        })
         this.options.forEach(e => {
             if (e._check == true) {
                 checkOptions.push(e)

@@ -21,9 +21,9 @@ export class HttpErrorInterceptor implements HttpInterceptor {
                     if (error.status == 401) {
                         this.router.navigateByUrl('/error/401');
                     }
-                    if (error.status == 504) {
-                        this.router.navigateByUrl('/error/504');
-                    }
+                    // if (error.status == 504) {
+                    //     this.router.navigateByUrl('/error/504');
+                    // }
                     const errormsg = error.error instanceof ErrorEvent ? `Error:${error.error.message}`
                         : `Error Code:${error.status},Message:${error.message}`;
                     console.log(errormsg);

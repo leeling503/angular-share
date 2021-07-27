@@ -45,8 +45,7 @@
             "scripts": [
               "./node_modules/leaflet/dist/leaflet-src.js",
               "share-libs/assets/3D/js/three.min.js",
-              "share-libs/assets/3D/js/OrbitControls.js",
-              "share-libs/assets/leaflet/leaflet-net-map.js"
+              "share-libs/assets/3D/js/OrbitControls.js"
             ]
           },
           "configurations": {

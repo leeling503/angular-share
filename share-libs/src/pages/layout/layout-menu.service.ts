@@ -20,7 +20,8 @@ export class LayoutMenuServer implements OnDestroy {
                 this._activeMenu && (this._activeMenu.active = false);
                 this._activeMenu = UtilArrayGetObjByValue(this._menus, 'url', curUrl);
                 this._activeMenu.active = true;
-                this.setSideMenu(this._activeMenu)
+                this.setSideMenu(this._activeMenu);
+                // this.setMenuActiveStatus(this._menus, curUrl)
             }
         })
     }
@@ -69,7 +70,7 @@ export class LayoutMenuServer implements OnDestroy {
         }
     }
 
-    /**判断当前路由是否有权限，没有权限就跳转打有权限路由*/
+    /**判断当前路由是否有权限，没有权限就跳转有权限路由*/
     goHasAuthPage(menus: MenuItem[], url): boolean {
         let menu = UtilArrayGetObjByValue(menus, 'url', url);
         let auth = menu && menu.ifShow;

@@ -9,8 +9,12 @@ class SelectConfig {
     ifMulti: boolean = false;
     /**是否拥有激活项状态 false*/
     ifActive: boolean = false;
+    /**是否可以输入 false*/
+    ifInput: boolean = false;
+    /**是否开启子类选择 false*/
+    ifSonCheck: boolean = false;
     /**是否拥有激活项状态 false*/
-    ifInput: boolean = true;
+    ifGanged: boolean = false;
     /**提示语 请选择*/
     placeholder: string = '请选择';
     /**下拉无数据提示 暂无数据*/

@@ -21,7 +21,10 @@ export class ShareOverlayService {
         return overlayComponent;
     }
 
-    /**显示template */
+    /**显示template  
+     * TemplatePortal通过ViewChild和cdkPortal指令    @ViewChild(CdkPortal, { static: true }) X: TemplatePortal<any>;
+     * 需要PortalModule模块
+     * */
     showTemplate<T>(
         overlayContext: TemplatePortal<T>,
         position: ShareOverlayPosition = new ShareOverlayPosition(),
@@ -61,8 +64,8 @@ export class ShareOverlayService {
     private getFlexPositionStrategy(position: ShareOverlayPosition) {
         let event: MouseEvent = position.event;
         let originEl: ElementRef;
-        let x = position.x,
-            y = position.y;
+        let x = position.x || 0,
+            y = position.y || 0;
         if (position.type == 'event') {
             if (!position.event) {
                 return this.getBodyPositionStrategy(position);

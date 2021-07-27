@@ -12,6 +12,16 @@ import { SelectConfig, SelectOption } from 'share-libs/src/components/select/sha
 export class ExShareSelectComponent implements OnInit {
 
   constructor() { }
+  optionsA: SelectOption[] = [
+    { key: '0', value: 'A' },
+    { key: '1', value: 'B' },
+    { key: '2', value: 'C' },
+    { key: '3', value: 'D' },
+    { key: '4', value: 'E' },
+    { key: '5', value: 'F' },
+  ]
+  modelA = [{ key: '3', value: 'D' }]
+
   default = [
     {
       key: '1', value: 'A', showName: '改变显示的值', children:
@@ -20,7 +30,20 @@ export class ExShareSelectComponent implements OnInit {
             [{ key: '111', value: 'Aaa' }, { key: '112', value: 'Aab' }]
         }, {
           key: '12', value: 'Absd', children:
-            [{ key: '121', value: 'Abasd' }, { key: '122', value: 'Abbsd' }]
+            [
+              { key: '121', value: 'Abasd' },
+              {
+                key: '122', value: 'Abbsd', children:
+                  [
+                    { key: '1211', value: 'Abasd' },
+                    {
+                      key: '1221', value: 'Abbsd',
+                      children: [
+                        { key: '12111', value: 'Abasd' },
+                        { key: '12211', value: 'Abbsd' }
+                      ]
+                    }]
+              }]
         }]
     }, {
       key: '2', value: 'B', children:
@@ -36,9 +59,8 @@ export class ExShareSelectComponent implements OnInit {
         [{ key: '51', value: 'Ea' }]
     },
   ]
-
+  optionD = ["61"]
   ngOnInit() {
-    this.setSelect();
     this.setSelectA();
     this.setSelectB();
     this.setSelectC();
@@ -47,21 +69,13 @@ export class ExShareSelectComponent implements OnInit {
   }
 
   option = [];
-  options: SelectOption[] = [];
   config: SelectConfig = new SelectConfig();
-  setSelect() {
-    this.options = _.cloneDeep(this.default);
-  }
 
   optionA = [];
-  optionsA: SelectOption[] = [];
   configA: SelectConfig = new SelectConfig();
   setSelectA() {
     this.configA.ifMulti = true;
     this.optionA = ["12", "31"]
-    setTimeout(() => {
-      this.optionsA = _.cloneDeep(this.default)
-    }, 2000);
   }
 
   optionB;

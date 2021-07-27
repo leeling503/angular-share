@@ -40,14 +40,11 @@
     <div class="node-content"
       [ngClass]='{"node-content-check": option._check ,"node-content-active": option[inUuid] == activeOption[inUuid] }'
       (click)="onClickOptionNode(option)">
-      <ng-container *ngIf='_ifSonCheck'>
-        <ng-container *ngIf="option.children && option.children.length > 0">
-          <i (click)="onClickOptionChild(option)" class="E_I_pull_down"
-            [ngClass]='{"pull_down-on":option.showChild}'></i>
-        </ng-container>
-        <ng-container *ngIf="!option.children || option.children.length == 0">
-          <i></i>
-        </ng-container>
+      <ng-container *ngIf="option.children && option.children.length > 0">
+        <i (click)="onClickOptionChild(option)" class="E_I_pull_down" [ngClass]='{"pull_down-on":option.showChild}'></i>
+      </ng-container>
+      <ng-container *ngIf="!option.children || option.children.length == 0">
+        <i></i>
       </ng-container>
       <ng-container *ngIf="_showCheck">
         <share-checkbox [modelChecked]='option._check' [inIfOther]='option._mix'
@@ -59,5 +56,5 @@
     <ng-container *ngIf="option.showChild">
       <div *ngTemplateOutlet="optionEl;context:{options:option.children}"></div>
     </ng-container>
-  </div>
+  </div> 
 </ng-template>
