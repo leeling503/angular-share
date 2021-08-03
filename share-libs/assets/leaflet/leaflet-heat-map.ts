@@ -1,148 +1,104 @@
 import * as L from "leaflet";
+import { CanvasLayer } from "./leaflet-canvas-layer";
+import { CanvasUtil } from "./leaflet-canvas-util";
 
-export class HeatLayer extends L.Layer {
+export class LeafletHeatLayer extends CanvasLayer {
+
     /** 热力图  传入经纬度坐标[],也可传入系数 [纬度,经度,系数?] */
-    constructor(options?: L.LayerOptions) { super(options) }
-    _latlngs: any[];
-    _heat: Simpleheat;
-    _canvas: HTMLCanvasElement;
-    /**动画id */
-    _frame: number;
-    options: {
-        /**半径 */
-        radius?: number,
-        /**模糊半径 */
-        blur?: number,
-        /**渐变色 */
-        gradient?: any,
-        /**最小阴影透明度 */
-        minOpacity?: number,
-        pane?: any,
-    } = {}
+    constructor(options?: HeatOption) {
+        super();
+        this.initOptions(options)
+    }
     _map: any;
-
-    initialize(latlngs, options) {
-        this._latlngs = latlngs || [];
-        L.setOptions(this, options);
+    /**数据的经纬度集合 */
+    private _latlngs: [number, number, number?][] = [];
+    /**动画id */
+    private _frame!: number;
+    /**热力图绘制数据 */
+    private _heatData: [number, number, number?][] = [];
+    /**用于绘制阴影，决定渲染颜色层级 */
+    private _circleShadow!: HTMLCanvasElement
+    /**单点渲染半径（ 默认+blur 15 ） */
+    private _r!: number;
+    /**渐变的二进制数据 */
+    private _grad!: Uint8ClampedArray;
+    private _gradEl!: HTMLCanvasElement;
+    private _maxNum: number = 2;
+    /**默认配置 */
+    options: HeatOption = {
+        radius: 20,
+        blur: 10,
+        minOpacity: 0.1,
+        maxZoom: 15,
+        ifTip: true,
+        tipX: 80,
+        tipY: 20,
+        gradient: {
+            0.2: 'blue',
+            0.4: 'cyan',
+            0.6: 'lime',
+            0.8: 'yellow',
+            1.0: 'red'
+        }
     }
 
-    onAdd(map) {
-        this._map = map;
-        if (!this._canvas) {
-            this._initCanvas();
-        }
-        if (this.options.pane) {
-            this.getPane().appendChild(this._canvas);
-        } else {
-            map._panes.overlayPane.appendChild(this._canvas);
-        }
-        map.on('moveend', this._reset, this);
-        if (map.options.zoomAnimation && L.Browser.any3d) {
-            map.on('zoomanim', this._animateZoom, this);
-        }
-        this._reset();
-        return this
-    }
-
-    onRemove(map) {
-        if (this.options.pane) {
-            this.getPane().removeChild(this._canvas);
-        } else {
-            map.getPanes().overlayPane.removeChild(this._canvas);
-        }
-        map.off('moveend', this._reset, this);
-        if (map.options.zoomAnimation) {
-            map.off('zoomanim', this._animateZoom, this);
-        }
-        return this
-    }
-
-    addTo(map) {
-        map.addLayer(this);
-        return this;
+    initOptions(options?: HeatOption) {
+        L.setOptions(this, options)
     }
 
     /**重置[纬度，经度]集合*/
-    setLatLngs(latlngs: any[]) {
+    setLatLngs(latlngs: [number, number, number?][]) {
         this._latlngs = latlngs;
-        return this.redraw();
+        return this._redraw();
     }
 
     /**添加[纬度，经度],并重绘*/
-    addLatLng(latlng) {
+    addLatLng(latlng: [number, number, number?]) {
         this._latlngs.push(latlng);
-        return this.redraw();
+        return this._redraw();
     }
 
     /**更新配置 */
-    setOptions(options) {
+    setOptions(options: HeatOption) {
         L.setOptions(this, options);
-        if (this._heat) {
-            this._updateOptions();
-        }
-        return this.redraw();
+        this._updateOptions();
+        return this._redraw();
     }
 
-    private redraw() {
-        if (this._heat && !this._frame && this._map && !this._map['_animating']) {
-            this._frame = L.Util.requestAnimFrame(this._redraw, this);
+    protected _redraw() {
+        if (!this._frame && this._map && !this._map['_animating']) {
+            this._frame = L.Util.requestAnimFrame(this._computeHeatData, this);
         }
         return this;
     }
 
-    /**初始化画布 */
-    private _initCanvas() {
-        var canvas = this._canvas = L.DomUtil.create('canvas', 'leaflet-heatmap-layer leaflet-layer');
-        var originProp = L.DomUtil.testProp(['transformOrigin', 'WebkitTransformOrigin', 'msTransformOrigin']);
-        canvas.style[originProp as string] = '50% 50%';
-        var size = this._map.getSize();
-        canvas.width = size.x;
-        canvas.height = size.y;
-        var animated = this._map.options.zoomAnimation && L.Browser.any3d;
-        L.DomUtil.addClass(canvas, 'leaflet-zoom-' + (animated ? 'animated' : 'hide'));
-        this._heat = new Simpleheat(canvas);
-        this._updateOptions();
-    }
-
     private _updateOptions() {
-        this._heat.radius(this.options.radius || this._heat.defaultRadius, this.options.blur);
+        this._generateShadowRadius(this.options.radius, this.options.blur);
         if (this.options.gradient) {
-            this._heat.gradient(this.options.gradient);
+            this._gradient(this.options.gradient);
         }
     }
 
-    /**重新定位画布并重绘 */
-    private _reset() {
-        var topLeft = this._map.containerPointToLayerPoint([0, 0]);
-        L.DomUtil.setPosition(this._canvas, topLeft);
-        var size = this._map.getSize();
-        if (this._heat._width !== size.x) {
-            this._canvas.width = this._heat._width = size.x;
-        }
-        if (this._heat._height !== size.y) {
-            this._canvas.height = this._heat._height = size.y;
-        }
-        this._redraw();
-    }
-
-
-    private _redraw() {
-        if (!this._map) { return; }
-        let data = [],
-            r = this._heat._r,
+    /**计算热力图数据 */
+    private _computeHeatData() {
+        let map: any = this._map;
+        if (!map) { return; }
+        let data: [number, number, number?][] = [],
+            r = this._r,
             size = this._map.getSize(),
             bounds = new L.Bounds(
                 L.point([-r, -r]),
                 size.add([r, r])),
-            maxZoom = this._map.getMaxZoom() + 3,
-            v = 1 / Math.pow(2, Math.max(0, Math.min(maxZoom - this._map.getZoom(), 12))),
+            maxZoom = this.options.maxZoom!,
+            num = Math.pow(2, Math.max(2, Math.min(maxZoom - this._map.getZoom(), 12))),
+            v = 1 / num,
             cellSize = r / 2,
-            grid = [],
+            grid: any[] = [],
             /**拖动后相对初始化时Ponit的偏移量*/
-            panePos = this._map._getMapPanePos(),
-            offsetX = panePos.x % cellSize,
-            offsetY = panePos.y % cellSize,
+            panePos = map._getMapPanePos(),
+            offsetX = panePos.x % cellSize, offsetY = panePos.y % cellSize,
             i, len, p, cell, x, y, j, len2, k;
+        this._maxNum = num;
         /**对点位进行计算 */
         for (i = 0, len = this._latlngs.length; i < len; i++) {
             /**得到像素点位 */
@@ -153,7 +109,7 @@ export class HeatLayer extends L.Layer {
                 x = Math.floor((p.x - offsetX) / cellSize) + 2;
                 y = Math.floor((p.y - offsetY) / cellSize) + 2;
                 /**阴影等级（热力等级）*/
-                var alt = this._latlngs[i][2] !== undefined ? + this._latlngs[i][2] : 1;
+                var alt = this._latlngs[i][2] !== undefined ? + this._latlngs[i][2]! : 1;
                 k = alt * v;
                 grid[y] = grid[y] || [];
                 cell = grid[y][x];
@@ -185,66 +141,45 @@ export class HeatLayer extends L.Layer {
             }
         }
         /**去设置热力图数据并绘制 */
-        this._heat.data(data).draw(this.options.minOpacity);
-        this._frame = null;
+        this._heatData = data;
+        this._drawByData();
+        if (this.options && this.options.ifTip) {
+            this._addGradient(num);
+        }
+        this._frame = 0;
     }
-
-    /**缩放动画 */
-    private _animateZoom(e) {
-        var scale = this._map.getZoomScale(e.zoom),
-            offset = this._map._getCenterOffset(e.center)._multiplyBy(-scale).subtract(this._map._getMapPanePos());
-        L.DomUtil.setTransform(this._canvas, offset, scale);
+    /**添加等级标识 */
+    private _addGradient(num: any) {
+        let ctx = this._ctx, x = this.options.tipX!, y = this.options.tipY!;
+        ctx.globalAlpha = 0.5;
+        ctx.drawImage(this._gradEl, x, y, 20, 128);
+        ctx.fillText('0', x + 25, y);
+        ctx.fillText(num, x + 25, y + 128);
     }
-}
-
-class Simpleheat {
-    constructor(canvas: any) {
-        this._canvas = canvas = typeof canvas === 'string' ? document.getElementById(canvas) : canvas;
-        this._ctx = canvas.getContext('2d');
-        this._width = canvas.width;
-        this._height = canvas.height;
-        this._data = [];
-    };
-    _canvas: HTMLCanvasElement;
-    _ctx: CanvasRenderingContext2D;
-    _width: number;
-    _height: number;
-    _data: any[];
-    /**默认半径 */
-    defaultRadius: number = 10;
-    _circle
-    /**单点渲染半径（ 默认+blur 15 ） */
-    _r: number;
-    /**渐变的二进制数据 */
-    _grad: Uint8ClampedArray;
-    /**渐变颜色 */
-    defaultGradient = {
-        0.1: 'blue',
-        0.2: 'cyan',
-        0.3: 'lime',
-        0.4: 'yellow',
-        0.5: 'red',
-        1.0: 'red'
-    };
-
-    data(data) {
-        this._data = data;
+    /**根据数据重绘制热力图 */
+    private _drawByData() {
+        var ctx = this._ctx;
+        ctx.clearRect(0, 0, this._width, this._height);
+        if (!this._circleShadow) this._generateShadowRadius(this.options.radius);
+        if (!this._grad) this._gradient(this.options.gradient);
+        let minOpacity = this.options.minOpacity || 0.05;
+        //根据点位创建颜色深度不一的黑色遮罩
+        for (var i = 0, len = this._heatData.length, p; i < len; i++) {
+            p = this._heatData[i];
+            ctx.globalAlpha = Math.min(Math.max(p[2]!, minOpacity), 1);
+            ctx.drawImage(this._circleShadow, p[0] - this._r, p[1] - this._r);
+        }
+        var colored = ctx.getImageData(0, 0, this._width, this._height);
+        /**根据遮罩的深度不同添加不同的渐变颜色 */
+        this._colorize(colored.data, this._grad);
+        ctx.putImageData(colored, 0, 0);
         return this;
     }
-
-    add(point) {
-        this._data.push(point);
-        return this;
-    }
-    clear() {
-        this._data = [];
-        return this;
-    }
-
-    radius(r, blur?) {
+    /**生成单个的阴影半径 */
+    private _generateShadowRadius(r: any, blur?: any) {
         blur = blur === undefined ? 15 : blur;
-        var circle = this._circle = this._createCanvas(),
-            ctx = circle.getContext('2d'),
+        let circle = this._circleShadow = CanvasUtil.createCanvas(),
+            ctx = circle.getContext('2d')!,
             r2 = this._r = r + blur;
         circle.width = circle.height = r2 * 2;
         ctx.shadowOffsetX = ctx.shadowOffsetY = r2 * 2;
@@ -256,25 +191,10 @@ class Simpleheat {
         ctx.fill();
         return this;
     }
-
-    /**创建新的画布 */
-    _createCanvas() {
-        if (typeof document !== 'undefined') {
-            return document.createElement('canvas');
-        } else {
-            return L.DomUtil.create('canvas', 'leaflet-heat-map leaflet-layer');
-        }
-    }
-
-    resize() {
-        this._width = this._canvas.width;
-        this._height = this._canvas.height;
-    }
-
     /**创建渐变色 */
-    gradient(grad) {
-        var canvas = this._createCanvas(),
-            ctx = canvas.getContext('2d'),
+    private _gradient(grad: any) {
+        let canvas = this._gradEl = CanvasUtil.createCanvas(),
+            ctx = canvas.getContext('2d')!,
             gradient = ctx.createLinearGradient(0, 0, 0, 256);
         canvas.width = 1;
         canvas.height = 256;
@@ -282,32 +202,12 @@ class Simpleheat {
             gradient.addColorStop(+i, grad[i]);
         }
         ctx.fillStyle = gradient;
-        ctx.fillRect(0, 0, 1, 256);
+        ctx.fillRect(0, 0, 10, 256);
         this._grad = ctx.getImageData(0, 0, 1, 256).data;
         return this;
     }
-
-    /**绘制热力图 */
-    draw(minOpacity) {
-        if (!this._circle) this.radius(this.defaultRadius);
-        if (!this._grad) this.gradient(this.defaultGradient);
-        var ctx = this._ctx;
-        ctx.clearRect(0, 0, this._width, this._height);
-        //根据点位创建颜色深度不以的黑色遮罩
-        for (var i = 0, len = this._data.length, p; i < len; i++) {
-            p = this._data[i];
-            ctx.globalAlpha = Math.min(Math.max(p[2], minOpacity === undefined ? 0.2 : minOpacity), 1);
-            ctx.drawImage(this._circle, p[0] - this._r, p[1] - this._r);
-        }
-        var colored = ctx.getImageData(0, 0, this._width, this._height);
-        /**根据遮罩的深度不同添加不同的渐变颜色 */
-        this._colorize(colored.data, this._grad);
-        ctx.putImageData(colored, 0, 0);
-        return this;
-    }
-
     /**填充颜色 */
-    _colorize(pixels: Uint8ClampedArray, gradient: Uint8ClampedArray): void {
+    private _colorize(pixels: Uint8ClampedArray, gradient: Uint8ClampedArray): void {
         for (var i = 0, len = pixels.length, j; i < len; i += 4) {
             j = pixels[i + 3] * 4;
             if (j) {
@@ -317,4 +217,24 @@ class Simpleheat {
             }
         }
     }
+}
+
+interface HeatOption {
+    /**半径 */
+    radius?: number,
+    /**模糊级数(越大影响范围越大影响系数越小，最好不要超过半径的两倍) */
+    blur?: number,
+    /**渐变色 */
+    gradient?: any,
+    /**最小阴影透明度 */
+    minOpacity?: number,
+    pane?: any,
+    /**单位变红 */
+    maxNum?: number,
+    /**决定了不同层级变红的数量*/
+    maxZoom?: number,
+    /**等级标识tip */
+    ifTip?: boolean,
+    tipX?: number,
+    tipY?: number,
 }

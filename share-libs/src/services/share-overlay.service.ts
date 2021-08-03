@@ -2,13 +2,14 @@ import { Overlay, OverlayRef, OverlayConfig, ScrollStrategy, PositionStrategy, C
 import { Injectable, ElementRef, ComponentRef, EmbeddedViewRef } from '@angular/core';
 import { ComponentPortal, TemplatePortal } from '@angular/cdk/portal';
 import { UtilSetValue } from '../utils';
+import { DragDrop } from '@angular/cdk/drag-drop';
 
 /**弹窗服务 */
 @Injectable({
     providedIn: 'root'
 })
 export class ShareOverlayService {
-    constructor(private overlay: Overlay) { }
+    constructor(private overlay: Overlay, private drag_: DragDrop) { }
 
     /**显示组件 */
     showComponent<T>(

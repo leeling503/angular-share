@@ -38,7 +38,6 @@ export class ExShareModalComponent {
         let ref = this.modal_.openModal(fig);
         let ref2 = this.modal_.openTipModal();
         ref.getComponentInstabce
-
         // let ref: ShareModalRef = this.modal_.openModal(fig);
         ref.emitAfterOpen.subscribe(res => {
             let instal = ref.getInstance();

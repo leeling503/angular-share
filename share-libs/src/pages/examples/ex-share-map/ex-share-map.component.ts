@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { HeatLayer } from 'share-libs/assets/leaflet/leaflet-heat-map';
+import { LeafletHeatLayer } from 'share-libs/assets/leaflet/leaflet-heat-map';
 import { ExMapService } from './ex-share-map.service';
 @Component({
   selector: 'app-ex-share-map',
@@ -8,12 +8,13 @@ import { ExMapService } from './ex-share-map.service';
 })
 export class ExShareMapComponent implements OnInit {
   map: L.Map;
-  hearMap =new HeatLayer();
+  heatMap = new LeafletHeatLayer({ ifTip: false })
   constructor(private exMap_: ExMapService, private cdr: ChangeDetectorRef) { }
 
   ngOnInit() {
+
     setTimeout(() => {
-      this.hearMap.addTo(this.map);
+      this.heatMap.addTo(this.map);
       console.log(this.map.getBounds())
       this.cdr.detectChanges();
       let bounds = this.map.getBounds(), north = bounds.getNorthEast(), south = bounds.getSouthWest();
@@ -26,7 +27,7 @@ export class ExShareMapComponent implements OnInit {
       this.exMap_.getShips(data).subscribe(res => {
         console.log(res)
       })
-  
+
       this.map.on('zoomend', () => {
         this.getShipByBounds();
       });
@@ -34,7 +35,7 @@ export class ExShareMapComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
-  
+
   }
 
   getShipByBounds() {
@@ -50,7 +51,7 @@ export class ExShareMapComponent implements OnInit {
       if (res.rlt == 0) {
         let datas = res.datas;
         let data = datas.map(e => { return [e.c, e.b] });
-        this.hearMap.setLatLngs(data)
+        this.heatMap.setLatLngs(data);
       }
     })
   }
