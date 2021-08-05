@@ -1,6 +1,6 @@
 import { Overlay, OverlayRef, OverlayConfig, ScrollStrategy, PositionStrategy, ConnectedPosition } from '@angular/cdk/overlay';
 import { Injectable, ElementRef, ComponentRef, EmbeddedViewRef } from '@angular/core';
-import { ComponentPortal, TemplatePortal } from '@angular/cdk/portal';
+import { ComponentPortal, ComponentType, TemplatePortal } from '@angular/cdk/portal';
 import { UtilSetValue } from '../utils';
 import { DragDrop } from '@angular/cdk/drag-drop';
 
@@ -13,11 +13,12 @@ export class ShareOverlayService {
 
     /**显示组件 */
     showComponent<T>(
-        overlayContext: ComponentPortal<T>,
+        component: ComponentType<T>,
         position: ShareOverlayPosition = new ShareOverlayPosition(),
         overlay: ShareOverlayConfig = new ShareOverlayConfig()): ShareOverlayComponent<T> {
         let overlayComponent: ShareOverlayComponent = {};
-        this.setContext(overlayComponent, overlayContext, position, overlay);
+        let componentPortal: ComponentPortal<T> = new ComponentPortal(component)
+        this.setContext(overlayComponent, componentPortal, position, overlay);
         overlayComponent.component = overlayComponent.modalRef.instance;
         return overlayComponent;
     }
@@ -153,12 +154,12 @@ export class ShareOverlayConfig extends OverlayConfig {
         this.hasBackdrop = UtilSetValue(data.hasBackdrop, true);
         this.backdropClass = data.backdropClass || 'E_O_transparent';
         this.panelClass = data.panelClass || 'E_O_panel';
-        this.width = UtilSetValue(data.width, 1000);
-        this.height = UtilSetValue(data.height, 600);
+        this.width = UtilSetValue(data.width, null);
+        this.height = UtilSetValue(data.height, null);
         this.maxWidth = UtilSetValue(data.maxWidth, "95%");
         this.maxHeight = UtilSetValue(data.maxHeight, "95%");
         this.minWidth = UtilSetValue(data.minWidth, 100);
-        this.minHeight = UtilSetValue(data.minHeight, 100);
+        this.minHeight = UtilSetValue(data.minHeight, 25);
         this.backdropClick = UtilSetValue(data.backdropClick, true);
         this.positionStrategy = data.positionStrategy;
         this.scrollStrategy = data.scrollStrategy;

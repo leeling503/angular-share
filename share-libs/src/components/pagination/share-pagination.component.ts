@@ -1,4 +1,3 @@
-import { SelectConfig } from './../select/share-select.model';
 import { Component, Input, Output, EventEmitter, SimpleChanges, ViewChild, ElementRef } from "@angular/core";
 import { PaginationPage, PaginationType, JumpType, PaginationSize, PaginationInfoType } from './share-pagination.model';
 import { CdkOverlayOrigin } from '@angular/cdk/overlay';

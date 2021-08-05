@@ -1,12 +1,14 @@
 import { CdkOverlayOrigin } from "@angular/cdk/overlay";
 import { Component, EventEmitter, Input, Output, SimpleChanges, ViewChild } from "@angular/core";
+import { extend } from "jquery";
+import { PerfixText } from "../../base/perfix-text.component";
 
 @Component({
     selector: 'share-date-year',
     templateUrl: './share-date-year.component.html',
     styleUrls: ['./share-date-year.component.less']
 })
-export class ShareDateYearComponent {
+export class ShareDateYearComponent extends PerfixText {
     @Input() inPlaceholder: string = "请选择";
     @Input() inAutoSet: boolean = true;//关闭选款自动设置
     @Input() inIfDefault: boolean = true;//设置默认值
@@ -17,6 +19,7 @@ export class ShareDateYearComponent {
     overlayOpen: boolean = false;
     yearValues: number[] = [];
     ngOnChanges(changes: SimpleChanges): void {
+        super.ngPerfixChange(changes);
         if (changes.modelYear && this.modelYear) {
             if (typeof this.modelYear === 'string') {
                 this.modelYear = parseInt(this.modelYear)

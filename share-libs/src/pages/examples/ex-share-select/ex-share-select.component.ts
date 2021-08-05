@@ -1,8 +1,7 @@
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { Component, OnInit } from '@angular/core';
 import * as _ from 'lodash';
 import { ShareModalRef } from 'share-libs/src/components/modal/modalRef.service';
-import { SelectConfig, SelectOption } from 'share-libs/src/components/select/share-select.model';
+import { SelectOption, SelectPara } from 'share-libs/src/components/select/share-select.model';
 
 @Component({
   selector: 'ex-share-select',
@@ -10,18 +9,6 @@ import { SelectConfig, SelectOption } from 'share-libs/src/components/select/sha
   styleUrls: ['./ex-share-select.component.less']
 })
 export class ExShareSelectComponent implements OnInit {
-
-  constructor() { }
-  optionsA: SelectOption[] = [
-    { key: '0', value: 'A' },
-    { key: '1', value: 'B' },
-    { key: '2', value: 'C' },
-    { key: '3', value: 'D' },
-    { key: '4', value: 'E' },
-    { key: '5', value: 'F' },
-  ]
-  modelA = [{ key: '3', value: 'D' }]
-
   default = [
     {
       key: '1', value: 'A', showName: '改变显示的值', children:
@@ -59,64 +46,146 @@ export class ExShareSelectComponent implements OnInit {
         [{ key: '51', value: 'Ea' }]
     },
   ]
-  optionD = ["61"]
+  constructor() { }
+
+  options: SelectOption[] = [
+    { key: '0', value: 'A' },
+    { key: '1', value: 'B' },
+    { key: '2', value: 'C' },
+    { key: '3', value: 'D' },
+    { key: '4', value: 'E' },
+    { key: '5', value: 'F' },
+  ];
+  config: SelectPara = {};
+  model = ['3']
   ngOnInit() {
     this.setSelectA();
     this.setSelectB();
     this.setSelectC();
     this.setSelectD();
     this.setSelectE();
+    this.setSelectF();
+
+    this.setSelectPanel()
   }
 
-  option = [];
-  config: SelectConfig = new SelectConfig();
 
-  optionA = [];
-  configA: SelectConfig = new SelectConfig();
+
+  paraA: SelectPara = {};
+  optionsA: SelectOption[] = [];
+  modelA = [{ key: '21', value: 'D' }]
+  activeA;
   setSelectA() {
-    this.configA.ifMulti = true;
-    this.optionA = ["12", "31"]
+    this.optionsA = Object.assign([], this.options)
+    this.paraA.ifMulti = true;
+  }
+  onActiveChangeA($event) {
+    this.activeA = $event
   }
 
-  optionB;
+  modelB;
   optionsB: SelectOption[] = [];
-  configB: SelectConfig = new SelectConfig();
+  paraB: SelectPara = {};
   setSelectB() {
-    this.configB.ifActive = true;
-    this.optionB = "12";
+    this.paraB.ifActive = true;
+    this.modelB = "12";
     this.optionsB = _.cloneDeep(this.default);
   }
 
   optionC = [];
   optionsC: SelectOption[] = [];
-  configC: SelectConfig = new SelectConfig();
+  paraC: SelectPara = {};
   setSelectC() {
-    this.configC.leastOne = true;
-    this.configC.openWidth = 200;
-    this.optionsC = _.cloneDeep(this.default);
+    this.paraC.leastOne = true;
+    this.paraC.openWidth = 200;
+    this.optionsC = _.cloneDeep(this.options);
   }
 
-  configD: SelectConfig = new SelectConfig()
+  configD: SelectPara = {}
   setSelectD() {
     this.configD.placeholder = '自己设置的提示语';
     this.configD.noneTip = "自己设置的无数据提示语"
   }
 
 
-  configE: SelectConfig = new SelectConfig()
+  configE: SelectPara = {}
   optionE = [];
   setSelectE() {
     this.configE.ifCheck = false;
+    this.configE.ifSonCheck = true;
     this.configE.ifMulti = true;
+    this.config.ifActive = true;
   }
 
+  paraF: SelectPara = {}
+  modelF = [];
+  setSelectF() {
+    this.paraF.ifCheck = true;
+    this.paraF.ifSonCheck = true;
+    this.paraF.ifMulti = false;
+    this.config.ifActive = true;
+  }
 
-
-
-
-
-
-
+  optionsPanel: SelectOption[] = []
+  modelPanel = []
+  setSelectPanel() {
+    setTimeout(() => {
+      this.optionsPanel = [{
+        key: 'A', value: '中国', children: [
+          { key: 'A1', value: '北京市' },
+          { key: 'A2', value: '天津市' },
+          { key: 'A3', value: '上海市' },
+          { key: 'A4', value: '重庆市' },
+          {
+            key: 'A5', value: '湖南省', children: [
+              { key: 'A51', value: '长沙', },
+              { key: 'A52', value: '常德', },
+              { key: 'A53', value: '岳阳', },
+            ]
+          },
+          {
+            key: 'A6', value: '湖北省', children: [
+              { key: 'A61', value: '武汉', },
+              { key: 'A62', value: '黄冈', },
+              { key: 'A63', value: '赤壁', },
+            ]
+          },
+          {
+            key: 'A7', value: '广东省', children: [
+              { key: 'A71', value: '广州', },
+              { key: 'A72', value: '深圳', },
+              { key: 'A73', value: '湛江', },
+            ]
+          },
+        ]
+      },
+      {
+        key: 'B', value: '美国', children: [
+          { key: 'B1', value: 'USA B1' },
+          { key: 'B2', value: 'USA B2' },
+          { key: 'B3', value: 'USA B3' },
+        ]
+      },
+      {
+        key: 'C', value: '俄国', children: [
+          { key: 'C1', value: 'C1' },
+          { key: 'C2', value: 'C2' },
+          { key: 'C3', value: 'C3' },
+        ]
+      },
+      {
+        key: 'D', value: '韩国', children: [
+          { key: 'D1', value: 'D1' },
+          { key: 'D2', value: 'D2' },
+          { key: 'D3', value: 'D3' },
+        ]
+      },
+      ]
+      setTimeout(() => {
+        this.modelPanel = ['C1', 'A73', 'A5']
+      }, 1000);
+    }, 2000);
+  }
   modelOptionChange($event) {
     console.log($event)
   }

@@ -1,6 +1,7 @@
 import { CdkOverlayOrigin } from "@angular/cdk/overlay";
 import { Component, EventEmitter, HostListener, Input, Output, SimpleChanges, ViewChild } from "@angular/core";
 import { UtilChanges, UtilChangesValue } from "share-libs/src/utils";
+import { PerfixText } from "../../base/perfix-text.component";
 import { DateMonth } from "../share-date-picker.model";
 
 @Component({
@@ -8,7 +9,7 @@ import { DateMonth } from "../share-date-picker.model";
     templateUrl: './share-date-month.component.html',
     styleUrls: ['./share-date-month.component.less']
 })
-export class ShareDateMonthComponent {
+export class ShareDateMonthComponent extends PerfixText {
     @Input() inPlaceholder: string = "请选择";
     @ViewChild(CdkOverlayOrigin, { static: true }) cdkOverlayOrigin: CdkOverlayOrigin;
     @Input() modelMonth: string;
@@ -45,6 +46,7 @@ export class ShareDateMonthComponent {
     ]
 
     ngOnChanges(changes: SimpleChanges): void {
+        super.ngPerfixChange(changes);
         if (UtilChanges(changes, 'modelMonth')) {
             this.viewMonth = this.modelMonth;
             if (this.modelMonth) {

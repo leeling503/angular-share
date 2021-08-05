@@ -1,0 +1,11 @@
+<div class="node-panel">
+  <ng-container *ngFor="let option of _allOptions">
+    <div class="node-option">
+      <div class="option-content" (click)="onClickOption(option)">
+        <share-checkbox [modelChecked]="option._check" [inIfOther]="option._mix"
+          (onClick)="onCheckOption($event,option)"></share-checkbox>
+        <span [ngClass]="{'node-children': option.children&& option.children.length>0}">{{option.value}}</span>
+      </div>
+    </div>
+  </ng-container>
+</div>

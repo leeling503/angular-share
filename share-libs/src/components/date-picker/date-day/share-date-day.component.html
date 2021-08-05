@@ -1,7 +1,8 @@
 <div class="share-date-picker E_BD E_BD_hover" dateRangePicker [inPickerOpt]="inOptions" [modelDay]="modelDay"
   (modelDayChange)="onModelDayChange($event)" (onIconClick)="onClearValue()" shareIcon [inView]="modelDay">
+  <div class="E-T-prefix" *ngIf="_perText" [style.width]="_perWidth">{{_perText}}</div>
   <input type="text" [ngModel]="viewVal" [placeholder]="inPlaceholder" readonly>
-  <div class="E_suffer_icon E_split_line">
+  <div class="E_suffix_icon E_split_line">
     <i class="E_I_date_day"></i>
   </div>
 </div>

@@ -13,12 +13,13 @@ export class ExShareButtonsComponent implements OnInit {
   constructor() { }
 
   btnParaA: ShareBtn = {
-    iconPer: IconClass.pullDown,
+    iconPer: IconClass.clear,
     iconSuf: IconClass.pullDown,
     width: 130,
     color: ColorEnum.yellow,
     colorBG: ColorEnum.red,
-    clickPer: () => { console.log('clickPer') }
+    clickPer: () => { console.log('clickPer') },
+    click: () => { console.log('click') }
   }
 
   btnParaB: ShareBtn = new ShareBtn();

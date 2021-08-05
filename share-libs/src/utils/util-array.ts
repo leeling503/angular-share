@@ -32,7 +32,7 @@ function UtilArrayIsNonNull(arr: Array<any>): boolean {
     return UtilArrayIsArray(arr) && arr.length > 0
 }
 
-/**将数组及其子数组中的 指定的key的值设置为 value
+/**将数组及其后代数组中的 指定的key的值设置为 value
  * arr 为数组   key为要设置的key  value为要设置值   children 为子数组所在的key
  */
 function UtilArraySetKeyValue<T>(arr: Array<T>, key: keyof T, value: any, children: string = 'children') {
@@ -40,7 +40,7 @@ function UtilArraySetKeyValue<T>(arr: Array<T>, key: keyof T, value: any, childr
         for (let i = 0, len = arr.length; i < len; i++) {
             let el = arr[i];
             el[key] = value;
-            UtilArraySetKeyValue(el[children], key, value);
+            UtilArraySetKeyValue(el[children], key, value, children);
         }
     }
 }
@@ -67,19 +67,20 @@ function UtilArraySetKeyValueByValue<T>(arr: Array<T>, key: keyof T, value: any,
     }
 }
 
-/** 获取数组中key为指定value的对象数组*/
-function UtilArrayGetArrByValue<T>(arr: Array<T>, key: keyof T, value: any, children: string = 'children'): T[] {
+/** 获取数组中key为指定value的对象数组 onlySuper为true表示父类匹配后就不再匹配子类*/
+function UtilArrayGetArrByValue<T>(arr: Array<T>, key: keyof T, value: any, onlySuper: boolean = false, children: string = 'children'): T[] {
     let values = [];
     if (UtilArrayIsNonNull(arr)) {
         for (let i = 0, len = arr.length; i < len; i++) {
             let el = arr[i];
             if (el[key] == value) {
                 values.push(el);
+                if (onlySuper) {
+                    continue;
+                }
             }
-            if (UtilArrayIsNonNull(el[children])) {
-                let datas: T[] = UtilArrayGetArrByValue(el[children], key, value);
-                values.push(...datas);
-            }
+            let datas: T[] = UtilArrayGetArrByValue(el[children], key, value, onlySuper);
+            values.push(...datas);
         }
     }
     return values
@@ -119,4 +120,40 @@ function UtilArrayGetAncestorByValue<T>(arr: Array<T>, key: keyof T, value: any,
     }
 }
 
+
+/**得到含自身和父级的数组,顶级父类排第一
+ * arr数组中key等于value或者该对象等于value的父级数组 
+*/
+export function UtilArrayGetAncestorsByValue<T>(arr: Array<T>, value: any, key: keyof T, children: string = 'children'): T[] {
+    if (UtilArrayIsNonNull(arr)) {
+        for (let i = 0, len = arr.length; i < len; i++) {
+            let el = arr[i];
+            if (el[key] == value || el === value) {
+                let arrB = []
+                arrB.unshift(el)
+                return arrB;
+            } else {
+                let obj: T[] = UtilArrayGetAncestorsByValue(el[children], value, key);
+                if (obj) {
+                    obj.unshift(el)
+                    return obj;
+                }
+            }
+        }
+    }
+}
+
+/**数组中如果有就删除如果没有就添加*/
+export function UtilArrayValueToggle<T>(arr: Array<T>, value: T): T[] {
+    if (UtilArrayIsArray(arr)) {
+        for (let i = 0, len = arr.length; i < len; i++) {
+            let el = arr[i];
+            if (el === value) {
+                return UtilArrayRemoveItem(arr, value);
+            }
+        }
+        arr.push(value);
+    }
+    return arr
+}
 export { UtilArrayClear, UtilArrayRemoveItem, UtilArrayIsArray, UtilArrayIsNonNull, UtilArraySetKeyValue, UtilArraySetKeyValueByValue, UtilArrayGetObjByValue, UtilArrayGetAncestorByValue, UtilArrayGetArrByValue }

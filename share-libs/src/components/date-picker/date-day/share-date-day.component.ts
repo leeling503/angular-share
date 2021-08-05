@@ -2,13 +2,15 @@ import { Component, Input, Output, EventEmitter, ElementRef, SimpleChanges, Host
 import * as moment from 'moment';
 import { TimeRange } from '../share-date-picker.model';
 import { UtilChanges, UtilChangesHasValue, UtilChangesValue } from "share-libs/src/utils";
+import { PerfixText } from "../../base/perfix-text.component";
 @Component({
     selector: 'share-date-day',
     templateUrl: './share-date-day.component.html',
     styleUrls: ['./share-date-day.component.less'],
 })
-export class ShareDateDayComponent {
+export class ShareDateDayComponent extends PerfixText {
     constructor(private elementRef: ElementRef) {
+        super();
         this.el = this.elementRef.nativeElement;
     }
     el: HTMLElement;
@@ -78,6 +80,7 @@ export class ShareDateDayComponent {
     /**可视的时间日期数据 */
     viewVal: string;
     ngOnChanges(changes: SimpleChanges): void {
+        super.ngPerfixChange(changes);
         /**异步更改 */
         if (UtilChangesValue(changes, 'modelDay')) {
             this.inIfSingle = typeof this.modelDay == 'string';

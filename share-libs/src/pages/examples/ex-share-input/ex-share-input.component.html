@@ -1,8 +1,8 @@
 <div class="ex-share-input">
-  <share-input [(ngModel)]="valueA" [inType]="'number'"></share-input>
+  <share-input class="asd" [(ngModel)]="valueA" [inPerText]="'北京时间'" [inType]="'number'"></share-input>
   {{valueA}}
-  <share-input [(ngModel)]="valueB" [inType]="'int'"></share-input>
+  <share-input [(ngModel)]="valueB" [inType]="'int'" [inLength]='2'></share-input>
   {{valueB}}
-  <share-input [(ngModel)]="valueC" [inType]="'plusInt'"></share-input>
+  <share-input [(ngModel)]="valueC" [inLength]='5'></share-input>
   {{valueC}}
 </div>

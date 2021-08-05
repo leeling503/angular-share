@@ -1,5 +1,5 @@
 @import '../../styles/index.less';
-@name: 'pagination';
+@name: 'icon/pagination/';
 @radius-size: 3px;
 
 .but-size(@width) {
@@ -128,7 +128,7 @@
     position: relative;
 
     &:hover:before {
-      .pagi-skip('pagination_prev_five')
+      .pagi-skip('page_prev_five')
     }
   }
 
@@ -136,31 +136,31 @@
     position: relative;
 
     &:hover:before {
-      .pagi-skip('pagination_next_five')
+      .pagi-skip('page_next_five')
     }
   }
 
   .pagi-first {
     i {
-      .e_icon('@{name}/pagination_first_gray')
+      .e_icon('@{name}/page_first_gray')
     }
   }
 
   .pagi-prev {
     i {
-      .e_icon('@{name}/pagination_pre_gray')
+      .e_icon('@{name}/page_pre_gray')
     }
   }
 
   .pagi-next {
     i {
-      .e_icon('@{name}/pagination_next_gray')
+      .e_icon('@{name}/page_next_gray')
     }
   }
 
   .pagi-last {
     i {
-      .e_icon('@{name}/pagination_last_gray')
+      .e_icon('@{name}/page_last_gray')
     }
   }
 }

@@ -61,7 +61,7 @@ export class ShareModalService {
     }
 
     private createModal<T>(para: ShareModalPara<T>): ShareModalRef {
-        let show = this.shareOverlayer.showComponent(new ComponentPortal(ShareModalComponent), para.position, para.overlayer);
+        let show = this.shareOverlayer.showComponent(ShareModalComponent, para.position, para.overlayer);
         para.modalPara.overlayRef = show.overlayRef;
         this.shareOverlayer.instanceComponent(show, para.modalPara);
         return show.modalRef.instance

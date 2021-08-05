@@ -7,9 +7,10 @@ import { ShareSelectComponent } from './select/share-select.component';
 import { ShareSelectAdd } from './select-add/share-select-add.component';
 import { ShareDirectiveModule } from 'share-libs/src/directives/share-directive.module';
 import { ShareSelectPanelComponent } from './select-panel/share-select-panel.component';
+import { NodePanel } from './node-panel/node-panel.component';
 @NgModule({
     imports: [CommonModule, FormsModule, OverlayModule, ShareDirectiveModule, ShareCheckboxModule],
-    declarations: [ShareSelectComponent, ShareSelectAdd, ShareSelectPanelComponent],
+    declarations: [ShareSelectComponent, ShareSelectAdd, ShareSelectPanelComponent, NodePanel],
     providers: [],
     exports: [ShareSelectComponent, ShareSelectAdd, ShareSelectPanelComponent]
 })

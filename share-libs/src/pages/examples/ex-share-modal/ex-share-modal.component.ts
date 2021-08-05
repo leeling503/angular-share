@@ -25,14 +25,15 @@ export class ExShareModalComponent {
     openModal() {
         let fig: ShareModalPara = {
             width: '50%',
+            height: '50%',
             btns: ['primary', 'close'],
             modalPara: { title: '弹窗' },
             onCbClose: (data) => { console.log(data) },
             // template: this.ddd,
-            // component: ExShareSelectComponent,
-            // componentPara: {
-            //     option: []
-            // },
+            component: ExShareSelectComponent,
+            componentPara: {
+                option: []
+            },
             position: { x: 300, y: 150 }
         }
         let ref = this.modal_.openModal(fig);
@@ -44,7 +45,7 @@ export class ExShareModalComponent {
             let comp = ref.getComponentInstabce();
             let comA = instal.component;
         });
-        let ref5 = this.overlay_.showComponent(new ComponentPortal(ExShareSelectComponent))
+        let ref5 = this.overlay_.showComponent(ExShareSelectComponent)
         setTimeout(() => {
             let modal = ref.getInstance();
             modal.title = 'asds';

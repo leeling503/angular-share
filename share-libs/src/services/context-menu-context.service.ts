@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ComponentPortal, ComponentType } from '@angular/cdk/portal';
+import { ComponentType } from '@angular/cdk/portal';
 import { ShareOverlayComponent, ShareOverlayPosition, ShareOverlayService } from 'share-libs/src/services/share-overlay.service';
 /**右键菜单服务 */
 @Injectable({ providedIn: 'root' })
@@ -12,7 +12,7 @@ export class ContextMenuService {
     position.type = 'event';
     position.event = event;
     let overlay = this.overlay = this.shareOverlay_.showComponent(
-      new ComponentPortal(component),
+      component,
       position
     )
     return overlay.component;

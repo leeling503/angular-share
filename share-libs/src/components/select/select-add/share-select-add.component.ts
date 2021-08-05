@@ -1,16 +1,26 @@
 import { CdkOverlayOrigin } from "@angular/cdk/overlay";
 import { Component, ElementRef, EventEmitter, Input, Output, SimpleChanges, ViewChild } from "@angular/core";
 import { UtilArraySetKeyValue, UtilArraySetKeyValueByValue } from "share-libs/src/utils";
-import { SelectAddConfig, SelectAddOption } from "../share-select.model";
+import { PerfixText } from "../../base/perfix-text.component";
+import { SelectAddPara, SelectAddOption } from "../share-select.model";
 
 @Component({
     selector: 'share-select-add',
     templateUrl: './share-select-add.component.html',
     styleUrls: ['./share-select-add.component.less']
 })
-export class ShareSelectAdd {
-    constructor(private el: ElementRef) { this.nativeEl = this.el.nativeElement }
-    @Input() inConfig: SelectAddConfig;
+export class ShareSelectAdd extends PerfixText {
+    constructor(private el: ElementRef) {
+        super();
+        this.nativeEl = this.el.nativeElement
+    }
+    defaultPara: SelectAddPara = {
+        ifFlag: true,
+        ifClear: false,
+        placeholder: '请选择',
+        noneTip: '暂无数据'
+    }
+    @Input() inPara: SelectAddPara;
     @Input() inOptions: SelectAddOption[] = [];
     @Input() modelOptions: SelectAddOption[];
     @Output() modelOptionsChange: EventEmitter<any> = new EventEmitter();
@@ -41,7 +51,8 @@ export class ShareSelectAdd {
     _placeholder: string = "请选择";
     _activeOption: SelectAddOption;
     ngOnChanges(changes: SimpleChanges): void {
-        if (changes.inConfig && this.inConfig) {
+        super.ngPerfixChange(changes);
+        if (changes.inPara && this.inPara) {
             this.setConfig()
         }
         if (changes.inOptions) {
@@ -58,12 +69,13 @@ export class ShareSelectAdd {
     }
 
     setConfig() {
-        this._ifCheck = this.notUndefined(this.inConfig.ifCheck, this._ifCheck);
-        this._ifMulti = this.notUndefined(this.inConfig.ifMulti, this._ifMulti);
-        this._defualt = this.notUndefined(this.inConfig.defualt, this._defualt);
-        this._leastOne = this.notUndefined(this.inConfig.leastOne, this._leastOne);
-        this._ifAdd = this.notUndefined(this.inConfig.ifAdd, this._ifAdd);
-        this._placeholder = this.notUndefined(this.inConfig.placeholder, this._placeholder);
+        let para = this.inPara = Object.assign({}, this.defaultPara, this.inPara);
+        this._ifCheck = this.notUndefined(para.ifCheck, this._ifCheck);
+        this._ifMulti = this.notUndefined(para.ifMulti, this._ifMulti);
+        this._defualt = this.notUndefined(para.defualt, this._defualt);
+        this._leastOne = this.notUndefined(para.leastOne, this._leastOne);
+        this._ifAdd = this.notUndefined(para.ifAdd, this._ifAdd);
+        this._placeholder = this.notUndefined(para.placeholder, this._placeholder);
     }
 
     notUndefined<T>(value: T, data: T): T {
@@ -71,8 +83,8 @@ export class ShareSelectAdd {
     }
 
     setOpenWidth() {
-        if (this.inConfig && this.inConfig.openWidth) {
-            this.cdkConnectedOverlayWidth = this.inConfig.openWidth;
+        if (this.inPara && this.inPara.openWidth) {
+            this.cdkConnectedOverlayWidth = this.inPara.openWidth;
         } else {
             let el = this.nativeEl.querySelector('.share-select-add')
             let rect = el.getBoundingClientRect();

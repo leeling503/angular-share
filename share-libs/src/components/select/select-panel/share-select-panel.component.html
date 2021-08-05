@@ -1,8 +1,9 @@
-<div class="share-select E_BD E_BD_hover" cdkOverlayOrigin (click)='openOverlay()'
+<div class="share-select-panel E_BD E_BD_hover" cdkOverlayOrigin (click)='onOpenOverlay()'
   [ngClass]="{'select-has-border':checkOptions.length > 1}" shareIcon [inView]="_showClear && checkOptions.length"
   (onIconClick)="onClickClearNodes()">
+  <div class="E-T-prefix" *ngIf="_perText" [style.width]="_perWidth">{{_perText}}</div>
   <div class="selected-nodes">
-    <ng-container *ngIf="(!checkOptions || checkOptions.length==0) && !_ifInput">
+    <ng-container *ngIf="(!checkOptions || checkOptions.length==0)">
       <div class="selected-node placeholder-text">
         <span>{{_placeholder}}</span>
       </div>
@@ -13,15 +14,8 @@
         <i class="select-clear" *ngIf="_showClear" (click)="onClickClearNode(node)"></i>
       </div>
     </ng-container>
-    <!-- 是否显示输入框  （用户传入显示且  多选或者 单选时未选择 ）-->
-    <ng-container *ngIf=" _ifInput &&  (_multi || (checkOptions && checkOptions.length == 0))  ">
-      <div class="selected-input input-text">
-        <input [placeholder]="_placeholder" [(ngModel)]="inputValue" (keydown.enter)="onInputValueEnd()"
-          (blur)="onInputValueEnd()" />
-      </div>
-    </ng-container>
   </div>
-  <div class="E_suffer_icon E_split_line" *ngIf="_showFlag">
+  <div class="E_suffix_icon E_split_line" *ngIf="_showFlag">
     <i class="E_I_pull_down" [ngClass]=" {'pull_down-on':openOptions}"></i>
   </div>
 </div>
@@ -31,30 +25,12 @@
   (backdropClick)="closeOptions()">
   <div class="open-nodes">
     <div class="open-node none-node" *ngIf="inOptions.length == 0"> {{_noneTip}}</div>
-    <div *ngTemplateOutlet="optionEl;context:{options:inOptions}"></div>
-  </div>
-</ng-template>
-
-<ng-template #optionEl let-options="options">
-  <div class="open-node" *ngFor="let option of options">
-    <div class="node-content"
-      [ngClass]='{"node-content-check": option._check ,"node-content-active": option[inUuid] == activeOption[inUuid] }'
-      (click)="onClickOptionNode(option)">
-      <ng-container *ngIf="option.children && option.children.length > 0">
-        <i (click)="onClickOptionChild(option)" class="E_I_pull_down" [ngClass]='{"pull_down-on":option.showChild}'></i>
-      </ng-container>
-      <ng-container *ngIf="!option.children || option.children.length == 0">
-        <i></i>
-      </ng-container>
-      <ng-container *ngIf="_showCheck">
-        <share-checkbox [modelChecked]='option._check' [inIfOther]='option._mix'
-          (onClick)="onClickOptionNode( option ,true)">
-        </share-checkbox>
-      </ng-container>
-      <div class="node-content-text"><span>{{option.value}}</span></div>
+    <div class="open-node super-node" *ngIf="superOptions && superOptions.length>1">
+      <div *ngFor="let super of superOptions;last as isLast" (click)="onCheckSuper(super)">
+        <span class="super-name">{{super.value}}</span>
+        <span *ngIf="!isLast">>></span></div>
     </div>
-    <ng-container *ngIf="option.showChild">
-      <div *ngTemplateOutlet="optionEl;context:{options:option.children}"></div>
-    </ng-container>
-  </div> 
+    <node-panel [inAllOptions]="activeOption" (onActiveChange)="onActiveChange($event)"
+      (onCheckChange)="onCheckChange($event)"></node-panel>
+  </div>
 </ng-template>

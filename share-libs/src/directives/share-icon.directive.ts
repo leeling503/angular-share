@@ -28,9 +28,9 @@ export class ShareIconDirective {
         this.render2.addClass(this.clearEl, this.inName);
         this.render2.setStyle(this.clearEl, 'margin-right', '5px');
         this.render2.setStyle(this.clearEl, 'cursor', 'pointer');
-        let el = this.nativeEl.querySelector('.E_suffer_icon');
+        let el = this.nativeEl.querySelector('.E_suffix_icon');
         if (el) {
-            this.render2.insertBefore(this.nativeEl, this.clearEl, this.nativeEl.querySelector('.E_suffer_icon'));
+            this.render2.insertBefore(this.nativeEl, this.clearEl, this.nativeEl.querySelector('.E_suffix_icon'));
         } else {
             this.render2.appendChild(this.nativeEl, this.clearEl);
         }

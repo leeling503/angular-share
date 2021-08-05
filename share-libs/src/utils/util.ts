@@ -35,7 +35,7 @@ function UtilIsEqual(cur, value, key?: string) {
             return flag
         }
         return false
-    } else if (key && cur[key] === value[key] && cur[key]) {
+    } else if (key && cur[key] && cur[key] === value[key]) {
         return true
     }
     return false

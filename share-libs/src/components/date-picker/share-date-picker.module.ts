@@ -16,6 +16,6 @@ import { ShareDateYearComponent } from './date-year/share-date-year.component';
         DateRangePickerDirective
     ],
     imports: [CommonModule, ShareDirectiveModule, FormsModule, OverlayModule, PortalModule],
-    exports: [ShareDateDayComponent,ShareDateMonthComponent, ShareDateYearComponent]
+    exports: [ShareDateDayComponent, ShareDateMonthComponent, ShareDateYearComponent]
 })
 export class ShareDateModule { }

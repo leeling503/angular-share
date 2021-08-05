@@ -1,4 +1,5 @@
 <div class="share-select-add E_BD E_BD_hover" cdkOverlayOrigin (click)="openOptions()">
+  <div class="E-T-prefix" *ngIf="_perText" [style.width]="_perWidth">{{_perText}}</div>
   <div class="selected-nodes">
     <ng-container *ngIf="(!checkOptions || checkOptions.length==0)">
       <div class="selected-node text_placeholder">
@@ -9,7 +10,7 @@
       <span>{{node.showName || node.value}}</span><span *ngIf="!last">、</span>
     </ng-container>
   </div>
-  <div class="E_suffer_icon E_split_line">
+  <div class="E_suffix_icon E_split_line">
     <i class="E_I_pull_down" [ngClass]=" {'pull_down-on':optionsOpen}"></i>
   </div>
 </div>

@@ -1,23 +1,26 @@
 import { CdkOverlayOrigin } from '@angular/cdk/overlay';
 import { Component, OnInit, Input, ViewChild, ElementRef, Output, EventEmitter, SimpleChanges } from '@angular/core';
-import { SelectOption, SelectConfig, SelectModelInputs } from '../share-select.model';
+import { SelectOption, SelectModelInputs, SelectPara } from '../share-select.model';
 import { UtilArrayClear, UtilArrayGetObjByValue, UtilArrayRemoveItem, UtilArraySetKeyValue, UtilIsEqual, UtilSetValue } from 'share-libs/src/utils';
 import { ShareInputType } from 'share-libs/src/models';
 import { UtilChangesValue, UtilChangesNoFirstValue } from 'share-libs/src/utils/util-component';
 import { IfStmt } from '@angular/compiler';
+import { extend } from 'jquery';
+import { PerfixText } from '../../base/perfix-text.component';
 
 @Component({
   selector: 'share-select',
   templateUrl: './share-select.component.html',
   styleUrls: ['./share-select.component.less']
 })
-export class ShareSelectComponent implements OnInit {
+export class ShareSelectComponent extends PerfixText implements OnInit {
   constructor(private el: ElementRef) {
+    super();
     this.nativeEl = this.el.nativeElement;
   }
   nativeEl: HTMLElement
   /**配置 */
-  @Input() inConfig: SelectConfig = new SelectConfig();
+  @Input() inPara: SelectPara = {};
   /**所有选项 */
   @Input() inOptions: SelectOption[] = [];
   /**已选中 */
@@ -28,6 +31,20 @@ export class ShareSelectComponent implements OnInit {
   @Output() modelOptionChange: EventEmitter<SelectModelInputs> = new EventEmitter();
   /**改变激活项 */
   @Output() onActiveChange: EventEmitter<SelectOption> = new EventEmitter();
+  /**默认配置 */
+  defaultPara: SelectPara = {
+    ifFlag: true,
+    ifCheck: true,
+    ifClear: true,
+    ifMulti: false,
+    ifActive: false,
+    ifInput: false,
+    ifSonCheck: false,
+    ifGanged: false,
+    placeholder: '请选择',
+    noneTip: '暂无数据',
+    leastOne: false,
+  }
   /**选中的关键key集合 */
   checkUuids: string[];
   /**选中的选项集合 */
@@ -67,6 +84,7 @@ export class ShareSelectComponent implements OnInit {
   @ViewChild(CdkOverlayOrigin, { static: true }) cdkOverlayOrigin: CdkOverlayOrigin;
 
   ngOnChanges(changes: SimpleChanges): void {
+    super.ngPerfixChange(changes);
     if (UtilChangesNoFirstValue(changes, 'modelOption')) {
       if (UtilIsEqual(this.modelOption, this._outOptions)) return;
       this.setCheckOptions();
@@ -91,7 +109,7 @@ export class ShareSelectComponent implements OnInit {
 
   /**设置配置项 */
   setConfig() {
-    let _config = this.inConfig;
+    let _config = this.inPara = Object.assign({}, this.defaultPara, this.inPara);
     this._multi = _config.ifMulti;
     this._showCheck = _config.ifCheck;
     this._leastOne = _config.leastOne;
@@ -185,8 +203,8 @@ export class ShareSelectComponent implements OnInit {
 
   /**设置弹窗宽度 */
   private _setOpenWidth() {
-    if (this.inConfig.openWidth) {
-      this.cdkConnectedOverlayWidth = this.inConfig.openWidth;
+    if (this.inPara.openWidth) {
+      this.cdkConnectedOverlayWidth = this.inPara.openWidth;
     } else {
       let el = this.nativeEl.querySelector('.share-select')
       let rect = el.getBoundingClientRect();

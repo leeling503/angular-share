@@ -1,2 +1,4 @@
-<input type="text" class="share-input input-size-{{inSize}} E_BD E_BD_hover" [ngModel]="model"
-  (ngModelChange)="onEventChange($event)" />
+<div class="share-input E_BD E_BD_hover ">
+  <div class="E-T-prefix" *ngIf="_perText" [style.width]="_perWidth">{{_perText}}</div>
+  <input type="text" [ngModel]="model" (ngModelChange)="onEventChange($event)" />
+</div>

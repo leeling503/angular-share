@@ -1,56 +1,69 @@
 <div class="ex-share-select">
   <div class="select-info">
-    <span>默认基本配置</span>
+    <span>默认基本配置:{{model}}</span>
     <div class="select">
-      <share-select [inOptions]="optionsA" [(modelOption)]="modelA"></share-select>
+      <share-select [inOptions]="options" [(modelOption)]="model"></share-select>
     </div>
   </div>
   <div class="select-info">
-    <span>异步获得选项 , 多选 ， 选中：{{optionA}}</span>
+    <span>多选，选中：{{modelA |json}}</span>
     <div class="select">
-      <share-select [inOptions]="optionsA" [inConfig]="configA" [(modelOption)]="optionA"
+      <share-select [inOptions]="optionsA" [inPara]="paraA" [(modelOption)]="modelA"
         (modelOptionChange)="modelOptionChange($event)"></share-select>
     </div>
   </div>
   <div class="select-info">
-    <span>拥有激活项和选中项两种状态 , 单选 ， 选中：{{optionB}}</span>
+    <span>拥有激活项和选中项两种状态 , 单选 ， 选中：{{modelB}} 激活：{{activeA |json}}</span>
     <div class="select">
-      <share-select [inOptions]="optionsB" [inConfig]="configB" [(modelOption)]="optionB"
-        (modelOptionChange)="modelOptionChange($event)" (onActiveChange)="onActiveChange($event)"></share-select>
+      <share-select [inOptions]="optionsB" [inPara]="paraB" [(modelOption)]="modelB"
+        (onActiveChange)="onActiveChangeA($event)" (modelOptionChange)="modelOptionChange($event)"
+        (onActiveChange)="onActiveChange($event)"></share-select>
     </div>
   </div>
   <div class="select-info">
     <span>至少选中一项 ， 弹出选项框宽度自己设置， 选中：{{optionC}}</span>
     <div class="select">
-      <share-select [inOptions]="optionsC" [inConfig]="configC" [(modelOption)]="optionC"
+      <share-select [inOptions]="optionsC" [inPara]="paraC" [(modelOption)]="optionC"
         (modelOptionChange)="modelOptionChange($event)"></share-select>
     </div>
   </div>
   <div class="select-info">
     <span>提示语自己设置</span>
     <div class="select">
-      <share-select [inConfig]="configD"></share-select>
+      <share-select [inPara]="configD"></share-select>
     </div>
   </div>
   <div class="select-info">
-    <span>无选择框示例</span>
+    <span>无选择框, 开启子选择示例</span>
     <div class="select">
-      <share-select [inOptions]="optionsB" [inConfig]="configE" [(modelOption)]="optionE"
-        (modelOptionChange)="modelOptionChange($event)"></share-select>
+      <share-select [inOptions]="optionsB" [inPara]="configE" [(modelOption)]="optionE"
+        (modelOptionChange)="modelOptionChange($event)" (onActiveChange)="onActiveChange($event)"></share-select>
+    </div>
+  </div>
+  <div class="select-info">
+    <span>选中{{modelF}}</span>
+    <div class="select">
+      <share-select [inOptions]="optionsB" [(modelOption)]="modelF" [inPara]="paraF" (modelOptionChange)="modelOptionChange($event)">
+      </share-select>
     </div>
   </div>
   <div class="select-info">
     <span>待定示例</span>
     <div class="select">
-      <share-select [inOptions]="optionsB" [inConfig]="configB" [(modelOption)]="optionB"
-        (modelOptionChange)="modelOptionChange($event)"></share-select>
+      <share-select-add></share-select-add>
+    </div>
+  </div>
+  <div class="select-info">
+    <span>待定示例{{modelPanel}}</span>
+    <div class="select">
+      <share-select-panel [inOptions]='optionsPanel' [(modelOption)]="modelPanel"
+        (modelOptionChange)="modelOptionChange($event)"></share-select-panel>
     </div>
   </div>
   <div class="select-info">
     <span>待定示例</span>
     <div class="select">
-      <share-select-add>
-      </share-select-add>
+      <share-select-add></share-select-add>
     </div>
   </div>
 </div>
