@@ -25,12 +25,7 @@
   (backdropClick)="closeOptions()">
   <div class="open-nodes">
     <div class="open-node none-node" *ngIf="inOptions.length == 0"> {{_noneTip}}</div>
-    <div class="open-node super-node" *ngIf="superOptions && superOptions.length>1">
-      <div *ngFor="let super of superOptions;last as isLast" (click)="onCheckSuper(super)">
-        <span class="super-name">{{super.value}}</span>
-        <span *ngIf="!isLast">>></span></div>
-    </div>
-    <node-panel [inAllOptions]="activeOption" (onActiveChange)="onActiveChange($event)"
-      (onCheckChange)="onCheckChange($event)"></node-panel>
+    <node-panel [inOptions]="inOptions" [inCheckOptions]="checkOptions" (onCheckChange)="onCheckChange($event)">
+    </node-panel>
   </div>
 </ng-template>

@@ -94,7 +94,7 @@ export class ShareSelectComponent extends PerfixText implements OnInit {
       this.setCheckOptions();
       this.setOptionsState();
     }
-    if (UtilChangesNoFirstValue(changes, 'inConfig')) {
+    if (UtilChangesNoFirstValue(changes, 'inPara')) {
       this.setConfig();
     }
   }

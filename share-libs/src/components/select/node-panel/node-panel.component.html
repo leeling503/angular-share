@@ -1,5 +1,10 @@
 <div class="node-panel">
-  <ng-container *ngFor="let option of _allOptions">
+  <div class="open-node super-node" *ngIf="superOptions && superOptions.length>1">
+    <div *ngFor="let super of superOptions;last as isLast" (click)="onCheckSuper(super)">
+      <span class="super-name">{{super.value}}</span>
+      <span *ngIf="!isLast">>></span></div>
+  </div>
+  <ng-container *ngFor="let option of activeOptions">
     <div class="node-option">
       <div class="option-content" (click)="onClickOption(option)">
         <share-checkbox [modelChecked]="option._check" [inIfOther]="option._mix"

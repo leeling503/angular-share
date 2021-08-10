@@ -72,18 +72,18 @@ export class ShareSelectPanelComponent extends PerfixText implements OnInit {
       this.activeOption = this.optionAll = { value: '全部', children: this.inOptions };
       this.superOptions = [this.activeOption]
     }
-    if (UtilChangesNoFirstValue(changes, 'inConfig')) {
-      this.setConfig();
+    if (UtilChangesNoFirstValue(changes, 'inPara')) {
+      this.setPara();
     }
   }
 
   ngOnInit() {
-    this.setConfig();
+    this.setPara();
     Promise.resolve().then(() => { this._emitModelOption(); })
   }
 
   /**设置配置项 */
-  setConfig() {
+  setPara() {
     let para = this.inPara = Object.assign({}, this.defaultPara, this.inPara);
     this._placeholder = para.placeholder;
     this._showClear = para.ifClear;
@@ -112,7 +112,6 @@ export class ShareSelectPanelComponent extends PerfixText implements OnInit {
       }
     }
     this.orgCheckOptions = this.checkOptions;
-    this._setOptionsStateByCheckOption();
     Promise.resolve().then(() => { this._emitModelOption(); })
   }
 
@@ -135,9 +134,6 @@ export class ShareSelectPanelComponent extends PerfixText implements OnInit {
   /**打开选框 */
   onOpenOverlay() {
     this.cdkConnectedOverlayWidth || this._setOpenWidth();
-    this.optionsStateChange && this._setOptionsStateByCheckOption();
-    this.optionsStateChange = false;
-    this.onCheckSuper();
     this.openOptions = !0;
   }
 
@@ -156,34 +152,14 @@ export class ShareSelectPanelComponent extends PerfixText implements OnInit {
   onClickClearNodes() {
     event.stopPropagation();
     UtilArrayClear(this.checkOptions);
-    this.optionsStateChange = true;
     this._emitModelOption();
   }
 
   /**删除选中 */
   onClickClearNode(option: SelectOption) {
     event.stopPropagation();
-    this.removeItem(option);
-    this._emitModelOption();
-  }
-
-  /**从选中中移除指定选项，当配置为至少选中一个时，最后一个无法移除 */
-  removeItem(option: SelectOption): void {
     UtilArrayRemoveItem(this.checkOptions, option);
-    this.optionsStateChange = true;
     this._emitModelOption();
-  }
-
-  /**根据选中数组设置选项的状态 */
-  private _setOptionsStateByCheckOption() {
-    console.log('_setOptionsStateByCheckOption')
-    UtilArraySetKeyValue(this.inOptions, '_check', false);
-    UtilArraySetKeyValue(this.inOptions, '_mix', false);
-    this.checkOptions.forEach(e => {
-      e._check = true;
-      this._setOptionState(e);
-    });
-    this.checkOptions = this.getCheckOptionsByCheck();
   }
 
   /**关闭选框并根据输入类型输出选中数据 */
@@ -209,46 +185,7 @@ export class ShareSelectPanelComponent extends PerfixText implements OnInit {
     this.modelOptionChange.emit(this._outOptions);
   }
 
-  /**选中上级选项(不传将会回到最顶层) */
-  onCheckSuper(sup: SelectOption = this.optionAll) {
-    this.activeOption = sup;
-    this.superOptions = UtilArrayGetAncestorsByValue(this.superOptions, sup, 'key')
+  onCheckChange($event: SelectOption[]) {
+    this.checkOptions = $event;
   }
-
-  /**激活选项变化 */
-  onActiveChange(option: SelectOption) {
-    this.activeOption = option;
-    this.superOptions.push(option);
-  }
-
-  /**有选项选中改变 */
-  onCheckChange(option: SelectOption) {
-    this._setOptionState(option);
-    this.checkOptions = this.getCheckOptionsByCheck();
-  }
-
-  /**设置选项和其父类的状态 */
-  private _setOptionState(option: SelectOption) {
-    console.log('setOptionState');
-    let flag = option._check;
-    option._mix = false;
-    let ancestors = UtilArrayRemoveItem(UtilArrayGetAncestorsByValue(this.inOptions, option, 'key'), option);
-    UtilArraySetKeyValue(option.children, '_mix', false);
-    UtilArraySetKeyValue(option.children, '_check', flag);
-    for (let i = ancestors.length - 1; i >= 0; i--) {
-      let anc = ancestors[i], children = anc.children || [];
-      anc._check = children.every(e => e._check == true);
-      if (anc._check) {
-        continue;
-      }
-      anc._check = false;
-      anc._mix = children.some(e => e._check == true) || children.some(e => e._mix == true);
-    };
-  }
-
-  /**获取选中ckeck状态为true的选项（获取父类后不要子类） */
-  getCheckOptionsByCheck(): SelectOption[] {
-    return UtilArrayGetArrByValue(this.inOptions, '_check', true, true);
-  }
-
 }
