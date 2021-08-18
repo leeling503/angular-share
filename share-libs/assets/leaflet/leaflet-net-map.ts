@@ -16,7 +16,7 @@ const MAPINFO = {
             Annotion: "//t{s}.tianditu.com/DataServer?T=cta_w&X={x}&Y={y}&L={z}&tk={key}"
         },
         Subdomains: ['0', '1', '2', '3', '4', '5', '6', '7'],
-        key: "174705aebfe31b79b3587279e211cb9a"
+        key: "a9e2dd65c94fab979c9d897ff7098a4c"
     },
 
     GaoDe: {
@@ -84,6 +84,7 @@ export enum NetMap {
     tianDiTuSatelliteAnnotion = 'TianDiTu.Satellite.Annotion',
     tianDiTuTerrainMap = 'TianDiTu.Terrain.Map',
     tianDiTuTerrainAnnotion = 'TianDiTu.Terrain.Annotion',
+    /**gaoDe 高德*/
     gaoDeNormalMap = 'GaoDe.Normal.Map',
     gaoDeSatelliteMap = 'GaoDe.Satellite.Map',
     gaoDeSatelliteAnnotion = 'GaoDe.Satellite.Annotion',
@@ -101,7 +102,7 @@ export enum NetMap {
 /**加载网络地图 并通过坐标转换使瓦片偏移解决地图偏移问题 */
 export class LeafletNetMap {
     constructor(name: NetMap, options = {}) {
-        this.setMapProvider(name, options);
+        this._setMapProvider(name, options);
     }
     private _mapProvider: L.Layer
     private _map: L.Map;
@@ -116,7 +117,14 @@ export class LeafletNetMap {
         this._mapProvider && this._mapProvider.remove();
     }
 
-    setMapProvider(name: NetMap, options?) { // (type, Object)
+    changeMap(name: NetMap, options?) {
+        this.remove();
+        this._setMapProvider(name, options);
+        this._map && this.addTo(this._map);
+        return this;
+    }
+
+    private _setMapProvider(name: NetMap, options?) { // (type, Object)
         options = options || {}
         let parts = name.split('.'), mapSource = parts[0], mapName = parts[1], mapType = parts[2];
         let url = MAPINFO[mapSource][mapName][mapType];
@@ -127,13 +135,6 @@ export class LeafletNetMap {
             options.tms = MAPINFO[mapSource]['tms']
         }
         this._mapProvider = new NetMapProvider(url, options);
-    }
-
-    changeMap(name: NetMap, options?) {
-        this.remove();
-        this.setMapProvider(name, options);
-        this._map && this.addTo(this._map);
-        return this;
     }
 
     /**获取坐标转换类型*/

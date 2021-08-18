@@ -1,7 +1,8 @@
 import * as L from "leaflet";
 import { CanvasLayer } from "./leaflet-canvas-layer";
-import { ArcInfo, CanvasUtil, CtxConfig, ImageInfo, LatlngInfo, LineInfo } from "./leaflet-canvas-util";
-
+import { ArcInfo, CanvasUtil, ImageInfo, LineInfo } from "./leaflet-canvas-util";
+import * as $ from "jquery"
+/**绘制轨迹 */
 export class LeafletTrackMap extends CanvasLayer {
     options: {
         pane,
@@ -24,7 +25,7 @@ export class LeafletTrackMap extends CanvasLayer {
     intervalPart: [];//动画点绘制区域
     private _arcSize = 3;
     private _alpha = 0.5;
-    _arcClick: (e, data) => any;
+    _arcClick: (e, data) => any = (e, data) => { console.log(e, data) };
 
     initialize(options) {
         L.setOptions(this, options);
@@ -47,6 +48,7 @@ export class LeafletTrackMap extends CanvasLayer {
         this._redraw()
     }
 
+    /**设置多条轨迹数据 */
     setTracks(tracks: TrackInfo[]) {
         this._allTracks = tracks.map(e => {
             e.latlngs = e.infos.map(e => [e.lat, e.lng]);
@@ -58,7 +60,7 @@ export class LeafletTrackMap extends CanvasLayer {
     /**添加单个标志数据*/
     addMark(data: ImageInfo) {
         this._marks.push(data);
-        this._drawMark(data);
+        this._map && this._drawMark(data);
     }
 
     /**绘制所有标志 */
@@ -88,13 +90,15 @@ export class LeafletTrackMap extends CanvasLayer {
             for (let j = 0, len = infos.length; j < len; j++) {
                 let info = infos[j], xmin = Math.floor(info.latPoint), ymin = Math.floor(info.lngPoint);
                 if (xmin - size <= x && x <= xmin + size && ymin - size <= y && y <= ymin + size) {
-                    // this._canvas.setAttribute('style', 'cursor:pointer');
+                    $(this._canvas).css('cursor', 'pointer');
+                    $(this._canvas).css('z-index', '10000');
                     this.cursorData = info;
                     console.log(info)
                     return
                 } else {
                     this.cursorData = undefined
-                    // this._canvas.setAttribute('style', 'cursor:none');
+                    $(this._canvas).css('cursor', 'grab');
+                    $(this._canvas).css('z-index', '10');
                 }
             }
         }
@@ -110,9 +114,11 @@ export class LeafletTrackMap extends CanvasLayer {
 
     /**清空画布重新绘制 */
     protected _redraw() {
-        this._clearContext();
-        this._drawTracks();
-        this._drawMarks();
+        if (this._map) {
+            this._clearContext();
+            this._drawTracks();
+            this._drawMarks();
+        }
     }
 
     /**绘制轨迹数据 */

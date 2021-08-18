@@ -1,11 +1,11 @@
 import * as L from "leaflet";
-import { CanvasLayer } from "./leaflet-canvas-layer";
+import { CanvasLayer, CanvasPara } from "./leaflet-canvas-layer";
 import { CanvasUtil } from "./leaflet-canvas-util";
 
 export class LeafletHeatLayer extends CanvasLayer {
 
     /** 热力图  传入经纬度坐标[],也可传入系数 [纬度,经度,系数?] */
-    constructor(options?: HeatOption) {
+    constructor(options?: HeatPara) {
         super();
         this.initOptions(options)
     }
@@ -25,7 +25,8 @@ export class LeafletHeatLayer extends CanvasLayer {
     private _gradEl!: HTMLCanvasElement;
     private _maxNum: number = 2;
     /**默认配置 */
-    options: HeatOption = {
+    options: HeatPara = {
+        nameClass: 'leaflet-heat-canvas',
         radius: 20,
         blur: 10,
         minOpacity: 0.1,
@@ -42,10 +43,6 @@ export class LeafletHeatLayer extends CanvasLayer {
         }
     }
 
-    initOptions(options?: HeatOption) {
-        L.setOptions(this, options)
-    }
-
     /**重置[纬度，经度]集合*/
     setLatLngs(latlngs: [number, number, number?][]) {
         this._latlngs = latlngs;
@@ -59,7 +56,7 @@ export class LeafletHeatLayer extends CanvasLayer {
     }
 
     /**更新配置 */
-    setOptions(options: HeatOption) {
+    setOptions(options: HeatPara) {
         L.setOptions(this, options);
         this._updateOptions();
         return this._redraw();
@@ -219,7 +216,7 @@ export class LeafletHeatLayer extends CanvasLayer {
     }
 }
 
-interface HeatOption {
+interface HeatPara extends CanvasPara {
     /**半径 */
     radius?: number,
     /**模糊级数(越大影响范围越大影响系数越小，最好不要超过半径的两倍) */
@@ -235,6 +232,8 @@ interface HeatOption {
     maxZoom?: number,
     /**等级标识tip */
     ifTip?: boolean,
+    /**tip偏移量*/
     tipX?: number,
+    /**tip偏移量 */
     tipY?: number,
 }

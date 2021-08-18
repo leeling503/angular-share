@@ -3,12 +3,17 @@ import { CanvasUtil } from "./leaflet-canvas-util";
 
 export abstract class CanvasLayer extends L.Layer {
     constructor() { super(); }
-    options
-    className: string;
+    options: CanvasPara;
     protected _canvas: HTMLCanvasElement;
     protected _ctx: CanvasRenderingContext2D;
     protected _width: number;
     protected _height: number;
+    protected _animationLoop: number;
+
+    /**初始化设置配置 */
+    initOptions(options?: CanvasPara) {
+        L.setOptions(this, options)
+    }
 
     /**addTo时会自动调用 */
     onAdd(map: L.Map) {
@@ -44,12 +49,15 @@ export abstract class CanvasLayer extends L.Layer {
         if (map.options.zoomAnimation) {
             map.off('zoomanim', this._animateZoom, this);
         }
+        if (this._animationLoop) cancelAnimationFrame(this._animationLoop);
         return this
     }
+
     protected _onMouseMove(e) { }
     protected _onClickCanvas(e) { }
     /**重画，需要先清空画布 */
     protected abstract _redraw();
+
     private _reset() {
         var topLeft = this._map.containerPointToLayerPoint([0, 0]);
         L.DomUtil.setPosition(this._canvas, topLeft);
@@ -58,9 +66,10 @@ export abstract class CanvasLayer extends L.Layer {
         this._canvas.height = this._height = size.y;
         this._redraw();
     }
+
     /**初始化画布 */
     private _initCanvas() {
-        this._canvas = L.DomUtil.create('canvas', 'leaflet-canvas-map leaflet-layer');
+        this._canvas = L.DomUtil.create('canvas', `leaflet-layer ${this.options.nameClass || 'leaflet-canvas-map'}`);
         var originProp = "" + L.DomUtil.testProp(['transformOrigin', 'WebkitTransformOrigin', 'msTransformOrigin']);
         this._canvas.style[originProp] = '50% 50%';
         var size = this._map.getSize();
@@ -75,9 +84,11 @@ export abstract class CanvasLayer extends L.Layer {
             onload: L.bind(this._onCanvasLoad, this)
         });
     }
+
     private _onCanvasLoad() {
         this.fire('load');
     }
+
     /**是否成功清除 */
     protected _clearContext(): boolean {
         let map = this._map;
@@ -88,8 +99,16 @@ export abstract class CanvasLayer extends L.Layer {
         }
         return false
     }
+
     /**缩放动画 */
     private _animateZoom(e: any) {
         CanvasUtil.animateZoom(e, this._canvas, this._map)
     }
+
+}
+
+export interface CanvasPara {
+    pane?: any;
+    /**画布的class名称 */
+    nameClass?: string
 }

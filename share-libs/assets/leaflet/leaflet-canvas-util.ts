@@ -3,9 +3,10 @@ import * as L from "leaflet";
 export class CanvasUtil {
     /**图片的缓存 */
     static readonly imgs: { [key: string]: HTMLImageElement } = Object.create(null);
-    static readonly ctxFig: CtxConfig = {
+    static readonly ctxFig: CtxPara = {
         alpha: 1, lineWidth: 1, colorLine: 'blue', colorFill: 'green', dash: [0, 0], dashOff: 0, fillAlpha: 0.2
     }
+
     /**绘制图片 */
     static drawImg(ctx: CanvasRenderingContext2D, img: ImageInfo): string {
         let point = img.point || [], x = point[0], y = point[1], size = img.size,
@@ -24,7 +25,8 @@ export class CanvasUtil {
         img.id = img.id || UtilCreateUuid()
         return img.id;
     }
-    /**画线
+
+    /**画线(没有id将自动生成)
      * @param isClose 是否闭合
      */
     static drawLine(ctx: CanvasRenderingContext2D, line: LineInfo, isClose: boolean = false): string {
@@ -44,10 +46,11 @@ export class CanvasUtil {
             }
         }
         this._setCtxFig(ctx);
-        line.id = line.id || UtilCreateUuid()
+        line.id = line.id || UtilCreateUuid();
         return line.id;
     }
-    /**画矩形*/
+
+    /**画矩形(没有id将自动生成)*/
     static drawRect(ctx: CanvasRenderingContext2D, rect: RectInfo): string {
         this.drawLine(ctx, rect, true);
         ctx.fillStyle = rect.colorFill || this.ctxFig.colorFill;
@@ -57,7 +60,8 @@ export class CanvasUtil {
         rect.id = rect.id || UtilCreateUuid()
         return rect.id;
     }
-    /**绘制小圆点 */
+
+    /**绘制小圆点(没有id将自动生成) */
     static drawArc(ctx: CanvasRenderingContext2D, arc: ArcInfo): string {
         let points = arc.points || [], size = arc.size || 10;
         this._setCtxFig(ctx, arc);
@@ -72,10 +76,12 @@ export class CanvasUtil {
         arc.id = arc.id || UtilCreateUuid()
         return arc.id;
     }
+
     /**将经纬度数组转换为坐标系 */
     static transformLatLngsToPoints<T>(map: L.Map, latlngs: LatlngInfo<T>[]): LatlngInfo<T>[] {
         return latlngs.map(e => this.transformLatLngToPoint(map, e));
     }
+
     /**得到坐标系点位 */
     static transformLatLngToPoint(map: L.Map, latlngInfo: LatlngInfo): LatlngInfo {
         let e = latlngInfo;
@@ -102,6 +108,7 @@ export class CanvasUtil {
             offset = map._getCenterOffset(e.center)._multiplyBy(-scale).subtract(map._getMapPanePos());
         L.DomUtil.setTransform(canvas, offset, scale);
     }
+    
     /**创建一个画布 */
     static createCanvas(): HTMLCanvasElement {
         if (typeof document !== 'undefined') {
@@ -110,6 +117,7 @@ export class CanvasUtil {
             return L.DomUtil.create('canvas', 'leaflet-canvas-util leaflet-layer');
         }
     }
+
     /**根据图片路径地址，获取图片后缓存 , 避免重复请求*/
     private static _getImgPromise(imgUrl: string): Promise<any> {
         let img = this.imgs[imgUrl];
@@ -126,10 +134,10 @@ export class CanvasUtil {
         return Promise.resolve(img)
     }
 
-    /**设置相关配置 */
+    /**设置画布的相关配置 */
     private static _setCtxFig(
         ctx: CanvasRenderingContext2D,
-        fig: CtxConfig = {}) {
+        fig: CtxPara = {}) {
         fig = Object.assign({}, this.ctxFig, fig);
         ctx.globalAlpha = fig.alpha;
         ctx.fillStyle = fig.colorFill;
@@ -139,9 +147,12 @@ export class CanvasUtil {
         ctx.lineDashOffset = fig.dashOff;
     }
 }
+
+/**纬经度及该点信息 */
 export type LatlngInfo<T = any> = [number, number, T?];
+
 /**canvas的画笔属性配置 */
-export interface CtxConfig {
+export interface CtxPara {
     /**透明度 */
     alpha?: number;
     /**填充的颜色透明度 */
@@ -157,6 +168,7 @@ export interface CtxConfig {
     /**虚线偏移*/
     dashOff?: number,
 }
+
 /**图片渲染 */
 export interface ImageInfo {
     id?: string,
@@ -173,8 +185,9 @@ export interface ImageInfo {
     /**透明度 */
     alpha?: number;
 }
+
 /**线条渲染 */
-export interface LineInfo extends CtxConfig {
+export interface LineInfo extends CtxPara {
     /**用于从数据中删除该条线 */
     id?: string;
     /**经纬度必须转换为像素位置后再绘制 (可附带该位置点的信息) */
@@ -182,12 +195,15 @@ export interface LineInfo extends CtxConfig {
     /**所有点位的像素点(通过经纬度转换过来) */
     points?: LatlngInfo[],
 }
+
 /**矩形渲染 */
 export interface RectInfo extends LineInfo { }
+
 /**圆 */
 export interface ArcInfo extends LineInfo {
     size?: number;
 }
+
 function UtilCreateUuid(): string {
     let time = new Date().getTime().toString().slice(-7)
     let per = Math.random().toFixed(3).split('.')[1];
