@@ -22,7 +22,7 @@ export class MapBaseDirective {
             attributionControl: false,
             doubleClickZoom: false,
             closePopupOnClick: false,//点击地图不关闭弹出层
-        }).setView([37, 118], 12);
+        }).setView([37, 118], 7);
         this.onMapInit.emit(map)
     }
 }

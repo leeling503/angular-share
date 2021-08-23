@@ -1,10 +1,11 @@
 import * as L from "leaflet";
 
 export class CanvasUtil {
+    private constructor() { };
     /**图片的缓存 */
     static readonly imgs: { [key: string]: HTMLImageElement } = Object.create(null);
     static readonly ctxFig: CtxPara = {
-        alpha: 1, lineWidth: 1, colorLine: 'blue', colorFill: 'green', dash: [0, 0], dashOff: 0, fillAlpha: 0.2
+        alpha: 1, lineWidth: 1, colorLine: 'blue', colorFill: 'green', dash: [10, 0], dashOff: 0, fillAlpha: 1
     }
 
     /**绘制图片 */
@@ -26,25 +27,38 @@ export class CanvasUtil {
         return img.id;
     }
 
-    /**画线(没有id将自动生成)
-     * @param isClose 是否闭合
-     */
-    static drawLine(ctx: CanvasRenderingContext2D, line: LineInfo, isClose: boolean = false): string {
+    /**画线(没有id将自动生成)*/
+    static drawLine(ctx: CanvasRenderingContext2D, line: LineInfo): string {
         let points = line.points || [];
+        if (points.length < 2) return;
         this._setCtxFig(ctx, line);
-        for (let i = 0, len = points.length; i < len; i++) {
+        let s = points[0];
+        ctx.beginPath();
+        ctx.moveTo(s[0], s[1]);
+        for (let i = 1, len = points.length; i < len; i++) {
             let point = points[i];
-            if (i == 0) {
-                ctx.beginPath();
-                ctx.moveTo(point[0], point[1])
-            } else if (i == len - 1) {
-                ctx.lineTo(point[0], point[1]);
-                isClose && ctx.closePath();
-                ctx.stroke();
-            } else {
-                ctx.lineTo(point[0], point[1]);
-            }
+            ctx.lineTo(point[0], point[1]);
         }
+        ctx.stroke();
+        this._setCtxFig(ctx);
+        line.id = line.id || UtilCreateUuid();
+        return line.id;
+    }
+
+    /**画贝塞尔曲线(没有id将自动生成)*/
+    static drawBezierLine(ctx: CanvasRenderingContext2D, line: LineInfo): string {
+        let points = line.points || [];
+        if (points.length < 2) return;
+        this._setCtxFig(ctx, line);
+        let s = points[0], degree = line.degree;
+        ctx.beginPath();
+        ctx.moveTo(s[0], s[1]);
+        for (let i = 1, len = points.length; i < len; i++) {
+            let s = points[i - 1], e = points[i];
+            let c = this.getBezierCtrlPoint(s, e, degree);
+            ctx.quadraticCurveTo(c[0], c[1], e[0], e[1]);
+        }
+        ctx.stroke();
         this._setCtxFig(ctx);
         line.id = line.id || UtilCreateUuid();
         return line.id;
@@ -52,12 +66,25 @@ export class CanvasUtil {
 
     /**画矩形(没有id将自动生成)*/
     static drawRect(ctx: CanvasRenderingContext2D, rect: RectInfo): string {
-        this.drawLine(ctx, rect, true);
-        ctx.fillStyle = rect.colorFill || this.ctxFig.colorFill;
-        ctx.globalAlpha = rect.fillAlpha == 0 ? 0 : rect.fillAlpha || this.ctxFig.fillAlpha;
-        ctx.fill();
+        this._setCtxFig(ctx, rect);
+        let points = rect.points || [];
+        for (let i = 0, len = points.length; i < len; i++) {
+            let point = points[i];
+            if (i == 0) {
+                ctx.beginPath();
+                ctx.moveTo(point[0], point[1])
+            } else if (i == len - 1) {
+                ctx.lineTo(point[0], point[1]);
+                ctx.closePath();
+                ctx.stroke();
+                ctx.globalAlpha = rect.fillAlpha == undefined ? 1 : rect.fillAlpha;
+                ctx.fill();
+            } else {
+                ctx.lineTo(point[0], point[1]);
+            }
+        }
         this._setCtxFig(ctx);
-        rect.id = rect.id || UtilCreateUuid()
+        rect.id = rect.id || UtilCreateUuid();
         return rect.id;
     }
 
@@ -78,7 +105,7 @@ export class CanvasUtil {
     }
 
     /**将经纬度数组转换为坐标系 */
-    static transformLatLngsToPoints<T>(map: L.Map, latlngs: LatlngInfo<T>[]): LatlngInfo<T>[] {
+    static transformLatLngsToPoints(map: L.Map, latlngs: LatlngInfo[]): LatlngInfo[] {
         return latlngs.map(e => this.transformLatLngToPoint(map, e));
     }
 
@@ -108,7 +135,7 @@ export class CanvasUtil {
             offset = map._getCenterOffset(e.center)._multiplyBy(-scale).subtract(map._getMapPanePos());
         L.DomUtil.setTransform(canvas, offset, scale);
     }
-    
+
     /**创建一个画布 */
     static createCanvas(): HTMLCanvasElement {
         if (typeof document !== 'undefined') {
@@ -116,6 +143,24 @@ export class CanvasUtil {
         } else {
             return L.DomUtil.create('canvas', 'leaflet-canvas-util leaflet-layer');
         }
+    }
+
+    /**获取贝塞尔曲线的控制点
+     * @param s:起点
+     * @param e:终点
+     * @param degree：曲度等级（越大越弯曲）
+     */
+    static getBezierCtrlPoint(s: LatlngInfo, e: LatlngInfo, degree: number = 1): [number, number] {
+        const e0 = s, e1 = e,
+            c = [(e0[0] + e1[0]) / 2, (e0[1] + e1[1]) / 2],
+            d = degree;
+        let x = c[0] - e0[0],
+            y = c[1] - e0[1];
+        /**两点间的距离 */
+        let len = Math.sqrt(x * x + y * y);
+        let angle = Math.PI / 2 - Math.asin(y / len);
+        let curve: [number, number] = [c[0] + d * Math.cos(angle) * len, c[1] - d * Math.sin(angle) * len * x / Math.abs(x)];
+        return curve;
     }
 
     /**根据图片路径地址，获取图片后缓存 , 避免重复请求*/
@@ -140,6 +185,7 @@ export class CanvasUtil {
         fig: CtxPara = {}) {
         fig = Object.assign({}, this.ctxFig, fig);
         ctx.globalAlpha = fig.alpha;
+        ctx.globalCompositeOperation = fig.globalCompositeOperation || 'source-over';
         ctx.fillStyle = fig.colorFill;
         ctx.strokeStyle = fig.colorLine;
         ctx.lineWidth = fig.lineWidth;
@@ -149,7 +195,8 @@ export class CanvasUtil {
 }
 
 /**纬经度及该点信息 */
-export type LatlngInfo<T = any> = [number, number, T?];
+export type LatlngInfo = [number, number, any?];
+export type Latlng = [number, number];
 
 /**canvas的画笔属性配置 */
 export interface CtxPara {
@@ -167,6 +214,27 @@ export interface CtxPara {
     dash?: [number, number],
     /**虚线偏移*/
     dashOff?: number,
+    globalCompositeOperation?: string
+}
+
+/**线条渲染 */
+export interface LineInfo extends CtxPara {
+    /**用于从数据中删除该条线 */
+    id?: string;
+    /**经纬度必须转换为像素位置后再绘制 (可附带该位置点的信息) */
+    latlngs?: LatlngInfo[],
+    /**所有点位的像素点(通过经纬度转换过来) */
+    points?: LatlngInfo[],
+    /**贝塞尔曲线的曲度 数值越大越弯曲 */
+    degree?: number,
+}
+
+/**矩形渲染 */
+export interface RectInfo extends LineInfo { }
+
+/**圆 */
+export interface ArcInfo extends LineInfo {
+    size?: number;
 }
 
 /**图片渲染 */
@@ -184,24 +252,6 @@ export interface ImageInfo {
     rotate?: number,
     /**透明度 */
     alpha?: number;
-}
-
-/**线条渲染 */
-export interface LineInfo extends CtxPara {
-    /**用于从数据中删除该条线 */
-    id?: string;
-    /**经纬度必须转换为像素位置后再绘制 (可附带该位置点的信息) */
-    latlngs?: LatlngInfo[],
-    /**所有点位的像素点(通过经纬度转换过来) */
-    points?: LatlngInfo[],
-}
-
-/**矩形渲染 */
-export interface RectInfo extends LineInfo { }
-
-/**圆 */
-export interface ArcInfo extends LineInfo {
-    size?: number;
 }
 
 function UtilCreateUuid(): string {

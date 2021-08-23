@@ -1,6 +1,3 @@
-
-import * as L from "leaflet";
-import { identity } from "lodash";
 import { CanvasLayer } from "./leaflet-canvas-layer";
 import { ArcInfo, CanvasUtil, ImageInfo, LatlngInfo, LineInfo, RectInfo } from "./leaflet-canvas-util";
 
@@ -11,6 +8,8 @@ export class LeafletCanvasMap extends CanvasLayer {
     options
     /**所有的线的经纬度数据 */
     private _allLines: LineInfo[] = [];
+    /**所有的贝塞尔曲线的经纬度数据 */
+    private _allBezierLines: LineInfo[] = [];
     /**所有的矩形经纬度数据 */
     private _allRects: RectInfo[] = [];
     /**所有的小圆经纬度数据 */
@@ -29,6 +28,10 @@ export class LeafletCanvasMap extends CanvasLayer {
         this._allLines.forEach(line => {
             line.points = CanvasUtil.transformLatLngsToPoints(this._map, line.latlngs);
             CanvasUtil.drawLine(this._ctx, line);
+        })
+        this._allBezierLines.forEach(line => {
+            line.points = CanvasUtil.transformLatLngsToPoints(this._map, line.latlngs);
+            CanvasUtil.drawBezierLine(this._ctx, line);
         })
         this._allImgs.forEach(img => {
             img.point = CanvasUtil.transformLatLngToPoint(this._map, img.latlng);
@@ -58,6 +61,11 @@ export class LeafletCanvasMap extends CanvasLayer {
     setAllLines(lines: LineInfo[]) {
         this._allLines = lines; this._redraw();
     }
+
+    setAllBezierLines(lines: LineInfo[]) {
+        this._allBezierLines = lines; this._redraw();
+    }
+
     /**设置图片数据 */
     setAllImg(imgs: ImageInfo[]) {
         this._allImgs = imgs; this._redraw();
@@ -75,6 +83,7 @@ export class LeafletCanvasMap extends CanvasLayer {
         this._allRects.push(rect);
         return rect.id;
     }
+
     /**添加线 */
     addLatlngLine(line: LineInfo): string {
         if (!line.latlngs || line.latlngs.length == 0) return;

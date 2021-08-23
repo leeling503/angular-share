@@ -95,7 +95,6 @@ export class LeafletHeatLayer extends CanvasLayer {
             panePos = map._getMapPanePos(),
             offsetX = panePos.x % cellSize, offsetY = panePos.y % cellSize,
             i, len, p, cell, x, y, j, len2, k;
-        this._maxNum = num;
         /**对点位进行计算 */
         for (i = 0, len = this._latlngs.length; i < len; i++) {
             /**得到像素点位 */

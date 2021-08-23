@@ -4,8 +4,6 @@ import { LeafletCanvasMap } from "share-libs/assets/leaflet/leaflet-canvas-map";
 import { LeafletTrackMap, PointInfo } from "share-libs/assets/leaflet/leaflet-track-map";
 import { LeafletNetMap, NetMap } from "share-libs/assets/leaflet/leaflet-net-map";
 import { ShareMapBase } from "./share-map-base.service";
-import { LeafletVelocity } from "share-libs/assets/leaflet/leaflet-velocity-map";
-
 @Component({
     selector: 'share-map-base,map-base',
     templateUrl: './map-base.component.html',
@@ -21,13 +19,10 @@ export class MapComponent {
     onMapInit(map: L.Map) {
         this.map = map;
         let leafletCanvas = new LeafletCanvasMap().addTo(map);
-        leafletCanvas.addTo(map);
-        let pointStr = leafletCanvas.addLatlngRect({ latlngs: [[37, 118], [36.975, 118.05], [37, 118.1], [36.9, 118.2], [36.8, 118.1], [36.8, 118], [36.9, 118.1]] });
-        leafletCanvas.getExpend([[37, 118], [36.9, 118.05], [37, 118.1], [36.9, 118.2], [36.8, 118.1], [36.8, 118], [36.9, 118.1]])
-        let id = leafletCanvas.addLatlngLine({ latlngs: [[37, 118], [37, 118.1], [36.9, 118.2], [36.8, 118.1], [36.8, 118], [36.9, 118.1]], lineWidth: 5, colorLine: 'red' });
-        let dist = leafletCanvas.getLatDiffByPoints(1000)
-        setTimeout(() => { leafletCanvas.removeById(id) }, 10000);
-        let velo = new LeafletVelocity({ nameClass: 'leaflet-velocity' }).addTo(map);
+        leafletCanvas.addLatlngRect({ latlngs: [[35, 115], [37, 115], [37, 118], [35, 118]], colorFill: "rgba(255,0,0)", fillAlpha: 0.1})
+        leafletCanvas.addLatlngRect({ latlngs: [[35.5, 116], [36, 116], [36, 117], [35.5, 117]], colorFill: "rgba(0,255,0)", fillAlpha: 0.1, globalCompositeOperation: 'xor' })
+        leafletCanvas.addLatlngRect({ latlngs: [[35.1, 116], [35.3, 116], [35.3, 119], [35.1, 119]], colorFill: "rgba(0,0,255)", fillAlpha: 1, globalCompositeOperation: 'xor' })
+        // let velo = new LeafletVelocity({ nameClass: 'leaflet-velocity' }).addTo(map);
     }
     ngAfterViewInit(): void {
         this.mapChange.emit(this.map);

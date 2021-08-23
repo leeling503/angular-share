@@ -23,6 +23,5 @@ export class MapNetDirective {
         }
     }
     ngOnInit(): void {
-        this.netMap.addTo(this.map)
     }
 }

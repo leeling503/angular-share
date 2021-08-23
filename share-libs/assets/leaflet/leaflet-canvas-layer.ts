@@ -72,6 +72,7 @@ export abstract class CanvasLayer extends L.Layer {
         this._canvas = L.DomUtil.create('canvas', `leaflet-layer ${this.options.nameClass || 'leaflet-canvas-map'}`);
         var originProp = "" + L.DomUtil.testProp(['transformOrigin', 'WebkitTransformOrigin', 'msTransformOrigin']);
         this._canvas.style[originProp] = '50% 50%';
+        this._canvas.style['z-index'] = this.options.zIndex || 100;
         var size = this._map.getSize();
         this._canvas.width = size.x;
         this._canvas.height = size.y;
@@ -111,4 +112,6 @@ export interface CanvasPara {
     pane?: any;
     /**画布的class名称 */
     nameClass?: string
+    /**画布层级  默认100，最大400 */
+    zIndex?: number;
 }
