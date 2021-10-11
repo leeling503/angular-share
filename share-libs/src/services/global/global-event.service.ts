@@ -10,7 +10,7 @@ export class GlobalEventService {
   /**事件主体 */
   private _event$ = new Subject<GlEventInfo>();
   /**事件Map集合<事件名,{id:回调函数}> */
-  private _eventMap: Map<EventName, { [id: string]: Function[] }> = new Map();
+  private _eventMap: Map<GlEventName, { [id: string]: Function[] }> = new Map();
 
   constructor() {
     this._event$.subscribe((data: GlEventInfo) => this._onEvent(data));
@@ -21,7 +21,7 @@ export class GlobalEventService {
    * @param event事件名
    * @param value数据
    */
-  next<T>(event: EventName, value: T): void {
+  next<T>(event: GlEventName, value: T): void {
     let current = this._datas[event];
     if (current !== value) {
       this._datas[event] = value;
@@ -36,12 +36,14 @@ export class GlobalEventService {
    * 订阅事件
    * @param event事件名
    * @param callback回调函数
+   * @param behavior是否立即调用回调
    */
-  subscribe(event: EventName, callback: Function): GlEventUn {
+  subscribe(event: GlEventName, callback: Function, behavior: boolean = false): GlEventUn {
     let id = event + ++this.i;
     let subscriber = this._eventMap.get(event) || Object.create(null);
     let cbs = subscriber[id] = subscriber[id] || [];
     cbs.push(callback);
+    if (behavior) { callback(this._datas[event] || {}); }
     this._eventMap.set(event, subscriber);
     return { un: () => { delete subscriber[id] } }
   }
@@ -51,7 +53,7 @@ export class GlobalEventService {
   * @param event事件名
   * @param id用于移除部分监听(不传将会导致所有该事件的订阅全部取消)
   */
-  unsubscribe(event: EventName, id?: string): void {
+  unsubscribe(event: GlEventName, id?: string): void {
     if (id) {
       let subscriber = this._eventMap.get(event) || Object.create(null);
       delete subscriber[id]
@@ -73,13 +75,12 @@ export class GlobalEventService {
   }
 }
 
-interface GlEventInfo { event: EventName, data: any };
-interface GlEventUn { un: () => void }
-
-export enum EventName {
+interface GlEventInfo { event?: GlEventName, data?: any };
+export interface GlEventUn { un: () => void }
+export enum GlEventName {
   /**变更事件 */
-  change = 'change'
+  change = 'change',
+  /**实时数据 */
+  'real-data' = 'real-data'
 }
-
-
 

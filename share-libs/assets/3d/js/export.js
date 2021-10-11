@@ -14,8 +14,8 @@ function loadgltf(scene) {
     };
     var gltfloader = new THREE.GLTFLoader()
     gltfloader.setDRACOLoader(new THREE.DRACOLoader());
-    console.log(`share-libs/assets/3d/model/${modelName}.gltf`)
-    gltfloader.load(`share-libs/assets/3d/model/${modelName}.gltf`, function (gltf) {
+    console.log(`../model/model/${modelName}.gltf`)
+    gltfloader.load(`../model/${modelName}.gltf`, function (gltf) {
         var object = gltf.scene
         var objBbox = new THREE.Box3().setFromObject(gltf.scene);
         var bboxCenter = objBbox.getCenter().clone();

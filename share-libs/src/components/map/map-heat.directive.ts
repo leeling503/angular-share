@@ -11,7 +11,7 @@ export class MapHeatDirective {
     constructor(private el: ElementRef, private exMap_: ExMapService) {
         this.nativeEl = this.el.nativeElement;
     }
-    heatMap = new LeafletHeatLayer({ ifTip: false })
+    heatMap = new LeafletHeatLayer({ ifTip: true })
     nativeEl: HTMLElement
     @Input() map: L.Map;
     ngOnChanges(changes: SimpleChanges): void {

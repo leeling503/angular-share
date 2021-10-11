@@ -6,7 +6,7 @@ import { Component } from "@angular/core";
     styleUrls: ['./ex-share-three-model.component.less']
 })
 export class ExShareThreeModelComponent { 
-    modelName:string = "box" ;
+    modelName:string = "ship2" ;
     ngOnInit(): void {
         //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
         //Add 'implements OnInit' to the class.

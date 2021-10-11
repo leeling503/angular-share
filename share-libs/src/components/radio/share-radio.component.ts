@@ -1,8 +1,10 @@
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { EventEmitter, Output, SimpleChanges } from '@angular/core';
 import { Component, Input, OnInit } from '@angular/core';
-import { UtilGetAttrValue, UtilIsEmpty, UtilIsEqual, UtilIsFalse, UtilIsUndefined } from 'share-libs/src/utils/util';
-import { UtilChangesValue, UtilChangesNoFirstValue } from 'share-libs/src/utils/util-component';
-import { RadioIconType, RadiosData, RadiosPara } from './share-radio.model';
+import * as _ from 'lodash';
+import { UtilGetAttrValue, UtilIsEmpty, UtilIsEqual, UtilIsFalse, UtilIsUndefined, UtilSetValue } from 'share-libs/src/utils/util';
+import { UtilChangesValue, UtilChangesNoFirstValue, UtilChanges } from 'share-libs/src/utils/util-component';
+import { RadioIconType, RadioData, RadioPara } from './share-radio.model';
 
 @Component({
   selector: 'share-radio',
@@ -10,102 +12,109 @@ import { RadioIconType, RadiosData, RadiosPara } from './share-radio.model';
   styleUrls: ['./share-radio.component.less']
 })
 export class ShareRadioComponent implements OnInit {
-
   constructor() { }
-  /**按钮组参数 */
-  @Input() inRadioPara: RadiosPara = {};
   /**按钮组数据 */
-  @Input() inRadioDatas: RadiosData | RadiosData[];
+  @Input() inOptins: RadioData | RadioData[];
   @Input() modelRadio: string | string[];
+  /**按钮组参数 */
+  @Input() inPara: RadioPara = {};
+  /**是否多选 */
+  @Input() inMulti: boolean;
+  /**是否全部去勾选 */
+  @Input() inClear: boolean;
+  /**禁用选项能去勾选 */
+  @Input() inDisCancel: boolean;
+  /**取哪个属性的值 (key) */
+  @Input() inKey: string = 'key';
+  /**按钮组图标 */
+  @Input() inIconType: RadioIconType;
   @Output() modelRadioChange: EventEmitter<any> = new EventEmitter();
+  defaultPara: RadioPara = {
+    ifMulti: false,
+    ifClear: false,
+    ifDisCancel: false,
+    iconType: 'radio',
+  }
+  /**输入数据类型 */
+  modelType: 'string' | 'array' = 'string';
+  emitModel: string | string[];
+  public options: RadioData[] = [];
 
-  _datas: RadiosData[] = [];
-  /**取值的属性名 */
-  _key: string = 'key';
-  /**多选 */
-  _multi: boolean = false;
-  /**可以一个都不选 */
-  _clear: boolean = false;
-  /**图标组类型 */
-  _iconType: RadioIconType = 'radio';
-  /**单选是禁用的能否被取消*/
-  _disCancel: boolean = true;
-  _inputType: 'string' | 'array' = 'array';
-  _outModel: string | string[];
   ngOnChanges(changes: SimpleChanges): void {
-    if (UtilChangesNoFirstValue(changes, 'inRadioDatas')) {
-      this.set_datas();
-      this.set_checkRadio();
+    if (UtilChanges(changes, 'inOptins')) {
+      this.setOptions();
+      this.setCheckRadio();
     }
-    if (UtilChangesNoFirstValue(changes, 'modelRadio')) {
-      !UtilIsEqual(this.modelRadio, this._outModel) && this.set_checkRadio()
-    }
-    if (UtilChangesValue(changes, 'inRadioPara')) {
-      this.set_config()
+    if (UtilChanges(changes, 'modelRadio') && !UtilIsEqual(this.modelRadio, this.emitModel)) {
+      this.setModelType();
+      this.setCheckRadio();
     }
   }
 
   ngOnInit() {
-    this.set_datas();
-    this.set_checkRadio()
+    this.setPara();
   }
 
-  set_config() {
-    this._multi = this.inRadioPara.multi;
-    this._clear = this.inRadioPara.clear;
-    this._key = this.inRadioPara.valueKey || this._key;
-    this._disCancel = UtilGetAttrValue(this.inRadioPara, 'disCancel', this._disCancel);
-    this._iconType = UtilGetAttrValue(this.inRadioPara, 'iconType', this._iconType);
+  /**设置配置 */
+  setPara() {
+    let para = Object.assign({}, this.defaultPara, this.inPara)
+    this.inMulti = this.inMulti ?? para.ifMulti;
+    this.inClear = this.inClear ?? para.ifClear;
+    this.inDisCancel = this.inDisCancel ?? para.ifDisCancel;
+    this.inIconType = this.inIconType ?? para.iconType;
   }
 
   /**设置选项数据 */
-  set_datas() {
-    if (UtilIsUndefined(this.inRadioDatas)) return;
-    if (Array.isArray(this.inRadioDatas)) {
-      this._datas = this.inRadioDatas
+  setOptions() {
+    if (!this.inOptins) return;
+    if (Array.isArray(this.inOptins)) {
+      this.options = _.cloneDeep(this.inOptins)
     } else {
-      this._datas = [this.inRadioDatas]
+      this.options = _.cloneDeep([this.inOptins])
+    }
+  }
+
+  setModelType() {
+    this.modelType = 'string';
+    if (Array.isArray(this.modelRadio)) {
+      this.modelType = 'array'
     }
   }
 
   /**设置勾选 */
-  set_checkRadio() {
+  setCheckRadio() {
     if (UtilIsUndefined(this.modelRadio)) return;
-    this._inputType = Array.isArray(this.modelRadio) ? 'array' : 'string';
     let modelRadio = this.modelRadio;
-    !Array.isArray(this.modelRadio) && (modelRadio = this.modelRadio.split(','));
-    this._datas.map(e => {
-      modelRadio.includes(e[this._key]) && (e.ifCheck = true);
-    })
+    if (typeof this.modelRadio == 'string') {
+      modelRadio = this.modelRadio.split(',');
+    } else if (!Array.isArray(modelRadio)) {
+      modelRadio = [modelRadio]
+    }
+    this.options.map(e => { modelRadio?.includes(e[this.inKey]) && (e._check = true); })
   }
 
-  tiggerCheck(radio: RadiosData) {
-    if (radio.ifDis) return;
+  onTiggerCheck(radio: RadioData) {
+    if (radio._dis) return;
+    let flag = radio._check;
     /**单选 */
-    if (!this._multi) {
-      let flag = radio.ifCheck;
-      this._datas.map(e => {
-        /**禁用能否取消判断 */
-        if (!e.ifDis || this._disCancel !== false) {
-          e.ifCheck = false
-        }
-      });
-      radio.ifCheck = flag;
+    if (!this.inMulti) {
+      /**禁用能否取消判断 */
+      this.options.map(e => { if (!e._dis || this.inDisCancel) { e._check = false } });
     }
-    radio.ifCheck = !radio.ifCheck
+    radio._check = !flag;
     /**至少要勾选一个的判断 */
-    if (this._datas.every(e => UtilIsFalse(e.ifCheck)) && !this._clear) {
-      radio.ifCheck = true;
+    if (this.options.every(e => UtilIsFalse(e._check)) && !this.inClear) {
+      radio._check = true;
     }
-    let values: string | string[] = this._datas.filter(e => e.ifCheck).map(e => e[this._key]);
-    if (this._inputType == 'string') {
+    let values: string | string[] = this.options.filter(e => e._check).map(e => e[this.inKey]);
+    if (this.modelType == 'string') {
       values = values.join(',')
     }
     if (UtilIsEqual(values, this.modelRadio)) {
       return
     }
-    this._outModel = values;
-    this.modelRadioChange.emit(this._outModel)
+    this.emitModel = values;
+    this.modelRadioChange.emit(this.emitModel)
   }
 
 }

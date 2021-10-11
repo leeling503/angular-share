@@ -32,5 +32,8 @@ export class MapTrackDirective {
         }, 2000);
         ship.setTracks([{ infos: latlngs }]);
         let data = ship.getInfosByTime('2021-07-30 06:32:18');
+        this.track.subscribeOnClick(e => {
+            console.log(e);
+        })
     }
 }

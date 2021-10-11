@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { RadiosData, RadiosPara } from 'share-libs/src/components/radio/share-radio.model';
+import { RadioData, RadioPara } from 'share-libs/src/components/radio/share-radio.model';
 
 @Component({
   selector: 'ex-share-radio',
@@ -8,87 +8,37 @@ import { RadiosData, RadiosPara } from 'share-libs/src/components/radio/share-ra
 })
 export class ExShareRadioComponent implements OnInit {
   constructor() { }
-  radioDatasA: RadiosData[];
-  radioDatasB: RadiosData[];
-  radioDatasC: RadiosData[];
-  radioDatasD: RadiosData[];
-  radioDatasE: RadiosData[];
-  radioParaA: RadiosPara;
-  radioParaB: RadiosPara = {
-    multi: false,
+  radioData: RadioData[] = [{ key: true, value: '是' }, { key: false, value: '否' }]
+  radioKey: RadioData[] = [{ key: 'key', value: 'key' }, { key: 'value', value: 'value' }]
+  radioType: RadioData[] = [
+    { key: 'radio', value: 'radio' },
+    { key: 'check', value: 'check' },
+    { key: 'cricle', value: 'cricle' }]
+  paraA: RadioPara = {
+    ifMulti: false,
+    ifClear: false,
+    ifDisCancel: false,
     iconType: 'check',
-    valueKey: 'value',
-    disCancel: false,
-    clear: false
-  };
-  radioParaC: RadiosPara = {
-    multi: false,
-    iconType: 'radio',
-    valueKey: 'key',
-    clear: true
-  };
-  radioParaD: RadiosPara = {
-    multi: true,
-    iconType: 'cricle',
-    valueKey: 'key',
-    disCancel: true,
-    clear: true
-  };
-  radioParaE: RadiosPara = {
-    multi: true,
-    iconType: 'cricle',
-    clear: false
-  };
-  modelRadioA = ['1'];
-  modelRadioB = '';
-  modelRadioC = '';
-  modelRadioD = ['1'];
-  modelRadioE = ['1'];
+    key: 'value'
+  }
+  radioDatasA: RadioData[];
+  modelRadioA = 20;
 
 
   ngOnInit() {
-    setTimeout(() => {
-      this.radioDatasA = [
-        { key: '1', value: 10 },
-        { key: '2', value: 0 },
-        { key: '3', value: 20 },
-        { key: '4', value: 'false' },
-        { key: '5', value: undefined },
-      ]
-      this.radioDatasB = [
-        { key: '1', value: 10, ifCheck: false, ifDis: false },
-        { key: '2', value: 0, ifCheck: true, ifDis: true },
-        { key: '4', value: 'false', ifCheck: false, ifDis: false },
-        { key: '5', value: undefined, ifCheck: false, ifDis: false },
-      ]
-      this.radioDatasC = [
-        { key: '1', value: 10, ifCheck: false, ifDis: false },
-        { key: '2', value: 0, ifCheck: true, ifDis: true },
-        { key: '3', value: 20, ifCheck: false, ifDis: false },
-        { key: '4', value: 'false', ifCheck: false, ifDis: false },
-        { key: '5', value: undefined, ifCheck: false, ifDis: false },
-      ]
-      this.radioDatasD = [
-        { key: '1', value: 10 },
-        { key: '2', value: 0 },
-        { key: '3', value: 20 },
-        { key: '4', value: 'false' },
-        { key: '5', value: undefined },
-      ]
-      this.radioDatasE = [
-        { key: '1', value: 10 },
-        { key: '2', value: 0 },
-        { key: '3', value: 20 },
-        { key: '4', value: 'false' },
-        { key: '5', value: undefined },
-      ]
-    }, 100);
+    this.radioDatasA = [
+      { key: '1', value: 10 },
+      { key: '2', value: 0 },
+      { key: '3', value: 20 },
+      { key: '4', value: 'false' },
+      { key: '5', value: undefined },
+      { key: '6', value: true },
+      { key: '7', value: '7' },
+      { key: '8', value: '8', _dis: true, _check: true },
+      { key: '9', value: '9' },
+    ]
   }
 
   onModelChangeA($event) { console.log(this.modelRadioA, $event) }
-  onModelChangeB($event) { console.log(this.modelRadioB, $event) }
-  onModelChangeC($event) { console.log(this.modelRadioC, $event) }
-  onModelChangeD($event) { console.log(this.modelRadioD, $event) }
-  onModelChangeE($event) { console.log(this.modelRadioE, $event) }
 
 }

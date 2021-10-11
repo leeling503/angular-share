@@ -30,7 +30,7 @@ export class LeafletHeatLayer extends CanvasLayer {
         radius: 20,
         blur: 10,
         minOpacity: 0.1,
-        maxZoom: 15,
+        maxZoom: 3,
         ifTip: true,
         tipX: 80,
         tipY: 20,
@@ -224,12 +224,11 @@ interface HeatPara extends CanvasPara {
     gradient?: any,
     /**最小阴影透明度 */
     minOpacity?: number,
-    pane?: any,
     /**单位变红 */
     maxNum?: number,
     /**决定了不同层级变红的数量*/
     maxZoom?: number,
-    /**等级标识tip */
+    /**是否显示等级标识tip */
     ifTip?: boolean,
     /**tip偏移量*/
     tipX?: number,

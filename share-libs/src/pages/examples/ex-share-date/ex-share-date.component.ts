@@ -10,6 +10,7 @@ export class ExShareDateComponent implements OnInit {
   constructor() { }
   month = "2020-07";
   monthB = "";
+  day
   dayA;
   dayB;
   year = "2020";

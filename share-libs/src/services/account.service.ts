@@ -17,27 +17,21 @@ export class AccountService {
         return this.http.get('api/open/csrf')
     }
 
-    private getNetAccount(): Observable<any> {
-        return this.http.get('api/open/getAccount')
+    /**传入ture表示通过网络获取用户信息不读取缓存 */
+    async getAccount(network: boolean = false) {
+        if (!this._account || network) {
+            let res = await this.getNetAccount();
+            if (res.rlt == 0) {
+                let _account = this._account = res.datas;
+                _account.organizeList = _account.organize ? [_account.organize] : [];
+            }
+            this.accountUpdate.next(this._account);
+        }
+        return this._account;
     }
 
-    /**传入ture表示通过网络获取用户信息不读取缓存 */
-    getAccount(network: boolean = false): Promise<Account> {
-        return new Promise((resolve, reject) => {
-            if (this._account && !network) {
-                resolve(this._account)
-            } else {
-                resolve(this.getNetAccount().toPromise().then(res => {
-                    if (res.rlt == 0) {
-                        let account = res.datas;
-                        account.organizeList = account.organize ? [account.organize] : [];
-                        this._account = account;
-                    }
-                    this.accountUpdate.next(this._account);
-                    return this._account;
-                }))
-            }
-        })
+    private getNetAccount(): Promise<any> {
+        return this.http.get('api/open/getAccount').toPromise()
     }
 
     hasAnyAuthority(authorities: string[]): Promise<boolean> {
@@ -67,12 +61,12 @@ export class AccountService {
     hasAuthority(menuCode): boolean {
         if (menuCode === undefined) return true;
         if (!this._account) return false;
-        let accunt = this._account;
-        let roleCode: string = accunt.roleCode;
+        let account = this._account;
+        let roleCode: string = account.roleCode;
         if (roleCode === "1") {
             return true;
         }
-        let menuCodeList = (accunt && accunt.menuCodeList) || [];
+        let menuCodeList = (account && account.menuCodeList) || [];
         return menuCodeList.some((ele) => ele == menuCode);
     }
 
@@ -82,10 +76,6 @@ export class AccountService {
 
     setAccount(account: Account) {
         this._account = account;
-    }
-
-    getNext(): Observable<any> {
-        return this.http.get('api/Apply/getNextUser')
     }
 
     subscribeAccout(): Observable<Account> {

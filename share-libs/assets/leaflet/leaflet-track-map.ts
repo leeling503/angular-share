@@ -21,11 +21,11 @@ export class LeafletTrackMap extends CanvasLayer {
     private _marks: ImageInfo[] = [];
     /**多条轨迹数据 */
     private _allTracks: TrackInfo[] = [];
-    private cursorData: PointInfo;//指针点击所对应的点
+    /**指针点击所对应的点*/
+    private cursorData: PointInfo[];
     intervalPart: [];//动画点绘制区域
     private _arcSize = 3;
     private _alpha = 0.5;
-    _arcClick: (e, data) => any = (e, data) => { console.log(e, data) };
 
     initialize(options) {
         L.setOptions(this, options);
@@ -78,13 +78,15 @@ export class LeafletTrackMap extends CanvasLayer {
         CanvasUtil.drawImg(ctx, mark);
     }
 
-    //鼠标移动事件
-    protected _onMouseMove(e) {
+    /**鼠标移动事件*/
+    protected onMouseMove(e: L.LeafletMouseEvent) {
         let containerPoint = e.containerPoint,
             x = containerPoint.x,
             y = containerPoint.y,
             tracks = this._allTracks,
-            size = this._arcSize + 2;
+            size = this._arcSize + 2,
+            flag = false;
+        this.cursorData = [];
         for (let i = tracks.length - 1; i >= 0; i--) {
             let infos = tracks[i].infos;
             for (let j = 0, len = infos.length; j < len; j++) {
@@ -92,11 +94,10 @@ export class LeafletTrackMap extends CanvasLayer {
                 if (xmin - size <= x && x <= xmin + size && ymin - size <= y && y <= ymin + size) {
                     $(this._canvas).css('cursor', 'pointer');
                     $(this._canvas).css('z-index', '10000');
-                    this.cursorData = info;
-                    console.log(info)
-                    return
-                } else {
-                    this.cursorData = undefined
+                    this.cursorData.push(info);
+                    flag = true;
+                } else if (!flag) {
+                    this.cursorData = [];
                     $(this._canvas).css('cursor', 'grab');
                     $(this._canvas).css('z-index', '10');
                 }
@@ -105,11 +106,11 @@ export class LeafletTrackMap extends CanvasLayer {
     }
 
     //点击事件
-    protected _onClickCanvas(e) {
+    protected onMouseClick(e) {
         if (this.cursorData === undefined || this._map === undefined) {
             return;
         }
-        this._arcClick(e, this.cursorData);
+        this.cbClick({ e, datas: this.cursorData });
     }
 
     /**清空画布重新绘制 */
@@ -134,7 +135,7 @@ export class LeafletTrackMap extends CanvasLayer {
     private _drawHistoryTrack(track: TrackInfo) {
         let ctx = this._ctx,
             zoom = this._map.getZoom();
-        track.lineWidth = 2;
+        track.widthLine = 2;
         track.colorLine = track.colorLine || 'blue';
         track.points = track.infos.map(e => {
             let point = CanvasUtil.transformLatLngToPoint(this._map, [e.lat, e.lng]);
@@ -197,6 +198,12 @@ export class LeafletTrackMap extends CanvasLayer {
 }
 /**轨迹类型 */
 type TrackType = '';
+
+export interface TrackInfo extends LineInfo {
+    infos: PointInfo[];
+    type?: TrackType;
+}
+
 export interface PointInfo extends ImageInfo {
     /**点位信息 */
     lat: number;
@@ -207,10 +214,5 @@ export interface PointInfo extends ImageInfo {
     /**信息播发时间 */
     time?: string;
     /**点位类型 ship表示船 ， arc表示小圆点 */
-    type?: TrackType;
-}
-
-export interface TrackInfo extends LineInfo {
-    infos: PointInfo[];
     type?: TrackType;
 }

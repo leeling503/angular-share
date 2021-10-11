@@ -25,15 +25,10 @@
   border-radius: 3px;
 }
 
-/**全局的文本样式*/
-.e_t_placeholder() {
-  color: #cccccc;
-}
-
 /**下拉打开选择弹窗的动画*/
-.e_tf() {
+.e_tf(@deg: 90deg) {
   /**动画过程*/
-  transform: translate(-50%, -50%) rotate(-90deg);
+  transform: rotate(@deg);
   transition: 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
 }
 

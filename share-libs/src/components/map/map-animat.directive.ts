@@ -26,11 +26,40 @@ export class MapAnimatDirective {
     ngOnInit(): void { }
     initAnimat() {
         let parts: ParticleInfo[] = [
-            { latlngs: [[39.0019694, 117.688788], [38.9855695, 117.715833]], degree: 0.2, speed: 0.002, length: 20, width: 3 },
-            { latlngs: [[40.29655075, 122.10762787], [39.0019694, 117.688788]], degree: 0.2, speed: 0.002, length: 20, width: 3 },
-            { latlngs: [[38.06863403, 118.94127655], [39.0019694, 117.688788]], degree: 0.5, speed: 0.002, length: 20, width: 3 },
-            { latlngs: [[39.0019694, 116.688788], [39.0019694, 117.688788]], speed: 0.001, length: 20, width: 3 }];
-        this.animatLines.setAllBezierLines(parts)
+            {
+                latlngs: [[39.0019694, 117.688788], [38.5855695, 119.715833]],
+                degree: 0.3, speed: 0.002, length: 50,
+            },
+            {
+                latlngs: [[38.06863403, 118.94127655], [39.0019694, 117.688788], [39.7019694, 117.688788]],
+                degree: 0.7, speed: 0.002, length: 50, colorLine: 'green', colorParticle: 'yellow'
+            }
+            ,
+            {
+                latlngs: [[39.0019694, 116.688788], [39.0019694, 117.688788]],
+                degree: 0.9, speed: 0.001, length: 50, colorLine: 'purple', colorParticle: 'yellow'
+            }
+        ];
+        let parts2: ParticleInfo[] = [
+            {
+                latlngs: [[39.0019694, 117.688788], [38.5855695, 119.715833]],
+                degree: 0.3, speed: 0.002, length: 20,
+            },
+            {
+                latlngs: [[40.29655075, 122.10762787], [39.0019694, 117.688788], [39.0019694, 112.688788]],
+                degree: 0.5, speed: 0.002, length: 0.1, colorLine: 'red', colorParticle: 'cyan',
+            },
+            {
+                latlngs: [[38.06863403, 118.94127655], [39.0019694, 117.688788], [39.7019694, 117.688788]],
+                degree: 0.7, speed: 0.002, length: 20, colorLine: 'green', colorParticle: 'yellow'
+            }
+            ,
+            {
+                latlngs: [[39.0019694, 116.688788], [39.0019694, 117.688788]],
+                degree: 0.9, speed: 0.001, length: 20, colorLine: 'purple',
+            }
+        ];
+        this.animatLines.setAllBezierLines(parts2)
         this.leafletAnimat.setAllParticles(parts)
     }
 }

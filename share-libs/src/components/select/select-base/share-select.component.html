@@ -3,7 +3,7 @@
   (onIconClick)="onClickClearNodes()">
   <div class="E-T-prefix" *ngIf="_perText" [style.width]="_perWidth">{{_perText}}</div>
   <div class="selected-nodes">
-    <ng-container *ngIf="(!checkOptions || checkOptions.length==0)">
+    <ng-container *ngIf="(!checkOptions || checkOptions.length==0) && !inAdd">
       <div class="selected-node placeholder-text">
         <span>{{inPlace}}</span>
       </div>
@@ -14,6 +14,13 @@
         <i class="select-clear" *ngIf="inClear" (click)="onClickClearNode(node)"></i>
       </div>
     </ng-container>
+    <!-- 是否显示输入框  （用户传入显示且  多选或者 单选时未选择 ）-->
+    <ng-container *ngIf=" inAdd &&  (inMulti || (checkOptions && checkOptions.length == 0))  ">
+      <div class="selected-input input-text">
+        <input [placeholder]="inPlace" [(ngModel)]="inputValue" (keydown.enter)="onInputValueEnd()"
+          (blur)="onInputValueEnd()" />
+      </div>
+    </ng-container>
   </div>
   <div class="E_suffix_icon E_split_line" *ngIf="inFlag">
     <i class="E_I_pull_down" [ngClass]=" {'E_TF_180':openOptions}"></i>
@@ -21,11 +28,12 @@
 </div>
 <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="cdkOverlayOrigin" [cdkConnectedOverlayHasBackdrop]="true"
   [cdkConnectedOverlayOpen]="openOptions" [cdkConnectedOverlayOffsetY]='3'
-  [cdkConnectedOverlayWidth]='cdkConnectedOverlayWidth' [cdkConnectedOverlayBackdropClass]="'E_O_transparent'"
-  (backdropClick)="onCloseOptions()">
+  [cdkConnectedOverlayFlexibleDimensions]="true" [cdkConnectedOverlayWidth]='cdkConnectedOverlayWidth'
+  [cdkConnectedOverlayBackdropClass]="'E_O_transparent'" (backdropClick)="onCloseOptions()">
   <div class="open-nodes">
-    <node-panel [inOptions]="options" [inCheckOptions]="checkOptions" (onCheckChange)="onCheckChange($event)"
+    <node-select [inOptions]="options" [inCheckOptions]="checkOptions" (onCheckChange)="onCheckChange($event)"
       [inMulti]="inMulti" [inCheck]="inCheck" [inSon]="inSon" [inTip]="inTip" [inOne]="inOne" [inActive]="inActive"
-      [inGanged]="inGanged" [inAdd]="inAdd"></node-panel>
+      [inGanged]="inGanged">
+    </node-select>
   </div>
 </ng-template>

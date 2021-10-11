@@ -1,4 +1,5 @@
 <div class="node-panel">
+  <div class="open-node none-node" *ngIf="inOptions.length == 0"> {{inTip}}</div>
   <div class="open-node super-node" *ngIf="superOptions && superOptions.length>1">
     <div *ngFor="let super of superOptions;last as isLast" (click)="onCheckSuper(super)">
       <span class="super-name">{{super.value}}</span>
@@ -6,11 +7,24 @@
   </div>
   <ng-container *ngFor="let option of activeOptions">
     <div class="node-option">
-      <div class="option-content" (click)="onClickOption(option)">
+      <div class="option-content" (click)="onClickOption(option)" (dblclick)="onDblClick(option)">
         <share-checkbox [modelChecked]="option._check" [inIfOther]="option._mix"
           (onClick)="onCheckOption($event,option)"></share-checkbox>
-        <span [ngClass]="{'node-children': option.children&& option.children.length>0}">{{option.value}}</span>
+        <span
+          [ngClass]="{'node-children': option.children && option.children.length >0 && inSon}">{{option.value}}</span>
       </div>
     </div>
+  </ng-container>
+  <!-- <ng-container *ngFor="let option of addOptions">
+    <div class="add-node">
+      <div share-checkbox [inIfDisable]="!option.value" [modelChecked]="option._check" class="option-check"+++  
+        (onClick)="onOptionCheck($event,option)">
+      </div>
+      <input [(ngModel)]="option.value" (keydown.enter)="onInputValueEnd(option)" (blur)="onInputValueEnd(option)"
+        placeholder="请输入" />
+    </div>
+  </ng-container> -->
+  <ng-container *ngIf="inAdd">
+    <div class="node-option option-add"><span (click)="onAddOption()">+ 添加选项</span> </div>
   </ng-container>
 </div>

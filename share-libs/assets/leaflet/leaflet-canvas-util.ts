@@ -1,12 +1,8 @@
 import * as L from "leaflet";
-
 export class CanvasUtil {
     private constructor() { };
     /**图片的缓存 */
     static readonly imgs: { [key: string]: HTMLImageElement } = Object.create(null);
-    static readonly ctxFig: CtxPara = {
-        alpha: 1, lineWidth: 1, colorLine: 'blue', colorFill: 'green', dash: [10, 0], dashOff: 0, fillAlpha: 1
-    }
 
     /**绘制图片 */
     static drawImg(ctx: CanvasRenderingContext2D, img: ImageInfo): string {
@@ -159,7 +155,9 @@ export class CanvasUtil {
         /**两点间的距离 */
         let len = Math.sqrt(x * x + y * y);
         let angle = Math.PI / 2 - Math.asin(y / len);
-        let curve: [number, number] = [c[0] + d * Math.cos(angle) * len, c[1] - d * Math.sin(angle) * len * x / Math.abs(x)];
+        let xd = d * Math.cos(angle) * len, yd = d * Math.sin(angle) * len * x / Math.abs(x);
+        xd = isNaN(xd) ? 0 : xd; yd = isNaN(yd) ? 0 : yd;
+        let curve: [number, number] = [c[0] + xd, c[1] - yd];
         return curve;
     }
 
@@ -179,16 +177,17 @@ export class CanvasUtil {
         return Promise.resolve(img)
     }
 
+    static readonly ctxFig: CtxPara = {
+        alpha: 1, widthLine: 1, colorLine: 'blue', colorFill: 'white', dash: [10, 0], dashOff: 0, fillAlpha: 1
+    }
     /**设置画布的相关配置 */
-    private static _setCtxFig(
-        ctx: CanvasRenderingContext2D,
-        fig: CtxPara = {}) {
+    private static _setCtxFig(ctx: CanvasRenderingContext2D, fig: CtxPara = {}) {
         fig = Object.assign({}, this.ctxFig, fig);
         ctx.globalAlpha = fig.alpha;
         ctx.globalCompositeOperation = fig.globalCompositeOperation || 'source-over';
         ctx.fillStyle = fig.colorFill;
         ctx.strokeStyle = fig.colorLine;
-        ctx.lineWidth = fig.lineWidth;
+        ctx.lineWidth = fig.widthLine;
         ctx.setLineDash(fig.dash);
         ctx.lineDashOffset = fig.dashOff;
     }
@@ -196,7 +195,6 @@ export class CanvasUtil {
 
 /**纬经度及该点信息 */
 export type LatlngInfo = [number, number, any?];
-export type Latlng = [number, number];
 
 /**canvas的画笔属性配置 */
 export interface CtxPara {
@@ -209,7 +207,7 @@ export interface CtxPara {
     /**线条的颜色 */
     colorLine?: string | CanvasGradient | CanvasPattern;
     /**线宽 */
-    lineWidth?: number;
+    widthLine?: number;
     /**虚线 线长,间隔长*/
     dash?: [number, number],
     /**虚线偏移*/
@@ -234,6 +232,7 @@ export interface RectInfo extends LineInfo { }
 
 /**圆 */
 export interface ArcInfo extends LineInfo {
+    /**圆半径 */
     size?: number;
 }
 

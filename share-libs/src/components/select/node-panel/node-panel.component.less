@@ -1,3 +1,7 @@
+@import '../../../styles/index.less';
+@C-B: @C-B-default;
+@C-BG: @C-BG-default ;
+
 :host,
 .node-panel {
   width: 100%;
@@ -5,8 +9,19 @@
 }
 
 .node-panel {
+  border: 1px solid @C-B;
+  border-radius: 3px;
+  background-color: @C-BG;
+  padding: 2px 10px;
   display: flex;
   flex-wrap: wrap;
+
+  .none-node {
+    min-height: 60px;
+    text-align: center;
+    width: 100%;
+    line-height: 60px;
+  }
 
   .super-node {
     width: 100%;
@@ -27,13 +42,16 @@
   .node-option {
     width: 50%;
     display: flex;
+    padding: 0px 5px;
 
     .option-content {
       display: flex;
+      flex-grow: 1;
 
-
-      :hover {
-        color: blue
+      &:hover {
+        background-color: @C-blue-2;
+        color: blue;
+        cursor: pointer;
       }
 
       .node-children {
@@ -42,6 +60,12 @@
       }
 
     }
+  }
+
+
+  .option-add {
+    color: blue;
+    cursor: pointer;
   }
 
 }

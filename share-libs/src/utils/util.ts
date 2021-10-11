@@ -1,5 +1,3 @@
-import { ShareInputType } from "../models";
-
 /**undefined和null是返回true */
 function UtilIsUndefined(value: any): boolean {
     return value === undefined || value === null
@@ -51,22 +49,22 @@ function UtilGetAttrValue(obj: any, key: string, value) {
 }
 
 /**判断value是字符串还是对象或者数组 */
-function UtilValueType(value: any): ShareInputType {
-    let T: ShareInputType;
+function UtilValueType(value: any) {
+    let o;
     if (Array.isArray(value)) {
         if (typeof value[0] !== "object") {
-            T = 'strings';
+            o = 'strings';
         } else {
-            T = 'objects';
+            o = 'objects';
         }
     } else {
         if (typeof value == "string") {
-            T = 'string';
+            offscreenBuffering = 'string';
         } else {
-            T = 'object';
+            o = 'object';
         }
     }
-    return T
+    return o
 }
 
 /**存在并且是function */
@@ -74,9 +72,13 @@ function UtilIsFunction(v) {
     return v && typeof v === 'function'
 }
 
-/**第一个值不为undefined则返回第一个值 */
+/**第一个值不为undefined和null则返回第一个值 */
 function UtilSetValue(data1, data2) {
-    return data1 === undefined ? data2 : data1
+    return data1 ?? data2;
+}
+
+export function UtilType(value) {
+
 }
 
 export { UtilIsUndefined, UtilIsFalse, UtilIsEmpty, UtilIsEqual, UtilGetAttrValue, UtilValueType, UtilIsFunction, UtilSetValue }

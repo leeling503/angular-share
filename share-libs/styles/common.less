@@ -1,0 +1,43 @@
+/**边框*/
+.E_BD {
+  .e_bd()
+}
+
+/**hover激活的边框颜色*/
+.E_BD_hover {
+  &:hover {
+    border-color: @C-B-hover;
+
+    * {
+      border-color: @C-B-hover  !important;
+    }
+  }
+}
+
+.E-T-prefix {
+  color: #FFF;
+  height: 100%;
+  background-color: @C-BG-blue;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 1px 10px
+}
+
+/**全局禁选样式*/
+.E_D_S {
+  user-select: none;
+}
+
+/**全局禁用样式*/
+.E_D,
+.E_D * {
+  .e_d();
+}
+
+.E_D_drop,
+.E_D_drop * {
+  .e_d_drop()
+}

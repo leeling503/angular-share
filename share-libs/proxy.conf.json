@@ -1,6 +1,6 @@
 {
     "/api/Proarea": {
-        "target": "http://192.168.1.111:9000",
+        "target": "http://192.168.1.111:8086",
         "secure": false
     },
     "/api": {

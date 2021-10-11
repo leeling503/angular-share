@@ -159,15 +159,14 @@ export class LeafletNetMap {
 }
 
 class NetMapProvider extends L.TileLayer {
-    constructor(name, options = {}) {
-        super(name, options)
+    constructor(url: string, options = {}) {
+        super(url, options)
     }
 }
 
 'use strict';
-/**坐标转换关键代码 */
+/**坐标转换关键代码(加载后GridLayer自行转换) */
 (function (window, document) {
-    console.log('loading netmap')
     /**百度转84*/
     var bd09_To_gps84 = function (lng, lat) {
         var gcj02 = bd09_To_gcj02(lng, lat);
@@ -275,7 +274,6 @@ class NetMapProvider extends L.TileLayer {
     }
     L.GridLayer.include({
         _setZoomTransform: function (level, _center, zoom) {
-            console.log('L.GridLayer._setZoomTransform')
             var center = _center;
             if (center != undefined && this.options) {
                 if (this.options.corrdType == 'gcj02') {
@@ -295,7 +293,6 @@ class NetMapProvider extends L.TileLayer {
             }
         },
         _getTiledPixelBounds: function (_center) {
-            console.log('L.GridLayer._getTiledPixelBounds')
             var center = _center;
             if (center != undefined && this.options) {
                 if (this.options.corrdType == 'gcj02') {
@@ -309,7 +306,6 @@ class NetMapProvider extends L.TileLayer {
                 scale = map.getZoomScale(mapZoom, this._tileZoom),
                 pixelCenter = map.project(center, this._tileZoom).floor(),
                 halfSize = map.getSize().divideBy(scale * 2);
-
             return new L.Bounds(pixelCenter.subtract(halfSize), pixelCenter.add(halfSize));
         }
     })

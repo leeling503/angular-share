@@ -9,6 +9,12 @@ export abstract class CanvasLayer extends L.Layer {
     protected _width: number;
     protected _height: number;
     protected _animationLoop: number;
+    protected cbClick: (e) => any = (e) => { }
+    protected cbMove: (e) => any = (e) => { }
+    /**点击事件的监听 （传入点击事件回调） */
+    subscribeOnClick(cb: (e) => any) { this.cbClick = cb; };
+    /**鼠标移动事件的监听 （传入点击事件回调） */
+    subscribeOnMove(cb: (e) => any) { this.cbMove = cb; };
 
     /**初始化设置配置 */
     initOptions(options?: CanvasPara) {
@@ -25,8 +31,8 @@ export abstract class CanvasLayer extends L.Layer {
             map.getPanes().overlayPane.appendChild(this._canvas);
         map.on('viewreset', this._reset, this);
         map.on('moveend', this._reset, this);
-        map.on("mousemove", this._onMouseMove, this)
-        map.on("click", this._onClickCanvas, this)
+        map.on("mousemove", this.onMouseMove, this)
+        map.on("click", this.onMouseClick, this)
         if (map.options.zoomAnimation && L.Browser.any3d) {
             /**缩放动画 */
             map.on('zoomanim', this._animateZoom, this);
@@ -44,8 +50,8 @@ export abstract class CanvasLayer extends L.Layer {
         }
         map.off('moveend', this._reset, this);
         map.off('resize', this._reset, this);
-        map.off("mousemove", this._onMouseMove, this)
-        map.off("click", this._onClickCanvas, this)
+        map.off("mousemove", this.onMouseMove, this)
+        map.off("click", this.onMouseClick, this)
         if (map.options.zoomAnimation) {
             map.off('zoomanim', this._animateZoom, this);
         }
@@ -53,8 +59,10 @@ export abstract class CanvasLayer extends L.Layer {
         return this
     }
 
-    protected _onMouseMove(e) { }
-    protected _onClickCanvas(e) { }
+    protected onRemoveLayer(e) { }
+    protected onMouseMove(e) { }
+    protected onMouseClick(e) { }
+
     /**重画，需要先清空画布 */
     protected abstract _redraw();
 

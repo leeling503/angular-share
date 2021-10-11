@@ -1,0 +1,31 @@
+<div class="open-nodes">
+  <div class="open-node none-node" *ngIf="options.length == 0"> {{inTip}}</div>
+  <div *ngIf="inAdd">添加选项</div>
+  <div *ngTemplateOutlet="optionEl;context:{options:options}"></div>
+</div>
+
+<ng-template #optionEl let-options="options" let-dis="dis">
+  <div class="open-node" *ngFor="let option of options">
+    <div class="node-content" [ngClass]='{
+        "node-content-check": option._check ,
+        "node-content-active": option== activeOption }' (click)="onClickOptionNode(option , true)">
+      <ng-container *ngIf='inSon'>
+        <ng-container *ngIf="option.children && option.children.length > 0">
+          <i (click)="onOpenOptionChild(option)" class="E_I_pull_down" [ngClass]='{"E_TF_180":option.showChild}'></i>
+        </ng-container>
+        <ng-container *ngIf="!option.children || option.children.length == 0">
+          <i></i>
+        </ng-container>
+      </ng-container>
+      <ng-container *ngIf="inCheck">
+        <share-checkbox (modelCheckedChange)="onClickOptionNode(option)" [modelChecked]='option._check'
+          [inIfOther]='option._mix' [inIfDisable]="option._dis || dis">
+        </share-checkbox>
+      </ng-container>
+      <div class="node-content-text"><span>{{option.value}}</span></div>
+    </div>
+    <ng-container *ngIf="option.showChild">
+      <div *ngTemplateOutlet="optionEl;context:{options:option.children,dis:option._dis}"></div>
+    </ng-container>
+  </div>
+</ng-template>

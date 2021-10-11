@@ -1,52 +1,30 @@
-<div class="share-select-add E_BD E_BD_hover" cdkOverlayOrigin (click)="openOptions()">
+<div class="share-select-panel E_BD E_BD_hover" cdkOverlayOrigin (click)='onOpenOverlay()'
+  [ngClass]="{'select-has-border':checkOptions.length > 1}" shareIcon [inView]="inClear && checkOptions.length"
+  (onIconClick)="onClickClearNodes()">
   <div class="E-T-prefix" *ngIf="_perText" [style.width]="_perWidth">{{_perText}}</div>
   <div class="selected-nodes">
     <ng-container *ngIf="(!checkOptions || checkOptions.length==0)">
-      <div class="selected-node text_placeholder">
-        <span>{{_placeholder}}</span>
+      <div class="selected-node placeholder-text">
+        <span>{{inPlace}}</span>
       </div>
     </ng-container>
-    <ng-container *ngFor="let node of checkOptions;last as last">
-      <span>{{node.showName || node.value}}</span><span *ngIf="!last">、</span>
+    <ng-container *ngFor="let node of checkOptions">
+      <div class="selected-node node-data-text">
+        <span>{{node.showName || node.value}}</span>
+        <i class="select-clear" *ngIf="inClear" (click)="onClickClearNode(node)"></i>
+      </div>
     </ng-container>
   </div>
-  <div class="E_suffix_icon E_split_line">
-    <i class="E_I_pull_down" [ngClass]=" {'pull_down-on':optionsOpen}"></i>
+  <div class="E_suffix_icon E_split_line" *ngIf="inFlag">
+    <i class="E_I_pull_down" [ngClass]=" {'E_TF_180':openOptions}"></i>
   </div>
 </div>
 <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="cdkOverlayOrigin" [cdkConnectedOverlayHasBackdrop]="true"
-  [cdkConnectedOverlayOpen]="optionsOpen" [cdkConnectedOverlayOffsetY]='3'
+  [cdkConnectedOverlayOpen]="openOptions" [cdkConnectedOverlayOffsetY]='3'
   [cdkConnectedOverlayWidth]='cdkConnectedOverlayWidth' [cdkConnectedOverlayBackdropClass]="'E_O_transparent'"
-  (backdropClick)="closeOpenNode()">
-  <div class="open-panel">
-    <div class="open-nodes">
-      <ng-container *ngFor="let option of options">
-        <div class="option-node">
-          <div share-checkbox class="option-check" [modelChecked]="option._check"
-            (onClick)="onOptionCheck($event,option)"></div>
-          <span [title]="option.value">
-            {{option.value}}
-          </span>
-        </div>
-      </ng-container>
-      <ng-container *ngFor="let option of addOptions">
-        <div class="add-node">
-          <div share-checkbox [inIfDisable]="!option.value" [modelChecked]="option._check" class="option-check"
-            (onClick)="onOptionCheck($event,option)">
-          </div>
-          <input [(ngModel)]="option.value" (keydown.enter)="onInputValueEnd(option.value)"
-            (blur)="onInputValueEnd(option.value)" placeholder="请输入" />
-        </div>
-      </ng-container>
-      <ng-container *ngIf="_ifAdd">
-        <div class="option-add">
-          <span (click)="onAddOption()">+ 添加选项</span>
-        </div>
-      </ng-container>
-    </div>
-    <div class="open-btns">
-      <div class="btn-sure" (click)="onBtnClick()">确定</div>
-      <div class="btn-off" (click)="onBtnClick(true)">取消</div>
-    </div>
+  (backdropClick)="onCheckSureChange(false)">
+  <div class="open-nodes">
+    <node-add [inOptions]="options" [inCheckOptions]="checkOptions" [inIfMulti]="inMulti"
+      (onCheckSureChange)="onCheckSureChange($event)"></node-add>
   </div>
 </ng-template>
