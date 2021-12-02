@@ -1,59 +1,58 @@
-<div class="share-pagination but-{{paginSize}}">
+<div class="share-pagination but-{{inSize}}">
   <div class="pagi-info pagi-comm">
-    <ng-container *ngIf="paginInfoType == 'none'">
+    <ng-container *ngIf="inInfoType == 'none'">
       <span></span>
     </ng-container>
-    <ng-container *ngIf="paginInfoType == 'simple'">
-      <span>第{{paginPage.currentPage}}页，共{{paginPage.recordCount}}条</span>
+    <ng-container *ngIf="inInfoType == 'simple'">
+      <span>第{{inPage.currentPage}}页，共{{inPage.recordCount}}条</span>
     </ng-container>
-    <ng-container *ngIf="paginInfoType == 'normal'">
-      <span>当前第{{paginPage.currentPage}}页，共{{paginPage.pageCount}}页，共{{paginPage.recordCount}}条</span>
+    <ng-container *ngIf="inInfoType == 'normal'">
+      <span>当前第{{inPage.currentPage}}页，共{{inPage.pageCount}}页，共{{inPage.recordCount}}条</span>
     </ng-container>
-    <ng-container *ngIf="paginInfoType == 'detail'">
-      <span>当前第{{paginPage.currentPage}}页，共{{paginPage.pageCount}}页，每页{{paginPage.pageRecord}}条，共有{{paginPage.recordCount}}条</span>
+    <ng-container *ngIf="inInfoType == 'detail'">
+      <span>当前第{{inPage.currentPage}}页，共{{inPage.pageCount}}页，每页{{inPage.pageRecord}}条，共有{{inPage.recordCount}}条</span>
     </ng-container>
   </div>
-  <ng-container *ngIf="paginType == 'simple' || paginType == 'all'">
-    <div (click)="jumpTo('first')" class="pagi-but pagi-comm pagi-first"
-      [ngClass]="{'but-disable':paginPage.currentPage==1}">
+  <ng-container *ngIf="inType == 'simple' || inType == 'all'">
+    <div (click)="onJumpTo('first')" class="pagi-but pagi-comm pagi-first"
+      [ngClass]="{'but-disable':inPage.currentPage==1}">
       <i></i>
     </div>
-    <div (click)="jumpTo('prev')" class="pagi-but pagi-comm pagi-prev"
-      [ngClass]="{'but-disable':paginPage.currentPage==1}">
+    <div (click)="onJumpTo('prev')" class="pagi-but pagi-comm pagi-prev"
+      [ngClass]="{'but-disable':inPage.currentPage==1}">
       <i></i>
     </div>
-    <div (click)="jumpTo('next')" class="pagi-but pagi-comm pagi-next"
-      [ngClass]="{'but-disable':paginPage.currentPage>=paginPage.pageCount}">
+    <div (click)="onJumpTo('next')" class="pagi-but pagi-comm pagi-next"
+      [ngClass]="{'but-disable':inPage.currentPage>=inPage.pageCount}">
       <i></i>
     </div>
-    <div (click)="jumpTo('last')" class="pagi-but pagi-comm pagi-last"
-      [ngClass]="{'but-disable':paginPage.currentPage>=paginPage.pageCount}">
+    <div (click)="onJumpTo('last')" class="pagi-but pagi-comm pagi-last"
+      [ngClass]="{'but-disable':inPage.currentPage>=inPage.pageCount}">
       <i></i>
     </div>
   </ng-container>
-  <ng-container *ngIf="paginType == 'default' || paginType == 'all'">
-    <div class="pagi-but pagi-comm pagi-num" [ngClass]="{'pagi-curr':paginPage.currentPage == 1}"
-      (click)="jumpToNum(1)">
+  <ng-container *ngIf="inType == 'default' || inType == 'all'">
+    <div class="pagi-but pagi-comm pagi-num" [ngClass]="{'pagi-curr':inPage.currentPage == 1}" (click)="onJumpToNum(1)">
       <span>1</span>
     </div>
-    <div class="pagi-but pagi-comm pagi-prev5" (click)="jumpTo('prev5')" *ngIf="prevFlag"><span>{{flagIcon}}</span>
+    <div class="pagi-but pagi-comm pagi-prev5" (click)="onJumpTo('prev5')" *ngIf="prevFlag"><span>{{flagIcon}}</span>
     </div>
-    <div class="pagi-but pagi-comm pagi-num" [ngClass]="{'pagi-curr':paginPage.currentPage == item}"
-      *ngFor="let item of buttons;index as i" (click)="jumpToNum(item)">
+    <div class="pagi-but pagi-comm pagi-num" [ngClass]="{'pagi-curr':inPage.currentPage == item}"
+      *ngFor="let item of buttons;index as i" (click)="onJumpToNum(item)">
       <span share-input-number>{{item}}</span>
     </div>
-    <div class="pagi-but pagi-comm pagi-next5" (click)="jumpTo('next5')" *ngIf="nextFlag"><span>{{flagIcon}}</span>
+    <div class="pagi-but pagi-comm pagi-next5" (click)="onJumpTo('next5')" *ngIf="nextFlag"><span>{{flagIcon}}</span>
     </div>
-    <div class="pagi-but pagi-comm pagi-num" [ngClass]="{'pagi-curr':paginPage.currentPage == paginPage.pageCount}"
-      *ngIf="paginPage.pageCount!=1" (click)="jumpToNum(paginPage.pageCount)"><span>{{paginPage.pageCount}}</span></div>
+    <div class="pagi-but pagi-comm pagi-num" [ngClass]="{'pagi-curr':inPage.currentPage == inPage.pageCount}"
+      *ngIf="inPage.pageCount!=1" (click)="onJumpToNum(inPage.pageCount)"><span>{{inPage.pageCount}}</span></div>
   </ng-container>
   <ng-container>
-    <input class="pagi-but pagi-comm pagi-input" type="text" share-input-number [max]="paginPage.pageCount" min=1
-      [(ngModel)]="inputNum" (keydown.enter)="jumpTo('num')" />
+    <input class="pagi-but pagi-comm pagi-input" type="text" share-input-number [max]="inPage.pageCount" min=1
+      [(ngModel)]="inputNum" (keydown.enter)="onJumpTo('num')" />
   </ng-container>
   <ng-container>
     <div class="pagi-record pagi-comm" cdk-overlay-origin (click)="onOpenOverlay()">
-      <span>{{paginPage.pageRecord}}条/页</span>
+      <span>{{inPage.pageRecord}}条/页</span>
       <i class="E_I_pull_down"></i>
     </div>
   </ng-container>

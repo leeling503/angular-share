@@ -142,6 +142,12 @@ export const SYSTEM_MENU: MenuItem[] = [
             }, {
                 title: '弹窗',
                 url: `${example}/modal`
+            }, {
+                title: '轮播图',
+                url: `${example}/swiper`
+            }, {
+                title: '表单',
+                url: `${example}/form`
             }
         ]
     },

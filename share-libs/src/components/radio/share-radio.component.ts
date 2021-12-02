@@ -1,11 +1,12 @@
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { EventEmitter, Output, SimpleChanges } from '@angular/core';
 import { Component, Input, OnInit } from '@angular/core';
 import * as _ from 'lodash';
-import { UtilGetAttrValue, UtilIsEmpty, UtilIsEqual, UtilIsFalse, UtilIsUndefined, UtilSetValue } from 'share-libs/src/utils/util';
-import { UtilChangesValue, UtilChangesNoFirstValue, UtilChanges } from 'share-libs/src/utils/util-component';
-import { RadioIconType, RadioData, RadioPara } from './share-radio.model';
-
+import { UtilIsEqual, UtilIsFalse, UtilIsUndefined } from 'share-libs/src/utils/util';
+import { UtilChanges } from 'share-libs/src/utils/util-component';
+import { RadioIconType, RadioOption, RadioPara } from './share-radio.model';
+/**
+ * 按钮组组件
+ */
 @Component({
   selector: 'share-radio',
   templateUrl: './share-radio.component.html',
@@ -14,8 +15,8 @@ import { RadioIconType, RadioData, RadioPara } from './share-radio.model';
 export class ShareRadioComponent implements OnInit {
   constructor() { }
   /**按钮组数据 */
-  @Input() inOptins: RadioData | RadioData[];
-  @Input() modelRadio: string | string[];
+  @Input() inOptins: RadioOption | RadioOption[];
+  @Input() model: string | string[];
   /**按钮组参数 */
   @Input() inPara: RadioPara = {};
   /**是否多选 */
@@ -25,27 +26,30 @@ export class ShareRadioComponent implements OnInit {
   /**禁用选项能去勾选 */
   @Input() inDisCancel: boolean;
   /**取哪个属性的值 (key) */
-  @Input() inKey: string = 'key';
+  @Input() inKey: string;
   /**按钮组图标 */
   @Input() inIconType: RadioIconType;
-  @Output() modelRadioChange: EventEmitter<any> = new EventEmitter();
+  /**输出数据类型与输入数据类型相关当为undefined时与是否多选有关 */
+  @Output() modelChange: EventEmitter<any> = new EventEmitter();
+  /**默认配置 */
   defaultPara: RadioPara = {
     ifMulti: false,
     ifClear: false,
     ifDisCancel: false,
     iconType: 'radio',
+    key: 'key'
   }
-  /**输入数据类型 */
-  modelType: 'string' | 'array' = 'string';
+  /**输入数据类型(输出数组或单个数据)*/
+  modelType: 'multi' | 'single' = 'multi';
   emitModel: string | string[];
-  public options: RadioData[] = [];
+  public options: RadioOption[] = [];
 
   ngOnChanges(changes: SimpleChanges): void {
     if (UtilChanges(changes, 'inOptins')) {
       this.setOptions();
       this.setCheckRadio();
     }
-    if (UtilChanges(changes, 'modelRadio') && !UtilIsEqual(this.modelRadio, this.emitModel)) {
+    if (UtilChanges(changes, 'model') && !UtilIsEqual(this.model, this.emitModel)) {
       this.setModelType();
       this.setCheckRadio();
     }
@@ -53,6 +57,8 @@ export class ShareRadioComponent implements OnInit {
 
   ngOnInit() {
     this.setPara();
+    this.setModelType();
+    this.setCheckRadio();
   }
 
   /**设置配置 */
@@ -62,6 +68,7 @@ export class ShareRadioComponent implements OnInit {
     this.inClear = this.inClear ?? para.ifClear;
     this.inDisCancel = this.inDisCancel ?? para.ifDisCancel;
     this.inIconType = this.inIconType ?? para.iconType;
+    this.inKey = this.inKey ?? para.key;
   }
 
   /**设置选项数据 */
@@ -74,26 +81,29 @@ export class ShareRadioComponent implements OnInit {
     }
   }
 
+  /**判断输出的值类型 */
   setModelType() {
-    this.modelType = 'string';
-    if (Array.isArray(this.modelRadio)) {
-      this.modelType = 'array'
+    this.modelType = 'multi';
+    if (!Array.isArray(this.model) && typeof this.model !== undefined) {
+      this.modelType = 'single';
+    } if (typeof this.model === undefined && this.inMulti === false) {
+      this.model = 'single'
     }
   }
 
   /**设置勾选 */
   setCheckRadio() {
-    if (UtilIsUndefined(this.modelRadio)) return;
-    let modelRadio = this.modelRadio;
-    if (typeof this.modelRadio == 'string') {
-      modelRadio = this.modelRadio.split(',');
+    if (UtilIsUndefined(this.model)) return;
+    let modelRadio = this.model;
+    if (typeof this.model == 'string') {
+      modelRadio = this.model.split(',');
     } else if (!Array.isArray(modelRadio)) {
       modelRadio = [modelRadio]
     }
     this.options.map(e => { modelRadio?.includes(e[this.inKey]) && (e._check = true); })
   }
 
-  onTiggerCheck(radio: RadioData) {
+  onTiggerCheck(radio: RadioOption) {
     if (radio._dis) return;
     let flag = radio._check;
     /**单选 */
@@ -107,14 +117,14 @@ export class ShareRadioComponent implements OnInit {
       radio._check = true;
     }
     let values: string | string[] = this.options.filter(e => e._check).map(e => e[this.inKey]);
-    if (this.modelType == 'string') {
-      values = values.join(',')
+    if (this.modelType == 'single') {
+      values = values.length === 1 ? values[0] : values.join(',')
     }
-    if (UtilIsEqual(values, this.modelRadio)) {
+    if (UtilIsEqual(values, this.model)) {
       return
     }
     this.emitModel = values;
-    this.modelRadioChange.emit(this.emitModel)
+    this.modelChange.emit(this.emitModel)
   }
 
 }

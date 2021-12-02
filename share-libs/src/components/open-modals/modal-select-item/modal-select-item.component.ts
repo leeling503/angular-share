@@ -6,9 +6,11 @@ import { Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/
     styleUrls: ['./modal-select-item.component.less']
 })
 export class ShareModalSelectItemComponent {
+    /**选项 */
     @Input() inItems: ShareModalSelectItem[] = [];
     @Input() inCheckKey: string = "_checked";
-    @Input() inHasAll: boolean = true;//是否有全选
+    /**是否允许全选 */
+    @Input() inHasAll: boolean = true;
     @Output() onModalChangeItem: EventEmitter<ModalChange> = new EventEmitter();
     checkedItems: ShareModalSelectItem[] = [];
     allChecked: boolean = false;

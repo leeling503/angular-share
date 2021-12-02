@@ -23,7 +23,7 @@ export class ShareBtn<T = any> {
     colorBD?: ColorEnum;
     /**文字颜色 */
     color?: ColorEnum;
-    click?: () => any;
+    click?: ($event) => any;
     clickPer?: () => any;
     clickSuf?: () => any;
 }

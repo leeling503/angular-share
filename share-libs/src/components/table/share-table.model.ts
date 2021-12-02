@@ -8,7 +8,7 @@ export interface TableItem<T = any> {
     title: string;
     /**宽度 */
     width?: number;
-    /**宽度固定（不会缩放，除非是最后一行） */
+    /**宽度固定（全部为固定宽度但宽度总和小于表格宽度也会扩展） */
     widthFix?: number
     /**最小宽度 不设置最小为60px*/
     widthMin?: number;
@@ -26,6 +26,8 @@ export interface TableItem<T = any> {
     ifShow?: boolean;
     /** 能否过滤掉该选列 只有设置为false才不能取消*/
     canFilter?: boolean;
+    /** 是否在过滤选框隐藏*/
+    hidFilter?: boolean;
     /**事件回调 */
     onClick?: (data: T, item: TableItem) => any;
     /**tag类型规则 最好采用UtilTableRuleTags生成 */
@@ -63,17 +65,6 @@ export interface BtnRule<T = any> {
     onClick?: (data: T, item, datas?: T[]) => void
 }
 
-export class SharePage {
-    numPages?: number = 1;//当总页数改变时触发，$ event：number等于总页数
-    currentPage?: number = 1;//当前页
-    pageRecord?: number = 15;//页容量
-    recordCount?: number = 0;//总数
-    pageCount?: number = 0;//总页数
-    pageSize?: string;
-    result?: any;
-    datas?: any;
-}
-
 export class TableSelect {
     /** 当前操作改变的数据 */
     curChangeDatas: any[];
@@ -98,6 +89,7 @@ export interface TableMultiItem extends TableItem {
     _keyCode?: string;
     /**多表头同列所有th隐藏才被隐藏 */
     _ifShow?: boolean;
+    /**综合多表头的 */
     _styckyLeft?: string;
 }
 

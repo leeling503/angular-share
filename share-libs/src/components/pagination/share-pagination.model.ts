@@ -1,13 +1,19 @@
-export class PaginationPage {
-    currentPage: number = 1;//当前页
-    endRow: number;//结束行数
-    pageCount: number;//页数
-    pageRecord: number;//每页几条
-    recordCount: number = 0;//总条数
-    startRow: number;//起始行数
-    result: any[];
-    pageOne: number;
-    pageTwo: number;
+export interface PaginationPage {
+    /**当前页 */
+    currentPage?: number;
+    /**结束行数 */
+    endRow?: number;
+    /**总页数 */
+    pageCount?: number;
+    /**每页几条 */
+    pageRecord?: number;
+    /**总条数 */
+    recordCount?: number;
+    /**起始行数 */
+    startRow?: number;
+    result?: any[];
+    pageOne?: number;
+    pageTwo?: number;
 }
 
 export type PaginationType = "simple" | "default" | 'all';

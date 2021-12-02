@@ -11,6 +11,7 @@ import { OverlayModule } from '@angular/cdk/overlay';
 import { PortalModule } from '@angular/cdk/portal';
 import { ShareInputModule } from '../input/share-input.module';
 import { ShareOpenModalsModule } from '../open-modals/open-modals.module';
+import { ShareNullModule } from '../null/share-null.module';
 
 @NgModule({
   imports: [
@@ -18,6 +19,7 @@ import { ShareOpenModalsModule } from '../open-modals/open-modals.module';
     OverlayModule,
     PortalModule,
     ShareDirectiveModule,
+    ShareNullModule,
     ShareInputModule,
     ShareCheckboxModule,
     SharePaginationModule,

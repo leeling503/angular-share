@@ -1,3 +1,4 @@
+
 /**undefined和null是返回true */
 function UtilIsUndefined(value: any): boolean {
     return value === undefined || value === null
@@ -77,8 +78,23 @@ function UtilSetValue(data1, data2) {
     return data1 ?? data2;
 }
 
-export function UtilType(value) {
 
+export class UtilSleep {
+    constructor() { }
+    private promise: Promise<any>;
+    /**回调函数 ， 延时（单位为秒） */
+    sleep(cb: (data?: any) => any, time: number = 5): UtilSleep {
+        this.promise = (this.promise || new Promise((resolve, reject) => { resolve(0) }))
+            .then((res) => {
+                return new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                        let data = cb(res);
+                        resolve(data)
+                    }, time * 1000);
+                })
+            })
+        return this
+    }
 }
 
 export { UtilIsUndefined, UtilIsFalse, UtilIsEmpty, UtilIsEqual, UtilGetAttrValue, UtilValueType, UtilIsFunction, UtilSetValue }

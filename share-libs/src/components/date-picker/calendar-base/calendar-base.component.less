@@ -1,0 +1,212 @@
+:host {
+  width: 100%;
+  height: 100%;
+}
+
+.share-calendar {
+  width: 100%;
+  height: 100%;
+  background-color: #FFF;
+  position: relative;
+}
+
+.calendar-ctr {
+  display: flex;
+  align-items: center;
+  height: 40px;
+  background: #D5E8FF;
+  position: relative;
+}
+
+.calendar-ctr-btn {
+  margin: 0px 15px;
+  width: 36px;
+  height: 22px;
+  background: #45ADB3;
+  border-radius: 3px;
+  color: #FFF;
+  text-align: center;
+}
+
+.calendar-ctr-per,
+.calendar-ctr-next {
+  margin: 0px 2px;
+  text-align: center;
+  width: 16px;
+  height: 22px;
+  background: #FFFFFF;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.calendar-ctr-date {
+  cursor: pointer;
+  padding: 0px 5px;
+  min-width: 90px;
+  height: 22px;
+  display: flex;
+  border-radius: 3px;
+  align-items: center;
+  justify-content: center;
+  background-color: #FFF;
+}
+
+.calendar-ctr-info {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  right: 20px;
+}
+
+.calendar-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  /**解决因定位以及子项  box-sizing: content-box; 导致的边框偏移*/
+  width: calc(100% - 2px);
+}
+
+.calendar-item {
+  width: 13%;
+  flex-grow: 1;
+  color: #999999;
+  font-size: 14px;
+  position: relative;
+
+  &.active-month {
+    color: #333;
+  }
+
+  &.date-per {
+    cursor: pointer;
+  }
+
+  .date-days.today {
+    width: 45%;
+    height: 45%;
+    background: #185EFE;
+    border-radius: 2.2px;
+    color: #FFF;
+  }
+
+}
+
+.calendar-week {
+  height: 32px;
+  color: #333;
+
+  .item-position {
+    background-color: #EAF4FF;
+  }
+}
+
+.calendar-day {
+  padding: 50% 0px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.date-days {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.date-per .date-days {
+  top: 20%;
+  transform: translate(-50%, 0);
+}
+
+.item-position {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  border: 1px solid #D5E8FF;
+  background-color: #FFF;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  box-sizing: content-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.active-date .item-position {
+  background-color: #CFE6F6;
+  z-index: 10;
+  border-color: #84BCFF;
+  right: -1px;
+  width: auto;
+  height: auto;
+  bottom: -1px;
+}
+
+.item-data {
+  z-index: 20;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.date-info {
+  position: absolute;
+  bottom: 0px;
+  height: 35%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 100%;
+  padding: 0px 5%;
+}
+
+.info-state {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.state-normal.date-info {
+  .info-state {
+    background-color: green;
+  }
+}
+
+.state-abnormal.date-info {
+  background-color: rgba(255, 122, 122, 0.1);
+
+  .info-state {
+    background-color: red;
+  }
+}
+
+.state-none.date-info {
+  justify-content: center;
+
+  .info-state {
+    display: none;
+  }
+
+  .info-user {
+    color: #185EFE;
+  }
+}
+
+
+.info-user {
+  font-size: 12px;
+  transform: scale(0.85);
+  color: #5C72A7;
+}

@@ -1,0 +1,16 @@
+<div class="share-swiper">
+  <share-null *ngIf="!inOptions||inOptions.length==0"></share-null>
+  <ng-container *ngIf="inOptions&&inOptions.length>0">
+    <ng-container *ngFor="let option of inOptions,index as i">
+      <div class="pic" *ngIf=" i === activeIndex"> <img [src]="option.imgUrl" /></div>
+    </ng-container>
+    <div class="ctr-btn swiper-per" (click)="onChangeIndex(-1)"></div>
+    <div class="ctr-btn swiper-nex" (click)="onChangeIndex(1)"></div>
+    <div class="swiper-ctr">
+      <ng-container *ngFor="let option of inOptions,index as i">
+        <i class="swiper-pagin" [ngClass]="{'active-pagin': i === activeIndex}" (click)='onChangeActive(option,i)'>
+        </i>
+      </ng-container>
+    </div>
+  </ng-container>
+</div>

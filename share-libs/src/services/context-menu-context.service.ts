@@ -11,7 +11,7 @@ export class ContextMenuService {
     let position: ShareOverlayPosition = new ShareOverlayPosition();
     position.type = 'event';
     position.event = event;
-    let overlay = this.overlay = this.shareOverlay_.showComponent(
+    let overlay = this.overlay = this.shareOverlay_.show(
       component,
       position
     )

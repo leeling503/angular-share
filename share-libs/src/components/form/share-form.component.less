@@ -1,0 +1,44 @@
+@C-BD: #C0D8FE;
+@BD: 1px solid @C-BD;
+
+.center-F-H() {
+  display: flex;
+  align-items: center;
+}
+
+:host {
+  width: 100%;
+  height: 100%;
+}
+
+.share-form {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  border-bottom: @BD;
+  border-left: @BD;
+}
+
+.form-item {
+  display: flex;
+  flex-grow: 1;
+  flex-shrink: 0;
+  border-top: @BD;
+  border-right: @BD;
+}
+
+.item-title {
+  .center-F-H();
+  height: 100%;
+  width: 100px;
+  padding: 0px 15px;
+  background-color: #E4EFFF;
+  flex-shrink: 0
+}
+
+.item-value {
+  .center-F-H();
+  height: 100%;
+  padding: 0px 15px;
+  flex-grow: 1;
+}

@@ -1,6 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { TypeModalTip } from '../share-modal.model';
 
+/**
+ * 提示框基本组件
+ */
 @Component({
   selector: 'app-modal-tip',
   templateUrl: './modal-tip.component.html',
@@ -8,15 +11,11 @@ import { TypeModalTip } from '../share-modal.model';
 })
 export class ShareModalTipComponent implements OnInit {
 
-
   constructor() { }
   @Input() type: TypeModalTip;
   /**tip提示语信息 */
   @Input() info: string;
-
-  ngOnInit() {
-  }
-
+  ngOnInit() { }
 }
 
 

@@ -162,7 +162,7 @@ export class CanvasUtil {
     }
 
     /**根据图片路径地址，获取图片后缓存 , 避免重复请求*/
-    private static _getImgPromise(imgUrl: string): Promise<any> {
+    private static _getImgPromise(imgUrl: string): Promise<HTMLImageElement> {
         let img = this.imgs[imgUrl];
         if (!img) {
             return new Promise((resolve, reject) => {

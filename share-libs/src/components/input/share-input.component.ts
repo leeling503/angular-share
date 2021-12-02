@@ -18,31 +18,38 @@ export class ShareInputComponent extends PerfixText implements OnChanges, OnDest
     checkedNames = [];
     private nativeEl: HTMLInputElement;
     private inputEl: HTMLInputElement;
-    @Input('ngModel') model: string;
+    @Input() model: string | number;
     @Input() inType: TypeInput = TypeInput.text;
     @Input() inMin: number;//最小值
     @Input() inMax: number;//最大值
-    @Input() inLength: number; //长度
-    @Output('ngModelChange') update: EventEmitter<string> = new EventEmitter()
+    @Input() inLength: number = 0; //长度
+    @Output('modelChange') update: EventEmitter<string | number> = new EventEmitter();
+    public value: string;
     ngOnChanges(changes: SimpleChanges): void {
         super.ngPerfixChange(changes);
     }
 
     ngOnInit() { }
 
-    ngAfterViewInit(): void {
-        this.inputEl = this.nativeEl.querySelector('input')
-    }
+    ngAfterViewInit(): void { this.inputEl = this.nativeEl.querySelector('input') }
 
     onEventChange($event: string) {
-        this.model = this.getModelByType(this.inputEl.value);
-        this.model = this.getModelByLength(this.model);
-        this.inputEl.value = this.model;
+        let value: string = this.getModelByType(this.inputEl.value), num: number;
+        let pointFlag = value.includes('.'), signFlag = value.includes('-');
+        if (this.inMax || this.inMin || this.inType === TypeInput.number) {
+            num = this.getValueByMix(value, signFlag);
+        }
+        let str = pointFlag ? num.toString() + '.' : num.toString();
+        str = signFlag && !str.includes('-') ? '-' + str : str;
+        this.value = value == "" || value == '-' || value == '-0' ? value : str;
+        // this.model = value == "" || value == '-' || value == '-0' ? value : num;
         Promise.resolve().then(res => {
-            this.update.emit(this.model)
+            this.inputEl.value = value == "" || value == '-' || value == '-0' ? value : str;
+            // this.update.emit(this.model)
         })
     }
 
+    /**对字符进行调整 */
     getModelByType(str: string): string {
         if (this.inType == TypeInput.number) {
             let result = str.match(/^\-?d*(\d+\.)?\d*/g);
@@ -55,14 +62,25 @@ export class ShareInputComponent extends PerfixText implements OnChanges, OnDest
         } else if (this.inType == TypeInput.noNull) {
             str = str.replace(/\s/g, '');
         }
-        return str
-    }
-
-    getModelByLength(str: string): string {
         if (this.inLength > 0) {
             str = str.slice(0, this.inLength)
         }
         return str
+    }
+
+    getValueByMix(str: string, sign: boolean) {
+        let value = parseFloat(str);
+        value = isNaN(value) ? 0 : value;
+        if (value === 0 && sign) {
+            value = -0;
+        }
+        if (this.inMin) {
+            value = value < this.inMin ? this.inMin : value
+        }
+        if (this.inMax) {
+            value = value > this.inMax ? this.inMax : value
+        }
+        return value
     }
 
     ngOnDestroy(): void { }

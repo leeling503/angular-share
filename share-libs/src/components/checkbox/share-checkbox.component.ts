@@ -11,16 +11,19 @@ import { Component, OnInit, Input, ElementRef, SimpleChanges, Output, EventEmitt
   }
 })
 export class ShareCheckboxComponent implements OnInit {
-  @Input() modelChecked: boolean = false;//是否选中
-  @Input() inIfOther: boolean = false;//是否属于第三种other状态(modelChecked为false才会显示为第三种状态)
+  constructor(private upEl: ShareUpdataClassService, private el: ElementRef) {
+    this.nativeEl = this.el.nativeElement;
+  }
+  /**是否选中*/
+  @Input() modelChecked: boolean = false;
+  /**是否属于第三种other状态(modelChecked为false才会显示为第三种状态)*/
+  @Input() inIfOther: boolean = false;
+  /**禁用*/
   @Input() inIfDisable: boolean = false;
   @Output() onClick: EventEmitter<any> = new EventEmitter();
   @Output() modelCheckedChange: EventEmitter<any> = new EventEmitter();
   classMap: any = {};
   nativeEl: HTMLElement;
-  constructor(private upEl: ShareUpdataClassService, private el: ElementRef) {
-    this.nativeEl = this.el.nativeElement;
-  }
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.modelChecked || changes.inIfOther || changes.inIfDisable) {
       this.upClass()

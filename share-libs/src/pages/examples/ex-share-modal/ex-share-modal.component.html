@@ -1,4 +1,9 @@
 <share-button [inPara]='btnA'>弹窗</share-button>
+<share-button (onClick)="onTipModalOpen()">提示框弹窗</share-button>
+<share-button (onClick)="onComponentOpen()" class="asd">组件弹窗</share-button>
 <ng-template cdkPortal #ddd>
   <ex-share-radio></ex-share-radio>
+  {{name}}
 </ng-template>
+<ng-template #dddPortal></ng-template>
+<!-- <div #dddPortal></div> -->

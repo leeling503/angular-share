@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --proxy-config ./share-libs/proxy.conf.json --progress ",
+    "start": "ng serve --host 192.168.1.137  --port 51008 --proxy-config ./share-libs/proxy.conf.json --progress ",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
@@ -33,7 +33,9 @@
     "rxjs": "~6.5.4",
     "tslib": "^1.10.0",
     "web-animations-js": "^2.3.2",
-    "zone.js": "~0.10.2"
+    "zone.js": "~0.10.2",
+    "html2canvas": "~1.0.0-rc.5",
+    "jspdf": "^2.3.1"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.901.9",

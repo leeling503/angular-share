@@ -1,12 +1,10 @@
-import { CdkPortal, ComponentPortal, TemplatePortal } from "@angular/cdk/portal";
-import { THIS_EXPR } from "@angular/compiler/src/output/output_ast";
-import { Component, TemplateRef, ViewChild } from "@angular/core";
+import { TemplatePortal } from "@angular/cdk/portal";
+import { Component, ElementRef, TemplateRef, ViewChild, ViewContainerRef } from "@angular/core";
 import { ShareBtn } from "share-libs/src/components/button/share-buttom";
 import { ShareModalService } from "share-libs/src/components/modal/modal.service";
-import { ShareModalRef } from "share-libs/src/components/modal/modalRef.service";
 import { ShareModalPara } from "share-libs/src/components/modal/share-modal.model";
-import { TypeBtn } from "share-libs/src/enum";
 import { ShareOverlayService } from "share-libs/src/services/share-overlay.service";
+import { UtilSleep } from "share-libs/src/utils";
 import { ExShareSelectComponent } from "../ex-share-select/ex-share-select.component";
 
 @Component({
@@ -14,44 +12,75 @@ import { ExShareSelectComponent } from "../ex-share-select/ex-share-select.compo
     styleUrls: ['./ex-share-modal.component.less']
 })
 export class ExShareModalComponent {
-    @ViewChild(CdkPortal, { static: true }) ddd: TemplatePortal<any>;
-    constructor(private modal_: ShareModalService, private overlay_: ShareOverlayService) { }
+    @ViewChild('ddd', { static: true }) ddd: TemplateRef<any>;
+    @ViewChild('dddPortal', { read: ViewContainerRef, static: true }) dddV: ViewContainerRef;
+    constructor(private modal_: ShareModalService, private overlay_: ShareOverlayService, private ele_: ElementRef) {
+        this.eleNative = this.ele_.nativeElement
+    }
+    eleNative: HTMLElement
+    ele: HTMLElement
     btnA: ShareBtn = {
-        click: () => { this.openModal() }
+        click: ($event) => { this.openModal($event) }
+    }
+    name = 'asdasdas'
+
+    ngAfterViewInit(): void {
+        //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
+        //Add 'implements AfterViewInit' to the class.
+        this.ele = this.eleNative.querySelector('.asd')
     }
 
 
 
-    openModal() {
-        let fig: ShareModalPara = {
+    openModal($event) {
+        let fig: ShareModalPara<ExShareSelectComponent> = {
             width: '50%',
             height: '50%',
             btns: ['primary', 'close'],
             modalPara: { title: '弹窗' },
-            onCbClose: (data) => { console.log(data) },
-            // template: this.ddd,
-            component: ExShareSelectComponent,
-            componentPara: {
-                option: []
-            },
-            position: { x: 300, y: 150 }
+            template: this.ddd,
+            position: { x: 300, y: 150, type: 'ele', element: this.ele }
         }
-        let ref = this.modal_.openModal(fig);
-        let ref2 = this.modal_.openTipModal();
-        ref.getComponentInstabce
-        // let ref: ShareModalRef = this.modal_.openModal(fig);
-        ref.emitAfterOpen.subscribe(res => {
-            let instal = ref.getInstance();
-            let comp = ref.getComponentInstabce();
-            let comA = instal.component;
-        });
-        let ref5 = this.overlay_.showComponent(ExShareSelectComponent)
-        setTimeout(() => {
-            let modal = ref.getInstance();
-            modal.title = 'asds';
-            modal.footerBtns = [{ type: TypeBtn.danger, text: 'asd' }]
-            // modal.overlayRef.detach()
-            console.log(ref5.component)
-        }, 5000);
+        // let ref = this.modal_.openModal(fig);
+        let templateP = new TemplatePortal(this.ddd, this.dddV);
+        let c = this.overlay_.show(ExShareSelectComponent);
+        let a = this.overlay_.show(this.ddd, undefined, undefined, this.dddV);
+        new UtilSleep()
+            .sleep(() => { a.modalRef.destroy(); return 2 }, 1)
+            .sleep((res) => { console.log(res); c.modalRef.destroy() }, 1)
+    }
+
+    /**打开提示类型弹窗 */
+    onTipModalOpen() {
+        let m = this.modal_.openTipModal({
+            title: '默认的',
+            type: 'none',
+            info: '',
+            btns: ['close', 'primary', 'cancel']
+        }).onOpen(e => {
+            let data = e.data;
+            data.title = "打开后改变title";
+            let instance = data.getComponentInstabce();
+            instance.info = "打开后改变info";
+            instance.type = 'success';
+            new UtilSleep()
+                .sleep((data) => { console.log(data); instance.type = 'tip'; instance.info = "打开1s后改变info"; return '1' }, 1)
+                .sleep((data) => { console.log(data); instance.type = 'error'; instance.info = "打开2s后改变info"; return '2' }, 1)
+                .sleep((data) => { console.log(data); instance.type = 'warning'; instance.info = "5s将关闭弹窗"; return '3' }, 1)
+                .sleep((data) => { m.emitClose({ closeType: 1 }) });
+        }).onClose(e => { console.log(e) });
+
+    }
+
+    /**打开组件类型弹窗 */
+    onComponentOpen() {
+        this.modal_.openModal({
+            title: '弹出选择框组件',
+            width: '50%',
+            component: ExShareSelectComponent,
+            btns: ['close', 'primary']
+        }).onClose(res => { console.log(res) }).onCloseBefor(res => { return false });
     }
 }
+
+

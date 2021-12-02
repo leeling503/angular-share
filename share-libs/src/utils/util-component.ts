@@ -26,7 +26,7 @@ function UtilChangesFirst(c: SimpleChanges, key: string): boolean {
 }
 
 /**不是第一次改变*/
-function UtilChangesNoFirst(c: SimpleChanges, key: string): boolean {
+export function UtilChangesNoFirst(c: SimpleChanges, key: string): boolean {
     return !!c[key] && !c[key].firstChange
 }
 
@@ -35,4 +35,4 @@ function UtilChangesNoFirstValue(c: SimpleChanges, key: string): boolean {
     return c[key] && !c[key].firstChange && c[key].currentValue !== undefined
 }
 
-export { UtilChangesNoFirstValue, UtilChangesHasValue, UtilChangesValue, UtilChangesUndefined, UtilChanges, UtilChangesNoFirst, UtilChangesFirst }
+export { UtilChangesNoFirstValue, UtilChangesHasValue, UtilChangesValue, UtilChangesUndefined, UtilChanges, UtilChangesFirst }

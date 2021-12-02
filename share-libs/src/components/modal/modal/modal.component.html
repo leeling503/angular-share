@@ -1,7 +1,7 @@
 <div class="share-modal" cdkDrag cdkDragRootElement=".cdk-overlay-pane">
   <div class="modal-title">
     <div class="title-text">{{title}}</div>
-    <div class="E_I_close E_I_S_l share-modal-close" (click)="closeModal()"></div>
+    <div class="E_I_close E_I_S_l share-modal-close" (click)="onEmitClose()"></div>
   </div>
   <div class="modal-content">
     <ng-template #bodyContainer></ng-template>

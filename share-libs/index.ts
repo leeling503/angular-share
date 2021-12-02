@@ -10,19 +10,8 @@ import { Share3DModule } from './src/components/three-model/three-model.module';
 import { ShareMapModule } from './src/components/map/share-map.module';
 import { ShareInputModule } from './src/components/input/share-input.module';
 import { ShareModalModule } from './src/components/modal/modal.module';
+import { ShareSwiperModule } from './src/components/swiper/share-swiper.module';
+import { ShareFormModule } from './src/components/form/share-form.module';
 
 
-export { ShareDateModule, ShareSelectModule, ShareTableModule, ShareCheckboxModule, ShareButtonModule, ShareRadioModule, SharePaginationModule, ShareFileUploadModule, Share3DModule, ShareMapModule, ShareInputModule, ShareModalModule };
-export const MODULES = [
-    ShareRadioModule,
-    ShareDateModule,
-    ShareSelectModule,
-    ShareCheckboxModule,
-    ShareButtonModule,
-    SharePaginationModule,
-    ShareTableModule,
-    ShareFileUploadModule,
-    Share3DModule,
-    ShareInputModule,
-    ShareModalModule
-];
+export { ShareDateModule, ShareSelectModule, ShareTableModule, ShareCheckboxModule, ShareButtonModule, ShareRadioModule, SharePaginationModule, ShareFileUploadModule, Share3DModule, ShareMapModule, ShareInputModule, ShareModalModule, ShareSwiperModule, ShareFormModule };

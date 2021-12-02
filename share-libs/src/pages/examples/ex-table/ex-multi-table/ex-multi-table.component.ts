@@ -11,6 +11,7 @@ import { UtilTableRuleDots, UtilTableRuleTags, UtilTableRuleText } from 'share-l
 })
 export class ExMultiTableComponent implements OnInit {
   constructor() { }
+  itemKey = 'typeCode';
   multiAllDatas: any[] = [
     { "id": "bbd0d97c-1e32-4c48-b4b0-761d4328d261", "aidsTableCode": "1716.1", "aidsName": "501号灯船实体AIS航标", "locationAttr": "01", "typeCode": "0303", "aidsType": "实体AIS航标", "functionCode": "17", "functionName": "未定义航标类型", "position": "35°53’13.9” N 120°18’50.3”E", "location": "超大型船舶航道", "lightId": "994131628", "lightRange": "01", "managekey": "公用", "ownerUnitName": "青岛航标处", "authorityUnitName": "青岛航标处", "usageCode": "01", "usageName": "使用中", "levels": "level_4", }, { "id": "0151cb3f-6ef0-4a07-b08c-5074f1814c5b", "aidsTableCode": "", "aidsName": "上古林导航台", "locationAttr": "01", "typeCode": "0309", "aidsType": "导航台", "position": "38°50’11.6” N 117°30’17.5”E", "location": "滨州港", "lightRange": "", "managekey": "公用", "ownerUnitName": "天津航标处", "authorityUnitName": "天津航标处", "usageCode": "01", "usageName": "使用中", "remarks": "", "levels": "level_7", }, { "id": "0151cb3f-6ef0-4a07-b08c-5074f1814c5b", "aidsTableCode": "", "aidsName": "上古林导航台", "locationAttr": "01", "typeCode": "0307", "aidsType": "导航台", "position": "38°50’11.6” N 117°30’17.5”E", "location": "滨州港", "lightRange": "", "managekey": "公用", "ownerUnitName": "天津航标处", "authorityUnitName": "天津航标处", "usageCode": "01", "usageName": "使用中", "remarks": "", "levels": "level_7", }, { "id": "0151cb3f-6ef0-4a07-b08c-5074f1814c5b", "aidsTableCode": "", "aidsName": "上古林导航台", "locationAttr": "01", "typeCode": "0307", "aidsType": "导航台", "position": "38°50’11.6” N 117°30’17.5”E", "location": "滨州港", "lightRange": "", "managekey": "公用", "ownerUnitName": "天津航标处", "authorityUnitName": "天津航标处", "usageCode": "01", "usageName": "使用中", "remarks": "", "levels": "level_7", },
     { "id": "475ffda2-4e9e-44dc-a547-af263e62f8bf", "aidsTableCode": "1716.13", "aidsName": "青岛港507号实体AIS航标", "locationAttr": "01", "typeCode": "0303", "aidsType": "实体AIS航标", "functionCode": "06", "functionName": "右侧标", "position": "35°55’44.2” N 120°20’37.3”E", "location": "超大型船舶航道", "lightId": "994131630", "lightRange": "01", "managekey": "公用", "ownerUnitName": "青岛航标处", "authorityUnitName": "青岛航标处", "usageCode": "01", "usageName": "使用中", "levels": "level_4", },
@@ -43,7 +44,7 @@ export class ExMultiTableComponent implements OnInit {
     { "id": "0151cb3f-6ef0-4a07-b08c-5074f1814c5b", "aidsTableCode": "", "aidsName": "上古林导航台", "locationAttr": "01", "typeCode": "0307", "aidsType": "导航台", "position": "38°50’11.6” N 117°30’17.5”E", "location": "滨州港", "lightRange": "", "managekey": "公用", "ownerUnitName": "天津航标处", "authorityUnitName": "天津航标处", "usageCode": "01", "usageName": "使用中", "remarks": "", "levels": "level_7", }];
 
   multiAllItems: TableMultiAllItems = {
-    "0307": [
+    "0101": [
       { title: '', type: 'check', width: 60, styckyLeft: '0px', keyCode: '1001', canFilter: false },
       { title: '名称', type: 'serial', key: 'serial', width: 60, styckyLeft: '60px', keyCode: '1002', canFilter: false },
       { title: '身高', key: 'aidsName', width: 3, keyCode: '1003', canFilter: false },
@@ -56,8 +57,8 @@ export class ExMultiTableComponent implements OnInit {
       { title: '美国', key: 'ownerUnitName', keyCode: '1010', type: "expend", width: 8 },
     ],
     "0303": [
-      { title: '', type: 'check', width: 60, keyCode: '1001', styckyLeft: '0px' },
-      { title: '名称', type: 'serial', width: 60, keyCode: '1002', styckyLeft: '60px' },
+      { title: '', type: 'check', keyCode: '1001' },
+      { title: '名称', type: 'serial', keyCode: '1002' },
       { title: '身高', key: 'aidsName', keyCode: '1003', width: 8 },
       { title: '体重', key: 'locationAttr', width: 3, keyCode: '1004' },
       { title: '性别', key: 'typeCode', keyCode: '1005', width: 3 },

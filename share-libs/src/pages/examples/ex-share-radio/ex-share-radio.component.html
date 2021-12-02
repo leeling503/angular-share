@@ -4,41 +4,41 @@
     <div class="para-info">
       <div>多选</div>
       <div>
-        <share-radio [(modelRadio)]="paraA.ifMulti" [inOptins]="radioData">
+        <share-radio [(model)]="paraA.ifMulti" [inOptins]="radioData">
         </share-radio>
       </div>
     </div>
     <div class="para-info">
       <div>能否清空</div>
       <div>
-        <share-radio [(modelRadio)]="paraA.ifClear" [inOptins]="radioData">
+        <share-radio [(model)]="paraA.ifClear" [inOptins]="radioData">
         </share-radio>
       </div>
     </div>
     <div class="para-info">
       <div>禁用被单选取消</div>
       <div>
-        <share-radio [(modelRadio)]="paraA.ifDisCancel" [inOptins]="radioData">
+        <share-radio [(model)]="paraA.ifDisCancel" [inOptins]="radioData">
         </share-radio>
       </div>
     </div>
     <div class="para-info">
       <div>样式</div>
       <div>
-        <share-radio [(modelRadio)]="paraA.iconType" [inOptins]="radioType">
+        <share-radio [(model)]="paraA.iconType" [inOptins]="radioType">
         </share-radio>
       </div>
     </div>
     <div class="para-info">
       <div>关键Key</div>
       <div>
-        <share-radio [(modelRadio)]="paraA.key" [inOptins]="radioKey">
+        <share-radio [(model)]="paraA.key" [inOptins]="radioKey">
         </share-radio>
       </div>
     </div>
   </div>
 
-  <share-radio [(modelRadio)]='modelRadioA' (modelRadioChange)="onModelChangeA($event)" [inPara]='paraA'
+  <share-radio [(model)]='modelRadioA' (modelRadioChange)="onModelChangeA($event)" [inPara]='paraA'
     [inOptins]="radioDatasA" [inMulti]="paraA.ifMulti" [inClear]="paraA.ifClear" [inKey]="paraA.key"
     [inDisCancel]="paraA.ifDisCancel" [inIconType]="paraA.iconType"></share-radio>
   <span>{{modelRadioA}}</span><br />

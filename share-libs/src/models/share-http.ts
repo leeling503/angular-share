@@ -12,7 +12,7 @@ interface HttpResult {
 class HttpSearch {
     currentPage: number = 1;//当前页
     pageRecord: number = 15;//页容量
-    ifPage: Boolean = true;//是否分页
+    ifPage: boolean = true;//是否分页
 }
 
 export { HttpResult, HttpSearch }

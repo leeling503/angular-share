@@ -43,14 +43,12 @@
     </table>
   </div>
   <ng-container *ngIf="tableDatas.length == 0 || loadingFlag">
-    <div class="no-data" [ngClass]="{'loading-data':loadingFlag}">
-      <div class="data-img"></div>
-      <div class="data-tip" *ngIf="!loadingFlag">~ 暂无数据 ~</div>
+    <div class="no-data">
+      <share-null [inLoad]="loadingFlag"></share-null>
     </div>
   </ng-container>
   <div class="pagination-part" *ngIf="inIfPage">
-    <share-pagination [paginPageRecord]="pageRecordOptions" [paginPage]="paginPage"
-      (onPageChange)="onPageChange($event)">
+    <share-pagination [inPageRecord]="inRecordOptions" [inPage]="page" (onPageChange)="onPageChange($event)">
     </share-pagination>
   </div>
 </div>

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { RadioData, RadioPara } from 'share-libs/src/components/radio/share-radio.model';
+import { RadioOption, RadioPara } from 'share-libs/src/components/radio/share-radio.model';
 
 @Component({
   selector: 'ex-share-radio',
@@ -8,9 +8,9 @@ import { RadioData, RadioPara } from 'share-libs/src/components/radio/share-radi
 })
 export class ExShareRadioComponent implements OnInit {
   constructor() { }
-  radioData: RadioData[] = [{ key: true, value: '是' }, { key: false, value: '否' }]
-  radioKey: RadioData[] = [{ key: 'key', value: 'key' }, { key: 'value', value: 'value' }]
-  radioType: RadioData[] = [
+  radioData: RadioOption[] = [{ key: true, value: '是' }, { key: false, value: '否' }]
+  radioKey: RadioOption[] = [{ key: 'key', value: 'key' }, { key: 'value', value: 'value' }]
+  radioType: RadioOption[] = [
     { key: 'radio', value: 'radio' },
     { key: 'check', value: 'check' },
     { key: 'cricle', value: 'cricle' }]
@@ -21,8 +21,8 @@ export class ExShareRadioComponent implements OnInit {
     iconType: 'check',
     key: 'value'
   }
-  radioDatasA: RadioData[];
-  modelRadioA = 20;
+  radioDatasA: RadioOption[];
+  modelRadioA;
 
 
   ngOnInit() {

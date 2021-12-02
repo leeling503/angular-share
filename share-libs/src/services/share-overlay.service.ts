@@ -1,7 +1,6 @@
 import { Overlay, OverlayRef, OverlayConfig, ScrollStrategy, PositionStrategy, ConnectedPosition } from '@angular/cdk/overlay';
-import { Injectable, ElementRef, ComponentRef, EmbeddedViewRef } from '@angular/core';
+import { Injectable, ElementRef, ComponentRef, EmbeddedViewRef, TemplateRef, ViewContainerRef } from '@angular/core';
 import { ComponentPortal, ComponentType, TemplatePortal } from '@angular/cdk/portal';
-import { UtilSetValue } from '../utils';
 import { DragDrop } from '@angular/cdk/drag-drop';
 
 /**弹窗服务 */
@@ -10,14 +9,42 @@ import { DragDrop } from '@angular/cdk/drag-drop';
 })
 export class ShareOverlayService {
     constructor(private overlay: Overlay, private drag_: DragDrop) { }
+    /**显示组件 */
+    show<T>(a: ComponentType<T>, b?: ShareOverlayPosition, c?: ShareOverlayConfig): ShareOverlayComponent<T>;
+    /**TemplatePortal通过ViewChild和cdkPortal指令
+     * ts @ViewChild(CdkPortal, { static: true }) X: TemplatePortal<any>;
+     * html <ng-template cdkPortal>  或 <div *cdkPortal>
+     **/
+    show<T>(a: TemplatePortal<T>, b?: ShareOverlayPosition, c?: ShareOverlayConfig): ShareOverlayTemplate<T>;
+    /**显示template (必传第四位ViewContainerRef ， 2，3位可传undefined得到默认值)
+    * ts @ViewChild("ddd", { read: ViewContainerRef ,static: true }) X:ViewContainerRef;
+    * html <ng-template #ddd>  
+    **/
+    show<T>(a: TemplateRef<T>, b?: ShareOverlayPosition, c?: ShareOverlayConfig, d?: ViewContainerRef): ShareOverlayTemplate<T>;
+    show<T>(
+        temp: TemplatePortal<T> | ComponentType<T> | TemplateRef<T>,
+        position: ShareOverlayPosition = new ShareOverlayPosition(),
+        overlay: ShareOverlayConfig = new ShareOverlayConfig(),
+        view?: ViewContainerRef
+    ) {
+        let protal: TemplatePortal<T> | ComponentPortal<T>;
+        if (temp instanceof TemplatePortal) {
+            return this.showTemplate(temp, position, overlay)
+        } else if (temp instanceof TemplateRef) {
+            protal = new TemplatePortal(temp, view);
+            return this.showTemplate(protal, position, overlay)
+        } else {
+            protal = new ComponentPortal(temp);
+            return this.showComponent(protal, position, overlay)
+        }
+    }
 
     /**显示组件 */
-    showComponent<T>(
-        component: ComponentType<T>,
+    private showComponent<T>(
+        componentPortal: ComponentPortal<T>,
         position: ShareOverlayPosition = new ShareOverlayPosition(),
         overlay: ShareOverlayConfig = new ShareOverlayConfig()): ShareOverlayComponent<T> {
         let overlayComponent: ShareOverlayComponent = {};
-        let componentPortal: ComponentPortal<T> = new ComponentPortal(component)
         this.setContext(overlayComponent, componentPortal, position, overlay);
         overlayComponent.component = overlayComponent.modalRef.instance;
         return overlayComponent;
@@ -27,7 +54,7 @@ export class ShareOverlayService {
      * TemplatePortal通过ViewChild和cdkPortal指令    @ViewChild(CdkPortal, { static: true }) X: TemplatePortal<any>;
      * 需要PortalModule模块
      * */
-    showTemplate<T>(
+    private showTemplate<T>(
         overlayContext: TemplatePortal<T>,
         position: ShareOverlayPosition = new ShareOverlayPosition(),
         overlay: ShareOverlayConfig = new ShareOverlayConfig()): ShareOverlayTemplate<T> {
@@ -135,9 +162,9 @@ export class ShareOverlayConfig extends OverlayConfig {
     scrollStrategy?: ScrollStrategy;
     /**弹窗面板的class*/
     panelClass?: string;
-    /**弹窗宽*/
+    /**弹窗宽(定位相对于body时百分比是相对body，但另外两种情况不一样)*/
     width?: number | string;
-    /**弹窗高*/
+    /**弹窗高(定位相对于body时百分比是相对body，但另外两种情况不一样)*/
     height?: number | string;
     /** */
     minWidth?: number | string;
@@ -149,18 +176,19 @@ export class ShareOverlayConfig extends OverlayConfig {
     maxHeight?: number | string;
     /** */
     disposeOnNavigation?: boolean;
-    constructor(data: any = {}) {
+    constructor(data: ShareOverlayConfig = {}) {
         super();
-        this.hasBackdrop = UtilSetValue(data.hasBackdrop, true);
+        /** 当??不兼容时 可采用UtilSetValue(data.hasBackdrop ,true) */
+        this.hasBackdrop = data.hasBackdrop ?? true;
         this.backdropClass = data.backdropClass || 'E_O_transparent';
         this.panelClass = data.panelClass || 'E_O_panel';
-        this.width = UtilSetValue(data.width, null);
-        this.height = UtilSetValue(data.height, null);
-        this.maxWidth = UtilSetValue(data.maxWidth, "95%");
-        this.maxHeight = UtilSetValue(data.maxHeight, "95%");
-        this.minWidth = UtilSetValue(data.minWidth, 100);
-        this.minHeight = UtilSetValue(data.minHeight, 25);
-        this.backdropClick = UtilSetValue(data.backdropClick, true);
+        this.width = data.width ?? null;
+        this.height = data.height ?? null;
+        this.maxWidth = data.maxWidth ?? "95%";
+        this.maxHeight = data.maxHeight ?? "95%";
+        this.minWidth = data.minWidth ?? 100;
+        this.minHeight = data.minHeight ?? 100;
+        this.backdropClick = data.backdropClick ?? true;
         this.positionStrategy = data.positionStrategy;
         this.scrollStrategy = data.scrollStrategy;
         this.disposeOnNavigation = data.disposeOnNavigation;
@@ -169,7 +197,7 @@ export class ShareOverlayConfig extends OverlayConfig {
 
 /**弹窗的定位配置*/
 export class ShareOverlayPosition {
-    /**相对 鼠标 | 指定元素 | body 进行定位*/
+    /**相对 鼠标（需配置event属性） | 指定元素（需配置element属性） | body 进行定位 */
     type?: 'event' | 'ele' | 'body';
     /**鼠标事件event*/
     event?: MouseEvent;
@@ -189,8 +217,8 @@ export class ShareOverlayPosition {
         this.type = data.type || 'body';
         this.event = data.event
         this.element = data.element
-        this.centerHorizontally = UtilSetValue(data.centerHorizontally, true);
-        this.centerVertically = UtilSetValue(data.centerVertically, true);
+        this.centerHorizontally = data.centerHorizontally ?? true;
+        this.centerVertically = data.centerVertically ?? true;
         this.x = data.x;
         this.y = data.y;
         this.withPositions = data.withPositions || [{
@@ -203,7 +231,9 @@ export class ShareOverlayPosition {
 }
 
 export interface ShareOverlay {
+    /**弹出层Ref，可销毁弹出层 */
     overlayRef?: OverlayRef;
+    /**内容madalRef，可销毁弹出内容(弹出层遮罩依旧存在) */
     modalRef?: any;
 }
 

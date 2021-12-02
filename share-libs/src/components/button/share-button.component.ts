@@ -134,7 +134,6 @@ export class ShareButtonComponent implements OnInit {
     }
   }
 
-
   setClassMap() {
     let classMap = {
       [`sl-button-size-${this._size}`]: true,

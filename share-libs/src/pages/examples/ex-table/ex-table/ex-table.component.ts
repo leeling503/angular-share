@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TableItem, TableMultiAllItems, TagRule, TagRules } from 'share-libs/src/components/table/share-table.model';
+import { TableClassName, TableItem, TableMultiAllItems, TagRule, TagRules } from 'share-libs/src/components/table/share-table.model';
 import { UtilRouterGetUrl } from 'share-libs/src/utils/util-router';
 import { UtilTableRuleDots, UtilTableRuleTags, UtilTableRuleText } from 'share-libs/src/utils/util-table';
 
@@ -14,27 +14,35 @@ export class ExTableComponent implements OnInit {
   allDatas: any[];
   items: TableItem<ItemData>[];
   // apiUrl: string = '';
-  apiUrl = 'api/Statuslist/getList';
+  // tableClass: TableClassName[] = ['view-left', 'simple-border', 'border', 'background-color'];
+  tableClass: TableClassName[]
+  apiUrl;
   inUuid = 'aidsName';
   selectedDatas = [
     { aidsName: "曹妃甸B11#灯浮" },
     { aidsName: '天津港3号灯浮' },
     { aidsName: '站点99' },
-    { aidsName: '站点88' },
+    { aidsName: '站点95' },
     { aidsName: "天津港G1#活节式灯桩" }]
+
+  disableDatas = [
+    { aidsName: '站点98' },
+    { aidsName: '站点95' },
+  ];
   constructor() { }
 
   ngOnInit() {
-    this.allDatas = [];
-    for (let i = 0; i < 100; i++) {
-      let data = {
-        id: i, collectionTime: 'detail' + i, aidsName: '站点' + (100 - i), ifAlarm: Math.random() + 0.5 | 0, ifBind: Math.random() + 0.5 | 0, ifMark: i % 3 == 0 ? 'success' : i % 3 == 1 ? 'defeated' : 'asdasd', aidsName2: '', commModeCodeName: '北斗'
-      }
-      this.allDatas.push(data);
-    };
-
+    setTimeout(() => {
+      this.allDatas = [];
+      for (let i = 0; i < 100; i++) {
+        let data = {
+          id: i, collectionTime: 'detail' + i, aidsName: '站点' + (100 - i), ifAlarm: Math.random() + 0.5 | 0, ifBind: Math.random() + 0.5 | 0, ifMark: i % 3 == 0 ? 'success' : i % 3 == 1 ? 'defeated' : 'asdasd', aidsName2: '', commModeCodeName: '北斗'
+        }
+        this.allDatas.push(data);
+      };
+    }, 1000);
     this.items = [
-      { title: '', type: 'check', width: 60, canFilter: false, styckyLeft: '0px' },
+      { title: '选框', type: 'check', width: 60, canFilter: false, hidFilter: true, styckyLeft: '0px' },
       { title: '序号', type: 'serial', width: 60, canFilter: false, styckyLeft: '60px', },
       { title: '时间', key: 'collectionTime', classNames: ['color-blue', 'underline'], onClick: (data, item) => { console.log(data, item) }, widthFix: 150, canFilter: false },
       {
@@ -43,7 +51,7 @@ export class ExTableComponent implements OnInit {
           1: { value: '0', class: 'blue', text: '已绑定', color: 'orange' }
         })
       },
-      { title: '名称', key: 'aidsName', width: 130, type: "expend" },
+      { title: '名称', key: 'aidsName', classNames: ['view-center'], width: 130, type: "expend" },
       {
         title: '报警', key: 'ifAlarm', type: 'rule-dot', width: 130, ruleDots: UtilTableRuleDots({
           0: { value: '0', class: 'green', text: '正常', color: '#13C4B0' },
@@ -58,7 +66,7 @@ export class ExTableComponent implements OnInit {
       },
       {
         title: "操作", key: 'opertion', type: "rule-btns", widthFix: 100, ruleBtns: (data) => {
-          if (data.functionCode == '01') {
+          if (data.id % 3 == 0) {
             return [
               { text: '操作01', onClick: (data, item, datas) => { console.log(data, item, datas) } }
             ]
@@ -70,6 +78,9 @@ export class ExTableComponent implements OnInit {
         }
       }
     ]
+    setTimeout(() => {
+      this.apiUrl = 'api/Statuslist/getList'
+    }, 5000);
   }
 
   onSelectChange($event) {
@@ -96,7 +107,7 @@ class ItemData {
   deviceCode: string;
   dutyStateCode: string;
   functionCode: string;
-  id: string;
+  id: number;
   ifAlarm: string;
   ifBind: string;
   ifIgnore: string;

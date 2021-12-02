@@ -1,17 +1,17 @@
 <div class="share-table">
   <ng-container>
-    <filter-head [inFilterKey]="'keyCode'" [inItems]="tableMultiItems" (onChangeItemFilter)="onChangeItemFilter()">
+    <filter-head [inFilterKey]="'_keyCode'" [inItems]="tableMultiItems" (onChangeItemFilter)="onChangeItemFilter()">
     </filter-head>
   </ng-container>
-  <div class="table-part" [class]="inClassNames">
+  <div class="table-part" [ngClass]="inClassNames">
     <div>
       <table>
         <ng-container *ngFor="let tableItems of tableMultiItems;last as itemLast">
           <thead>
             <tr class="table-thead">
               <ng-container *ngFor="let item of tableItems.heads">
-                <td [ngClass]="{'is-sticky':item.styckyLeft}" *ngIf="item._ifShow"
-                  [ngStyle]="{'width': item._width+'px','left':item.styckyLeft}" [class]="item.classNames">
+                <td [ngClass]="{'is-sticky':item._styckyLeft}" *ngIf="item._ifShow"
+                  [ngStyle]="{'width': item._width+'px','left':item._styckyLeft}" [class]="item.classNames">
                   <ng-container [ngSwitch]="item.type" *ngIf="item.ifShow !== false">
                     <div *ngSwitchCase="'check'">
                       <share-checkbox [modelChecked]='headAllSelect(tableItems.datas)'
@@ -31,8 +31,8 @@
               <!--cancle-border 去掉多表头的前一个最后列边框-->
               <tr [ngClass]="{'cancle-border':dataLast && !itemLast}">
                 <ng-container *ngFor="let item of tableItems.heads">
-                  <td [ngClass]="{'is-sticky':item.styckyLeft}" *ngIf="item._ifShow"
-                    [ngStyle]="{'width': item._width+'px','left':item.styckyLeft}" [class]="item.classNames">
+                  <td [ngClass]="{'is-sticky':item._styckyLeft}" *ngIf="item._ifShow"
+                    [ngStyle]="{'width': item._width+'px','left':item._styckyLeft}" [class]="item.classNames">
                     <ng-container [ngSwitch]="item.type" *ngIf="item.ifShow !== false">
                       <div *ngSwitchCase="'check'">
                         <share-checkbox [modelChecked]='getDataCheckStatus(data)'
@@ -56,8 +56,7 @@
     </div>
   </div>
   <div class="pagination-part">
-    <share-pagination [paginPageRecord]="pageRecordOptions" [paginPage]="paginPage"
-      (onPageChange)="onPageChange($event)">
+    <share-pagination [inPageRecord]="inRecordOptions" [inPage]="page" (onPageChange)="onPageChange($event)">
     </share-pagination>
   </div>
 </div>

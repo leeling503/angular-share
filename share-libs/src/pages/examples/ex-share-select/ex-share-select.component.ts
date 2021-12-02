@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as _ from 'lodash';
-import { RadioData } from 'share-libs/src/components/radio/share-radio.model';
+import { RadioOption } from 'share-libs/src/components/radio/share-radio.model';
 import { SelectModel, SelectOption, SelectOptions, SelectPara } from 'share-libs/src/components/select/share-select.model';
 
 @Component({
@@ -62,7 +62,7 @@ export class ExShareSelectComponent implements OnInit {
     this.paraA = Object.assign({}, this.paraA);
   }
 
-  radioData: RadioData[] = [{ key: true, value: '是' }, { key: false, value: '否' }]
+  radioData: RadioOption[] = [{ key: true, value: '是' }, { key: false, value: '否' }]
   paraA: SelectPara = {
     ifMulti: false, ifCheck: true, ifSon: true, ifAdd: false, ifFlag: true, ifClear: true, ifOne: true, ifActive: false, ifGanged: true
   }
