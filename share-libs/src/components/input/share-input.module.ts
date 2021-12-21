@@ -1,19 +1,19 @@
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { FormsModule } from "@angular/forms";
-import { ShareInputComponent } from "./share-input.component";
-import { ShareLnglatInputComponent } from "./share-lnglat-input/share-lnglat-input.component";
+import { ShareInputComponent } from "./share-input/share-input.component";
+import { ShareInputLnglatComponent } from "./share-input-lnglat/share-input-lnglat.component";
 
 @NgModule({
     declarations: [
         ShareInputComponent,
-        ShareLnglatInputComponent
+        ShareInputLnglatComponent
     ],
     imports: [
         CommonModule,
         FormsModule
     ],
     exports: [ShareInputComponent,
-        ShareLnglatInputComponent]
+        ShareInputLnglatComponent]
 })
 export class ShareInputModule { }

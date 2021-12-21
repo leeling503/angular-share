@@ -14,7 +14,8 @@
   }
 }
 
-.E-T-prefix {
+/**前缀文本的样式*/
+.E_T_prefix {
   color: #FFF;
   height: 100%;
   background-color: @C-BG-blue;
@@ -24,6 +25,14 @@
   justify-content: center;
   flex-shrink: 0;
   padding: 1px 10px
+}
+
+/**文本超出宽度的样式*/
+.E_T_over {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  word-break: break-all;
+  white-space: nowrap;
 }
 
 /**全局禁选样式*/

@@ -1,7 +1,7 @@
 import { CdkOverlayOrigin } from '@angular/cdk/overlay';
 import { OnInit, Input, ViewChild, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { SelectOption, SelectModel, SelectModelType, SelectOptions, SelectPara } from '../share-select.model';
-import { UtilArrayCopy, UtilArrayGetObjByValue, UtilArrayRemoveItem, UtilIsEqual, UtilSetValue } from 'share-libs/src/utils';
+import { UtilArrayCopy, UtilArrayGetObjByValue, UtilArrayRemoveItem, UtilIsEqual } from 'share-libs/src/utils';
 import { UtilChanges, UtilChangesValue } from 'share-libs/src/utils/util-component';
 import { PerfixText } from '../../base/perfix-text.component';
 export class ShareSelect extends PerfixText implements OnInit {

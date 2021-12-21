@@ -20,7 +20,7 @@ export class ShareOverlayService {
     * ts @ViewChild("ddd", { read: ViewContainerRef ,static: true }) X:ViewContainerRef;
     * html <ng-template #ddd>  
     **/
-    show<T>(a: TemplateRef<T>, b?: ShareOverlayPosition, c?: ShareOverlayConfig, d?: ViewContainerRef): ShareOverlayTemplate<T>;
+    show<T>(a: TemplateRef<T>, b: ShareOverlayPosition, c: ShareOverlayConfig, d: ViewContainerRef): ShareOverlayTemplate<T>;
     show<T>(
         temp: TemplatePortal<T> | ComponentType<T> | TemplateRef<T>,
         position: ShareOverlayPosition = new ShareOverlayPosition(),
@@ -28,6 +28,8 @@ export class ShareOverlayService {
         view?: ViewContainerRef
     ) {
         let protal: TemplatePortal<T> | ComponentPortal<T>;
+        position = Object.assign(new ShareOverlayPosition(), position);
+        overlay = Object.assign(new ShareOverlayConfig(), overlay);
         if (temp instanceof TemplatePortal) {
             return this.showTemplate(temp, position, overlay)
         } else if (temp instanceof TemplateRef) {
@@ -96,6 +98,7 @@ export class ShareOverlayService {
         let x = position.x || 0,
             y = position.y || 0;
         if (position.type == 'event') {
+            /**没有鼠标事件，调用body定位 */
             if (!position.event) {
                 return this.getBodyPositionStrategy(position);
             }
@@ -110,6 +113,7 @@ export class ShareOverlayService {
                 })
             })
         } else {
+            /**没有页面节点，调用body定位 */
             if (!position.element) {
                 return this.getBodyPositionStrategy(position);
             }

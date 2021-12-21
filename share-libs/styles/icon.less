@@ -1,17 +1,10 @@
-/**后缀图标*/
-.E_suffix_icon {
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 100%;
-  min-height: inherit;
-}
+// 菜单图标集合
 
-.E_split_line {
-  border-left: 1px solid @C-B-default;
-}
+/**
+I标签的大小 .e_i(@w: 16px, @y: @w)
+I标签的背景 e_b_i(@iconUrl) 
+e_icon(@url, @W: 16px, @H: @W)
+*/
 
 /**icon的大小 E_ICON_SIZE_ */
 .E_I_S_s {
@@ -29,6 +22,21 @@
 
 .E_I_S_A {
   .e_i(16px, 12px)
+}
+
+/**后缀图标*/
+.E_suffix_icon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 100%;
+  min-height: inherit;
+}
+
+.E_split_line {
+  border-left: 1px solid @C-B-default;
 }
 
 //下拉三角形
@@ -77,26 +85,19 @@
   .e_icon('icon/modal/warning');
 }
 
-.E_I_m_none {
-  display: none
-}
-
-// 菜单图标集合
-.e_icon_big(@url) {
-  .e_i(22px);
-  .e_b_i(@url);
-}
-
-.e_icon(@url) {
-  .e_i(16px);
-  .e_b_i(@url);
-}
-
 /**退出登录*/
 .E_I_logout {
   .e_icon_big('layout/layout_menu_logout');
 }
 
+
+
+
+
+
+
+
+/**菜单图标系列*/
 .menu-setting-icon {
   .e_icon_big('menu/menu_main_setting');
 }

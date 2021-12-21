@@ -1,0 +1,1 @@
+export type TypeCheck = "all" | "none" | "other";

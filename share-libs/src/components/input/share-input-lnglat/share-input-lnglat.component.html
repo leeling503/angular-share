@@ -1,11 +1,11 @@
-<div class="share-lnglat-input">
+<div class="share-input-lnglat">
   <div class="lnglat-value">
-    <share-input [(model)]="model[0]" [inMin]="0" [inMax]="90" [inType]="'number'" (modelChange)="onChange()">
+    <share-input [(model)]="model[0]" [inMin]="0" [inMax]="89" [inType]="'int'" (modelChange)="onChange()">
     </share-input>
     <div class="lnglat-symbol">°</div>
   </div>
   <div class="lnglat-value">
-    <share-input [(model)]="model[1]" [inMin]="0" [inMax]="60" [inType]="'number'" (modelChange)="onChange()">
+    <share-input [(model)]="model[1]" [inMin]="0" [inMax]="59" [inType]="'int'" (modelChange)="onChange()">
     </share-input>
     <div class="lnglat-symbol">'</div>
   </div>

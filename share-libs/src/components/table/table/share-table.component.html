@@ -1,21 +1,21 @@
 <div class="share-table">
   <ng-container *ngIf="inIfFilter">
-    <filter-head [inItems]="inItems" (onChangeItemFilter)="onChangeItemFilter()"></filter-head>
+    <filter-head [inItems]="inItems" (onChangeItemFilter)="onChangeItemFilter($event)"></filter-head>
   </ng-container>
   <div class="table-part" [ngClass]="inClassNames">
     <table>
+      <!--表头部分-->
       <thead>
         <tr class="table-thead">
           <ng-container *ngFor="let item of inItems">
             <ng-container *ngIf="item.ifShow !== false">
               <td [ngClass]="{'is-sticky':item.styckyLeft}"
-                [ngStyle]="{'width': item._width+'px','left':item.styckyLeft}">
+                [ngStyle]="{'width': item._width+'px','max-width':item._width+'px','min-width':item._width+'px','left':item.styckyLeft}">
                 <ng-container [ngSwitch]="item.type">
                   <div class="content-container" [ngClass]="item.classNames">
                     <ng-container *ngSwitchCase="'check'">
-                      <share-checkbox [modelChecked]='headAllSelect()' [inIfOther]='headMix()'
-                        (onClick)="onCheckThead($event)">
-                      </share-checkbox>
+                      <share-check [model]='headAllSelect()' [inIfOther]='headMix()' (onClick)="onCheckThead($event)">
+                      </share-check>
                     </ng-container>
                     <ng-container *ngSwitchDefault>
                       <span>{{item.title}}</span>
@@ -27,6 +27,7 @@
           </ng-container>
         </tr>
       </thead>
+      <!--body部分-->
       <tbody>
         <ng-container *ngFor="let data of tableDatas;index as i">
           <tr>
@@ -55,39 +56,58 @@
 
 <!-- item=列表项  data=该行数据  key=item.key  value=data[item.key]  -->
 <ng-template #tdEl let-item="item" let-data="data" let-datas="datas" let-key="key" let-value="value" let-i="i">
-  <td [ngClass]="{'is-sticky':item.styckyLeft}" [ngStyle]="{'width': item._width+'px','left':item.styckyLeft}">
+  <td [ngClass]="{'is-sticky':item.styckyLeft}"
+    [ngStyle]="{'width': item._width+'px','max-width':item._width+'px','min-width':item._width+'px', 'left':item.styckyLeft}">
     <ng-container [ngSwitch]="item.type">
       <div class="content-container" [ngClass]="item.classNames">
         <div class="content-main" [ngClass]='{"content-event":item.onClick}' (click)="onClick(data,item)">
+          <!--选框-->
           <ng-container *ngSwitchCase="'check'">
-            <share-checkbox [modelChecked]='getDataCheckStatus(data)' [inIfDisable]="getDataDisableStatus(data)"
+            <share-check [model]='getDataCheckStatus(data)' [inIfDisable]="getDataDisableStatus(data)"
               (onClick)="onCheckedData($event, data)">
-            </share-checkbox>
+            </share-check>
           </ng-container>
+          <!--排序-->
           <ng-container *ngSwitchCase="'serial'">
             {{inIfPage ? (page.currentPage-1)*page.pageRecord+i+1:i+1}}
           </ng-container>
+          <!--图片-->
           <ng-container *ngSwitchCase="'img'">
             <img [src]="value || '../../../../../assets/img/icon/no-img.png'" />
           </ng-container>
+          <!--tag-->
           <ng-container *ngSwitchCase="'rule-tag'">
-            <span class="table-tag" [ngClass]="item.ruleTags[value].class"
-              [ngStyle]="{'color':item.ruleTags[value].color}">
-              {{ item.ruleTags[value].text }}
-            </span>
+            <ng-container
+              *ngFor="let tag of (data._ruleTagKey && data._ruleTagKey[key] || data._ruleTags|| onRule(data,item))">
+              <span class="table-tag" [ngClass]="tag.class" [ngStyle]="{'color':tag.color}">
+                {{ tag.text }}
+              </span>
+            </ng-container>
           </ng-container>
+          <!--dot-->
           <ng-container *ngSwitchCase="'rule-dot'">
-            <div class="table-dot" [ngClass]="item.ruleDots[value].class"></div>
-            <span class="table-dot-span" [ngStyle]="{'color':item.ruleDots[value].color}">
-              {{ item.ruleDots[value].text }}
-            </span>
+            <ng-container
+              *ngFor="let dot of (data._ruleDotKey && data._ruleDotKey[key] || data._ruleDots|| onRule(data,item))">
+              <div class="table-dot" [ngClass]="dot.class"></div>
+              <span class="table-dot-span" [ngStyle]="{'color':dot.color}">
+                {{ dot.text }}
+              </span>
+            </ng-container>
           </ng-container>
+          <!--btns-->
           <ng-container *ngSwitchCase="'rule-btns'">
-            <ng-container *ngFor="let btn of data._ruleBtns || onRuleBtns(data,item)">
-              <div class="rule-btn" (click)="onRuleBtnClick(data,item,btn,datas )">
-                <i [class]="btn.icon"></i>
-                <span>{{btn.text}}</span>
-              </div>
+            <ng-container
+              *ngFor="let btn of (data._ruleBtnKey && data._ruleBtnKey[key] || data._ruleBtns|| onRule(data,item))">
+              <share-button [inPara]="btn"></share-button>
+            </ng-container>
+          </ng-container>
+          <!--text-->
+          <ng-container *ngSwitchCase="'rule-text'">
+            <ng-container
+              *ngFor="let text of (data._ruleTextKey && data._ruleTextKey[key] || data._ruleText|| onRule(data,item))">
+              <span class="text-info">
+                {{ text }}
+              </span>
             </ng-container>
           </ng-container>
           <ng-container *ngSwitchDefault>

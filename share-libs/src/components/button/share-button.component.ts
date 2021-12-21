@@ -1,10 +1,11 @@
 import { Component, OnInit, Input, ElementRef, RendererFactory2, Renderer2, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { ShareUpdataClassService } from '../../services/share-updata-class.service';
 import { IconClass } from 'share-libs/src/enum/icon.enum';
-import { ShareBtn } from './share-buttom';
-import { SizeBtn, TypeBtn, ColorEnum } from 'share-libs/src/enum';
+import { ShareParaBtn } from './share-button.model';
+import { SizeBtn, TypeBtn, ColorEnum, GlClass } from 'share-libs/src/enum';
 import { UtilChanges, UtilChangesUndefined, UtilChangesValue } from 'share-libs/src/utils';
 
+/**公用组件按钮 */
 @Component({
   selector: 'share-button,[share-button]',
   templateUrl: './share-button.component.html',
@@ -15,150 +16,132 @@ import { UtilChanges, UtilChangesUndefined, UtilChangesValue } from 'share-libs/
   }
 })
 export class ShareButtonComponent implements OnInit {
-
   constructor(private el: ElementRef, private rendeFactory: RendererFactory2, private upElClass: ShareUpdataClassService) {
     this.nativeEl = this.el.nativeElement;
-    this.renderer2 = this.rendeFactory.createRenderer(null, null)
+    this.renderer2 = this.rendeFactory.createRenderer(null, null);
   }
-  /**按钮配置*/
-  @Input() inPara: ShareBtn = new ShareBtn();
+  /**按钮配置(异步传入无效)*/
+  @Input() inPara: ShareParaBtn = new ShareParaBtn();
+  /**前置图片 */
   @Input() inIconPer: IconClass;
+  /**后置图片 */
   @Input() inIconSuf: IconClass;
+  /**按钮类型 */
   @Input() inType: TypeBtn;
+  /**按钮大小 */
   @Input() inSize: SizeBtn;
+  /**按钮宽 */
   @Input() inWidth: number;
+  /**按钮高 */
   @Input() inHeight: number;
+  /**按钮内文字*/
   @Input() inText: string;
-  @Input() inDisable: boolean;
+  /**是否禁用 */
+  @Input() inIfDisable: boolean;
+  /**文字颜色*/
   @Input() inColor: ColorEnum;
+  /**背景颜色 */
   @Input() inColorBG: ColorEnum;
+  /**边框颜色 */
   @Input() inColorBD: ColorEnum;
+  /**前置图标点击事件 */
   @Input() inClickPer: (event?: MouseEvent) => any;
+  /**按钮点击事件*/
   @Input() inClick: (event?: MouseEvent) => any;
+  /**后置图标点击事件*/
   @Input() inClickSuf: (event?: MouseEvent) => any;
-  @Output() onClick: EventEmitter<any> = new EventEmitter();
+  /**按钮点击事件*/
+  @Output() onClick: EventEmitter<MouseEvent> = new EventEmitter();
+  private defaultPara: ShareParaBtn = new ShareParaBtn();
   nativeEl: HTMLElement;
   renderer2: Renderer2;
   classMap: any = {};
-  /**前置图标class*/
-  /**后置图标class*/
-  _iconPer: IconClass;
-  _iconSuf: IconClass;
-  _type: TypeBtn = TypeBtn.default;
-  _size: SizeBtn = SizeBtn.default;
-  _width: number;
-  _height: number;
-  _text: string;
-  _disable: boolean;
-  _color: ColorEnum;
-  _colorBG: ColorEnum;
-  _colorBD: ColorEnum;
-  _clickPer: (event?: MouseEvent) => any;
-  _click: (event?: MouseEvent) => any;
-  _clickSuf: (event?: MouseEvent) => any;
   ngOnChanges(changes: SimpleChanges): void {
-    if (UtilChangesValue(changes, 'inPara')) {
-      this.setConfig();
-      this.setClassMap();
-      this.setStyleByPara();
-    }
-    if (UtilChanges(changes, 'inIconPer')) {
-      this._iconPer = this.inIconPer;
-    }
-    if (UtilChanges(changes, 'inIconSuf')) {
-      this._iconSuf = this.inIconSuf;
-    }
-    if (UtilChangesValue(changes, 'inText')) {
-      this._text = this.inText
-    }
     if (UtilChanges(changes, 'inType') || UtilChanges(changes, 'inSize') || UtilChanges(changes, 'inDisable')) {
-      this._type = this.inType;
-      this._size = this.inSize;
       this.setClassMap()
     }
     if (UtilChanges(changes, 'inWidth') || UtilChanges(changes, 'inHeight') || UtilChanges(changes, 'inColor') || UtilChanges(changes, 'inColorBG') || UtilChanges(changes, 'inColorBD')) {
-      this._width = this.inWidth;
-      this._height = this.inHeight;
-      this._color = this.inColor;
-      this._colorBG = this.inColorBG;
-      this._colorBD = this.inColorBD;
       this.setStyleByPara();
-    }
-    if (UtilChangesValue(changes, 'inClickPer')) {
-      this._clickPer = this.inClickPer
-    }
-    if (UtilChangesValue(changes, 'inClick')) {
-      this._click = this.inClick
-    }
-    if (UtilChangesValue(changes, 'inClickSuf')) {
-      this._clickSuf = this.inClickSuf
     }
   }
 
   ngOnInit() {
+    this.setConfig();
+    this.setStyleByPara();
+  }
+
+  ngAfterViewInit(): void {
     this.renderer2.setStyle(this.nativeEl, "display", 'inline-block');
     this.setClassMap();
   }
 
+  /**相关配置设置 */
   setConfig() {
-    this._size = this.inSize || this.inPara.size || this._size;
-    this._type = this.inType || this.inPara.type || this._type;
-    this._disable = this.inDisable || this.inPara.disable;
-    this._iconPer = this.inIconPer || this.inPara.iconPer;
-    this._iconSuf = this.inIconSuf || this.inPara.iconSuf;
-    this._text = this.inText || this.inPara.text;
-    this._width = this.inWidth || this.inPara.width;
-    this._height = this.inHeight || this.inPara.height;
-    this._color = this.inColor || this.inPara.color;
-    this._colorBG = this.inColorBG || this.inPara.colorBG;
-    this._colorBD = this.inColorBD || this.inPara.colorBD;
-    this._click = this.inClick || this.inPara.click;
-    this._clickPer = this.inClickPer || this.inPara.clickPer;
+    let para: ShareParaBtn = Object.assign({}, this.defaultPara, this.inPara)
+    this.inSize = this.inSize || para.size;
+    this.inType = this.inType || para.type;
+    this.inIfDisable = this.inIfDisable || para.ifDisable;
+    this.inIconPer = this.inIconPer || para.iconPer;
+    this.inIconSuf = this.inIconSuf || para.iconSuf;
+    this.inText = this.inText || para.text;
+    this.inWidth = this.inWidth || para.width;
+    this.inHeight = this.inHeight || para.height;
+    this.inColor = this.inColor || para.color;
+    this.inColorBG = this.inColorBG || para.colorBG;
+    this.inColorBD = this.inColorBD || para.colorBD;
+    this.inClick = this.inClick || para.click;
+    this.inClickPer = this.inClickPer || para.clickPer;
+    this.inClickSuf = this.inClickSuf || para.clickSuf;
   }
 
   setStyleByPara() {
-    if (typeof this._width === 'number') {
-      this.renderer2.setStyle(this.nativeEl.querySelector(".share-button"), "width", this._width + 'px')
+    let el = this.nativeEl.querySelector(".share-button");
+    if (!el) return;
+    if (typeof this.inWidth === 'number') {
+      this.renderer2.setStyle(el, "width", this.inWidth + 'px')
     }
-    if (typeof this._height === 'number') {
-      this.renderer2.setStyle(this.nativeEl.querySelector(".share-button"), "height", this._height + 'px')
+    if (typeof this.inHeight === 'number') {
+      this.renderer2.setStyle(el, "height", this.inHeight + 'px')
     }
-    if (this._colorBG) {
-      this.renderer2.setStyle(this.nativeEl.querySelector(".share-button"), "background-color", this._colorBG);
+    if (this.inColorBG) {
+      this.renderer2.setStyle(el, "background-color", this.inColorBG);
     }
-    if (this._colorBD || this._colorBG) {
-      this.renderer2.setStyle(this.nativeEl.querySelector(".share-button"), "border-color", this._colorBD || this._colorBG);
+    if (this.inColorBD || this.inColorBG) {
+      this.renderer2.setStyle(el, "border-color", this.inColorBD || this.inColorBG);
     }
-    if (this._color) {
-      this.renderer2.setStyle(this.nativeEl.querySelector(".share-button"), "color", this._color)
+    if (this.inColor) {
+      this.renderer2.setStyle(el, "color", this.inColor)
     }
   }
 
   setClassMap() {
     let classMap = {
-      [`sl-button-size-${this._size}`]: true,
-      [`sl-button-type-${this._type}`]: true,
-      [`E_D`]: this._disable,
+      [`sl-button-size-${this.inSize}`]: true,
+      [`sl-button-type-${this.inType}`]: true,
+      [GlClass.E_D]: this.inIfDisable,
     }
     this.upElClass.updateElClass(this.nativeEl.querySelector(".share-button"), classMap)
   }
 
   triggerClick($event: MouseEvent) {
-    if (this._disable) return;
-    this._click && this._click($event);
+    if (this.inIfDisable) return;
+    this.inClick && this.inClick($event);
     this.onClick.emit($event)
   }
 
+  /**前缀图标点击事件 */
   onElClickPer($event: MouseEvent) {
-    if (this._clickPer) {
+    if (this.inClickPer) {
       $event.stopPropagation()
-      this._clickPer($event);
+      this.inClickPer($event);
     }
   }
+
+  /**后缀图标点击事件 */
   onElClickSuf($event: MouseEvent) {
-    if (this._clickSuf) {
+    if (this.inClickSuf) {
       $event.stopPropagation()
-      this._clickSuf($event);
+      this.inClickSuf($event);
     }
   }
 }

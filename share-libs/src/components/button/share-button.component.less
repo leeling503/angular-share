@@ -25,23 +25,41 @@
 }
 
 /**按钮大小*/
-.sl-button-size(@min-width, @height, @radius: 3px) {
+.sl-button-size(@width, @height, @radius: 3px) {
   height: @height;
+  width: @width;
   line-height: calc(@height - 2*2px);
   padding: 2px 5px;
-  min-width: @min-width;
   border-radius: @radius;
 }
 
+.sl-button-size-small-x {
+  .sl-button-size(39px, 18px);
+  padding: 2px 2px;
+
+  span {
+    font-size: 12px;
+  }
+}
+
 .sl-button-size-small {
-  .sl-button-size(65px, 28px)
+  .sl-button-size(50px, 22px);
+  padding: 2px 3px;
+
+  span {
+    font-size: 12px;
+  }
 }
 
 .sl-button-size-default {
-  .sl-button-size(75px, 30px)
+  .sl-button-size(58px, 28px)
 }
 
 .sl-button-size-large {
+  .sl-button-size(75px, 30px)
+}
+
+.sl-button-size-large-x {
   .sl-button-size(85px, 32px)
 }
 

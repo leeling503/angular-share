@@ -73,12 +73,6 @@ function UtilIsFunction(v) {
     return v && typeof v === 'function'
 }
 
-/**第一个值不为undefined和null则返回第一个值 */
-function UtilSetValue(data1, data2) {
-    return data1 ?? data2;
-}
-
-
 export class UtilSleep {
     constructor() { }
     private promise: Promise<any>;
@@ -97,4 +91,4 @@ export class UtilSleep {
     }
 }
 
-export { UtilIsUndefined, UtilIsFalse, UtilIsEmpty, UtilIsEqual, UtilGetAttrValue, UtilValueType, UtilIsFunction, UtilSetValue }
+export { UtilIsUndefined, UtilIsFalse, UtilIsEmpty, UtilIsEqual, UtilGetAttrValue, UtilValueType, UtilIsFunction }

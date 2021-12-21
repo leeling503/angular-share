@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { TableBase } from '../share-table.component';
-import { BtnRule, BtnRules, TableItem } from '../share-table.model';
+import { TableBase } from '../share-table-base.component';
+import { BtnRules, TableItem } from '../share-table.model';
 
 @Component({
   selector: 'share-table',
@@ -9,24 +9,28 @@ import { BtnRule, BtnRules, TableItem } from '../share-table.model';
 })
 export class TableComponent extends TableBase implements OnInit {
 
+
+
   onClick(data, item: TableItem) {
     if (item.onClick && typeof item.onClick == 'function') {
-      item.onClick(data, item)
+      item.onClick(data, item, this.tableDatas)
     }
   }
 
-  onRuleBtns(data, item: TableItem): BtnRules {
-    if (typeof item.ruleBtns === 'function') {
-      return item.ruleBtns(data)
+
+  onRule(data, item: TableItem) {
+    let type = item.type, key;
+    switch (type) {
+      case "rule-btns": key = "ruleBtns"; break;
+      case "rule-dots": key = "ruleDots"; break;
+      case "rule-tags": key = "ruleTags"; break;
+      case "rule-text": key = "ruleText"; break;
+      default: return;
+    }
+    if (typeof item[key] === 'function') {
+      return item[key](data, item, this.tableDatas)
     } else {
-      return item.ruleBtns
-    }
-  }
-
-
-  onRuleBtnClick(data, item, btn: BtnRule, datas) {
-    if (btn.onClick && typeof btn.onClick == 'function') {
-      btn.onClick(data, item, datas)
+      return item[key]
     }
   }
 }

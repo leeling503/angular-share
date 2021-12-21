@@ -35,12 +35,13 @@ export class ShareRadioComponent implements OnInit {
   defaultPara: RadioPara = {
     ifMulti: false,
     ifClear: false,
-    ifDisCancel: false,
+    ifDisCancel: true,
     iconType: 'radio',
     key: 'key'
   }
   /**输入数据类型(输出数组或单个数据)*/
   modelType: 'multi' | 'single' = 'multi';
+  /**弹出的数据 */
   emitModel: string | string[];
   public options: RadioOption[] = [];
 
@@ -83,11 +84,14 @@ export class ShareRadioComponent implements OnInit {
 
   /**判断输出的值类型 */
   setModelType() {
+    /**默认数组多选输出 */
     this.modelType = 'multi';
     if (!Array.isArray(this.model) && typeof this.model !== undefined) {
+      /**输入数据非数组并且数据不是undefined ， 修正为单输出 */
       this.modelType = 'single';
     } if (typeof this.model === undefined && this.inMulti === false) {
-      this.model = 'single'
+      /**输入数据undefined ，并且配置申明单项 */
+      this.modelType = 'single'
     }
   }
 

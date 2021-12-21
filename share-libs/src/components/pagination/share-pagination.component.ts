@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, SimpleChanges, ViewChild, ElementRef } from "@angular/core";
-import { PaginationPage, PaginationType, JumpType, PaginationSize, PaginationInfoType } from './share-pagination.model';
+import { PaginationPage, SizePagination, TypeJump, TypePagination, TypePaginationInfo, } from './share-pagination.model';
 import { CdkOverlayOrigin } from '@angular/cdk/overlay';
 import { UtilChanges, UtilIsEqual } from "share-libs/src/utils";
 
@@ -16,11 +16,11 @@ export class SharePaginationComponent {
     /**翻页器数据 */
     @Input() inPage: PaginationPage = {};
     /**翻页器类型*/
-    @Input() inType: PaginationType = "default";
+    @Input() inType: TypePagination = "default";
     /**翻页器大小 */
-    @Input() inSize: PaginationSize = "normal";
+    @Input() inSize: SizePagination = "normal";
     /**翻页器说明信息类型 */
-    @Input() inInfoType: PaginationInfoType = "detail";
+    @Input() inInfoType: TypePaginationInfo = "detail";
     /**每页条数设置 */
     @Input() inPageRecord: number[] = [10, 20, 30, 50];
     prevFlag: boolean = false;
@@ -89,7 +89,7 @@ export class SharePaginationComponent {
     }
 
     /**分页器跳转 */
-    onJumpTo(type: JumpType) {
+    onJumpTo(type: TypeJump) {
         let currentPage = this.page.currentPage, pageCount = this.page.pageCount;
         switch (type) {
             case 'first':

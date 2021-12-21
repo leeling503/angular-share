@@ -1,7 +1,8 @@
 import { TemplateRef, Type } from '@angular/core';
 import { ShareOverlayConfig, ShareOverlayPosition } from 'share-libs/src/services/share-overlay.service';
-import { ShareModalTipComponent } from './modal-tip/modal-tip.component';
-import { ShareModalComponent } from './modal/modal.component';
+import { ShareParaBtn } from '../button/share-button.model';
+import { ShareModalTipComponent } from './modal-tip/share-modal-tip.component';
+import { ShareModalComponent } from './modal/share-modal.component';
 
 /**T表示传入的组件 如果是template建议填写undefined */
 export interface ShareModalPara<T = any, M = ShareModalComponent<T>> {
@@ -24,14 +25,14 @@ export interface ShareModalPara<T = any, M = ShareModalComponent<T>> {
     /**传给component的数据*/
     componentPara?: Partial<T>;
     /**弹窗的按钮组*/
-    btns?: TypeFooterBtn[];
+    btns?: Array<TypeFooterBtn | ShareParaBtn>;
 }
 
 export class ShareModalTip implements ShareModalPara<ShareModalTipComponent> {
     /**弹窗的标题 */
     title?: string = "提示";
     /**弹窗的按钮组*/
-    btns?: TypeFooterBtn[] = ['primary'];
+    btns?: Array<TypeFooterBtn | ShareParaBtn> = ['primary'];
     /**tip弹窗的类型 */
     type?: TypeModalTip = 'success';
     /**tip弹窗的提示信息 */

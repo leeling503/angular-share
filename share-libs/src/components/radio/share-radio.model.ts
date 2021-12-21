@@ -8,7 +8,7 @@ export interface RadioPara {
     ifClear?: boolean;
     /**图标类型 */
     iconType?: RadioIconType;
-    /**禁用按钮能否被单选去勾选 默认不可以*/
+    /**禁用按钮能否被单选去勾选 默认可以*/
     ifDisCancel?: boolean;
     /**取哪个属性的值 (key 需要使用 inKey)*/
     key?: string;

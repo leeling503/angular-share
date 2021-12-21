@@ -1,12 +1,11 @@
 import { ElementRef, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
+import { unset } from "lodash";
 import { HttpSearch, HttpResult } from "share-libs/src/models";
 import { HttpBaseService } from "share-libs/src/services/http-base.service";
 import { UtilChanges, UtilChangesNoFirst, UtilChangesValue } from "share-libs/src/utils";
 import { PaginationPage } from "../pagination/share-pagination.model";
 import { TableClassName, TableItem, TableSelect } from "./share-table.model";
-/**
- * 表格基础逻辑类
- */
+/**表格基础逻辑类 */
 export class TableBase {
   constructor(private http: HttpBaseService, private el: ElementRef) {
     this.nativeEl = this.el.nativeElement
@@ -37,11 +36,13 @@ export class TableBase {
   @Input() inRecordOptions: number[] = [15, 20, 30, 50];
   /**表格搜索条件对象（引用地址改变会重新查询） */
   searchItem: HttpSearch = new HttpSearch();
-  /**表格数据 */
+  /**表格宽度 */
+  tableWidth
+  /**当前显示的表格数据 */
   tableDatas: any[] = [];
-  /**选中的表格数据 */
+  /**所有选中的表格数据 */
   tableSelectedDatas: any[] = [];
-  /**选中的数据的唯一标识集合 */
+  /**所有选中的数据的唯一标识集合 */
   tableSelectedUuids: Array<string> = [];
   /**禁用数据的唯一标识集合 */
   tableDisableUuids: Array<string> = [];
@@ -54,7 +55,6 @@ export class TableBase {
   @Output() onSelectChange: EventEmitter<TableSelect> = new EventEmitter();
   @Output() onCurDataChange: EventEmitter<any[]> = new EventEmitter();
 
-
   ngOnChanges(changes: SimpleChanges): void {
     /**传入选中数据*/
     if (changes.inSelectedDatas) {
@@ -66,7 +66,9 @@ export class TableBase {
       this.setTableDisableUuidsByDatas();
     }
     /**用户自己传入表格数据非后台查询*/
-    if (UtilChangesValue(changes, 'inAllDatas') && this.inAllDatas.length > 0 && !this.inApiUrl) {
+    if (UtilChanges(changes, 'inAllDatas') && !this.inApiUrl) {
+      /**避免undefined */
+      this.inAllDatas = this.inAllDatas || [];
       this.page.recordCount = this.inAllDatas.length;
       this.page = Object.assign({}, this.page);
       if (UtilChangesNoFirst(changes, 'inAllDatas')) {
@@ -89,23 +91,20 @@ export class TableBase {
     this.superInitAfter();
   }
 
+  ngAfterViewInit(): void { }
 
-  ngAfterViewInit(): void {
-    /**初次计算避免首次加载宽度与获得数据后计算的不统一 */
-    setTimeout(() => { this.setTableWidth(); }, 10);
-    /**数据过多可能出现滚动条需要重新计算 */
-    let $after = this.onCurDataChange.asObservable().subscribe(res => {
-      this.setTableWidth();
-      $after.unsubscribe();
-    })
-  }
-
-  /**表格宽度设置 */
+  /**表格宽度设置 （是否需要延时在调用前自行判断）*/
   setTableWidth() {
-    let tableWidth = this.nativeEl.querySelector('.share-table').clientWidth;
-    let tableMaxHeight = this.nativeEl.querySelector('.table-part').clientHeight;
-    let tableHeight = this.nativeEl.querySelector('table').clientHeight;
-    let allWith = 0, calcWidth = 0;
+    /**页面宽度 */
+    let tableWidth = this.nativeEl.querySelector('.share-table').clientWidth,
+      /**页面表格高度 */
+      tableMaxHeight = this.nativeEl.querySelector('.table-part').clientHeight,
+      /**表格高度 */
+      tableHeight = this.nativeEl.querySelector('table').clientHeight,
+      /**所有需要显示的列的宽度*/
+      allWith = 0,
+      /*需要计算的宽度（未设置固定宽的） */
+      calcWidth = 0;
     this.inItems.forEach(e => {
       if (e.ifShow !== false) {
         allWith += (e.widthFix || e.width || e.widthMin || 60);
@@ -113,35 +112,42 @@ export class TableBase {
         calcWidth += (e.width || e.widthMin || 60);
       }
     })
-    /**表格左侧的边框宽度  box-sizing:border-box */
-    if (this.inClassNames.includes('border')) {
-      tableWidth -= (1)
-    }
+    console.log('tableHeight:', tableHeight, 'tableMaxHeight:', tableMaxHeight, 'tableWidth:', tableWidth)
     /**-侧边滚动条宽度 */
-    if (tableHeight > tableMaxHeight) {
-      tableWidth -= 6
-    }
+    if (tableHeight > tableMaxHeight) tableWidth -= 6;
+    /**页面表格宽度小于设置的表格项目总宽度 */
     if (tableWidth <= allWith) {
-      this.inItems.forEach(e => e._width = e.widthFix || e.width || e.widthMin || 60)
+      this.inItems.forEach(e => e._width = e.widthFix || e.width || e.widthMin || 60);
+      /**页面表格宽度大于设置的表格项目总宽度 */
     } else if (tableWidth > allWith) {
+      /**多余需分配的宽度 */
       let extraWidth = tableWidth - (allWith - calcWidth), len = this.inItems.length - 1;
       Promise.resolve().then(res => {
-        let computeWidth = calcWidth;
+        /**需要计算的总宽度（未设置固定宽的）*/
+        let cWidth = calcWidth;
         this.inItems.forEach((e, i) => {
+          /**不显示，隐藏掉 */
           if (e.ifShow === false) { e._width = 0; return }
+          /**表项设置的宽度 */
           let eWhidth = e.widthFix || e.width || e.widthMin || 60;
+          /**判断顺序极为重要 */
           if (e.styckyLeft || e.widthFix) {
+            /**固定宽度*/
             e._width = eWhidth;
           } else if (i === len) {
+            /**最后余下的宽度 */
             e._width = extraWidth;
           } else {
-            e._width = (extraWidth * eWhidth / computeWidth) | 0;
-            computeWidth -= eWhidth;
+            /**计算占比多少剩余宽度 */
+            e._width = (extraWidth * eWhidth / cWidth) | 0;
+            cWidth -= eWhidth;
             extraWidth -= e._width;
           }
         })
+        /**如果上面各种宽度出现错误的计算，由于样式问题表头宽度固定但body宽度依旧自适应，导致边框线错位， */
+        // this.tableWidth = this.inItems.map(e => e._width).reduce((a, b) => a + b)
       })
-    }
+    };
   }
 
   /**根据用户传入选中设置选中数据（如果当前table数据之后了没有就采用用户传入的数据） */
@@ -173,7 +179,6 @@ export class TableBase {
       if (this.inLoading) this.loadingFlag = true;
       this.getDatasByHttp()
     } else {
-      if (!this.inAllDatas) return;
       if (this.inIfPage) {
         let page = this.page,
           pageRecord = page.pageRecord = page.pageRecord ?? this.inRecordOptions[0],
@@ -210,7 +215,11 @@ export class TableBase {
   superChanges(changes: SimpleChanges) { }
   superInitAfter() { }
   superGetListBefor() { }
-  superGetListAfter() { };
+  /**查找、翻页、调整单页数据量以及初始加载数据都会调用 , 获得数据后表格需要在渲染数据后在进行宽高设置，需要设置延时 */
+  superGetListAfter() {
+    /**获取的高度或者宽度需要在数据渲染后进行，故设置此延时 */
+    setTimeout(() => { this.setTableWidth(); }, 0);
+  };
 
   /**表头点击事件 */
   onCheckThead(flag, datas = this.tableDatas, thead = this.inItems) {
@@ -222,6 +231,7 @@ export class TableBase {
   /**数据点击事件 */
   onCheckedData(flag, data, changeDatas: any[] = undefined) {
     if (flag) {
+      /**已经被选中，不用再添加 */
       if (this.tableSelectedUuids.includes(data[this.inUuid])) return;
       this.tableSelectedUuids.push(data[this.inUuid]);
       this.tableSelectedDatas.push(data);
@@ -229,7 +239,9 @@ export class TableBase {
       this.tableSelectedUuids = this.tableSelectedUuids.filter(e => e != data[this.inUuid]);
       this.tableSelectedDatas = this.tableSelectedDatas.filter(e => e[this.inUuid] != data[this.inUuid]);
     }
+    /**表头点击事件会将本次改变选中状态的数据进行存储 */
     changeDatas && changeDatas.push(data);
+    /**表头点击由表头点击事件进行emit弹出 */
     if (!changeDatas) {
       this.onSelectChange.emit(new TableSelect(flag, [data], this.tableSelectedDatas, this.tableSelectedUuids))
     }
@@ -239,21 +251,20 @@ export class TableBase {
   onPageChange(page: PaginationPage) {
     let currentPage = page.currentPage, pageRecord = page.pageRecord;
     if (this.searchItem.currentPage == currentPage && this.searchItem.pageRecord == pageRecord) return;
-    let flag = this.searchItem.pageRecord == pageRecord;
     Object.assign(this.searchItem, { currentPage, pageRecord });
     this.getList();
-    if (!flag) {
-      /**改变每页条数可能出现滚动条，需要重新计算宽度 */
-      let $after = this.onCurDataChange.asObservable().subscribe(res => {
-        this.setTableWidth();
-        $after.unsubscribe();
-      })
-    }
   }
 
   /** 表头显示列有改变 */
-  onChangeItemFilter() {
-    this.setTableWidth();
+  onChangeItemFilter(flag: boolean) {
+    /**如果恰巧增加的项导致纵轴出现滚动条，而纵轴滚动条又导致页面出现竖轴滚动条，无影响
+     * 如果恰巧取消的项导致纵轴滚动条消失，而纵轴滚动条又导致页面消失竖轴滚动条，有影响（边框线出现错位）
+    */
+   setTimeout(() => { this.setTableWidth(); }, 0);
+    // if (!flag) {
+    //   Promise.resolve().then(() => this.setTableWidth())
+    // } else {
+    // }
   }
 
   //以下选框状态方案待优化
@@ -262,16 +273,20 @@ export class TableBase {
     return flag;
   }
 
+  /**表头选款是否勾选 */
   headAllSelect(datas = this.tableDatas): boolean {
+    /**当前页在选中数组中能查找到或者在禁用数组中可以查找到，且当前页数据量大于0 */
     let flag = datas.every(e => this.tableSelectedUuids.includes(e[this.inUuid]) || this.tableDisableUuids.includes(e[this.inUuid])) && datas.length > 0;
     return flag;
   }
 
+  /**数据是否勾选 */
   getDataCheckStatus(data): boolean {
     let flag = this.tableSelectedUuids.includes(data[this.inUuid])
     return flag;
   }
 
+  /**数据是否禁用 */
   getDataDisableStatus(data): boolean {
     let flag = this.tableDisableUuids.includes(data[this.inUuid])
     return flag;

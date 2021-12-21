@@ -8,8 +8,8 @@
   <ng-container *ngFor="let option of activeOptions">
     <div class="node-option">
       <div class="option-content" (click)="onClickOption(option)" (dblclick)="onDblClick(option)">
-        <share-checkbox [modelChecked]="option._check" [inIfOther]="option._mix"
-          (onClick)="onCheckOption($event,option)"></share-checkbox>
+        <share-check [model]="option._check" [inIfOther]="option._mix"
+          (onClick)="onCheckOption($event,option)"></share-check>
         <span
           [ngClass]="{'node-children': option.children && option.children.length >0 && inSon}">{{option.value}}</span>
       </div>
@@ -17,7 +17,7 @@
   </ng-container>
   <!-- <ng-container *ngFor="let option of addOptions">
     <div class="add-node">
-      <div share-checkbox [inIfDisable]="!option.value" [modelChecked]="option._check" class="option-check"+++  
+      <div share-check [inIfDisable]="!option.value" [model]="option._check" class="option-check"+++  
         (onClick)="onOptionCheck($event,option)">
       </div>
       <input [(ngModel)]="option.value" (keydown.enter)="onInputValueEnd(option)" (blur)="onInputValueEnd(option)"

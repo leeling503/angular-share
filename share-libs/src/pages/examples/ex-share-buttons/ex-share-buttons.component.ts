@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Icon } from 'leaflet';
-import { ShareBtn } from 'share-libs/src/components/button/share-buttom';
+import { ShareParaBtn } from 'share-libs/src/components/button/share-button.model';
 import { TypeBtn, IconClass } from 'share-libs/src/enum';
 import { ColorEnum } from 'share-libs/src/enum/color.enum';
 
@@ -12,17 +12,19 @@ import { ColorEnum } from 'share-libs/src/enum/color.enum';
 export class ExShareButtonsComponent implements OnInit {
   constructor() { }
 
-  btnParaA: ShareBtn = {
-    iconPer: IconClass.clear,
+  btnParaA: ShareParaBtn = {
+    iconPer: IconClass.clearRed,
     iconSuf: IconClass.pullDown,
     width: 130,
     color: ColorEnum.yellow,
     colorBG: ColorEnum.red,
+    ifDisable: true,
     clickPer: () => { console.log('clickPer') },
-    click: () => { console.log('click') }
+    click: () => { console.log('click') },
+    clickSuf: () => { console.log('clickSuf') },
   }
 
-  btnParaB: ShareBtn = new ShareBtn();
+  btnParaB: ShareParaBtn = new ShareParaBtn();
   ngOnInit() {
     setTimeout(() => {
       this.btnParaA.width = 100;

@@ -9,9 +9,9 @@
             [ngStyle]="{'width': item.width+'px','left':item.styckyLeft}" [class]="item.classNames">
             <ng-container [ngSwitch]="item.type">
               <div *ngSwitchCase="'check'">
-                <share-checkbox [modelChecked]='headAllSelect()' [inIfOther]='headMix()'
+                <share-check [model]='headAllSelect()' [inIfOther]='headMix()'
                   (onClick)="onCheckThead($event)">
-                </share-checkbox>
+                </share-check>
               </div>
               <div *ngSwitchDefault>
                 <span>{{item.title}}</span>
@@ -28,9 +28,9 @@
                 [ngStyle]="{'width': item.width+'px','left':item.styckyLeft}" [class]="item.classNames">
                 <ng-container [ngSwitch]="item.type">
                   <div *ngSwitchCase="'check'">
-                    <share-checkbox [modelChecked]='getDataCheckStatus(data)' [inIfDisable]="getDataDisableStatus(data)"
+                    <share-check [model]='getDataCheckStatus(data)' [inIfDisable]="getDataDisableStatus(data)"
                       (onClick)="onCheckedData($event, data)">
-                    </share-checkbox>
+                    </share-check>
                   </div>
                   <div *ngSwitchDefault>
                     {{data[item.key]}}

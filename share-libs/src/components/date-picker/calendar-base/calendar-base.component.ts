@@ -15,13 +15,14 @@ export class ShareCalendarBaseComponent implements OnInit {
     this.elToday = UtilDateGetStr(this.today, "YYYY-MM-DD");
     this.setYearMonth();
   }
-  /**接受年月 （2021-01） */
-  @Input() inDate: string = "2021-10";
+  /**接受年月日 （2021-01-01） */
+  @Input() inDate: string = "2021-10-05";
   @Output() onChange: EventEmitter<DateData> = new EventEmitter();
   /**组件节点*/
   elNative: HTMLElement;
   /**年月选择器节点 */
   elYearMonth: HTMLElement;
+  /**星期栏数据 */
   WEEK: string[] = ['一', '二', '三', '四', '五', '六', '日'];
   /**组件日期对象 */
   date: Date = new Date();
@@ -87,9 +88,8 @@ export class ShareCalendarBaseComponent implements OnInit {
   /**页面点击日期 */
   onClickDate(item: DateData) {
     /**未度过的日期不允许查看点击 */
-    if (!item.ifPer) return;
     /**非当前页面展示月需要更新日历 */
-    if (!item.ifCurMonth) {
+    if (!item.ifCurM) {
       this.setCalendar(item.date)
     }
     /**用户激活日期变更为点击日期 */
@@ -104,7 +104,7 @@ export class ShareCalendarBaseComponent implements OnInit {
     this.calendar = this.generCalendar();
   }
 
-  /**生成日历数据对象(需要自己赋值给日历变量) */
+  /**生成日历对象(需要自己赋值给日历变量) */
   generCalendar(): DateData[] {
     /**最后一天的数字 */
     let lastDays = this.getMonthLastDay(this.curYear, this.curMonth);
@@ -141,7 +141,8 @@ export class ShareCalendarBaseComponent implements OnInit {
       calendar.push(data)
     }
     for (let i = 1; i <= lastDays; i++) {
-      let data = this.generDateData(this.curYear, this.curMonth, i)
+      let data = this.generDateData(this.curYear, this.curMonth, i);
+      data.ifCurM = true;
       calendar.push(data)
     }
     for (let i = 1; i <= next; i++) {
@@ -151,7 +152,7 @@ export class ShareCalendarBaseComponent implements OnInit {
     return calendar
   }
 
-  /**生成日历对象   
+  /**生成单个日历对象   
    *@param y 年
    *@param m 月
    *@param d 日
@@ -161,13 +162,8 @@ export class ShareCalendarBaseComponent implements OnInit {
     let mStr = STRS[m] || m;
     let date = new Date(`${y}-${mStr}-${dStr}`)
     let day = date.getDay(),
-      days = date.getDate(),
-      ifPer = this.today.getTime() > date.getTime(),
-      dateStr = UtilDateGetStr(date, 'YYYY-MM-DD');
-    let name = !ifPer ? '' : dateStr == this.elToday ? '今天' : "毛晓峰";
-
-    let state: DateState = dateStr == this.elToday ? 'none' : ifPer && name ? 'normal' : ifPer ? 'abnormal' : 'none';
-    return { date: dateStr, days, day, ifCurMonth: this.curMonth == m, ifPer, name, state }
+      dateStr = UtilDateGetStr(date);
+    return { date: dateStr, year: y, days: d, day, month: m }
   }
 
 
@@ -207,22 +203,16 @@ export class ShareCalendarBaseComponent implements OnInit {
 type DateState = 'normal' | 'abnormal' | 'none';
 /**日期数据（对应每天的各种数据） */
 interface DateData {
-  /**日期*/
-  date?: string,
+  /**日期字符串*/
+  date: string,
   /**对应的星期几 */
-  day?: number,
+  day: number,
+  /**年 */
+  year: number,
+  /**月份 (不需要+1处理)  */
+  month: number,
   /**对应的第几天 */
-  days?: number,
-  /**是否是当前显示月 */
-  ifCurMonth?: boolean,
-  /**是否是今天 */
-  ifCurDate?: boolean,
-  /**是否已经度过 */
-  ifPer?: boolean,
-  /** */
-  state?: DateState,
-  /**值班人员 */
-  name?: string,
-  /**天气 */
-  weather?: string,
+  days: number,
+  /**当前月(主月) */
+  ifCurM?: boolean;
 }

@@ -7,21 +7,9 @@
       <div> {{curMonth}}月 </div>
     </div>
     <div class="calendar-ctr-next" (click)="onElDataCtr(1)">></div>
-
-    <div class="calendar-ctr-info">
-      <ng-container>
-        <div class="ctr-info">
-          值班人
-        </div>
-        <div class="ctr-info">
-          天气
-        </div>
-      </ng-container>
-    </div>
   </div>
   <div class="calendar-content">
-    <!-- item-position 对边框进行定位
-      -->
+    <!-- item-position 对边框进行定位 -->
     <ng-container *ngFor="let week of WEEK">
       <div class="calendar-item ">
         <div class="calendar-week">
@@ -32,23 +20,12 @@
       </div>
     </ng-container>
     <ng-container *ngFor="let item of calendar">
-      <!-- active-month 标识是否是当月
-          active-date 是否是激活的那天
-          date-per 表示已经度过的日期（包括当前天）
-          item-data 为避免激活的日期边框出现极小部分偏移，单独设置数据块
-      -->
-      <div class="calendar-item"
-        [ngClass]="{'active-month':item.ifCurMonth , 'active-date':dateStr == item.date, 'date-per':item.ifPer}"
-        (click)="onClickDate(item)">
+      <div class="calendar-item" [ngClass]="{'active-date':dateStr == item.date}" (click)="onClickDate(item)">
         <div class="calendar-day">
           <div class="item-position"></div>
           <div class="item-data">
             <div class="date-days" [ngClass]="{'today':elToday== item.date}">
               {{item.days}}
-            </div>
-            <div class="date-info" [ngClass]="'state-'+item.state">
-              <i class="info-state"></i>
-              <div class="info-user">{{item.name}}</div>
             </div>
           </div>
         </div>

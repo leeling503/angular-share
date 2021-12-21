@@ -1,4 +1,6 @@
 <div class="ex-share-radio">
+  {{model}}
+  <share-check [(model)]="model"></share-check>
   <div class="select-para">
     {{paraA|json}}
     <div class="para-info">
@@ -38,8 +40,57 @@
     </div>
   </div>
 
-  <share-radio [(model)]='modelRadioA' (modelRadioChange)="onModelChangeA($event)" [inPara]='paraA'
-    [inOptins]="radioDatasA" [inMulti]="paraA.ifMulti" [inClear]="paraA.ifClear" [inKey]="paraA.key"
-    [inDisCancel]="paraA.ifDisCancel" [inIconType]="paraA.iconType"></share-radio>
+  <share-radio [(model)]='modelRadioA' (modelChange)="onModelChangeA($event)" [inPara]='paraA' [inOptins]="radioDatasA"
+    [inMulti]="paraA.ifMulti" [inClear]="paraA.ifClear" [inKey]="paraA.key" [inDisCancel]="paraA.ifDisCancel"
+    [inIconType]="paraA.iconType"></share-radio>
   <span>{{modelRadioA}}</span><br />
+
+  <div class="select-para">
+    {{paraB|json}}
+    <div class="para-info">
+      <div>多选</div>
+      <div>
+        <share-radio [(model)]="paraB.ifMulti" [inOptins]="radioData">
+        </share-radio>
+      </div>
+    </div>
+    <div class="para-info">
+      <div>能否清空</div>
+      <div>
+        <share-radio [(model)]="paraB.ifClear" [inOptins]="radioData">
+        </share-radio>
+      </div>
+    </div>
+    <div class="para-info">
+      <div>禁用被单选取消</div>
+      <div>
+        <share-radio [(model)]="paraB.ifDisCancel" [inOptins]="radioData">
+        </share-radio>
+      </div>
+    </div>
+    <div class="para-info">
+      <div>样式</div>
+      <div>
+        <share-radio [(model)]="paraB.iconType" [inOptins]="radioType">
+        </share-radio>
+      </div>
+    </div>
+    <div class="para-info">
+      <div>关键Key</div>
+      <div>
+        <share-radio [(model)]="paraB.key" [inOptins]="radioKey">
+        </share-radio>
+      </div>
+    </div>
+  </div>
+
+  <share-radio [(model)]='modelRadioB' (modelChange)="onModelChangeB($event)" [inPara]='paraB' [inOptins]="radioDatasA"
+    [inMulti]="paraB.ifMulti" [inClear]="paraB.ifClear" [inKey]="paraB.key" [inDisCancel]="paraB.ifDisCancel"
+    [inIconType]="paraB.iconType">
+  </share-radio>
+  <span>{{modelRadioB|json}}</span><br />
+  <span>默认配置 传入数组输出数组 传入字符或undefined输出字符</span>
+  <share-radio [(model)]='modelRadioC' (modelChange)="onModelChangeB($event)" [inOptins]="radioDatasB">
+  </share-radio>
+  <span>{{modelRadioC|json}}</span><br />
 </div>

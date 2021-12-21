@@ -1,6 +1,6 @@
 import { OverlayRef } from '@angular/cdk/overlay';
 import { Component, OnInit, Input, SimpleChanges, ViewChild, ViewContainerRef, ComponentFactory, ComponentFactoryResolver, ComponentRef, Type, EventEmitter, Injector, TemplateRef } from '@angular/core';
-import { ShareBtn } from '../../button/share-buttom';
+import { ShareParaBtn } from '../../button/share-button.model';
 import { IconClass, TypeBtn } from 'share-libs/src/enum';
 import { ShareModalCbData, TypeFooterBtn } from '../share-modal.model';
 
@@ -24,20 +24,24 @@ export abstract class ShareModalRef<T = any> {
  */
 @Component({
   selector: 'app-modal',
-  templateUrl: './modal.component.html',
-  styleUrls: ['./modal.component.less'],
+  templateUrl: './share-modal.component.html',
+  styleUrls: ['./share-modal.component.less'],
 })
 export class ShareModalComponent<T = any> extends ShareModalRef implements OnInit {
   constructor(private factory: ComponentFactoryResolver, private viewContainer: ViewContainerRef,) {
     super()
   }
-  @Input() title: string;//弹出窗标题
+  /**弹出窗标题 */
+  @Input() title: string;
+  /**弹出窗template内容 */
   @Input() template: TemplateRef<any>;
+  /**弹出窗内组件内容 */
   @Input() component: Type<T>
+  /**弹出窗内组件参数 */
   @Input() componentPara: Partial<T>
   @ViewChild('bodyContainer', { read: ViewContainerRef, static: true }) private bodyContainer: ViewContainerRef;
-  /**modal的弹窗实例 */
-  overlayRef: OverlayRef;
+  /**modal的弹窗实例 (modal服务将其实例化) */
+  public overlayRef: OverlayRef;
   private componentRef: ComponentRef<T>;
   /**弹窗打开后的触发事件 */
   private emitModalOpen: EventEmitter<ShareModalCbData<T>> = new EventEmitter();
@@ -48,15 +52,15 @@ export class ShareModalComponent<T = any> extends ShareModalRef implements OnIni
   /**关闭控制权是否属于组件本身（如果外部调用onCloseBefor且点击确定按钮将会由外部回调决定，其余关闭情况会调用回调且一定关闭） */
   private closeCtr: boolean = true;
   /**弹窗所有按钮组*/
-  private BTNS: { [key in TypeFooterBtn]?: ShareBtn } = {
+  private BTNS: { [key in TypeFooterBtn]?: ShareParaBtn } = {
     primary: { text: '确定', type: TypeBtn.primary, iconPer: IconClass.confirm, click: () => { this.emitClose({ closeType: 0 }) } },
-    close: { text: '关闭', type: TypeBtn.gray, click: () => { this.emitClose({ closeType: 1 }) } },
-    cancel: { text: '取消', type: TypeBtn.danger, click: () => { this.emitClose({ closeType: 2 }) } },
+    close: { text: '关闭', type: TypeBtn.danger, iconPer: IconClass.close, click: () => { this.emitClose({ closeType: 1 }) } },
+    cancel: { text: '取消', type: TypeBtn.gray, click: () => { this.emitClose({ closeType: 2 }) } },
   }
   /**提示框显示的按钮组*/
-  public footerBtns: ShareBtn[] = [];
-  set btns(btns: TypeFooterBtn[]) {
-    this.footerBtns = btns.map(e => { return this.BTNS[e] })
+  public footerBtns: ShareParaBtn[] = [];
+  set btns(btns: Array<TypeFooterBtn | ShareParaBtn>) {
+    this.footerBtns = btns.map(e => { return typeof e === 'string' ? this.BTNS[e] : e; });
   }
 
   ngOnChanges(changes: SimpleChanges): void { }

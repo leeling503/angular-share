@@ -1,6 +1,6 @@
 <div class="share-date-month  E_BD E_BD_hover" cdkOverlayOrigin (click)="onToggleOpen()" shareIcon
   (onIconClick)="onClearValue()" [inView]="modelMonth">
-  <div class="E-T-prefix" *ngIf="_perText" [style.width]="_perWidth">{{_perText}}</div>
+  <div class="E_T_prefix" *ngIf="_perText" [style.width]="_perWidth">{{_perText}}</div>
   <input type="text" [ngModel]="viewMonth" [placeholder]="inPlaceholder" readonly>
   <div class="E_suffix_icon E_split_line">
     <i class="E_I_date_day"></i>

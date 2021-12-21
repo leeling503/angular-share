@@ -2,14 +2,14 @@
   <div class="open-nodes">
     <ng-container *ngFor="let option of options">
       <div class="option-node">
-        <div share-checkbox class="option-check" [modelChecked]="option._check"
+        <div share-check class="option-check" [model]="option._check"
           (onClick)="onOptionCheck($event,option)"></div>
         <span [title]="option.value">{{option.value}}</span>
       </div>
     </ng-container>
     <ng-container *ngFor="let option of addOptions">
       <div class="add-node">
-        <div share-checkbox [inIfDisable]="!option.value" [modelChecked]="option._check" class="option-check"
+        <div share-check [inIfDisable]="!option.value" [model]="option._check" class="option-check"
           (onClick)="onOptionCheck($event,option)">
         </div>
         <input [(ngModel)]="option.value" (keydown.enter)="onInputValueEnd(option)" (blur)="onInputValueEnd(option)"

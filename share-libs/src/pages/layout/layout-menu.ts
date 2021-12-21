@@ -1,4 +1,4 @@
-import { AUTHCODE } from "share-libs/src/const";
+import { AUTHCODE } from "share-libs/src/enum";
 
 export interface MenuItem {
     /**暂无意义 */
@@ -12,7 +12,7 @@ export interface MenuItem {
     /**和路由匹配决定是否处于激活状态 */
     key?: string;
     /**authCode表示该菜单所需的权限，没有该权限则不会显示该菜单 */
-    authCode?: string;
+    authCode?: AUTHCODE;
     /**是否显示根据用户权限生成,自行配置后将忽略账号权限*/
     ifShow?: boolean;
     /**子菜单 */

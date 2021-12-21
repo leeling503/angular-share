@@ -6,8 +6,8 @@ import { TypeModalTip } from '../share-modal.model';
  */
 @Component({
   selector: 'app-modal-tip',
-  templateUrl: './modal-tip.component.html',
-  styleUrls: ['./modal-tip.component.less']
+  templateUrl: './share-modal-tip.component.html',
+  styleUrls: ['./share-modal-tip.component.less']
 })
 export class ShareModalTipComponent implements OnInit {
 

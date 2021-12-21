@@ -1,8 +1,13 @@
 <div class="ex-share-input">
-  <share-input class="asd" [(model)]="valueA" [inPerText]="'北京时间'" [inType]="'number'"></share-input>
-  {{valueA}}
-  <share-input [(model)]="valueB" [inType]="'int'" [inLength]='2'></share-input>
-  {{valueB}}
-  <share-input [(model)]="valueC" [inLength]='5'></share-input>
-  {{valueC}}
+  <share-input class="asd" [(model)]="valueA" [inPerText]="'研发公司'" [inReg]="reg"></share-input>
+  <div class='show-value'> {{valueA}}</div>
+  <span> 整数长度限制5</span>
+  <share-input [(model)]="valueB" [inType]="'int'" [inLength]='5'></share-input>
+  <div class='show-value'> {{valueB}}</div>
+  <span> 数字长度限制8</span>
+  <share-input [(model)]="valueC" [inType]="'number'" [inLength]='8'></share-input>
+  <div class='show-value'> {{valueC}}</div>
+  <span> 经纬度专用</span>
+  <share-input-lnglat [(model)]="lnglat"></share-input-lnglat>
+  <div class='show-value'> {{lnglat|json}}</div>
 </div>

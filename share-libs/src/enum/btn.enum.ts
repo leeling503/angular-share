@@ -1,9 +1,14 @@
 /**按钮大小 */
 export enum SizeBtn {
+    /**超小号 */
     smallX = 'small-x',
+    /**小号 */
     small = 'small',
+    /**默认 */
     default = 'default',
+    /**大号*/
     large = 'large',
+    /**超大号*/
     largeX = 'large-x',
 }
 

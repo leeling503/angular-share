@@ -18,9 +18,9 @@
         </ng-container>
       </ng-container>
       <ng-container *ngIf="inCheck">
-        <share-checkbox (modelCheckedChange)="onClickOptionNode(option)" [modelChecked]='option._check'
+        <share-check (modelCheckedChange)="onClickOptionNode(option)" [model]='option._check'
           [inIfOther]='option._mix' [inIfDisable]="option._dis || dis">
-        </share-checkbox>
+        </share-check>
       </ng-container>
       <div class="node-content-text"><span>{{option.value}}</span></div>
     </div>

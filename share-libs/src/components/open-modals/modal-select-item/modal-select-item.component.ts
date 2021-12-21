@@ -72,7 +72,7 @@ export class ShareModalSelectItemComponent {
 
 export class ShareModalSelectItem {
     value?: string;
-    key?: string;
+    key?: any;
     /** 选中 */
     _checked?: boolean;
     /** 头部mix状态 */
@@ -82,7 +82,10 @@ export class ShareModalSelectItem {
 }
 
 export class ModalChange {
-    flag: boolean; //选中
-    changeItems: ShareModalSelectItem[]; //改变的item
-    selectItems: ShareModalSelectItem[]; //选中的Item
+    /**是否选中 （true）*/
+    flag: boolean;
+    /**此次改变的item*/
+    changeItems: ShareModalSelectItem[];
+    /**所有选中的item */
+    selectItems: ShareModalSelectItem[];
 }

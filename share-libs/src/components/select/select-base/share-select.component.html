@@ -1,7 +1,7 @@
 <div class="share-select-panel E_BD E_BD_hover" cdkOverlayOrigin (click)='onOpenOverlay()'
   [ngClass]="{'select-has-border':checkOptions.length > 1}" shareIcon [inView]="inClear && checkOptions.length"
   (onIconClick)="onClickClearNodes()">
-  <div class="E-T-prefix" *ngIf="_perText" [style.width]="_perWidth">{{_perText}}</div>
+  <div class="E_T_prefix" *ngIf="_perText" [style.width]="_perWidth">{{_perText}}</div>
   <div class="selected-nodes">
     <ng-container *ngIf="(!checkOptions || checkOptions.length==0) && !inAdd">
       <div class="selected-node placeholder-text">
@@ -33,7 +33,7 @@
   <div class="open-nodes">
     <node-select [inOptions]="options" [inCheckOptions]="checkOptions" (onCheckChange)="onCheckChange($event)"
       [inMulti]="inMulti" [inCheck]="inCheck" [inSon]="inSon" [inTip]="inTip" [inOne]="inOne" [inActive]="inActive"
-      [inGanged]="inGanged">
+      [inGanged]="inGanged" [inAdd]="inAdd">
     </node-select>
   </div>
 </ng-template>

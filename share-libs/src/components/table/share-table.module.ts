@@ -1,4 +1,4 @@
-import { ShareCheckboxModule } from '../checkbox/share-checkbox.module';
+import { ShareCheckModule } from '../check/share-check.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TableComponent } from './table/share-table.component';
@@ -10,8 +10,9 @@ import { FilterTableHeadComponent } from './filter-table-head/filter-table-head.
 import { OverlayModule } from '@angular/cdk/overlay';
 import { PortalModule } from '@angular/cdk/portal';
 import { ShareInputModule } from '../input/share-input.module';
-import { ShareOpenModalsModule } from '../open-modals/open-modals.module';
+import { ShareOpenModalsModule } from '../open-modals/share-open-modals.module';
 import { ShareNullModule } from '../null/share-null.module';
+import { ShareButtonModule } from '../button/share-button.module';
 
 @NgModule({
   imports: [
@@ -21,7 +22,8 @@ import { ShareNullModule } from '../null/share-null.module';
     ShareDirectiveModule,
     ShareNullModule,
     ShareInputModule,
-    ShareCheckboxModule,
+    ShareCheckModule,
+    ShareButtonModule,
     SharePaginationModule,
     ShareOpenModalsModule
   ],

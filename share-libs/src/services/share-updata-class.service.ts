@@ -11,6 +11,7 @@ export class ShareUpdataClassService {
     }
 
     updateElClass(el: HTMLElement, classMap: ShareClassMap) {
+        if (!el) return;
         this.removeClass(el, this.classMap, this.renderer);
         this.classMap = { ...classMap };
         this.addClass(el, this.classMap, this.renderer);

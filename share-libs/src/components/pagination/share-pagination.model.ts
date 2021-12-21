@@ -15,8 +15,11 @@ export interface PaginationPage {
     pageOne?: number;
     pageTwo?: number;
 }
-
-export type PaginationType = "simple" | "default" | 'all';
-export type PaginationSize = "big" | "normal" | 'small';
-export type PaginationInfoType = "none" | "simple" | "normal" | "detail";
-export type JumpType = "first" | "prev" | "next" | "last" | "prev5" | "next5" | 'num';
+/**分页器类型 */
+export type TypePagination = "simple" | "default" | 'all';
+/**分页器大小 */
+export type SizePagination = "big" | "normal" | 'small';
+/**分页器类型 */
+export type TypePaginationInfo = "none" | "simple" | "normal" | "detail";
+/**分页器跳转类型 */
+export type TypeJump = "first" | "prev" | "next" | "last" | "prev5" | "next5" | 'num';

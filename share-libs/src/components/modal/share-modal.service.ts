@@ -2,8 +2,8 @@
 import { ShareOverlayConfig, ShareOverlayPosition, ShareOverlayService } from '../../services/share-overlay.service';
 import { Injectable } from '@angular/core';
 import { ShareModalPara, ShareModalTip } from './share-modal.model';
-import { ShareModalComponent, ShareModalRef } from './modal/modal.component';
-import { ShareModalTipComponent } from './modal-tip/modal-tip.component';
+import { ShareModalComponent, ShareModalRef } from './modal/share-modal.component';
+import { ShareModalTipComponent } from './modal-tip/share-modal-tip.component';
 @Injectable({
     providedIn: 'root'
 })

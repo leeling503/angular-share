@@ -1,51 +1,12 @@
+import { ShareParaBtn } from "../button/share-button.model";
+
 /**view-left居左  view-right居右  border 四周均有边框    simple-border  上下有边框    background-color   背景色交替*/
 export type TableClassName = "border" | "simple-border" | "background-color" | "view-left" | 'view-right' | 'view-center';
 /**view-left居左  view-right居右  border 四周均有边框  underline 下划线  */
 export type TdClassName = "view-left" | 'view-right' | 'view-center' | 'underline' | 'color-blue';
-/**通过泛型获得数据类型T */
-export interface TableItem<T = any> {
-    /**表头名称  */
-    title: string;
-    /**宽度 */
-    width?: number;
-    /**宽度固定（全部为固定宽度但宽度总和小于表格宽度也会扩展） */
-    widthFix?: number
-    /**最小宽度 不设置最小为60px*/
-    widthMin?: number;
-    /**计算后的显示宽度 */
-    _width?: number;
-    /**该列的类型 */
-    type?: TdType;
-    /** 对应data中的key取值 */
-    key?: string;
-    /** td的export class view-left居左  view-right居右  is-sticky该列固定 */
-    classNames?: TdClassName[];
-    /** 列固定居左的距离（设置该距离后会固定列） */
-    styckyLeft?: string;
-    /** 当列是否显示  只有设置为false才不显示*/
-    ifShow?: boolean;
-    /** 能否过滤掉该选列 只有设置为false才不能取消*/
-    canFilter?: boolean;
-    /** 是否在过滤选框隐藏*/
-    hidFilter?: boolean;
-    /**事件回调 */
-    onClick?: (data: T, item: TableItem) => any;
-    /**tag类型规则 最好采用UtilTableRuleTags生成 */
-    ruleTags?: TagRules;
-    /**dot类型规则 最好采用UtilTableRuleDots生成 */
-    ruleDots?: DotRules;
-    /**Text类型规则 最好采用UtilTableRuleText生成 */
-    ruleText?: object;
-    /**Text类型规则 */
-    ruleBtns?: (data: T) => BtnRules<T> | BtnRules<T>;
-}
 /**check选框 serial序号 tag有背景色的小方块 dot带圆点 btn按钮数组 rule-text需要转换的文本 expend展开*/
-export type TdType = 'check' | 'serial' | "rule-tag" | "rule-dot" | 'rule-text' | 'rule-btns' | "expend";
+export type TdType = 'check' | 'serial' | "rule-tags" | "rule-dots" | 'rule-text' | 'rule-btns' | "expend";
 export type TagType = 'green' | 'danger' | "blue" | 'orange' | "pink";
-export type DotType = TagType;
-export type TagRules = { [key: string]: TagRule }
-export type DotRules = { [key: string]: DotRule }
-export type BtnRules<T = any> = BtnRule<T>[]
 export interface TagRule {
     /**决定tag颜色 */
     class: TagType;
@@ -57,12 +18,65 @@ export interface TagRule {
     color?: string;
 }
 export interface DotRule extends TagRule { };
-export interface BtnRule<T = any> {
-    text?: string;
-    /**图标 */
-    icon?: string;
-    /**点击事件 */
-    onClick?: (data: T, item, datas?: T[]) => void
+export type DotType = TagType;
+export type TagRules = TagRule[];
+export type DotRules = DotRule[];
+export type BtnRules = ShareParaBtn[]
+export class TableData {
+    [key: string]: any;
+    /**按钮组(确定不会出现同类型的td按钮组时使用)*/
+    _ruleBtns?: ShareParaBtn[];
+    /**按钮组(挂在到数据后之后的变更检测将不会再执行方法) 优先级高 */
+    _ruleBtnKey?: { [key: string]: ShareParaBtn[] };
+    /**Tag组(不会出现同类型时使用)*/
+    _ruleTags?: TagRules;
+    /**Tag组 优先级高(有出现同类型时使用)*/
+    _ruleTagKey?: { [key: string]: TagRules };
+    /**Dot组(不会出现同类型时使用)*/
+    _ruleDots?: DotRules;
+    /**Dot组 优先级高(有同类型时使用)*/
+    _ruleDotKey?: { [key: string]: DotRules };
+    /**Text组(不会出现同类型时使用)*/
+    _ruleText?: string;
+    /**Text组 优先级高(有同类型时使用)*/
+    _ruleTextKey?: { [key: string]: string };
+}
+/**通过泛型获得数据类型T */
+export interface TableItem<T extends TableData = any> {
+    /**表头名称  */
+    title?: string;
+    /** 对应data中的key取值 */
+    key?: string;
+    /**宽度 */
+    width?: number;
+    /**宽度固定（全部为固定宽度但宽度总和小于表格宽度也会扩展） */
+    widthFix?: number
+    /**最小宽度 不设置最小为60px*/
+    widthMin?: number;
+    /**计算后的显示宽度 */
+    _width?: number;
+    /** 当列是否显示  只有设置为false才不显示*/
+    ifShow?: boolean;
+    /** 能否过滤掉该选列 只有设置为false才不能取消*/
+    filterCan?: boolean;
+    /** 是否在过滤选框隐藏*/
+    filterHid?: boolean;
+    /**该列的类型 */
+    type?: TdType;
+    /** td的export class view-left居左  view-right居右  is-sticky该列固定 */
+    classNames?: TdClassName[];
+    /** 列固定居左的距离（设置该距离后会固定列） */
+    styckyLeft?: string;
+    /**事件回调 */
+    onClick?: (data: T, item: TableItem, datas: T[]) => any;
+    /**Text类型规则 最好采用UtilTableRuleText生成 */
+    ruleText?: (data: T, item: TableItem, datas: T[]) => string[];
+    /**tag类型规则 最好采用UtilTableRuleTags生成 */
+    ruleTags?: TagRules | ((data: T, item: TableItem, datas: T[]) => TagRules);
+    /**dot类型规则 最好采用UtilTableRuleDots生成 */
+    ruleDots?: DotRules | ((data: T, item: TableItem, datas: T[]) => DotRules);
+    /**Text类型规则 */
+    ruleBtns?: BtnRules | ((data: T, item: TableItem, datas: T[]) => BtnRules);
 }
 
 export class TableSelect {
@@ -72,7 +86,14 @@ export class TableSelect {
     changeFlag: boolean;
     /**所有选中的数据 */
     selectedDatas: any[];
+    /**所有选中的数据唯一标识 */
     selectedUuids: string[];
+    /**
+     * @param flag 状态改变为选中（true）未选中（false）
+     * @param changes 本次改变变动的数据
+     * @param datas 现在所有选中的数据
+     * @param uuids 所有选中的数据的唯一标识
+     */
     constructor(flag: boolean, changes: any[], datas, uuids) {
         this.curChangeDatas = changes;
         this.changeFlag = flag;

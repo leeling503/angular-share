@@ -15,7 +15,7 @@ export class ShareIconDirective {
     /**图标点击事件 */
     @Output() onIconClick: EventEmitter<any> = new EventEmitter();
     /**图标的class名称 */
-    @Input() inName: IconClass = IconClass.clear;
+    @Input() inName: IconClass = IconClass.clearRed;
     clearEl: HTMLElement;
 
     ngOnChanges(changes: SimpleChanges): void { }
