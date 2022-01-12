@@ -5,7 +5,7 @@ import { TableComponent } from './table/share-table.component';
 import { SharePaginationModule } from '../pagination/share-pagination.module';
 import { ShareDirectiveModule } from 'share-libs/src/directives/share-directive.module';
 import { TableExpendComponent } from './table-expend/share-table-expend.component';
-import { TableMultiHeadComponent } from './table-multi-head/table-multi-head.component';
+import { TableMultiHeadComponent } from './table-multi-head/share-table-multi-head.component';
 import { FilterTableHeadComponent } from './filter-table-head/filter-table-head.component';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { PortalModule } from '@angular/cdk/portal';

@@ -6,7 +6,7 @@ import { ShareSelect } from '../select/select.component';
 @Component({
   selector: 'share-select',
   templateUrl: './share-select.component.html',
-  styleUrls: ['./share-select.component.less']
+  styleUrls: ['../select/select.component.less', './share-select.component.less']
 })
 export class ShareSelectComponent extends ShareSelect {
   constructor(private el: ElementRef) {

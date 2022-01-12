@@ -1,55 +1,137 @@
 <ng-template #expendEl class="table-expend-el">
 </ng-template>
-<div class="share-table" share-loading [inLoading]="loadingFlag">
-  <div class="table-part" [class]="inClassNames">
-    <table>
-      <thead>
-        <tr class="table-thead">
-          <td *ngFor="let item of inItems" [ngClass]="{'is-sticky':item.styckyLeft}"
-            [ngStyle]="{'width': item.width+'px','left':item.styckyLeft}" [class]="item.classNames">
-            <ng-container [ngSwitch]="item.type">
-              <div *ngSwitchCase="'check'">
-                <share-check [model]='headAllSelect()' [inIfOther]='headMix()'
-                  (onClick)="onCheckThead($event)">
-                </share-check>
-              </div>
-              <div *ngSwitchDefault>
-                <span>{{item.title}}</span>
-              </div>
-            </ng-container>
-          </td>
-        </tr>
-      </thead>
-      <tbody [class.has-expend]="tableExpend">
-        <ng-container *ngFor="let data of tableDatas;index as i">
-          <tr>
+<div class="share-table share-table-expend">
+  <ng-container *ngIf="inIfFilter">
+    <filter-head [inItems]="inItems" (onChangeItemFilter)="onChangeItemFilter($event)"></filter-head>
+  </ng-container>
+  <!--该节点用于获得表格的固定最大最小宽度值-->
+  <div class="table">
+    <div class="table-part" [ngClass]="inClassNames">
+      <table>
+        <!--表头部分-->
+        <thead>
+          <tr class="table-thead">
             <ng-container *ngFor="let item of inItems">
-              <td [ngClass]="{'is-sticky':item.styckyLeft}"
-                [ngStyle]="{'width': item.width+'px','left':item.styckyLeft}" [class]="item.classNames">
-                <ng-container [ngSwitch]="item.type">
-                  <div *ngSwitchCase="'check'">
-                    <share-check [model]='getDataCheckStatus(data)' [inIfDisable]="getDataDisableStatus(data)"
-                      (onClick)="onCheckedData($event, data)">
-                    </share-check>
-                  </div>
-                  <div *ngSwitchDefault>
-                    {{data[item.key]}}
-                  </div>
-                </ng-container>
-              </td>
+              <ng-container *ngIf="item.ifShow !== false">
+                <td [ngClass]="{'is-sticky':item.styckyLeft}"
+                  [ngStyle]="{'width': item._width+'px','max-width':item._width+'px','min-width':item._width+'px','left':item.styckyLeft}">
+                  <ng-container [ngSwitch]="item.type">
+                    <div class="content-container" [ngClass]="item.classThNames">
+                      <ng-container *ngSwitchCase="'check'">
+                        <share-check [model]='headAllSelect()' [inIfOther]='headMix()' (onClick)="onCheckThead($event)">
+                        </share-check>
+                      </ng-container>
+                      <ng-container *ngSwitchDefault>
+                        <span>{{item.title}}</span>
+                      </ng-container>
+                    </div>
+                  </ng-container>
+                </td>
+              </ng-container>
             </ng-container>
           </tr>
-          <tr *ngIf="tableExpend" [ngStyle]='{"display":i == expendIndex? "table":"none"}'>
-            <td *ngIf="i == expendIndex" [attr.colspan]="inItems.length" [class.expend-element-td]=" i == expendIndex">
-              <ng-template *ngTemplateOutlet="expendEl"></ng-template>
-            </td>
-          </tr>
-        </ng-container>
-      </tbody>
-    </table>
+        </thead>
+        <!--body部分-->
+        <tbody [class.has-expend]="tableExpend">
+          <ng-container *ngFor="let data of tableDatas;index as i">
+            <tr>
+              <ng-container *ngFor="let item of inItems">
+                <ng-container *ngIf="item.ifShow !== false">
+                  <ng-template
+                    *ngTemplateOutlet="tdEl;context:{item:item,data:data,datas:tableDatas,key:item.key,i:i,value:data[item.key]}">
+                  </ng-template>
+                </ng-container>
+              </ng-container>
+            </tr>
+            <tr *ngIf="tableExpend" [ngStyle]='{"display":i == expendIndex? "table":"none"}'>
+              <td *ngIf="i == expendIndex" [attr.colspan]="inItems.length"
+                [class.expend-element-td]=" i == expendIndex">
+                <ng-template *ngTemplateOutlet="inTempRef"></ng-template>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
   </div>
-  <div class="pagination-part">
+  <ng-container *ngIf="tableDatas.length == 0 || loadingFlag">
+    <div class="no-data">
+      <share-null [inLoad]="loadingFlag"></share-null>
+    </div>
+  </ng-container>
+  <div class="pagination-part" *ngIf="inIfPage">
     <share-pagination [inPageRecord]="inRecordOptions" [inPage]="page" (onPageChange)="onPageChange($event)">
     </share-pagination>
   </div>
 </div>
+
+<!-- item=列表项  data=该行数据  key=item.key  value=data[item.key]  -->
+<ng-template #tdEl let-item="item" let-data="data" let-datas="datas" let-key="key" let-value="value" let-i="i">
+  <td [ngClass]="{'is-sticky':item.styckyLeft}"
+    [ngStyle]="{'width': item._width+'px','max-width':item._width+'px','min-width':item._width+'px', 'left':item.styckyLeft}">
+    <ng-container [ngSwitch]="item.type">
+      <div class="content-container" [ngClass]="item.classTdNames">
+        <div class="content-main" [ngClass]='{"content-event":item.onClick}' (click)="onClick(data,item)">
+          <!--选框-->
+          <ng-container *ngSwitchCase="'check'">
+            <share-check [model]='getDataCheckStatus(data)' [inIfDisable]="getDataDisableStatus(data)"
+              (onClick)="onCheckedData($event, data)">
+            </share-check>
+          </ng-container>
+          <!--排序-->
+          <ng-container *ngSwitchCase="'serial'">
+            {{inIfPage ? (page.currentPage-1)*page.pageRecord+i+1:i+1}}
+          </ng-container>
+          <!--排序-->
+          <ng-container *ngSwitchCase="'expend'">
+            <span (click)="onExpendLine(item,i)">展开</span>
+          </ng-container>
+          <!--图片-->
+          <ng-container *ngSwitchCase="'img'">
+            <img [src]="value || '../../../../../assets/img/icon/no-img.png'" />
+          </ng-container>
+          <!--tag-->
+          <ng-container *ngSwitchCase="'rule-tags'">
+            <ng-container
+              *ngFor="let tag of (data._ruleTagKey && data._ruleTagKey[key] || data._ruleTags|| onRule(data,item))">
+              <span class="table-tag" [ngClass]="tag.class" [ngStyle]="{'color':tag.color}">
+                {{ tag.text }}
+              </span>
+            </ng-container>
+          </ng-container>
+          <!--dot-->
+          <ng-container *ngSwitchCase="'rule-dots'">
+            <ng-container
+              *ngFor="let dot of (data._ruleDotKey && data._ruleDotKey[key] || data._ruleDots|| onRule(data,item))">
+              <div class="table-dot" [ngClass]="dot.class"></div>
+              <span class="table-dot-span" [ngStyle]="{'color':dot.color}">
+                {{ dot.text }}
+              </span>
+            </ng-container>
+          </ng-container>
+          <!--btns-->
+          <ng-container *ngSwitchCase="'rule-btns'">
+            <ng-container
+              *ngFor="let btn of (data._ruleBtnKey && data._ruleBtnKey[key] || data._ruleBtns|| onRule(data,item))">
+              <share-button [inPara]="btn"></share-button>
+            </ng-container>
+          </ng-container>
+          <!--text-->
+          <ng-container *ngSwitchCase="'rule-text'">
+            <ng-container
+              *ngFor="let text of (data._ruleTextKey && data._ruleTextKey[key] || data._ruleText|| onRule(data,item))">
+              <span class="text-info" [ngStyle]="text.styles">
+                {{ text.text }}
+              </span>
+            </ng-container>
+          </ng-container>
+          <ng-container *ngSwitchDefault>
+            <span class="text-info">
+              {{ value}}
+            </span>
+          </ng-container>
+        </div>
+      </div>
+    </ng-container>
+  </td>
+</ng-template>

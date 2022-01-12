@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TableItem, TableMultiAllItems, TagRule, TagRules } from 'share-libs/src/components/table/share-table.model';
-import { UtilRouterGetUrl } from 'share-libs/src/utils/util-router';
-import { UtilTableRuleDots, UtilTableRuleTags, UtilTableRuleText } from 'share-libs/src/utils/util-table';
+import { TableData, TableItem, TableMultiAllItems, TagRule, TagRules } from 'share-libs/src/components/table/share-table.model';
 
 @Component({
   selector: 'ex-multi-table',
@@ -43,13 +41,22 @@ export class ExMultiTableComponent implements OnInit {
     { "id": "d3c2995b-e555-46ea-976a-ba91908ab98f", "aidsTableCode": "", "aidsName": "秦皇岛RBN-DGPS台站", "locationAttr": "01", "typeCode": "0306", "aidsType": "RBN-DGPS台站", "levelCode": "01A", "levelName": "一级A等", "position": "39°54’41.0” N 119°37’0.7”E", "location": "秦皇岛主航道", "lightId": "", "lightHeight": 200, "lightRange": "", "managekey": "公用", "ownerUnitName": "秦皇岛航标处", "authorityUnitName": "秦皇岛航标处", "usageCode": "01", "usageName": "使用中", "remarks": "", "levels": "level_6", },
     { "id": "0151cb3f-6ef0-4a07-b08c-5074f1814c5b", "aidsTableCode": "", "aidsName": "上古林导航台", "locationAttr": "01", "typeCode": "0307", "aidsType": "导航台", "position": "38°50’11.6” N 117°30’17.5”E", "location": "滨州港", "lightRange": "", "managekey": "公用", "ownerUnitName": "天津航标处", "authorityUnitName": "天津航标处", "usageCode": "01", "usageName": "使用中", "remarks": "", "levels": "level_7", }];
 
-  multiAllItems: TableMultiAllItems = {
+  multiAllItems: TableMultiAllItems<MultiData> = {
     "0307": [
       { title: '', type: 'check', width: 60, styckyLeft: '0px', keyCode: '1001', filterCan: false },
-      { title: '名称', type: 'serial', key: 'serial', width: 60, styckyLeft: '60px', keyCode: '1002', filterCan: false },
-      { title: '身高', key: 'aidsName', width: 3, keyCode: '1003', filterCan: false },
+      { title: '序号', type: 'serial', key: 'serial', width: 60, styckyLeft: '60px', keyCode: '1002', filterCan: false },
+      {
+        title: '身高', key: 'aidsName', width: 3, keyCode: '1003', filterCan: false, classTdNames: ['color-blue'], onClick: (data) => {
+          console.log(data)
+        }
+      },
       { title: '体重', key: 'locationAttr', width: 3, keyCode: '1004', },
-      { title: '性别', key: 'typeCode', width: 3, keyCode: '1005' },
+      {
+        title: '性别', key: 'typeCode', width: 3, keyCode: '1005', type: 'rule-tags', ruleTags: (data) => {
+          data._ruleTags = [{ class: 'orange', text: '女' }]
+          return [{ class: 'orange', text: '女', styles: { 'color': 'blue' } }]
+        }
+      },
       { title: '学历', key: 'aidsType', width: 5, keyCode: '1006' },
       { title: '政治面貌', key: 'position', width: 5, keyCode: '1007' },
       { title: '姓名', key: 'location', width: 8, keyCode: '1008' },
@@ -58,10 +65,14 @@ export class ExMultiTableComponent implements OnInit {
     ],
     "0303": [
       { title: '', type: 'check', keyCode: '1001' },
-      { title: '名称', type: 'serial', keyCode: '1002' },
+      { title: '序号', type: 'serial', keyCode: '1002' },
       { title: '身高', key: 'aidsName', keyCode: '1003', width: 8 },
       { title: '体重', key: 'locationAttr', width: 3, keyCode: '1004' },
-      { title: '性别', key: 'typeCode', keyCode: '1005', width: 3 },
+      {
+        title: '性别', key: 'typeCode', keyCode: '1005', width: 3, type: 'rule-tags', ruleTags: (data) => {
+          return [{ class: 'blue', text: '男', styles: { 'color': 'yellow' } }]
+        }
+      },
       { title: '学历', key: 'aidsType', keyCode: '1006', width: 5 },
       { title: '政治面貌', key: 'position', keyCode: '1007', width: 5, filterCan: false },
       { title: '姓名', key: 'location', keyCode: '1008', width: 5 },
@@ -70,7 +81,7 @@ export class ExMultiTableComponent implements OnInit {
     ],
     "0306": [
       { title: '', type: 'check', width: 60, keyCode: '1001', styckyLeft: '0px' },
-      { title: '名称', type: 'serial', width: 90, keyCode: '1002', styckyLeft: '60px' },
+      { title: '序号', type: 'serial', width: 90, keyCode: '1002', styckyLeft: '60px' },
       { title: '身高', key: 'aidsType', keyCode: '1003', width: 13 },
       { title: '体重', key: 'aidsName', keyCode: '1004', width: 3 },
       { title: '性别', key: 'locationAttr', keyCode: '1005', width: 5 },
@@ -80,7 +91,7 @@ export class ExMultiTableComponent implements OnInit {
     ],
     "0309": [
       { title: '', type: 'check', width: 60, keyCode: '1001', styckyLeft: '0px' },
-      { title: '名称09', type: 'serial', width: 60, keyCode: '1002', styckyLeft: '60px' },
+      { title: '序号', type: 'serial', width: 60, keyCode: '1002', styckyLeft: '60px' },
       { title: '身高', key: 'aidsType', keyCode: '1003', width: 13 },
       { title: '体重', key: 'aidsName', keyCode: '1004', width: 3 },
       { title: '性别', key: 'locationAttr', keyCode: '1005', width: 5 },
@@ -102,10 +113,14 @@ export class ExMultiTableComponent implements OnInit {
 
   ngOnInit() {
     // this.multiAllDatas = []
-   }
+  }
 
   onSelectChange($event) {
     console.log($event)
   }
+
+}
+
+interface MultiData extends TableData {
 
 }

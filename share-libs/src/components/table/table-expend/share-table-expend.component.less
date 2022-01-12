@@ -1,19 +1,20 @@
-@import "../table/share-table.component.less";
+@c-tbody-tr: #F6FAFF;
 
-
-.share-table {
-  .table-part {
-    table {
-      tbody {
-        tr {
-          td {
-            .expend-link {
-              color: #035ADE;
-              cursor: pointer;
-            }
-          }
-        }
+//表格整体配置样式调整（实现ClassTableName中的样式）
+.table-part {
+  &.background-color {
+    tbody.has-expend {
+      tr {
+        background-color: #FFF;
       }
+
+      tr:nth-child(4n+3) {
+        background-color: @c-tbody-tr;
+      }
+
+      // tr:nth-child(4n+4) {
+      //   background-color: @c-tbody-tr;
+      // }
     }
   }
 }

@@ -20,7 +20,7 @@ export class FilterTableHeadComponent implements OnInit {
     /** 表格列的唯一key  单表头为key 多表头为_keyCode */
     @Input() inFilterKey: 'key' | '_keyCode' = 'key';
     /** 选项改变 true表示增加  false表示隐藏 */
-    @Output() onChangeItemFilter: EventEmitter<boolean> = new EventEmitter();
+    @Output() onChangeItemFilter: EventEmitter<ModalChange> = new EventEmitter();
     /**node节点 */
     native: HTMLElement;
     /**区别多表头和普通单表 */
@@ -89,30 +89,6 @@ export class FilterTableHeadComponent implements OnInit {
         return selectItems;
     }
 
-    /**过滤项有所改变 */
-    filterItemChange(item: ModalChange) {
-        let changeItems = item.changeItems;
-        for (let i = 0, len = changeItems.length; i < len; i++) {
-            const _item = changeItems[i];
-            if (this.tableType == 'single') {
-                this.inItems.forEach(item => {
-                    if (item[this.inFilterKey] == _item.key) {
-                        item.ifShow = _item._checked;
-                    }
-                })
-            } else {
-                (<TableMultiHeadItem[]>this.inItems).forEach(e => {
-                    e.heads.forEach(head => {
-                        if (head[this.inFilterKey] == _item.key) {
-                            head.ifShow = _item._checked;
-                        }
-                    })
-                })
-            }
-        }
-        this.onChangeItemFilter.emit(item.flag)
-    }
-
     /**打开弹出层 */
     onOpenOverlay() {
         let position = new ShareOverlayPosition(), config = new ShareOverlayConfig();
@@ -135,5 +111,9 @@ export class FilterTableHeadComponent implements OnInit {
         overlay.component.onModalChangeItem.subscribe((res: ModalChange) => { this.filterItemChange(res) })
     }
 
+    /**过滤项有所改变 */
+    filterItemChange(item: ModalChange) {
+        this.onChangeItemFilter.emit(item);
+    }
 
 }

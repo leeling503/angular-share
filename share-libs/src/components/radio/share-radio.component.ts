@@ -104,7 +104,7 @@ export class ShareRadioComponent implements OnInit {
     } else if (!Array.isArray(modelRadio)) {
       modelRadio = [modelRadio]
     }
-    this.options.map(e => { modelRadio?.includes(e[this.inKey]) && (e._check = true); })
+    this.options.map(e => { modelRadio?.includes(e[this.inKey]) && (e._check = true) || (e._check = false); })
   }
 
   onTiggerCheck(radio: RadioOption) {

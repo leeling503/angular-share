@@ -11,6 +11,7 @@ import { ShareMapBase } from "./share-map-base.service";
 })
 export class MapComponent {
     constructor(private map_: ShareMapBase) { }
+    /**输入地图名称 */
     @Input() mapName: NetMap = NetMap.tianDiTuNormalMap;
     @Input() map: L.Map;
     @Output() mapChange: EventEmitter<any> = new EventEmitter();
@@ -19,7 +20,7 @@ export class MapComponent {
     onMapInit(map: L.Map) {
         this.map = map;
         let leafletCanvas = new LeafletCanvasMap().addTo(map);
-        leafletCanvas.addLatlngRect({ latlngs: [[35, 115], [37, 115], [37, 118], [35, 118]], colorFill: "rgba(255,0,0)", fillAlpha: 0.1})
+        leafletCanvas.addLatlngRect({ latlngs: [[35, 115], [37, 115], [37, 118], [35, 118]], colorFill: "rgba(255,0,0)", fillAlpha: 0.1 })
         leafletCanvas.addLatlngRect({ latlngs: [[35.5, 116], [36, 116], [36, 117], [35.5, 117]], colorFill: "rgba(0,255,0)", fillAlpha: 0.1, globalCompositeOperation: 'xor' })
         leafletCanvas.addLatlngRect({ latlngs: [[35.1, 116], [35.3, 116], [35.3, 119], [35.1, 119]], colorFill: "rgba(0,0,255)", fillAlpha: 1, globalCompositeOperation: 'xor' })
         // let velo = new LeafletVelocity({ nameClass: 'leaflet-velocity' }).addTo(map);

@@ -152,8 +152,9 @@ export class CanvasUtil {
             d = degree;
         let x = c[0] - e0[0],
             y = c[1] - e0[1];
-        /**两点间的距离 */
+        /**中点到起点间的距离 */
         let len = Math.sqrt(x * x + y * y);
+        /**角度 */
         let angle = Math.PI / 2 - Math.asin(y / len);
         let xd = d * Math.cos(angle) * len, yd = d * Math.sin(angle) * len * x / Math.abs(x);
         xd = isNaN(xd) ? 0 : xd; yd = isNaN(yd) ? 0 : yd;

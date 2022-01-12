@@ -1,12 +1,9 @@
-<share-form [inItems]="items" [modelData]="data"></share-form>
-
-<ng-template #tempel>
-  <div>
-    <share-radio [inOptins]="options" [(model)]="data['radio']" (modelChange)="onRadioChange()"></share-radio>
-  </div>
+<share-form [inItems]="items" [modelData]="data" (modelChange)="onModelChange()"></share-form>
+<span>{{data|json}}</span>
+<ng-template #tempel let-item>
+  <share-radio [inClear]='true' [inOptins]="options" [(model)]="data[item?.key]" (modelChange)="onRadioChange()">
+  </share-radio>
 </ng-template>
 <ng-template #latpel>
-  <div>
-    <share-input-lnglat [(model)]="latModel"></share-input-lnglat>
-  </div>
+  <share-input-lnglat [(model)]="latModel"></share-input-lnglat>
 </ng-template>

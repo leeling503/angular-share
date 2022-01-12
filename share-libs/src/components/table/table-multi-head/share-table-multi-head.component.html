@@ -1,54 +1,57 @@
-<div class="share-table">
+<div class="share-table share-table-multi-head">
   <ng-container>
     <filter-head [inFilterKey]="'_keyCode'" [inItems]="tableMultiItems"
       (onChangeItemFilter)="onChangeItemFilter($event)">
     </filter-head>
   </ng-container>
-  <div class="table-part" [ngClass]="inClassNames">
-    <!--设置table宽度 ， 避免计算设置宽度后的总宽度与实际的误差-->
-    <table [style.width]="tableWidth+'px'">
-      <ng-container *ngFor="let tableItems of tableMultiItems;last as itemLast">
-        <thead>
-          <tr class="table-thead">
-            <ng-container *ngFor="let item of tableItems.heads">
-              <td [ngClass]="{'is-sticky':item._styckyLeft}" *ngIf="item._ifShow"
-                [ngStyle]="{'width': item._width+'px','max-width':item._width+'px','min-width':item._width+'px','left':item._styckyLeft}"
-                [class]="item.classNames">
-                <ng-container [ngSwitch]="item.type" *ngIf="item.ifShow !== false">
-                  <div *ngSwitchCase="'check'">
-                    <share-check [model]='headAllSelect(tableItems.datas)' [inIfOther]='headMix(tableItems.datas)'
-                      (onClick)="onCheckThead($event,tableItems.datas)">
-                    </share-check>
-                  </div>
-                  <div *ngSwitchDefault>
-                    <span>{{item.title}}</span>
-                  </div>
-                </ng-container>
-              </td>
-            </ng-container>
-          </tr>
-        </thead>
-        <tbody>
-          <ng-container *ngIf="!tableItems.datas.length">
-            <div class="no-data">
-              <share-null [inLoad]="loadingFlag"></share-null>
-            </div>
-          </ng-container>
-          <ng-container *ngFor="let data of tableItems.datas;index as i;last as dataLast">
-            <!--cancle-border 去掉多表头的前一个最后列边框-->
-            <tr [ngClass]="{'cancle-border':dataLast && !itemLast}">
+  <div class="table">
+    <div class="table-part" [ngClass]="inClassNames">
+      <!--设置table宽度 ， 避免计算设置宽度后的总宽度与实际的误差-->
+      <table>
+        <ng-container *ngFor="let tableItems of tableMultiItems;last as itemLast">
+          <thead>
+            <tr class="table-thead">
               <ng-container *ngFor="let item of tableItems.heads">
-                <ng-container [ngSwitch]="item.type" *ngIf="item.ifShow !== false">
-                  <ng-template
-                    *ngTemplateOutlet="tdEl;context:{item:item,data:data,datas:tableDatas,key:item.key,i:i,value:data[item.key]}">
-                  </ng-template>
-                </ng-container>
+                <td [ngClass]="{'is-sticky':item._styckyLeft}" *ngIf="item._ifShow"
+                  [ngStyle]="{'width': item._width+'px','max-width':item._width+'px','min-width':item._width+'px','left':item._styckyLeft}">
+                  <div class="content-container" [ngClass]="item.classThNames">
+                    <ng-container [ngSwitch]="item.type" *ngIf="item.ifShow !== false">
+                      <div *ngSwitchCase="'check'">
+                        <share-check [model]='headAllSelect(tableItems.datas)' [inIfOther]='headMix(tableItems.datas)'
+                          (onClick)="onCheckThead($event,tableItems.datas)">
+                        </share-check>
+                      </div>
+                      <div *ngSwitchDefault>
+                        <span>{{item.title}}</span>
+                      </div>
+                    </ng-container>
+                  </div>
+                </td>
               </ng-container>
             </tr>
-          </ng-container>
-        </tbody>
-      </ng-container>
-    </table>
+          </thead>
+          <tbody>
+            <ng-container *ngIf="!tableItems.datas.length">
+              <div class="no-data">
+                <share-null [inLoad]="loadingFlag"></share-null>
+              </div>
+            </ng-container>
+            <ng-container *ngFor="let data of tableItems.datas;index as i;last as dataLast">
+              <!--cancle-border 去掉多表头的前一个最后列边框-->
+              <tr [ngClass]="{'cancle-border':dataLast && !itemLast}">
+                <ng-container *ngFor="let item of tableItems.heads">
+                  <ng-container *ngIf="item.ifShow !== false">
+                    <ng-template
+                      *ngTemplateOutlet="tdEl;context:{item:item,data:data,datas:tableDatas,key:item.key,i:i,value:data[item.key]}">
+                    </ng-template>
+                  </ng-container>
+                </ng-container>
+              </tr>
+            </ng-container>
+          </tbody>
+        </ng-container>
+      </table>
+    </div>
   </div>
   <div class="pagination-part">
     <share-pagination [inPageRecord]="inRecordOptions" [inPage]="page" (onPageChange)="onPageChange($event)">
@@ -61,7 +64,7 @@
   <td [ngClass]="{'is-sticky':item.styckyLeft}"
     [ngStyle]="{'width': item._width+'px','max-width':item._width+'px','min-width':item._width+'px', 'left':item._styckyLeft}">
     <ng-container [ngSwitch]="item.type">
-      <div class="content-container" [ngClass]="item.classNames">
+      <div class="content-container" [ngClass]="item.classTdNames">
         <div class="content-main" [ngClass]='{"content-event":item.onClick}' (click)="onClick(data,item)">
           <!--选框-->
           <ng-container *ngSwitchCase="'check'">
@@ -71,14 +74,14 @@
           </ng-container>
           <!--排序-->
           <ng-container *ngSwitchCase="'serial'">
-            {{inIfPage ? (page.currentPage-1)*page.pageRecord+i+1:i+1}}
+            {{data._serial}}
           </ng-container>
           <!--图片-->
           <ng-container *ngSwitchCase="'img'">
             <img [src]="value || '../../../../../assets/img/icon/no-img.png'" />
           </ng-container>
           <!--tag-->
-          <ng-container *ngSwitchCase="'rule-tag'">
+          <ng-container *ngSwitchCase="'rule-tags'">
             <ng-container
               *ngFor="let tag of (data._ruleTagKey && data._ruleTagKey[key] || data._ruleTags|| onRule(data,item))">
               <span class="table-tag" [ngClass]="tag.class" [ngStyle]="{'color':tag.color}">
@@ -87,7 +90,7 @@
             </ng-container>
           </ng-container>
           <!--dot-->
-          <ng-container *ngSwitchCase="'rule-dot'">
+          <ng-container *ngSwitchCase="'rule-dots'">
             <ng-container
               *ngFor="let dot of (data._ruleDotKey && data._ruleDotKey[key] || data._ruleDots|| onRule(data,item))">
               <div class="table-dot" [ngClass]="dot.class"></div>
@@ -107,8 +110,8 @@
           <ng-container *ngSwitchCase="'rule-text'">
             <ng-container
               *ngFor="let text of (data._ruleTextKey && data._ruleTextKey[key] || data._ruleText|| onRule(data,item))">
-              <span class="text-info">
-                {{ text }}
+              <span class="text-info" [ngStyle]="text.styles">
+                {{ text.text }}
               </span>
             </ng-container>
           </ng-container>

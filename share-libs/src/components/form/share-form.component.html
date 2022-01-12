@@ -1,24 +1,26 @@
 <div class="share-form">
   <ng-container *ngFor="let item of inItems">
+    <!--flex-grow按比例分配剩余宽度-->
     <div class="form-item"
       [ngStyle]="{'width':item.width+'%','height':37*(item.height||1)+'px' , 'flex-grow':1*item.width}">
       <div class="item-title">{{item.title}}：</div>
       <div class="item-value">
-        <ng-template *ngTemplateOutlet="valueEl,context:{item:item,type:item.type,key:item.key,value:item.values}">
+        <ng-template *ngTemplateOutlet="valueEl,context:{item:item,type:item.type,key:item.key,ref:item.ref}">
         </ng-template>
       </div>
     </div>
   </ng-container>
 </div>
 
-
-<ng-template #valueEl let-item="item" let-type="type" let-key="key" let-value="value">
-  <ng-container [ngSwitch]="type">
-    <ng-container *ngSwitchCase="'a'"></ng-container>
-    <ng-container *ngSwitchCase="'b'"></ng-container>
-    <ng-container *ngSwitchCase="'template'">
-      <ng-template *ngTemplateOutlet='value'></ng-template>
+<ng-template #valueEl let-item="item" let-type="type" let-key="key" let-ref="ref">
+  <div [ngStyle]="{'width': item.widthV}">
+    <ng-container [ngSwitch]="type">
+      <ng-container *ngSwitchCase="'template'">
+        <ng-template *ngTemplateOutlet='ref'></ng-template>
+      </ng-container>
+      <span *ngSwitchDefault>{{data[key]}}</span>
     </ng-container>
-    <span *ngSwitchDefault>{{data[key]}}</span>
-  </ng-container>
+  </div>
+  <ng-container *ngIf="data[key]!==undefined&&item.unit"><span>（{{item.unit}}）</span></ng-container>
+  <ng-container *ngIf="item.require"><span style="color: red;margin: 0px 0px 15px 5px;">*</span></ng-container>
 </ng-template>

@@ -1,12 +1,18 @@
 import { ShareParaBtn } from "../button/share-button.model";
 
-/**view-left居左  view-right居右  border 四周均有边框    simple-border  上下有边框    background-color   背景色交替*/
-export type TableClassName = "border" | "simple-border" | "background-color" | "view-left" | 'view-right' | 'view-center';
+/**view-left居左  view-right居右  border 四周均有边框  simple-border仅仅上下有边框    background-color背景色交替*/
+export type ClassTableName = "border" | "simple-border" | "background-color" | "view-left" | 'view-right' | 'view-center';
 /**view-left居左  view-right居右  border 四周均有边框  underline 下划线  */
-export type TdClassName = "view-left" | 'view-right' | 'view-center' | 'underline' | 'color-blue';
-/**check选框 serial序号 tag有背景色的小方块 dot带圆点 btn按钮数组 rule-text需要转换的文本 expend展开*/
+export type ClassTdName = "view-left" | 'view-right' | 'view-center' | 'underline' | 'color-blue';
+/**td的类型 check选框 serial序号 tag有背景色的小方块 dot带圆点 btn按钮数组 rule-text需要转换的文本 expend展开*/
 export type TdType = 'check' | 'serial' | "rule-tags" | "rule-dots" | 'rule-text' | 'rule-btns' | "expend";
 export type TagType = 'green' | 'danger' | "blue" | 'orange' | "pink";
+export interface TextRule {
+    /**显示的字 */
+    text?: string;
+    /**样式 ngStyle实现 */
+    styles?: { [klass: string]: any; }
+}
 export interface TagRule {
     /**决定tag颜色 */
     class: TagType;
@@ -15,10 +21,11 @@ export interface TagRule {
     /** 显示的字*/
     text: string | number;
     /** 字体颜色*/
-    color?: string;
+    styles?: { [klass: string]: any; }
 }
 export interface DotRule extends TagRule { };
 export type DotType = TagType;
+export type TextRules = TextRule[];
 export type TagRules = TagRule[];
 export type DotRules = DotRule[];
 export type BtnRules = ShareParaBtn[]
@@ -64,13 +71,15 @@ export interface TableItem<T extends TableData = any> {
     /**该列的类型 */
     type?: TdType;
     /** td的export class view-left居左  view-right居右  is-sticky该列固定 */
-    classNames?: TdClassName[];
+    classTdNames?: ClassTdName[];
+    /** th的export class view-left居左  view-right居右  is-sticky该列固定 */
+    classThNames?: ClassTdName[];
     /** 列固定居左的距离（设置该距离后会固定列） */
     styckyLeft?: string;
     /**事件回调 */
     onClick?: (data: T, item: TableItem, datas: T[]) => any;
     /**Text类型规则 最好采用UtilTableRuleText生成 */
-    ruleText?: (data: T, item: TableItem, datas: T[]) => string[];
+    ruleText?: TextRules | ((data: T, item: TableItem, datas: T[]) => TextRules);
     /**tag类型规则 最好采用UtilTableRuleTags生成 */
     ruleTags?: TagRules | ((data: T, item: TableItem, datas: T[]) => TagRules);
     /**dot类型规则 最好采用UtilTableRuleDots生成 */
@@ -102,7 +111,7 @@ export class TableSelect {
     }
 }
 
-export interface TableMultiItem extends TableItem {
+export interface TableMultiItem<T extends TableData = any> extends TableItem<T> {
     checkFlag?: boolean;
     /** 多表头中keyCode相同的 title会在同一列 */
     keyCode: string;
@@ -115,13 +124,13 @@ export interface TableMultiItem extends TableItem {
 }
 
 //多表头html使用 ，heads表示表头 ， datas表示对应该表头的数据
-export interface TableMultiHeadItem {
+export interface TableMultiHeadItem<T extends TableData = any> {
     /**表头信息 */
-    heads: TableMultiItem[];
+    heads: TableMultiItem<T>[];
     /**表格数据 */
-    datas: any[];
+    datas: T[];
 }
 
-export interface TableMultiAllItems {
-    [key: string]: TableMultiItem[]
+export interface TableMultiAllItems<T extends TableData = any> {
+    [key: string]: TableMultiItem<T>[]
 }

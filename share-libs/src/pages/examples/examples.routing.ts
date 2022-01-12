@@ -10,6 +10,7 @@ import { ExShareRadioComponent } from "./ex-share-radio/ex-share-radio.component
 import { ExShareSelectComponent } from "./ex-share-select/ex-share-select.component";
 import { ExShareSwiperComponent } from "./ex-share-swiper/ex-share-swiper.component";
 import { ExShareThreeModelComponent } from "./ex-share-three-model/ex-share-three-model.component";
+import { ExExpendTableComponent } from "./ex-table/ex-expend-table/ex-expend-table.component";
 import { ExMultiTableComponent } from "./ex-table/ex-multi-table/ex-multi-table.component";
 import { ExTableComponent } from "./ex-table/ex-table/ex-table.component";
 import { ExMain } from "./examples.component";
@@ -21,6 +22,7 @@ let routes: Routes = [
             { path: 'button', component: ExShareButtonsComponent, data: { title: '按钮' } },
             { path: 'table', component: ExTableComponent, data: { title: '普通表格' } },
             { path: 'multi-table', component: ExMultiTableComponent, data: { title: '多表头表格' } },
+            { path: 'expend-table', component: ExExpendTableComponent, data: { title: '可展开表格' } },
             { path: 'box', component: ExShareRadioComponent, data: { title: '多种选框' } },
             { path: 'select', component: ExShareSelectComponent, data: { title: '选择框' } },
             { path: 'date-time', component: ExShareDateComponent, data: { title: '时间日期' } },

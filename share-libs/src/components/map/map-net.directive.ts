@@ -11,7 +11,7 @@ export class MapNetDirective {
         this.nativeEl = this.el.nativeElement;
     }
     nativeEl: HTMLElement
-    netMap: LeafletNetMap = new LeafletNetMap(NetMap.gaoDeNormalMap);
+    netMap: LeafletNetMap = new LeafletNetMap(NetMap.tianDiTuNormalAnnotion);
     @Input() map: L.Map;
     @Input() inMapName: NetMap;
     ngOnChanges(changes: SimpleChanges): void {

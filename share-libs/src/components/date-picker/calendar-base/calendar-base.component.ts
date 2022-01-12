@@ -17,6 +17,7 @@ export class ShareCalendarBaseComponent implements OnInit {
   }
   /**接受年月日 （2021-01-01） */
   @Input() inDate: string = "2021-10-05";
+  @Input() inPara: ShareParaCalendar
   @Output() onChange: EventEmitter<DateData> = new EventEmitter();
   /**组件节点*/
   elNative: HTMLElement;
@@ -200,7 +201,9 @@ export class ShareCalendarBaseComponent implements OnInit {
 
 }
 
-type DateState = 'normal' | 'abnormal' | 'none';
+export class ShareParaCalendar {
+
+}
 /**日期数据（对应每天的各种数据） */
 interface DateData {
   /**日期字符串*/

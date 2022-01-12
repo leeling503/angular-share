@@ -115,6 +115,9 @@ export const SYSTEM_MENU: MenuItem[] = [
                     }, {
                         title: '多表头表格',
                         url: `${example}/multi-table`,
+                    }, {
+                        title: '可展开表格',
+                        url: `${example}/expend-table`,
                     }
                 ]
             },

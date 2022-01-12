@@ -11,7 +11,7 @@ import { UtilChangesValue } from "share-libs/src/utils";
 export class MapAnimatDirective {
     constructor(private el: ElementRef) { }
     @Input() map: L.Map;
-    leafletAnimat: LeafletAnimatLayer = new LeafletAnimatLayer({ nameClass: 'leaflet-animat', zIndex: 150 });
+    leafletAnimat: LeafletAnimatLayer = new LeafletAnimatLayer({ nameClass: 'leaflet-animat', zIndex: 400 });
     animatLines: LeafletCanvasMap = new LeafletCanvasMap();
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -28,21 +28,6 @@ export class MapAnimatDirective {
         let parts: ParticleInfo[] = [
             {
                 latlngs: [[39.0019694, 117.688788], [38.5855695, 119.715833]],
-                degree: 0.3, speed: 0.002, length: 50,
-            },
-            {
-                latlngs: [[38.06863403, 118.94127655], [39.0019694, 117.688788], [39.7019694, 117.688788]],
-                degree: 0.7, speed: 0.002, length: 50, colorLine: 'green', colorParticle: 'yellow'
-            }
-            ,
-            {
-                latlngs: [[39.0019694, 116.688788], [39.0019694, 117.688788]],
-                degree: 0.9, speed: 0.001, length: 50, colorLine: 'purple', colorParticle: 'yellow'
-            }
-        ];
-        let parts2: ParticleInfo[] = [
-            {
-                latlngs: [[39.0019694, 117.688788], [38.5855695, 119.715833]],
                 degree: 0.3, speed: 0.002, length: 20,
             },
             {
@@ -56,10 +41,10 @@ export class MapAnimatDirective {
             ,
             {
                 latlngs: [[39.0019694, 116.688788], [39.0019694, 117.688788]],
-                degree: 0.9, speed: 0.001, length: 20, colorLine: 'purple',
+                degree: 1, speed: 0.001, length: 20, colorLine: 'purple',
             }
         ];
-        this.animatLines.setAllBezierLines(parts2)
+        this.animatLines.setAllBezierLines(parts)
         this.leafletAnimat.setAllParticles(parts)
     }
 }

@@ -4,7 +4,6 @@ import { CanvasUtil, LatlngInfo, LineInfo } from "./leaflet-canvas-util";
 /**leaflet的动画类 */
 export class LeafletAnimatLayer extends CanvasLayer {
 
-    private _staticCanvas: CanvasLayer;
     constructor(options?: CanvasPara) {
         super();
         this.initOptions(options)
@@ -26,7 +25,7 @@ export class LeafletAnimatLayer extends CanvasLayer {
     }
 
     /**
-     * @desc 二阶贝塞尔
+     * @desc 二阶贝塞尔，指定百分比的点位置信息
      * @param {number} t 当前百分比
      * @param {Array} p1 起点坐标
      * @param {Array} p2 终点坐标

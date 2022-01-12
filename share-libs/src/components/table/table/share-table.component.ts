@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { throttleTime } from 'rxjs/internal/operators/throttleTime';
+import { ModalChange } from '../../open-modals/modal-select-item/modal-select-item.component';
 import { TableBase } from '../share-table-base.component';
-import { BtnRules, TableItem } from '../share-table.model';
+import { TableItem } from '../share-table.model';
 
 @Component({
   selector: 'share-table',
@@ -9,14 +11,11 @@ import { BtnRules, TableItem } from '../share-table.model';
 })
 export class TableComponent extends TableBase implements OnInit {
 
-
-
   onClick(data, item: TableItem) {
     if (item.onClick && typeof item.onClick == 'function') {
       item.onClick(data, item, this.tableDatas)
     }
   }
-
 
   onRule(data, item: TableItem) {
     let type = item.type, key;

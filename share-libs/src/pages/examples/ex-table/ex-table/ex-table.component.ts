@@ -1,9 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { TableData, BtnRules, TableClassName, TableItem, TableMultiAllItems, TagRule, TagRules } from 'share-libs/src/components/table/share-table.model';
+import { TableData, BtnRules, ClassTableName, TableItem, TableMultiAllItems, TagRule, TagRules } from 'share-libs/src/components/table/share-table.model';
 import { SizeBtn, TypeBtn } from 'share-libs/src/enum';
-import { UtilRouterGetUrl } from 'share-libs/src/utils/util-router';
-import { UtilTableRuleDots, UtilTableRuleTags, UtilTableRuleText } from 'share-libs/src/utils/util-table';
 
 @Component({
   selector: 'ex-table',
@@ -15,8 +12,7 @@ export class ExTableComponent implements OnInit {
   allDatas: any[];
   items: TableItem<ItemData>[];
   // apiUrl: string = '';
-  // tableClass: TableClassName[] = ['view-left', 'simple-border', 'border', 'background-color'];
-  tableClass: TableClassName[]
+  tableClass: ClassTableName[] = ['simple-border', 'background-color'];
   apiUrl;
   inUuid = 'aidsName';
   selectedDatas = [
@@ -45,10 +41,10 @@ export class ExTableComponent implements OnInit {
     this.items = [
       { title: '选框', type: 'check', width: 60, filterCan: false, filterHid: true, styckyLeft: '0px' },
       { title: '序号', type: 'serial', width: 60, filterCan: false, styckyLeft: '60px', },
-      { title: '标识符', key: 'id', width: 60 },
-      { title: '时间', key: 'collectionTime', classNames: ['color-blue', 'underline'], onClick: (data, item) => { console.log(data, item) }, widthFix: 150, filterCan: false },
-      { title: '名称1', key: 'aidsName', classNames: ['view-center'], width: 60 },
-      { title: 'ifAlarm', key: 'ifAlarm', filterCan: false, classNames: ['view-center'], width: 60 },
+      { title: '标识符', key: 'id', width: 60, onClick: (data) => { data.aidsName } },
+      { title: '时间', key: 'collectionTime', classTdNames: ['color-blue', 'underline'], onClick: (data, item) => { console.log(data, item) }, widthFix: 150, filterCan: false },
+      { title: '名称1', key: 'aidsName', classTdNames: ['view-center'], width: 60 },
+      { title: 'ifAlarm', key: 'ifAlarm', filterCan: false, classTdNames: ['view-center'], width: 60 },
       {
         title: '报警', key: 'ifAlarm', type: 'rule-dots', width: 60, ruleDots: (data, item, datas) => {
           let res = data.ifAlarm ? '是' : '否';
@@ -56,18 +52,16 @@ export class ExTableComponent implements OnInit {
           return [{ text: res, class: 'orange' }]
         }
       },
-      { title: 'ifBind', key: 'ifBind', filterCan: false, classNames: ['view-center'], width: 60 },
+      { title: 'ifBind', key: 'ifBind', filterCan: false, classTdNames: ['view-center'], width: 60 },
       {
         title: '是否绑定', key: 'ifBind', type: 'rule-text', filterCan: false, width: 60, ruleText: (data, item) => {
           let str = data.ifBind + data.ifBind;
-          console.log('是否绑定')
-          return [str,str]
+          return [{ text: str, styles: { 'color': 'red' } }, { text: str, styles: { 'color': 'yellow' } }]
         }
       },
-      { title: 'ifMark', key: 'ifMark', filterCan: false, classNames: ['view-center'], width: 60 },
+      { title: 'ifMark', key: 'ifMark', filterCan: false, classTdNames: ['view-center'], width: 60 },
       {
         title: "绑定", key: 'opertion', type: "rule-btns", widthFix: 60, ruleBtns: (data, item) => {
-          console.log("操作")
           let btns: BtnRules = []
           if (data.id % 3 == 0) {
             btns = [
@@ -85,11 +79,11 @@ export class ExTableComponent implements OnInit {
           return btns;
         }
       },
-      { title: '名称2', key: 'commModeCode', filterCan: false, classNames: ['view-center'], width: 60 },
-      { title: '名称2', key: 'functionCode', filterCan: false, classNames: ['view-center'], width: 60 },
+      { title: '名称2', key: 'commModeCode', filterCan: false, classTdNames: ['view-center'], classThNames: ['view-right', 'underline'], width: 60 },
+      { title: '名称3', key: 'functionCode', filterCan: false, classTdNames: ['view-center'], width: 60 },
       {
         title: '执行结果', key: 'functionCode', type: "rule-tags", width: 60, ruleTags: (data, item, datas) => {
-          data._ruleTags = [{ text: data.functionCode, class: 'orange' }]
+          data._ruleTags = [{ text: data.functionCode, class: 'orange', styles: { 'color': "blue" } }]
           return [{ text: data.functionCode, class: 'orange' }]
         }
       },

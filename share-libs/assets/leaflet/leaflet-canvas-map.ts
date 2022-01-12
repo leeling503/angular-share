@@ -62,6 +62,7 @@ export class LeafletCanvasMap extends CanvasLayer {
         this._allLines = lines; this._redraw();
     }
 
+    /**设置贝塞尔曲线数据 */
     setAllBezierLines(lines: LineInfo[]) {
         this._allBezierLines = lines; this._redraw();
     }

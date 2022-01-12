@@ -57,7 +57,7 @@ export class ShareButtonComponent implements OnInit {
   renderer2: Renderer2;
   classMap: any = {};
   ngOnChanges(changes: SimpleChanges): void {
-    if (UtilChanges(changes, 'inType') || UtilChanges(changes, 'inSize') || UtilChanges(changes, 'inDisable')) {
+    if (UtilChanges(changes, 'inType') || UtilChanges(changes, 'inSize')) {
       this.setClassMap()
     }
     if (UtilChanges(changes, 'inWidth') || UtilChanges(changes, 'inHeight') || UtilChanges(changes, 'inColor') || UtilChanges(changes, 'inColorBG') || UtilChanges(changes, 'inColorBD')) {
@@ -99,6 +99,8 @@ export class ShareButtonComponent implements OnInit {
     if (!el) return;
     if (typeof this.inWidth === 'number') {
       this.renderer2.setStyle(el, "width", this.inWidth + 'px')
+    } else {
+      this.renderer2.setStyle(el, "width", this.inWidth)
     }
     if (typeof this.inHeight === 'number') {
       this.renderer2.setStyle(el, "height", this.inHeight + 'px')
