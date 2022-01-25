@@ -1,11 +1,14 @@
 import * as L from "leaflet";
+/**
+ * canvas画布的工具类
+ */
 export class CanvasUtil {
     private constructor() { };
     /**图片的缓存 */
     static readonly imgs: { [key: string]: HTMLImageElement } = Object.create(null);
 
     /**绘制图片 */
-    static drawImg(ctx: CanvasRenderingContext2D, img: ImageInfo): string {
+    static drawImg(ctx: CanvasRenderingContext2D, img: InfoImage): string {
         let point = img.point || [], x = point[0], y = point[1], size = img.size,
             url = img.url, rotate = img.rotate || 0, alpha = img.alpha === 0 ? 0 : img.alpha || 1,
             sizeX: number = size[0] || size, sizeY: number = size[1] || size;
@@ -24,7 +27,7 @@ export class CanvasUtil {
     }
 
     /**画线(没有id将自动生成)*/
-    static drawLine(ctx: CanvasRenderingContext2D, line: LineInfo): string {
+    static drawLine(ctx: CanvasRenderingContext2D, line: InfoLine): string {
         let points = line.points || [];
         if (points.length < 2) return;
         this._setCtxFig(ctx, line);
@@ -42,7 +45,7 @@ export class CanvasUtil {
     }
 
     /**画贝塞尔曲线(没有id将自动生成)*/
-    static drawBezierLine(ctx: CanvasRenderingContext2D, line: LineInfo): string {
+    static drawBezierLine(ctx: CanvasRenderingContext2D, line: InfoLine): string {
         let points = line.points || [];
         if (points.length < 2) return;
         this._setCtxFig(ctx, line);
@@ -61,7 +64,7 @@ export class CanvasUtil {
     }
 
     /**画矩形(没有id将自动生成)*/
-    static drawRect(ctx: CanvasRenderingContext2D, rect: RectInfo): string {
+    static drawRect(ctx: CanvasRenderingContext2D, rect: InfoRect): string {
         this._setCtxFig(ctx, rect);
         let points = rect.points || [];
         for (let i = 0, len = points.length; i < len; i++) {
@@ -85,7 +88,7 @@ export class CanvasUtil {
     }
 
     /**绘制小圆点(没有id将自动生成) */
-    static drawArc(ctx: CanvasRenderingContext2D, arc: ArcInfo): string {
+    static drawArc(ctx: CanvasRenderingContext2D, arc: InfoArc): string {
         let points = arc.points || [], size = arc.size || 10;
         this._setCtxFig(ctx, arc);
         for (let i = 0, len = points.length; i < len; i++) {
@@ -101,12 +104,12 @@ export class CanvasUtil {
     }
 
     /**将经纬度数组转换为坐标系 */
-    static transformLatLngsToPoints(map: L.Map, latlngs: LatlngInfo[]): LatlngInfo[] {
+    static transformLatLngsToPoints(map: L.Map, latlngs: InfoLatlng[]): InfoLatlng[] {
         return latlngs.map(e => this.transformLatLngToPoint(map, e));
     }
 
     /**得到坐标系点位 */
-    static transformLatLngToPoint(map: L.Map, latlngInfo: LatlngInfo): LatlngInfo {
+    static transformLatLngToPoint(map: L.Map, latlngInfo: InfoLatlng): InfoLatlng {
         let e = latlngInfo;
         let latlng: [number, number] = [e[0], e[1]], info = e[2];
         let p = map.latLngToContainerPoint(latlng);
@@ -117,7 +120,7 @@ export class CanvasUtil {
      * @param 间隔距离 
      * @param 纬度点位集合(纬度不同，相同距离差值不一样) 
      */
-    static getLatDiffByPoints(distance: number = 100, latLng: LatlngInfo[]): number {
+    static getLatDiffByPoints(distance: number = 100, latLng: InfoLatlng[]): number {
         let lng = 0.00001, lat = latLng.map(e => e[0]).reduce((s, v) => s + v) / latLng.length;
         let positionA: [number, number] = [lat, 100],
             positionB: [number, number] = [lat, 100 + lng];
@@ -146,7 +149,7 @@ export class CanvasUtil {
      * @param e:终点
      * @param degree：曲度等级（越大越弯曲）
      */
-    static getBezierCtrlPoint(s: LatlngInfo, e: LatlngInfo, degree: number = 1): [number, number] {
+    static getBezierCtrlPoint(s: InfoLatlng, e: InfoLatlng, degree: number = 1): [number, number] {
         const e0 = s, e1 = e,
             c = [(e0[0] + e1[0]) / 2, (e0[1] + e1[1]) / 2],
             d = degree;
@@ -195,7 +198,7 @@ export class CanvasUtil {
 }
 
 /**纬经度及该点信息 */
-export type LatlngInfo = [number, number, any?];
+export type InfoLatlng = [number, number, any?];
 
 /**canvas的画笔属性配置 */
 export interface CtxPara {
@@ -217,33 +220,33 @@ export interface CtxPara {
 }
 
 /**线条渲染 */
-export interface LineInfo extends CtxPara {
+export interface InfoLine extends CtxPara {
     /**用于从数据中删除该条线 */
     id?: string;
     /**经纬度必须转换为像素位置后再绘制 (可附带该位置点的信息) */
-    latlngs?: LatlngInfo[],
+    latlngs?: InfoLatlng[],
     /**所有点位的像素点(通过经纬度转换过来) */
-    points?: LatlngInfo[],
+    points?: InfoLatlng[],
     /**贝塞尔曲线的曲度 数值越大越弯曲 */
     degree?: number,
 }
 
 /**矩形渲染 */
-export interface RectInfo extends LineInfo { }
+export interface InfoRect extends InfoLine { }
 
 /**圆 */
-export interface ArcInfo extends LineInfo {
+export interface InfoArc extends InfoLine {
     /**圆半径 */
     size?: number;
 }
 
 /**图片渲染 */
-export interface ImageInfo {
+export interface InfoImage {
     id?: string,
     /**在canvas中的位置  经纬度（需要转换为像素点X,Y）*/
-    latlng?: LatlngInfo,
+    latlng?: InfoLatlng,
     /**图片的像素点(通过经纬度转换过来) */
-    point?: LatlngInfo,
+    point?: InfoLatlng,
     /**图片大小 */
     size?: number | [number, number]
     /**图片路径 */

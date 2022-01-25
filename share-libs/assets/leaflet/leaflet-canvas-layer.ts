@@ -1,23 +1,34 @@
 import * as L from "leaflet";
 import { CanvasUtil } from "./leaflet-canvas-util";
-
+/**
+ * 生成canvas图层的基础类
+ */
 export abstract class CanvasLayer extends L.Layer {
-    constructor() { super(); }
-    options: CanvasPara;
+    constructor(options?: ParaCanvas) {
+        super(options);
+        L.setOptions(this, options)
+    }
+    options: ParaCanvas;
+    /**生成的canvas画布，onAdd调用时生成 */
     protected _canvas: HTMLCanvasElement;
+    /**画布的内容信息 */
     protected _ctx: CanvasRenderingContext2D;
     protected _width: number;
     protected _height: number;
+    /**动画循环的id标识 */
     protected _animationLoop: number;
+    /**点击事件的回调 */
     protected cbClick: (e) => any = (e) => { }
+    /**鼠标移动事件的回调 */
     protected cbMove: (e) => any = (e) => { }
-    /**点击事件的监听 （传入点击事件回调） */
-    subscribeOnClick(cb: (e) => any) { this.cbClick = cb; };
-    /**鼠标移动事件的监听 （传入点击事件回调） */
-    subscribeOnMove(cb: (e) => any) { this.cbMove = cb; };
+    /**添加点击事件 （传入点击事件回调） */
+    onClick(cb: (e) => any) { this.cbClick = cb; };
+    /**添加鼠标移动事件 （传入点击事件回调） */
+    onMove(cb: (e) => any) { this.cbMove = cb; };
 
     /**初始化设置配置 */
-    initOptions(options?: CanvasPara) {
+    initOptions(options: ParaCanvas = this.options) {
+        console.log(options)
         L.setOptions(this, options)
     }
 
@@ -25,9 +36,11 @@ export abstract class CanvasLayer extends L.Layer {
     onAdd(map: L.Map) {
         this._map = map;
         if (!this._canvas) this._initCanvas();
-        if (this.options.pane)
-            this.getPane().appendChild(this._canvas);
-        else
+        if (this.options.pane) {
+            /**如果指定的pane不存在就自己创建（往map添加div Pane） */
+            (this.getPane(this.options.pane) || map.createPane(this.options.pane)).appendChild(this._canvas);
+            console.log(this.options.pane, this.getPane());
+        } else
             map.getPanes().overlayPane.appendChild(this._canvas);
         map.on('viewreset', this._reset, this);
         map.on('moveend', this._reset, this);
@@ -77,7 +90,7 @@ export abstract class CanvasLayer extends L.Layer {
 
     /**初始化画布 */
     private _initCanvas() {
-        this._canvas = L.DomUtil.create('canvas', `leaflet-layer ${this.options.nameClass || 'leaflet-canvas-map'}`);
+        this._canvas = L.DomUtil.create('canvas', `leaflet-layer ${this.options.className || 'leaflet-canvas-map'}`);
         var originProp = "" + L.DomUtil.testProp(['transformOrigin', 'WebkitTransformOrigin', 'msTransformOrigin']);
         this._canvas.style[originProp] = '50% 50%';
         this._canvas.style['z-index'] = this.options.zIndex || 100;
@@ -116,10 +129,19 @@ export abstract class CanvasLayer extends L.Layer {
 
 }
 
-export interface CanvasPara {
-    pane?: any;
+/**
+ * canvas画布的部分配置
+ */
+export interface ParaCanvas {
+    /**画布挂载的div节点;
+     * map默认创建 mapPane tilePane shadowPane overlayPane markerPane tooltipPane popupPane,
+     * 不存在时CanvasLayer会调用创建方法 
+     * 类名会去掉Pane， 例如XPane和X都生成类名为 leaflet-X-pane的div节点，但是属于不同的pane
+     */
+    pane?: string;
     /**画布的class名称 */
-    nameClass?: string
-    /**画布层级  默认100，最大400 */
+    className?: string
+    /**画布层级  默认100，最大400(受挂载的div影响，可修改) */
     zIndex?: number;
+
 }

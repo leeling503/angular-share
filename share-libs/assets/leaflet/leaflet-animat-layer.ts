@@ -1,10 +1,10 @@
-import { CanvasLayer, CanvasPara } from "./leaflet-canvas-layer";
-import { CanvasUtil, LatlngInfo, LineInfo } from "./leaflet-canvas-util";
+import { CanvasLayer, ParaCanvas } from "./leaflet-canvas-layer";
+import { CanvasUtil, InfoLatlng, InfoLine } from "./leaflet-canvas-util";
 
 /**leaflet的动画类 */
 export class LeafletAnimatLayer extends CanvasLayer {
 
-    constructor(options?: CanvasPara) {
+    constructor(options?: ParaCanvas) {
         super();
         this.initOptions(options)
     }
@@ -192,7 +192,7 @@ export class LeafletAnimatLayer extends CanvasLayer {
     }
 }
 
-export interface ParticleInfo extends LineInfo {
+export interface ParticleInfo extends InfoLine {
     /**计算得到的贝塞尔曲线控制点*/
     curve?: [number, number][];
     /**速度(小于0.1采用百分比)(每帧移动距离) */
@@ -200,7 +200,7 @@ export interface ParticleInfo extends LineInfo {
     /**粒子长度 */
     length?: number;
     /**当前粒子点位数据 */
-    curPoints?: LatlngInfo[];
+    curPoints?: InfoLatlng[];
     /**生命 0-1*/
     age?: number;
     /**所属线段序号 */

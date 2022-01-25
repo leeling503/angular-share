@@ -1,3 +1,5 @@
+import { TypeSelect } from "share-libs/src/enum";
+
 export interface SelectPara {
     /**是否显示后缀图标标志 true*/
     ifFlag?: boolean;
@@ -23,6 +25,8 @@ export interface SelectPara {
     noneTip?: string;
     /**弹窗宽度 */
     widthNode?: number | string;
+    /**类型 */
+    type?: TypeSelect;
 }
 
 export interface SelectOption {

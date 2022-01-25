@@ -11,7 +11,7 @@ import { UtilChangesValue } from "share-libs/src/utils";
 export class MapAnimatDirective {
     constructor(private el: ElementRef) { }
     @Input() map: L.Map;
-    leafletAnimat: LeafletAnimatLayer = new LeafletAnimatLayer({ nameClass: 'leaflet-animat', zIndex: 400 });
+    leafletAnimat: LeafletAnimatLayer = new LeafletAnimatLayer({ className: 'leaflet-animat', zIndex: 400 });
     animatLines: LeafletCanvasMap = new LeafletCanvasMap();
 
     ngOnChanges(changes: SimpleChanges): void {

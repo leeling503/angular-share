@@ -1,5 +1,5 @@
 import * as L from "leaflet";
-import { CanvasLayer, CanvasPara } from "./leaflet-canvas-layer";
+import { CanvasLayer, ParaCanvas } from "./leaflet-canvas-layer";
 import { CanvasUtil } from "./leaflet-canvas-util";
 
 export class LeafletHeatLayer extends CanvasLayer {
@@ -26,7 +26,7 @@ export class LeafletHeatLayer extends CanvasLayer {
     private _maxNum: number = 2;
     /**默认配置 */
     options: HeatPara = {
-        nameClass: 'leaflet-heat-canvas',
+        className: 'leaflet-heat-canvas',
         radius: 20,
         blur: 10,
         minOpacity: 0.1,
@@ -215,7 +215,7 @@ export class LeafletHeatLayer extends CanvasLayer {
     }
 }
 
-interface HeatPara extends CanvasPara {
+interface HeatPara extends ParaCanvas {
     /**半径 */
     radius?: number,
     /**模糊级数(越大影响范围越大影响系数越小，最好不要超过半径的两倍) */

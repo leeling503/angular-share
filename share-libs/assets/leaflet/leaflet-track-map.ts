@@ -1,9 +1,15 @@
 import * as L from "leaflet";
-import { CanvasLayer } from "./leaflet-canvas-layer";
-import { ArcInfo, CanvasUtil, ImageInfo, LineInfo } from "./leaflet-canvas-util";
+import { CanvasLayer, ParaCanvas } from "./leaflet-canvas-layer";
+import { InfoArc, CanvasUtil, InfoImage, InfoLine } from "./leaflet-canvas-util";
 import * as $ from "jquery"
-/**绘制轨迹 */
+/**在地图上绘制轨迹
+ * getInfosByTime() 获取指定时间各轨迹点的位置信息集合
+ * 
+ */
 export class LeafletTrackMap extends CanvasLayer {
+    constructor(options?: ParaCanvasTrack) {
+        super(options);
+    }
     options: {
         pane,
         map: undefined,
@@ -18,21 +24,17 @@ export class LeafletTrackMap extends CanvasLayer {
         { red: 85, green: 0, blue: 125 },
         { red: 255, green: 155, blue: 0 }
     ];
-    private _marks: ImageInfo[] = [];
+    private _marks: InfoImage[] = [];
     /**多条轨迹数据 */
-    private _allTracks: TrackInfo[] = [];
+    private _allTracks: InfoTrack[] = [];
     /**指针点击所对应的点*/
-    private cursorData: PointInfo[];
+    private cursorData: InfoPoint[];
     intervalPart: [];//动画点绘制区域
     private _arcSize = 3;
     private _alpha = 0.5;
 
-    initialize(options) {
-        L.setOptions(this, options);
-    }
-
     /**获取指定时间各轨迹点的位置信息集合 */
-    getInfosByTime(timeStr: string): PointInfo[] {
+    getInfosByTime(timeStr: string): InfoPoint[] {
         let time = new Date(timeStr);
         let len = this._allTracks.length, curTimeDatas = [];
         for (let i = 0; i < len; i++) {
@@ -43,13 +45,13 @@ export class LeafletTrackMap extends CanvasLayer {
         return curTimeDatas
     }
 
-    setMarks(marks: ImageInfo[]) {
+    setMarks(marks: InfoImage[]) {
         this._marks = marks;
         this._redraw()
     }
 
     /**设置多条轨迹数据 */
-    setTracks(tracks: TrackInfo[]) {
+    setTracks(tracks: InfoTrack[]) {
         this._allTracks = tracks.map(e => {
             e.latlngs = e.infos.map(e => [e.lat, e.lng]);
             return e;
@@ -58,7 +60,7 @@ export class LeafletTrackMap extends CanvasLayer {
     }
 
     /**添加单个标志数据*/
-    addMark(data: ImageInfo) {
+    addMark(data: InfoImage) {
         this._marks.push(data);
         this._map && this._drawMark(data);
     }
@@ -71,7 +73,7 @@ export class LeafletTrackMap extends CanvasLayer {
     }
 
     /**单个标志绘制 */
-    private _drawMark(mark: ImageInfo) {
+    private _drawMark(mark: InfoImage) {
         let ctx = this._ctx;
         let latlng = mark.latlng;
         mark.point = CanvasUtil.transformLatLngToPoint(this._map, latlng);
@@ -132,7 +134,7 @@ export class LeafletTrackMap extends CanvasLayer {
     }
 
     /**单条轨迹绘制 */
-    private _drawHistoryTrack(track: TrackInfo) {
+    private _drawHistoryTrack(track: InfoTrack) {
         let ctx = this._ctx,
             zoom = this._map.getZoom();
         track.widthLine = 2;
@@ -144,7 +146,7 @@ export class LeafletTrackMap extends CanvasLayer {
         });
         CanvasUtil.drawLine(ctx, track);
         if (zoom > 8) {
-            let arc: ArcInfo = track;
+            let arc: InfoArc = track;
             arc.colorFill = 'white';
             arc.size = zoom > 14 ? this._arcSize : 2;
             CanvasUtil.drawArc(ctx, arc);
@@ -152,11 +154,11 @@ export class LeafletTrackMap extends CanvasLayer {
     }
 
     /**获得指定时间的位置信息 */
-    private _getInfoByTime(time: Date, track: TrackInfo): PointInfo {
+    private _getInfoByTime(time: Date, track: InfoTrack): InfoPoint {
         let infos = track.infos,
             len = infos.length,
-            sData: PointInfo = infos[0],
-            eData: PointInfo = infos[len - 1];
+            sData: InfoPoint = infos[0],
+            eData: InfoPoint = infos[len - 1];
         if (time <= new Date(sData.time)) {
             sData = sData, eData = infos[1] || sData;
         } else if (time >= new Date(eData.time)) {
@@ -174,7 +176,7 @@ export class LeafletTrackMap extends CanvasLayer {
     }
 
     /**计算位置信息 */
-    private _computeDate(sData: PointInfo, eData: PointInfo, time: Date): PointInfo {
+    private _computeDate(sData: InfoPoint, eData: InfoPoint, time: Date): InfoPoint {
         if (sData == eData) { return sData };
         let angleY = Math.atan((eData.lngPoint - sData.lngPoint) / (eData.latPoint - sData.latPoint));
         angleY = eData.latPoint < sData.latPoint ? angleY + Math.PI : angleY;
@@ -199,12 +201,12 @@ export class LeafletTrackMap extends CanvasLayer {
 /**轨迹类型 */
 type TrackType = '';
 
-export interface TrackInfo extends LineInfo {
-    infos: PointInfo[];
+export interface InfoTrack extends InfoLine {
+    infos: InfoPoint[];
     type?: TrackType;
 }
 
-export interface PointInfo extends ImageInfo {
+export interface InfoPoint extends InfoImage {
     /**点位信息 */
     lat: number;
     lng: number;
@@ -215,4 +217,8 @@ export interface PointInfo extends ImageInfo {
     time?: string;
     /**点位类型 ship表示船 ， arc表示小圆点 */
     type?: TrackType;
+}
+
+export interface ParaCanvasTrack extends ParaCanvas {
+
 }

@@ -5,3 +5,4 @@ export * from './gl-class.enum';
 export * from './icon.enum';
 export * from './color.enum';
 export * from './ids.enum';
+export * from './type.enum';

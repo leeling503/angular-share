@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
 import * as L from "leaflet";
 import { LeafletCanvasMap } from "share-libs/assets/leaflet/leaflet-canvas-map";
-import { LeafletTrackMap, PointInfo } from "share-libs/assets/leaflet/leaflet-track-map";
+import { LeafletTrackMap, InfoPoint } from "share-libs/assets/leaflet/leaflet-track-map";
 import { LeafletNetMap, NetMap } from "share-libs/assets/leaflet/leaflet-net-map";
 import { ShareMapBase } from "./share-map-base.service";
 @Component({

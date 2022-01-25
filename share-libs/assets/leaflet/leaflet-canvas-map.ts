@@ -1,5 +1,5 @@
 import { CanvasLayer } from "./leaflet-canvas-layer";
-import { ArcInfo, CanvasUtil, ImageInfo, LatlngInfo, LineInfo, RectInfo } from "./leaflet-canvas-util";
+import { InfoArc, CanvasUtil, InfoImage, InfoLatlng, InfoLine, InfoRect } from "./leaflet-canvas-util";
 
 type Shape = 'all' | 'line' | 'rect' | 'img' | 'arc'
 
@@ -7,17 +7,17 @@ type Shape = 'all' | 'line' | 'rect' | 'img' | 'arc'
 export class LeafletCanvasMap extends CanvasLayer {
     options
     /**所有的线的经纬度数据 */
-    private _allLines: LineInfo[] = [];
+    private _allLines: InfoLine[] = [];
     /**所有的贝塞尔曲线的经纬度数据 */
-    private _allBezierLines: LineInfo[] = [];
+    private _allBezierLines: InfoLine[] = [];
     /**所有的矩形经纬度数据 */
-    private _allRects: RectInfo[] = [];
+    private _allRects: InfoRect[] = [];
     /**所有的小圆经纬度数据 */
-    private _allArcs: ArcInfo[] = [];
+    private _allArcs: InfoArc[] = [];
     /**所有的图片经纬度数据 */
-    private _allImgs: ImageInfo[] = [];
+    private _allImgs: InfoImage[] = [];
     /**刚刚通过经纬度画完的矩形 */
-    private _curLatLngs: LatlngInfo[] = [];
+    private _curLatLngs: InfoLatlng[] = [];
 
     _redraw() {
         this._clearContext();
@@ -54,29 +54,29 @@ export class LeafletCanvasMap extends CanvasLayer {
         this._redraw();
     }
     /**设置矩形数据 */
-    setAllRect(rects: RectInfo[]) {
+    setAllRect(rects: InfoRect[]) {
         this._allRects = rects; this._redraw();
     }
     /**设置线数据 */
-    setAllLines(lines: LineInfo[]) {
+    setAllLines(lines: InfoLine[]) {
         this._allLines = lines; this._redraw();
     }
 
     /**设置贝塞尔曲线数据 */
-    setAllBezierLines(lines: LineInfo[]) {
+    setAllBezierLines(lines: InfoLine[]) {
         this._allBezierLines = lines; this._redraw();
     }
 
     /**设置图片数据 */
-    setAllImg(imgs: ImageInfo[]) {
+    setAllImg(imgs: InfoImage[]) {
         this._allImgs = imgs; this._redraw();
     }
     /**设置原点数据 */
-    setAllArc(arcs: ArcInfo[]) {
+    setAllArc(arcs: InfoArc[]) {
         this._allArcs = arcs; this._redraw();
     }
     /**添加矩形*/
-    addLatlngRect(rect: RectInfo): string {
+    addLatlngRect(rect: InfoRect): string {
         if (!rect.latlngs || rect.latlngs.length == 0) return '';
         this._curLatLngs = rect.latlngs;
         rect.points = CanvasUtil.transformLatLngsToPoints(this._map, rect.latlngs);
@@ -86,7 +86,7 @@ export class LeafletCanvasMap extends CanvasLayer {
     }
 
     /**添加线 */
-    addLatlngLine(line: LineInfo): string {
+    addLatlngLine(line: InfoLine): string {
         if (!line.latlngs || line.latlngs.length == 0) return;
         line.points = CanvasUtil.transformLatLngsToPoints(this._map, line.latlngs);
         CanvasUtil.drawLine(this._ctx, line);
@@ -113,7 +113,7 @@ export class LeafletCanvasMap extends CanvasLayer {
      * @param 间隔距离 
      * @param 纬度点位集合(纬度不同，相同距离差值不一样) 
      */
-    getLatDiffByPoints(distance: number = 100, lats: LatlngInfo[] = this._curLatLngs): number {
+    getLatDiffByPoints(distance: number = 100, lats: InfoLatlng[] = this._curLatLngs): number {
         return CanvasUtil.getLatDiffByPoints(distance, lats)
     }
 
