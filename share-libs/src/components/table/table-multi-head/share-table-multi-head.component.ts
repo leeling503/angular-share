@@ -2,7 +2,7 @@ import { Component, ElementRef, EventEmitter, Input, OnInit, Output, SimpleChang
 import { HttpSearch } from "share-libs/src/models";
 import { TableComponent } from "../table/share-table.component";
 import { TableMultiAllItems, TableMultiHeadItem, TableMultiItem, TableSelect } from "../share-table.model";
-import { HttpBaseService } from "share-libs/src/services/http-base.service";
+import { HttpService } from "share-libs/src/services/http-base.service";
 import { ModalChange } from "../../open-modals/modal-select-item/modal-select-item.component";
 /**
  * 多表头表格组件
@@ -13,7 +13,7 @@ import { ModalChange } from "../../open-modals/modal-select-item/modal-select-it
     styleUrls: ['../table/share-table.component.less', './share-table-multi-head.component.less']
 })
 export class TableMultiHeadComponent extends TableComponent implements OnInit {
-    constructor(http_: HttpBaseService, el: ElementRef) {
+    constructor(http_: HttpService, el: ElementRef) {
         super(http_, el);
     }
     /**表格对应数据value的表头的数据 */
@@ -22,9 +22,7 @@ export class TableMultiHeadComponent extends TableComponent implements OnInit {
     @Input() inHeadKey: string = "typeCode";
     /**html页面使用的数据(含表头和数据) */
     tableMultiItems: Array<TableMultiHeadItem> = [];
-    searchItem: HttpSearch = new HttpSearch();
     @Output() onSelectChange: EventEmitter<TableSelect> = new EventEmitter();
-    ifYScorll: boolean = false;
 
     onChanges(changes: SimpleChanges) { }
     superInit() { }
@@ -164,7 +162,7 @@ export class TableMultiHeadComponent extends TableComponent implements OnInit {
         /**表的最高高度 */
         let tableMaxHeight = this.tableHeightMax;
         /**表的实际高度 */
-        let tableHeight = this.nativeEl.querySelector('table').clientHeight;
+        let tableHeight = this.tableHeight;
         if (tableWidth > allWith) {
             /**设置的宽度小于实际宽度 */
             let computeWidth = 0;

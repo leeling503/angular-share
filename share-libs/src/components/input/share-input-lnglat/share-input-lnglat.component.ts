@@ -11,6 +11,7 @@ export class ShareInputLnglatComponent implements OnInit {
 
   constructor() { }
   @Input() model: number[] = [];
+  @Input() inMax: number[] = [89, 59, 60]
   @Output() modelChange: EventEmitter<number[]> = new EventEmitter()
   ngOnChanges(changes: SimpleChanges): void {
     //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.

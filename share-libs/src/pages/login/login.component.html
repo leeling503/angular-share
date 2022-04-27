@@ -16,7 +16,7 @@
           <li class="item phone">
             <div>
               <i></i>
-              <input loginValiate (focus)="onFocus(name.value)" (blur)="onBlur(name.value)"
+              <input (focus)="onFocus(name.value)" (blur)="onBlur(name.value)"
                 onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')" autocomplete="off" type="text" name="username"
                 placeholder="请输入手机号" maxlength="11" minlength="11" [(ngModel)]="user.userName" style="width: 310px;"
                 required #name="ngModel">

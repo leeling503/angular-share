@@ -181,19 +181,41 @@ export class CanvasUtil {
         return Promise.resolve(img)
     }
 
+    /**绘图的默认配置 */
     static readonly ctxFig: CtxPara = {
-        alpha: 1, widthLine: 1, colorLine: 'blue', colorFill: 'white', dash: [10, 0], dashOff: 0, fillAlpha: 1
+        alpha: 1,
+        widthLine: 1,
+        colorLine: 'blue',
+        colorFill: 'white',
+        dash: [10, 0],
+        dashOff: 0,
+        fillAlpha: 1,
+        globalCompositeOperation: 'source-over'
     }
+
     /**设置画布的相关配置 */
     private static _setCtxFig(ctx: CanvasRenderingContext2D, fig: CtxPara = {}) {
+        this._deletePara(fig)
         fig = Object.assign({}, this.ctxFig, fig);
         ctx.globalAlpha = fig.alpha;
-        ctx.globalCompositeOperation = fig.globalCompositeOperation || 'source-over';
+        ctx.globalCompositeOperation = fig.globalCompositeOperation;
         ctx.fillStyle = fig.colorFill;
         ctx.strokeStyle = fig.colorLine;
         ctx.lineWidth = fig.widthLine;
         ctx.setLineDash(fig.dash);
         ctx.lineDashOffset = fig.dashOff;
+    }
+
+    /**移除掉值为 undefined 或 null 的属性，方便赋值 */
+    private static _deletePara(obj: Object = {}) {
+        for (const key in obj) {
+            if (Object.prototype.hasOwnProperty.call(obj, key)) {
+                const ele = obj[key];
+                if (ele === undefined || ele === null) {
+                    Reflect.deleteProperty(obj, key)
+                }
+            }
+        }
     }
 }
 

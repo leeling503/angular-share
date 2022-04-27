@@ -1,37 +1,23 @@
 import * as L from "leaflet";
 import { CanvasLayer, ParaCanvas } from "./leaflet-canvas-layer";
 import { InfoArc, CanvasUtil, InfoImage, InfoLine } from "./leaflet-canvas-util";
-import * as $ from "jquery"
+import * as $ from "jquery";
+const NUMSTR = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09']
 /**在地图上绘制轨迹
- * getInfosByTime() 获取指定时间各轨迹点的位置信息集合
+ * 绘制标志
  * 
  */
 export class LeafletTrackMap extends CanvasLayer {
     constructor(options?: ParaCanvasTrack) {
         super(options);
+        this.initOptions(options);
     }
-    options: {
-        pane,
-        map: undefined,
-        minIcon: string,
-        arcSize: 3,//圆大小
-        alpha: 0.5,//透明度
-        lineWidth: 1,//线宽
-        arcClick: (e) => {},
-    };
-    private _colors: { red: number, green: number, blue: number }[] = [
-        { red: 0, green: 155, blue: 255 },
-        { red: 85, green: 0, blue: 125 },
-        { red: 255, green: 155, blue: 0 }
-    ];
+    options: ParaCanvasTrack = new ParaCanvasTrack();
     private _marks: InfoImage[] = [];
     /**多条轨迹数据 */
     private _allTracks: InfoTrack[] = [];
     /**指针点击所对应的点*/
     private cursorData: InfoPoint[];
-    intervalPart: [];//动画点绘制区域
-    private _arcSize = 3;
-    private _alpha = 0.5;
 
     /**获取指定时间各轨迹点的位置信息集合 */
     getInfosByTime(timeStr: string): InfoPoint[] {
@@ -84,10 +70,11 @@ export class LeafletTrackMap extends CanvasLayer {
     protected onMouseMove(e: L.LeafletMouseEvent) {
         let containerPoint = e.containerPoint,
             x = containerPoint.x,
-            y = containerPoint.y,
-            tracks = this._allTracks,
-            size = this._arcSize + 2,
-            flag = false;
+            y = containerPoint.y;
+        let tracks = this._allTracks;
+        let options = this.options;
+        let size = options.sizeArc + 2;
+        let flag = false;
         this.cursorData = [];
         for (let i = tracks.length - 1; i >= 0; i--) {
             let infos = tracks[i].infos;
@@ -101,7 +88,7 @@ export class LeafletTrackMap extends CanvasLayer {
                 } else if (!flag) {
                     this.cursorData = [];
                     $(this._canvas).css('cursor', 'grab');
-                    $(this._canvas).css('z-index', '10');
+                    $(this._canvas).css('z-index', this.options.zIndex);
                 }
             }
         }
@@ -137,8 +124,10 @@ export class LeafletTrackMap extends CanvasLayer {
     private _drawHistoryTrack(track: InfoTrack) {
         let ctx = this._ctx,
             zoom = this._map.getZoom();
-        track.widthLine = 2;
-        track.colorLine = track.colorLine || 'blue';
+        let options = this.options;
+        let sizeArc = options.sizeArc;
+        track.widthLine = options.widthLine;
+        track.colorLine = track.colorLine || options.colorLine;
         track.points = track.infos.map(e => {
             let point = CanvasUtil.transformLatLngToPoint(this._map, [e.lat, e.lng]);
             e.latPoint = point[0], e.lngPoint = point[1];
@@ -146,9 +135,10 @@ export class LeafletTrackMap extends CanvasLayer {
         });
         CanvasUtil.drawLine(ctx, track);
         if (zoom > 8) {
-            let arc: InfoArc = track;
-            arc.colorFill = 'white';
-            arc.size = zoom > 14 ? this._arcSize : 2;
+            let arc: InfoArc = Object.assign({}, track);
+            arc.colorFill = options.colorArcFill;
+            arc.size = zoom > 14 ? sizeArc : 2;
+            arc.colorLine = options.colorArc;
             CanvasUtil.drawArc(ctx, arc);
         }
     }
@@ -193,11 +183,12 @@ export class LeafletTrackMap extends CanvasLayer {
     /**格式化时间 */
     private _formatTime(timeNum): string {
         let date = new Date(timeNum), hour = date.getHours(), minu = date.getMinutes();
-        let h = hour > 9 ? hour : '0' + hour, m = minu > 9 ? minu : '0' + minu;
+        let h = NUMSTR[hour] || hour, m = NUMSTR[minu] || minu;
         let time = h + ':' + m;
         return time;
     }
 }
+
 /**轨迹类型 */
 type TrackType = '';
 
@@ -219,6 +210,24 @@ export interface InfoPoint extends InfoImage {
     type?: TrackType;
 }
 
-export interface ParaCanvasTrack extends ParaCanvas {
-
+/**
+ * 轨迹绘制的配置
+ */
+export class ParaCanvasTrack implements ParaCanvas {
+    pane?: string = 'sl-track';
+    className?: string = 'sl-track';
+    zIndex?: number = 100;
+    minIcon?: string;
+    /**圆点大小 */
+    sizeArc?: number = 3;
+    /**圆点颜色 ( rgb(),rgba(),#fff )*/
+    colorArc?: string = "steelblue";
+    /**圆点填充色*/
+    colorArcFill?: string = "#CCFF99";
+    alpha?: number;
+    /**线条宽度 */
+    widthLine?: number = 2;
+    /**线条颜色 */
+    colorLine?: string = "darkorange";
+    arcClick?: (e: any) => (any | void);
 }

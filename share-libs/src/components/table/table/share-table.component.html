@@ -31,17 +31,15 @@
         </thead>
         <!--body部分-->
         <tbody>
-          <ng-container *ngFor="let data of tableDatas;index as i">
-            <tr>
-              <ng-container *ngFor="let item of inItems">
-                <ng-container *ngIf="item.ifShow !== false">
-                  <ng-template
-                    *ngTemplateOutlet="tdEl;context:{item:item,data:data,datas:tableDatas,key:item.key,i:i,value:data[item.key]}">
-                  </ng-template>
-                </ng-container>
+          <tr *ngFor="let data of tableDatas;index as i">
+            <ng-container *ngFor="let item of inItems">
+              <ng-container *ngIf="item.ifShow !== false">
+                <ng-template
+                  *ngTemplateOutlet="tdEl;context:{item:item,data:data,datas:tableDatas,key:item.key,i:i,value:data[item.key]}">
+                </ng-template>
               </ng-container>
-            </tr>
-          </ng-container>
+            </ng-container>
+          </tr>
         </tbody>
       </table>
     </div>
@@ -78,6 +76,15 @@
           <ng-container *ngSwitchCase="'img'">
             <img [src]="value || '../../../../../assets/img/icon/no-img.png'" />
           </ng-container>
+          <!-- /_ruleText 如果整个表只有一个type为rule-text，则可以用此来缓存-->
+          <ng-container *ngSwitchCase="'rule-text'">
+            <ng-container
+              *ngFor="let info of (data._ruleTextKey && data._ruleTextKey[key] || data._ruleText|| onRule(data,item))">
+              <span class="text-info" [ngStyle]="info.styles">
+                {{ info.text }}
+              </span>
+            </ng-container>
+          </ng-container>
           <!--tag-->
           <ng-container *ngSwitchCase="'rule-tags'">
             <ng-container
@@ -104,8 +111,7 @@
               <share-button [inPara]="btn"></share-button>
             </ng-container>
           </ng-container>
-          <!--text-->
-          <ng-container *ngSwitchCase="'rule-text'">
+          <ng-container *ngSwitchCase="'rule-any'">
             <ng-container
               *ngFor="let text of (data._ruleTextKey && data._ruleTextKey[key] || data._ruleText|| onRule(data,item))">
               <span class="text-info" [ngStyle]="text.styles">

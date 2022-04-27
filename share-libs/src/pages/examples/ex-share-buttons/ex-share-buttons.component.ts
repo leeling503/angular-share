@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, PlatformRef } from '@angular/core';
 import { Icon } from 'leaflet';
 import { ShareParaBtn } from 'share-libs/src/components/button/share-button.model';
 import { TypeBtn, IconClass } from 'share-libs/src/enum';
@@ -10,7 +10,7 @@ import { ColorEnum } from 'share-libs/src/enum/color.enum';
   styleUrls: ['./ex-share-buttons.component.less']
 })
 export class ExShareButtonsComponent implements OnInit {
-  constructor() { }
+  constructor(private pl_: PlatformRef) { }
 
   btnParaA: ShareParaBtn = {
     iconPer: IconClass.clearRed,

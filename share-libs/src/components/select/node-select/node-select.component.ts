@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
-import { UtilArrayEvery, UtilArrayGetAncestorsByValue, UtilArrayGetArrByValue, UtilArrayRemoveItem, UtilArraySetKeyValue, UtilArraySome, UtilArraysSetValueByOther, UtilChanges, UtilIsEqual } from "share-libs/src/utils";
+import {   UtilArray, UtilChanges, UtilIsEqual } from "share-libs/src/utils";
 import { SelectOption, SelectOptions } from "../share-select.model";
 /**
  * 多级node面板
@@ -48,7 +48,7 @@ export class NodeSelect {
             this.setStateByCheckOption();
         }
         if (UtilChanges(changes, 'inCheckOptions') && !UtilIsEqual(this.emitOptions, this.inCheckOptions)) {
-            this.checkOptions = this.inCheckOptions;
+            this.checkOptions = this.emitOptions = this.inCheckOptions;
             this.setStateByCheckOption();
         }
     }
@@ -62,23 +62,23 @@ export class NodeSelect {
 
     /**设置选项勾选状态 */
     _setOptionsStateByCheckOption() {
-        UtilArraySetKeyValue(this.options, '_check', false);
-        UtilArraySetKeyValue(this.options, '_mix', false);
-        UtilArraysSetValueByOther(this.options, this.checkOptions, '_check', true, 'key');
+        UtilArray.setItemValue(this.options, '_check', false);
+        UtilArray.setItemValue(this.options, '_mix', false);
+        UtilArray.setValueByOther(this.options, this.checkOptions, '_check', true, 'key');
         /**新增用户选项需要此操作，在去勾选后，点击取消后再次打开勾选状态正常 */
-        UtilArraySetKeyValue(this.checkOptions, '_check', true, this.inGanged ? undefined : '');
+        UtilArray.setItemValue(this.checkOptions, '_check', true, this.inGanged ? undefined : '');
     }
 
     /**设置选项的mix状态 */
     setMixState(option: SelectOption) {
-        let ancestors = UtilArrayRemoveItem(UtilArrayGetAncestorsByValue(this.options, option), option)
+        let ancestors = UtilArray.itemRemove(UtilArray.getAncestorsByValue(this.options, option), option)
         for (let i = ancestors.length - 1; i >= 0; i--) {
             let el = ancestors[i], children = el.children || [];
             el._mix = false;
             if (this.inGanged) {
-                el._check = UtilArrayEvery(children, true, '_check')
+                el._check = UtilArray.every(children, true, '_check')
             }
-            el._mix = UtilArraySome(children, true, '_check') || UtilArraySome(children, true, '_mix');
+            el._mix = UtilArray.some(children, true, '_check') || UtilArray.some(children, true, '_mix');
         }
     }
 
@@ -106,19 +106,19 @@ export class NodeSelect {
         }
         /**单选先去掉选中的勾选以及之前可能存在的mix状态 */
         if (!this.inMulti && this.checkOptions && this.checkOptions.length) {
-            UtilArraySetKeyValue(this.checkOptions, '_check', false, this.inGanged ? undefined : '');
-            UtilArraySetKeyValue(this.checkOptions, '_mix', false, this.inGanged ? undefined : '');
+            UtilArray.setItemValue(this.checkOptions, '_check', false, this.inGanged ? undefined : '');
+            UtilArray.setItemValue(this.checkOptions, '_mix', false, this.inGanged ? undefined : '');
             /**更新父类的勾选和mix状态 */
             this.setMixState(this.checkOptions[0]);
         }
         option._check = flag;
         /**父子项联动时 */
         if (this.inGanged) {
-            UtilArraySetKeyValue([option], '_check', option._check)
-            UtilArraySetKeyValue([option], '_mix', false)
+            UtilArray.setItemValue([option], '_check', option._check)
+            UtilArray.setItemValue([option], '_mix', false)
         }
         this.setMixState(option);
-        this.checkOptions = UtilArrayGetArrByValue(this.options, '_check', true, this.inGanged);
+        this.checkOptions = UtilArray.getArrByValue(this.options, '_check', true, this.inGanged);
         /**至少选择一个时 */
         if (this.inOne && this.checkOptions.length == 0) {
             setTimeout(() => {

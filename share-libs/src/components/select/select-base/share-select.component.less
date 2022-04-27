@@ -1,0 +1,132 @@
+@import 'index.less';
+@C-B: @C-B-normal;
+@C-BG: @C-BG-normal ;
+
+:host {
+  width: 100%;
+  height: 100%;
+}
+
+.share-select-panel {
+  width: 100%;
+  height: 100%;
+  min-height: 29px;
+  max-height: 100px;
+  display: flex;
+  align-items: center;
+  background-color: @C-BG;
+  cursor: pointer;
+
+
+  &:hover {
+    .select-clear {
+      display: inline-block;
+    }
+  }
+
+  &.select-has-border {
+    .node-data-text {
+      border: 1px solid @C-B;
+      padding: 0px 2px;
+      margin: 0px 2px;
+      border-radius: 2px;
+    }
+
+    .selected-nodes {
+      &:hover+.select-clear {
+        display: none !important;
+      }
+    }
+
+    .selected-node {
+      position: relative;
+
+      &:hover .select-clear {
+        display: inline-block;
+        top: 0px;
+        right: 0px;
+        margin: 0px 0px;
+      }
+    }
+  }
+
+  .selected-nodes {
+    flex-grow: 1;
+    overflow: auto;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    padding: 1px 2px;
+
+    .select-clear {
+      display: none;
+    }
+
+    .selected-node {
+      display: inline-block;
+      flex-shrink: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      word-break: break-all;
+    }
+
+    .selected-input {
+      min-width: 100px;
+      width: 100%;
+
+      input {
+        width: 100%;
+        border-width: 0px;
+      }
+    }
+  }
+
+  .select-clear {
+    .e_icon('icon/com_clear');
+    position: absolute;
+    right: 0px;
+    display: none;
+  }
+}
+
+.open-nodes {
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+
+  border: 1px solid @C-B;
+  border-radius: 3px;
+  background-color: @C-BG;
+  padding: 2px 10px;
+}
+
+.open-btns {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  div {
+    width: 50px;
+    height: 30px;
+    line-height: 30px;
+    font-size: 14px;
+    border-radius: 3px;
+    text-align: center;
+    margin: 2px 15px;
+    cursor: pointer;
+  }
+
+  .btn-sure {
+    color: #FFF;
+    background-color: blue;
+  }
+
+  .btn-off {
+    color: #3e3e3e;
+    background-color: #ECECEC;
+    border: 1px solid #6e6e6e;
+  }
+}

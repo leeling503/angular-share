@@ -1,7 +1,7 @@
 /**正则对象的key值*/
 type Regkey = 'number' | "int" | 'point' | 'phone' | 'email';
 
-export const REGEXP: { [key in Regkey]: { title: string, reg: RegExp } } = {
+export const SL_REGEXP: { [key in Regkey]: { title: string, reg: RegExp } } = {
     number: { title: '', reg: /^\-{0,1}\d*\.{0,1}\d*/ },
     int: { title: '', reg: /^\-{0,1}\d*\.{0,1}\d*/ },
     point: { title: '', reg: /^\-{0,1}\d*\.{0,1}\d*/ },

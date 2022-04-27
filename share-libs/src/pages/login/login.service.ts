@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { AccountService } from 'share-libs/src/services/account.service';
 import { AuthService } from 'share-libs/src/services/auth.service';
-import { HttpBaseService } from 'share-libs/src/services/http-base.service';
+import { HttpService } from 'share-libs/src/services/http-base.service';
 @Injectable({
   providedIn: 'root'
 })
@@ -11,7 +11,7 @@ export class LoginService {
   constructor(
     private account_: AccountService,
     private auth_: AuthService,
-    private http_: HttpBaseService,
+    private http_: HttpService,
   ) { }
 
   getWsAddress(uuid): string {

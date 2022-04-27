@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FileOptions } from 'share-libs/src/components/upload-file/share-file-upload/share-file-upload.component';
-import { Log } from 'share-libs/src/utils';
 
 @Component({
   selector: 'app-ex-share-file',

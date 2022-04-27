@@ -1,13 +1,15 @@
+import { Injectable } from "@angular/core";
+import { PL_KEYS } from "share-libs/const/pl-keys";
+
 export const OPTIONS_STATIC = Object.create(null);
 export const OPTIONS_ACCOUNT = Object.create(null);
 export const OPTIONS_DATA_BASE: { [key in PL_KEYS]: any[] } = Object.create(null);
 
-import { Injectable } from "@angular/core";
 /**全局选项服务 */
 @Injectable({
     providedIn: "root"
 })
-export class GlobalOptionsService {
+export class GlOptionsService {
     /**静态 */
     private OPTIONS_STATIC = Object.create(null);
     /**不同账号选项会不同（切换账号需要改变，即退出登录清空）*/
@@ -23,8 +25,3 @@ export class GlobalOptionsService {
     }
 
 }
-
-enum PL_KEYS {
-    /**灯质选项*/
-    X = 'X',
-} 

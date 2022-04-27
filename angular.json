@@ -30,11 +30,6 @@
                 "glob": "**/*",
                 "input": "./share-libs/assets/",
                 "output": "/assets/"
-              },
-              {
-                "glob": "**/*",
-                "input": "./node_modules/@ant-design/icons-angular/src/inline-svg/",
-                "output": "/assets/"
               }
             ],
             "styles": [
@@ -42,6 +37,11 @@
               "src/styles.less",
               "share-libs/share-libs.less"
             ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "share-libs/src/styles"
+              ]
+            },
             "scripts": [
               "share-libs/assets/3D/js/three.min.js",
               "share-libs/assets/3D/js/OrbitControls.js"

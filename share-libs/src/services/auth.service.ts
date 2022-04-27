@@ -4,13 +4,13 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { HttpResult } from '../models';
 import { AccountService } from './account.service';
-import { HttpBaseService } from './http-base.service';
+import { HttpService } from './http-base.service';
 
 /**后台授权服务商 */
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   constructor(
-    private http_: HttpBaseService,
+    private http_: HttpService,
     private account_: AccountService
   ) { }
   private _token = "some-auth-token"

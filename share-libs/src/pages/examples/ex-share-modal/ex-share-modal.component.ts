@@ -77,7 +77,12 @@ export class ExShareModalComponent {
         let a: ShareModalRef<ExShareSelectComponent> = this.modal_.openModal({
             title: '弹出选择框组件',
             width: '50%',
+            height: 500,
             component: ExShareSelectComponent,
+            componentPara: { optionC: [] },
+            overlayer: {
+                backdropClass: 'E_O_shade'
+            },
             btns: [
                 'close',
                 'primary',
@@ -97,7 +102,7 @@ export class ExShareModalComponent {
     }
 
     onPositionByEle() {
-        this.overlay_.show(this.dddPortal, { type: 'ele', element: this.ele })
+        this.overlay_.show(this.dddPortal, { type: 'ele', element: this.ele, y: 20 })
     }
 }
 

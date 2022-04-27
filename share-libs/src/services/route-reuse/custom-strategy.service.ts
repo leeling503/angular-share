@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot } from '@angular/router';
-import { UtilRouterGetUrl } from 'share-libs/src/utils';
+import { UtilRouter } from 'share-libs/src/utils';
 import { CacheCtrService } from './cache-ctr.service';
 
 /**自定义路由复用策略 */
@@ -66,7 +66,7 @@ export class CustomStrategy {
 
   /**根据快照获取URL地址*/
   getUrl(route: ActivatedRouteSnapshot): string {
-    let url = UtilRouterGetUrl(route);
+    let url = UtilRouter.getUrl(route);
     return url;
   }
 }

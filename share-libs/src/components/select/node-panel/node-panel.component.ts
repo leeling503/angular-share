@@ -1,5 +1,5 @@
-import { Component, ElementRef, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
-import { UtilArrayGetAncestorsByValue, UtilArrayGetArrByValue, UtilArrayRemoveItem, UtilArraySetKeyValue, UtilChanges, UtilIsEqual } from "share-libs/src/utils";
+import { Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
+import { UtilArray, UtilChanges, UtilIsEqual } from "share-libs/src/utils";
 import { SelectOption, SelectOptions } from "../share-select.model";
 /**
  * 多级node面板
@@ -26,7 +26,7 @@ export class NodePanel {
     @Input() public inActive: boolean
     /**至少选中一项 */
     @Input() public inOne: boolean;
-    /**能否添加新选项 */
+    /**能否父子项联动 */
     @Input() public inGanged: boolean;
     /**是否显示子项展开按钮 */
     @Input() public inSon: boolean;
@@ -74,22 +74,13 @@ export class NodePanel {
     /**选中上级选项(不传将会回到最顶层) */
     onCheckSuper(sup: SelectOption) {
         this.activeOptions = sup && sup.children || [];;
-        this.superOptions = UtilArrayGetAncestorsByValue(this.superOptions, sup, 'key')
+        this.superOptions = UtilArray.getAncestorsByValue(this.superOptions, sup, 'key')
     }
 
     /**激活选项变化 */
     activeChange(option: SelectOption) {
         this.activeOptions = option.children;
         this.superOptions.push(option);
-    }
-
-    onAddOption() {
-
-    }
-
-    /**用户添加结束 */
-    onInputValueEnd(option: SelectOption) {
-        option.key = option.value;
     }
 
     /**有选项选中改变 */
@@ -130,11 +121,11 @@ export class NodePanel {
     /**设置选项和其父类的状态 */
     private _setOptionState(option: SelectOption) {
         let flag = option._check;
-        UtilArraySetKeyValue(option.children, '_mix', false);
+        UtilArray.setItemValue(option.children, '_mix', false);
         if (this.inGanged) {
-            UtilArraySetKeyValue(option.children, '_check', flag);
+            UtilArray.setItemValue(option.children, '_check', flag);
         }
-        let ancestors = UtilArrayRemoveItem(UtilArrayGetAncestorsByValue(this.inOptions, option, 'key'), option);
+        let ancestors = UtilArray.itemRemove(UtilArray.getAncestorsByValue(this.inOptions, option, 'key'), option);
         for (let i = ancestors.length - 1; i >= 0; i--) {
             let anc = ancestors[i], children = anc.children || [];
             if (this.inGanged) {
@@ -146,8 +137,8 @@ export class NodePanel {
 
     /**根据选中数组设置选项的状态 */
     private _setOptionsStateByCheckOption() {
-        UtilArraySetKeyValue(this.inOptions, '_check', false);
-        UtilArraySetKeyValue(this.inOptions, '_mix', false);
+        UtilArray.setItemValue(this.inOptions, '_check', false);
+        UtilArray.setItemValue(this.inOptions, '_mix', false);
         this.checkOptions.forEach(e => {
             e._check = true;
             this._setOptionState(e);
@@ -157,6 +148,6 @@ export class NodePanel {
 
     /**获取选中ckeck状态为true的选项（获取父类后不要子类） */
     private getCheckOptionsByCheck(): SelectOptions {
-        return UtilArrayGetArrByValue(this.inOptions, '_check', true, this.inGanged ? true : false);
+        return UtilArray.getArrByValue(this.inOptions, '_check', true, this.inGanged);
     }
 }

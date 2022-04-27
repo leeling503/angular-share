@@ -12,7 +12,7 @@ export class ExTableComponent implements OnInit {
   allDatas: any[];
   items: TableItem<ItemData>[];
   // apiUrl: string = '';
-  tableClass: ClassTableName[] = ['simple-border', 'background-color'];
+  tableClass: ClassTableName[] = ['border', 'background-color'];
   apiUrl;
   inUuid = 'aidsName';
   selectedDatas = [
@@ -42,21 +42,25 @@ export class ExTableComponent implements OnInit {
       { title: '选框', type: 'check', width: 60, filterCan: false, filterHid: true, styckyLeft: '0px' },
       { title: '序号', type: 'serial', width: 60, filterCan: false, styckyLeft: '60px', },
       { title: '标识符', key: 'id', width: 60, onClick: (data) => { data.aidsName } },
+      { title: '图片', key: 'id', width: 90, type: 'img' },
       { title: '时间', key: 'collectionTime', classTdNames: ['color-blue', 'underline'], onClick: (data, item) => { console.log(data, item) }, widthFix: 150, filterCan: false },
       { title: '名称1', key: 'aidsName', classTdNames: ['view-center'], width: 60 },
       { title: 'ifAlarm', key: 'ifAlarm', filterCan: false, classTdNames: ['view-center'], width: 60 },
       {
         title: '报警', key: 'ifAlarm', type: 'rule-dots', width: 60, ruleDots: (data, item, datas) => {
-          let res = data.ifAlarm ? '是' : '否';
-          data._ruleDots = [{ text: res, class: 'orange' }]
-          return [{ text: res, class: 'orange' }]
+          let res = data.ifAlarm == '1' ? '是' : '否';
+          data._ruleDots = [{ text: res, class: data.ifAlarm == '1' ? 'orange' : 'blue' }];
+          return [{ text: res, class: data.ifAlarm == '1' ? 'orange' : 'blue' }]
         }
       },
       { title: 'ifBind', key: 'ifBind', filterCan: false, classTdNames: ['view-center'], width: 60 },
       {
         title: '是否绑定', key: 'ifBind', type: 'rule-text', filterCan: false, width: 60, ruleText: (data, item) => {
           let str = data.ifBind + data.ifBind;
-          return [{ text: str, styles: { 'color': 'red' } }, { text: str, styles: { 'color': 'yellow' } }]
+          console.log("run ruleText");
+          data._ruleTextKey = data._ruleTextKey || {};
+          data._ruleTextKey[item.key] = [{ text: str, styles: { 'color': 'red' } }, { text: str, styles: { 'color': 'yellow' } }]
+          return data._ruleText
         }
       },
       { title: 'ifMark', key: 'ifMark', filterCan: false, classTdNames: ['view-center'], width: 60 },
@@ -74,12 +78,12 @@ export class ExTableComponent implements OnInit {
               { text: '操作02', click: () => { console.log(data) } }
             ]
           }
-          data._ruleBtnKey = (data._ruleBtn || {});
+          data._ruleBtnKey = (data._ruleBtnKey || {});
           data._ruleBtnKey[item.key] = btns;
           return btns;
         }
       },
-      { title: '名称2', key: 'commModeCode', filterCan: false, classTdNames: ['view-center'], classThNames: ['view-right', 'underline'], width: 60 },
+      { title: '名称2', key: 'commModeCode', filterCan: false, classTdNames: ['view-center'], classThNames: ['view-right', 'underline', 'color-blue'], width: 60 },
       { title: '名称3', key: 'functionCode', filterCan: false, classTdNames: ['view-center'], width: 60 },
       {
         title: '执行结果', key: 'functionCode', type: "rule-tags", width: 60, ruleTags: (data, item, datas) => {
@@ -94,7 +98,7 @@ export class ExTableComponent implements OnInit {
       }
     ]
     // setTimeout(() => {
-    //   this.apiUrl = 'api/Statuslist/getList'
+    // this.apiUrl = 'api/Statuslist/getList'
     // }, 5000);
   }
 

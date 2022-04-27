@@ -1,5 +1,5 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
-import { STRS, UtilDateGetStr } from 'share-libs/src/utils/util-date';
+import { UtilDate } from 'share-libs/src/utils/util-date';
 /**
  * 日历组件
  */
@@ -12,7 +12,7 @@ export class ShareCalendarBaseComponent implements OnInit {
 
   constructor(private el: ElementRef) {
     this.elNative = this.el.nativeElement;
-    this.elToday = UtilDateGetStr(this.today, "YYYY-MM-DD");
+    this.elToday = UtilDate.getStr(this.today, "YYYY-MM-DD");
     this.setYearMonth();
   }
   /**接受年月日 （2021-01-01） */
@@ -41,7 +41,7 @@ export class ShareCalendarBaseComponent implements OnInit {
   elToday: string;
   /**日期 */
   get dateStr(): string {
-    return UtilDateGetStr(this.activeDate, "YYYY-MM-DD")
+    return UtilDate.getStr(this.activeDate, "YYYY-MM-DD")
   }
   /**日历 */
   calendar: DateData[] = []
@@ -75,7 +75,7 @@ export class ShareCalendarBaseComponent implements OnInit {
       month = 1;
       year = year + 1;
     }
-    let date = year + '-' + (STRS[month] || month);
+    let date = year + '-' + (UtilDate.STRS[month] || month);
     this.setCalendar(date + '-01')
   }
 
@@ -110,9 +110,9 @@ export class ShareCalendarBaseComponent implements OnInit {
     /**最后一天的数字 */
     let lastDays = this.getMonthLastDay(this.curYear, this.curMonth);
     /**得到月份的第一天日期字符串 */
-    let fymd = UtilDateGetStr(this.date, 'YYYY-MM-' + '01');
+    let fymd = UtilDate.getStr(this.date, 'YYYY-MM-' + '01');
     /**得到月份的最后天日期字符串 */
-    let lymd = UtilDateGetStr(this.date, 'YYYY-MM-' + lastDays);
+    let lymd = UtilDate.getStr(this.date, 'YYYY-MM-' + lastDays);
     /**始末日期对象*/
     let fDate = new Date(fymd), lDate = new Date(lymd);
     /**始末日期对象对应的星期数*/
@@ -159,11 +159,11 @@ export class ShareCalendarBaseComponent implements OnInit {
    *@param d 日
    */
   generDateData(y: number, m: number, d: number): DateData {
-    let dStr = STRS[d] || d;
-    let mStr = STRS[m] || m;
+    let dStr = UtilDate.STRS[d] || d;
+    let mStr = UtilDate.STRS[m] || m;
     let date = new Date(`${y}-${mStr}-${dStr}`)
     let day = date.getDay(),
-      dateStr = UtilDateGetStr(date);
+      dateStr = UtilDate.getStr(date);
     return { date: dateStr, year: y, days: d, day, month: m }
   }
 

@@ -103,7 +103,7 @@ export abstract class ExportPDF {
                 let back = 0;
                 for (let j = start; j < end;) {
                     let r = list[j], g = list[j + 1], b = list[j + 2];
-                    if (!r && !g && !b) { back++ }
+                    if ((r + g + b !== 765) && list[j + 3] !== 0) { back++ }
                     /**下一像素点 */
                     j = j + 4;
                 }

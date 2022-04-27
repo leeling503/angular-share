@@ -6,9 +6,9 @@ import { CanvasUtil } from "./leaflet-canvas-util";
 export abstract class CanvasLayer extends L.Layer {
     constructor(options?: ParaCanvas) {
         super(options);
-        L.setOptions(this, options)
+        this.initOptions(options)
     }
-    options: ParaCanvas;
+    protected options: ParaCanvas;
     /**生成的canvas画布，onAdd调用时生成 */
     protected _canvas: HTMLCanvasElement;
     /**画布的内容信息 */
@@ -26,9 +26,7 @@ export abstract class CanvasLayer extends L.Layer {
     /**添加鼠标移动事件 （传入点击事件回调） */
     onMove(cb: (e) => any) { this.cbMove = cb; };
 
-    /**初始化设置配置 */
-    initOptions(options: ParaCanvas = this.options) {
-        console.log(options)
+    initOptions(options?: ParaCanvas) {
         L.setOptions(this, options)
     }
 
@@ -39,17 +37,9 @@ export abstract class CanvasLayer extends L.Layer {
         if (this.options.pane) {
             /**如果指定的pane不存在就自己创建（往map添加div Pane） */
             (this.getPane(this.options.pane) || map.createPane(this.options.pane)).appendChild(this._canvas);
-            console.log(this.options.pane, this.getPane());
         } else
             map.getPanes().overlayPane.appendChild(this._canvas);
-        map.on('viewreset', this._reset, this);
-        map.on('moveend', this._reset, this);
-        map.on("mousemove", this.onMouseMove, this)
-        map.on("click", this.onMouseClick, this)
-        if (map.options.zoomAnimation && L.Browser.any3d) {
-            /**缩放动画 */
-            map.on('zoomanim', this._animateZoom, this);
-        };
+        this._eventSwitch(true);
         this._reset()
         return this
     }
@@ -61,24 +51,33 @@ export abstract class CanvasLayer extends L.Layer {
         } else {
             map.getPanes().overlayPane.removeChild(this._canvas);
         }
-        map.off('moveend', this._reset, this);
-        map.off('resize', this._reset, this);
-        map.off("mousemove", this.onMouseMove, this)
-        map.off("click", this.onMouseClick, this)
-        if (map.options.zoomAnimation) {
-            map.off('zoomanim', this._animateZoom, this);
-        }
+        this._eventSwitch(false);
         if (this._animationLoop) cancelAnimationFrame(this._animationLoop);
         return this
     }
 
+    /** true开启监听事件   false 关闭所有监听事件 */
+    private _eventSwitch(flag: boolean = true) {
+        let map = this._map;
+        let key = flag ? 'on' : 'off';
+        map[key]('viewreset', this._reset, this);
+        map[key]('resize', this._reset, this);
+        map[key]('moveend', this._reset, this);
+        map[key]("mousemove", this.onMouseMove, this)
+        map[key]("click", this.onMouseClick, this)
+        if (map.options.zoomAnimation && L.Browser.any3d) {
+            /**缩放动画 */
+            map[key]('zoomanim', this._animateZoom, this);
+        };
+    }
+
+    /**重画，需要先清空画布 */
+    protected abstract _redraw();
     protected onRemoveLayer(e) { }
     protected onMouseMove(e) { }
     protected onMouseClick(e) { }
 
-    /**重画，需要先清空画布 */
-    protected abstract _redraw();
-
+    /**重设画布*/
     private _reset() {
         var topLeft = this._map.containerPointToLayerPoint([0, 0]);
         L.DomUtil.setPosition(this._canvas, topLeft);
@@ -143,5 +142,4 @@ export interface ParaCanvas {
     className?: string
     /**画布层级  默认100，最大400(受挂载的div影响，可修改) */
     zIndex?: number;
-
 }

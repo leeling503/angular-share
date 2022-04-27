@@ -2,14 +2,14 @@ import { ElementRef, EventEmitter, Input, Output, SimpleChanges } from "@angular
 import { Subject } from "rxjs";
 import { throttleTime } from "rxjs/internal/operators/throttleTime";
 import { HttpSearch, HttpResult } from "share-libs/src/models";
-import { HttpBaseService } from "share-libs/src/services/http-base.service";
+import { HttpService } from "share-libs/src/services/http-base.service";
 import { UtilChanges, UtilChangesNoFirst } from "share-libs/src/utils";
 import { ModalChange } from "../open-modals/modal-select-item/modal-select-item.component";
 import { PaginationPage } from "../pagination/share-pagination.model";
 import { ClassTableName, TableItem, TableSelect } from "./share-table.model";
 /**表格基础逻辑类 */
 export abstract class TableBase {
-  constructor(private http: HttpBaseService, private el: ElementRef) {
+  constructor(private http: HttpService, private el: ElementRef) {
     this.nativeEl = this.el.nativeElement;
     this.timeoutCtr.asObservable().pipe(
       throttleTime(200)
@@ -98,9 +98,17 @@ export abstract class TableBase {
         this.getList();
       }
     }
+    /**查询条数需要是分页器存在的*/
+    if (changes.inRecordOptions && this.inRecordOptions) {
+      this.searchItem.pageRecord = this.inRecordOptions[0] || 15;
+    }
     /**查询条件改变 */
     if (UtilChangesNoFirst(changes, 'inSearchObj') && this.inSearchObj) {
-      Object.assign(this.searchItem, this.inSearchObj);
+      this.searchItem = Object.assign({
+        pageRecord: this.searchItem.pageRecord,
+        currentPage: 1,
+        ifPage: this.searchItem.ifPage
+      }, this.inSearchObj);
       this.getList();
     }
     if (UtilChangesNoFirst(changes, 'inApiUrl') && this.inApiUrl) {
@@ -132,6 +140,8 @@ export abstract class TableBase {
         let page = this.page,
           pageRecord = page.pageRecord = page.pageRecord ?? this.inRecordOptions[0],
           cur = page.currentPage = page.currentPage ?? 1;
+        this.searchItem.pageRecord = pageRecord;
+        this.searchItem.currentPage = cur;
         this._datas = this.inAllDatas.slice((cur - 1) * pageRecord, cur * pageRecord);
       } else {
         this._datas = this.inAllDatas
@@ -223,7 +233,6 @@ export abstract class TableBase {
   }
 
   /** 表头显示列有改变 */
-  /** 表头显示列有改变 */
   onChangeItemFilter(item: ModalChange) {
     let changeItems = item.changeItems;
     for (let i = 0, len = changeItems.length; i < len; i++) {
@@ -238,8 +247,9 @@ export abstract class TableBase {
     this.setTableWidth()
   }
 
-  /**表格宽度设置（如果恰巧该变项导致表格高度变化，需采用settimeout延时 ） */
+  /**表格宽度设置*/
   setTableWidth() {
+    /**如果恰巧导致表格高度出现或消失滚动条，需采用settimeout延时 */
     this.timeoutCtr.next();
     /**表格实际高度可能超高 */
     let tableHeight = this.tableHeight, tableMaxHeight = this.tableHeightMax, tableWidth = this.tableWidthMax,
@@ -290,7 +300,6 @@ export abstract class TableBase {
         })
         /**如果上面各种宽度出现错误的计算，由于样式问题表头宽度固定但body宽度依旧自适应，导致边框线错位， */
         // this.tableWidth = this.inItems.map(e => e._width).reduce((a, b) => a + b)
-        console.log()
       })
     };
   }

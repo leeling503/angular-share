@@ -4,7 +4,7 @@ import { LoginService } from './login.service';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { UtilIsEmpty } from 'share-libs/src/utils';
-import { REGEXP } from 'share-libs/src/const';
+import { SL_REGEXP } from 'share-libs/const';
 import { map, take } from 'rxjs/operators';
 import { AuthService } from 'share-libs/src/services/auth.service';
 import { HttpResult } from 'share-libs/src/models';
@@ -42,7 +42,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   loginInit() {
-    this.phoneValidateReg = REGEXP.phone.reg;
+    this.phoneValidateReg = SL_REGEXP.phone.reg;
     this.errorInfo = '';
     this.loginState = true;
     this.user.userName = localStorage.getItem('phone');

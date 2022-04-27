@@ -11,7 +11,7 @@ export function UtilRegValidator(reg: RegExp, text?: string): ValidatorFn {
 }
 
 /**通过正则给字符串中的数字增加到指定位数 */
-export function UtilRegAddNumber(str: string, length: number = 3) {
+function UtilRegAddNumber(str: string, length: number = 3) {
     let result = str.replace(/\d*、*/g, function ($) {
         if ($) {
             let strs = $.split("")
@@ -27,7 +27,7 @@ export function UtilRegAddNumber(str: string, length: number = 3) {
 }
 
 /**对相似名称（只有数字不同）进行合并处理 */
-export function UtilRegCombineNames(names: string[]): string {
+function UtilRegCombineNames(names: string[]): string {
     let combines: string[] = [];
     /**排序 */
     names.sort((a, b) => parseInt(b.replace(/\D/g, '')) - parseInt(a.replace(/\D/g, '')));
@@ -60,4 +60,8 @@ function UtilIsSimilar(a: string, b: string) {
     } else {
         return false
     }
+}
+
+export const UtilReg = {
+
 }

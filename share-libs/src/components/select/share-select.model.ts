@@ -1,5 +1,3 @@
-import { TypeSelect } from "share-libs/src/enum";
-
 export interface SelectPara {
     /**是否显示后缀图标标志 true*/
     ifFlag?: boolean;
@@ -26,7 +24,18 @@ export interface SelectPara {
     /**弹窗宽度 */
     widthNode?: number | string;
     /**类型 */
-    type?: TypeSelect;
+    type?: SelectOpenType;
+    /**是否有确定按钮 */
+    ifBtn?:boolean;
+}
+/**select选框的open框类型 */
+export enum SelectOpenType {
+    /**基础选择框（普通） */
+    base = "base",
+    /**具有选项和确定取消按钮的弹窗 */
+    add = 'add',
+    /**父子项不在同一面板 */
+    panel = "panel"
 }
 
 export interface SelectOption {

@@ -14,7 +14,7 @@ export class MapTrackDirective {
         this.nativeEl = this.el.nativeElement;
     }
     nativeEl: HTMLElement
-    track: LeafletTrackMap = new LeafletTrackMap({ pane: 'wqj', className: 'track' });
+    track: LeafletTrackMap = new LeafletTrackMap({ widthLine: 3, zIndex: 200, colorArc: 'red' });
     @Input() map: L.Map;
     @Input() inMapName: NetMap;
     ngOnChanges(changes: SimpleChanges): void {
@@ -34,7 +34,6 @@ export class MapTrackDirective {
         }, 2000);
         ship.setTracks([{ infos: latlngs }]);
         let data = ship.getInfosByTime('2022-01-23 05:23');
-        console.log(data);
         this.track.onClick(e => {
             console.log(e);
         })

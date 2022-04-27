@@ -3,7 +3,7 @@ import { ActivatedRoute, ActivatedRouteSnapshot, NavigationEnd, Router } from "@
 import { filter } from "rxjs/operators";
 import { CacheCtrService } from "share-libs/src/services/route-reuse/cache-ctr.service";
 import { ReuseMenuEvent, ReuseCacheNotify, ReuseCachedCtr } from "share-libs/src/services/route-reuse/reuse-tab";
-import { UtilArraySetKeyValue, UtilRouterGetUrl } from "share-libs/src/utils";
+import { UtilArray, UtilRouter } from "share-libs/src/utils";
 
 /**复用路由缓存控制按钮组件 */
 @Component({
@@ -34,12 +34,12 @@ export class LayoutCacheCtrComponent {
     /**生成缓存按钮组 */
     genReuseList() {
         let snap = this.active.snapshot;
-        let url = UtilRouterGetUrl(snap);
+        let url = UtilRouter.getUrl(snap);
         /** 从缓存控制中获取，故路由离开时active会设置为false 和 禁止复用的路由会自动清除*/
         this.reuseRouteList = [...this.cacheCtr_.reuseCachedList];
         let index = this.reuseRouteList.findIndex(e => e.url == url);
-        UtilArraySetKeyValue(this.reuseRouteList, 'ifRight', false);
-        UtilArraySetKeyValue(this.reuseRouteList, 'active', false);
+        UtilArray.setItemValue(this.reuseRouteList, 'ifRight', false);
+        UtilArray.setItemValue(this.reuseRouteList, 'active', false);
         if (index < 0) {
             let truthSnap = this.getTruthRoute(snap)
             let item = this.cacheCtr_.genReuseTabCached(url, truthSnap)

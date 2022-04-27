@@ -1,5 +1,5 @@
 import { RouteReuseStrategy, DefaultUrlSerializer, ActivatedRouteSnapshot, DetachedRouteHandle } from '@angular/router';
-import { UtilRouterGetUrl } from 'share-libs/src/utils';
+import { UtilRouter } from 'share-libs/src/utils';
 
 /**简单的路由复用策略*/
 export class SimpleReuseStrategy implements RouteReuseStrategy {
@@ -32,6 +32,6 @@ export class SimpleReuseStrategy implements RouteReuseStrategy {
      * 根据快照获取URL地址
      */
     getUrl(route: ActivatedRouteSnapshot): string {
-        return UtilRouterGetUrl(route)
+        return UtilRouter.getUrl(route)
     }
 }

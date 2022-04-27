@@ -66,11 +66,10 @@ export class ShareModalComponent<T = any> extends ShareModalRef implements OnIni
   ngOnChanges(changes: SimpleChanges): void { }
 
   ngOnInit() {
+    this.bodyContainer.clear();
     if (this.template) {
-      this.bodyContainer.clear();
       this.bodyContainer.createEmbeddedView(this.template);
     } else if (this.component) {
-      this.bodyContainer.clear();
       let factory = this.factory.resolveComponentFactory(this.component);
       const childInjector = Injector.create({
         providers: [{ provide: ShareModalRef, useValue: this }],

@@ -7,7 +7,6 @@ export class LeafletHeatLayer extends CanvasLayer {
     /** 热力图  传入经纬度坐标[],也可传入系数 [纬度,经度,系数?] */
     constructor(options?: HeatPara) {
         super();
-        this.initOptions(options)
     }
     _map: any;
     /**数据的经纬度集合 */

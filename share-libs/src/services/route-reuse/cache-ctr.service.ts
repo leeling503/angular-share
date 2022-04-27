@@ -1,9 +1,9 @@
-import { Injectable, Injector } from "@angular/core";
-import { ActivatedRoute, ActivatedRouteSnapshot, NavigationEnd, Router } from "@angular/router";
+import { Injectable } from "@angular/core";
+import { ActivatedRouteSnapshot } from "@angular/router";
 import { Observable } from "rxjs";
 import { BehaviorSubject } from "rxjs";
 import { filter } from "rxjs/operators";
-import { UtilRouterGetUrl } from "share-libs/src/utils";
+import { UtilRouter } from "share-libs/src/utils";
 import { ReuseCachedCtr, ReuseCacheNotify } from "./reuse-tab";
 
 /**复用路由缓存控制服务 */
@@ -75,7 +75,7 @@ export class CacheCtrService {
      * 根据快照获取URL地址
      */
     getUrl(route: ActivatedRouteSnapshot): string {
-        let url = UtilRouterGetUrl(route);
+        let url = UtilRouter.getUrl(route);
         return url;
     }
 

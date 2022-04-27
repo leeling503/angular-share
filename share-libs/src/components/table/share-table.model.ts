@@ -1,3 +1,4 @@
+import { data } from "jquery";
 import { ShareParaBtn } from "../button/share-button.model";
 
 /**view-left居左  view-right居右  border 四周均有边框  simple-border仅仅上下有边框    background-color背景色交替*/
@@ -5,7 +6,7 @@ export type ClassTableName = "border" | "simple-border" | "background-color" | "
 /**view-left居左  view-right居右  border 四周均有边框  underline 下划线  */
 export type ClassTdName = "view-left" | 'view-right' | 'view-center' | 'underline' | 'color-blue';
 /**td的类型 check选框 serial序号 tag有背景色的小方块 dot带圆点 btn按钮数组 rule-text需要转换的文本 expend展开*/
-export type TdType = 'check' | 'serial' | "rule-tags" | "rule-dots" | 'rule-text' | 'rule-btns' | "expend";
+export type TdType = 'check' | 'serial' | "rule-tags" | "rule-dots" | 'rule-text' | 'rule-btns' | "expend" | 'img';
 export type TagType = 'green' | 'danger' | "blue" | 'orange' | "pink";
 export interface TextRule {
     /**显示的字 */
@@ -30,23 +31,23 @@ export type TagRules = TagRule[];
 export type DotRules = DotRule[];
 export type BtnRules = ShareParaBtn[]
 export class TableData {
-    [key: string]: any;
+    // [key: string]: any;
     /**按钮组(确定不会出现同类型的td按钮组时使用)*/
     _ruleBtns?: ShareParaBtn[];
     /**按钮组(挂在到数据后之后的变更检测将不会再执行方法) 优先级高 */
     _ruleBtnKey?: { [key: string]: ShareParaBtn[] };
     /**Tag组(不会出现同类型时使用)*/
     _ruleTags?: TagRules;
-    /**Tag组 优先级高(有出现同类型时使用)*/
+    /**Tag组注意要先初始化改数据项 优先级高(多项用到时使用)*/
     _ruleTagKey?: { [key: string]: TagRules };
     /**Dot组(不会出现同类型时使用)*/
     _ruleDots?: DotRules;
-    /**Dot组 优先级高(有同类型时使用)*/
+    /**Dot组注意要先初始化改数据项 优先级高(多项用到时使用)*/
     _ruleDotKey?: { [key: string]: DotRules };
     /**Text组(不会出现同类型时使用)*/
-    _ruleText?: string;
-    /**Text组 优先级高(有同类型时使用)*/
-    _ruleTextKey?: { [key: string]: string };
+    _ruleText?: TextRules;
+    /**Text组注意要先初始化改数据项 优先级高(多项用到时使用）*/
+    _ruleTextKey?: { [key: string]: TextRules };
 }
 /**通过泛型获得数据类型T */
 export interface TableItem<T extends TableData = any> {
@@ -78,14 +79,14 @@ export interface TableItem<T extends TableData = any> {
     styckyLeft?: string;
     /**事件回调 */
     onClick?: (data: T, item: TableItem, datas: T[]) => any;
-    /**Text类型规则 最好采用UtilTableRuleText生成 */
-    ruleText?: TextRules | ((data: T, item: TableItem, datas: T[]) => TextRules);
-    /**tag类型规则 最好采用UtilTableRuleTags生成 */
-    ruleTags?: TagRules | ((data: T, item: TableItem, datas: T[]) => TagRules);
-    /**dot类型规则 最好采用UtilTableRuleDots生成 */
-    ruleDots?: DotRules | ((data: T, item: TableItem, datas: T[]) => DotRules);
+    /**Text类型规则*/
+    ruleText?: TextRules | ((data: T, item: TableItem, datas: T[]) => (TextRules | void));
+    /**tag类型规则*/
+    ruleTags?: TagRules | ((data: T, item: TableItem, datas: T[]) => (TagRules | void));
+    /**dot类型规则*/
+    ruleDots?: DotRules | ((data: T, item: TableItem, datas: T[]) => (DotRules | void));
     /**Text类型规则 */
-    ruleBtns?: BtnRules | ((data: T, item: TableItem, datas: T[]) => BtnRules);
+    ruleBtns?: BtnRules | ((data: T, item: TableItem, datas: T[]) => (BtnRules | void));
 }
 
 export class TableSelect {
@@ -133,4 +134,10 @@ export interface TableMultiHeadItem<T extends TableData = any> {
 
 export interface TableMultiAllItems<T extends TableData = any> {
     [key: string]: TableMultiItem<T>[]
+}
+
+/**数据缓存工具函数 */
+export function utilDataCache<T>(data: T, key: keyof T, cache: string, res: any) {
+    data[key] = <any>data[key] || {};
+    data[key][cache] = res
 }

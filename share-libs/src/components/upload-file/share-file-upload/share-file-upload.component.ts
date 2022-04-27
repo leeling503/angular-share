@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Output, Input, SimpleChanges, ElementRef } from '@angular/core';
 import { FileUploader, FileItem, ParsedResponseHeaders, FileLikeObject, FileUploaderOptions } from 'ng2-file-upload';
 import * as $ from "jquery"
-import { Log, UtilChanges } from 'share-libs/src/utils';
+import { UtilChanges } from 'share-libs/src/utils';
 @Component({
     template: `
     <div class="share-file-upload">

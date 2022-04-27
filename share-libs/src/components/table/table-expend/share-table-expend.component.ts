@@ -1,5 +1,5 @@
 import { Component, OnInit, ElementRef, Renderer2, Input, Output, EventEmitter, TemplateRef } from '@angular/core';
-import { HttpBaseService } from 'share-libs/src/services/http-base.service';
+import { HttpService } from 'share-libs/src/services/http-base.service';
 import { TableComponent } from '../table/share-table.component';
 
 @Component({
@@ -8,7 +8,7 @@ import { TableComponent } from '../table/share-table.component';
   styleUrls: ['../table/share-table.component.less', './share-table-expend.component.less']
 })
 export class TableExpendComponent extends TableComponent implements OnInit {
-  constructor(http: HttpBaseService, el: ElementRef) {
+  constructor(http: HttpService, el: ElementRef) {
     super(http, el);
   }
   @Input() inTempRef: TemplateRef<any>

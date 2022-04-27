@@ -1,0 +1,41 @@
+//如果写了实体的.claaName{} ； 打包时所有引入了改less的less文件都会有该className
+@base-url: '/assets/images/';
+
+/**I标签的大小*/
+.e_i(@w: 16px, @y: @w) {
+  display: inline-block;
+  width: @w;
+  height: @y;
+  min-width: @w;
+  min-height: @y;
+}
+
+/**背景图片路径*/
+.e_i_u(@url) {
+  background-image: url('@{base-url}@{url}.png');
+}
+
+/**带后缀背景图片路径*/
+.e_i_u_suffix(@url) {
+  background-image: url('@{base-url}@{url}');
+}
+
+/**背景*/
+.e_b_i(@iconUrl) {
+  .e_i_u(@iconUrl);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/**图标*/
+.e_icon(@url, @W: 16px, @H: @W) {
+  cursor: pointer;
+  .e_i(@W, @H);
+  .e_b_i(@url);
+}
+
+.e_icon_big(@url) {
+  .e_i(22px);
+  .e_b_i(@url);
+}

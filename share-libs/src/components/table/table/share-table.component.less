@@ -1,15 +1,13 @@
-@import "../../../styles/index.less";
+@import "index.less";
 @trheight: 34px;
-@c-thead-tr: #E4EFFF;
-@c-tbody-tr: #F6FAFF;
-@table-border: 1px solid #c0d8fe;
-@c-F-default : #333;
+@table-border: 1px solid @C-T-border;
 
 :host {
   width: 100%;
   height: 100%;
 }
 
+// /组件整体
 .share-table {
   width: 100%;
   height: 100%;
@@ -19,6 +17,7 @@
   position: relative;
   min-height: 300px;
 
+  /// 无数据时
   .no-data {
     width: 300px;
     height: 300px;
@@ -28,6 +27,7 @@
     transform: translate(-50%, -50%);
   }
 
+  /// 表部分
   .table {
     width: 100%;
     height: 100%;
@@ -36,6 +36,7 @@
     position: relative;
   }
 
+  /// 分页器部分
   .pagination-part {
     min-height: 50px;
     height: 50px;
@@ -48,6 +49,7 @@
   }
 }
 
+/// 表样式
 table {
   width: 100%;
   //高度不能设置为100% (多表头数据量少但表头多会出现断层)
@@ -66,11 +68,12 @@ table {
   }
 }
 
+///表样式的重要实现（滚动，宽度）
 tr {
   display: table;
   width: 100%;
   table-layout: fixed;
-  background-color: #FFF;
+  background-color: @C-T-bg-tr;
 
   &.table-thead {
     position: sticky !important;
@@ -92,14 +95,111 @@ tr {
     overflow: hidden;
 
     span {
-      word-break: break-all;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      overflow: hidden;
+      .e_T_over()
     }
   }
 }
 
+/// 表格整体配置样式调整（实现ClassTableName中的样式）
+.table-part {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+
+  & &.view-center .content-container {
+    justify-content: center;
+  }
+
+  &.view-left .content-container {
+    justify-content: left;
+  }
+
+  &.view-right .content-container {
+    justify-content: flex-end;
+  }
+}
+
+/// 表格背景色部分
+.table-part.background-color {
+  tr {
+    &:nth-child(2n) {
+      background-color: @C-T-bg-td;
+    }
+
+    &:nth-child(2n+1) {
+      background-color: #FFF;
+    }
+
+    &.table-thead {
+      background-color: @C-T-bg-th;
+    }
+  }
+}
+
+/// 表格边框border部分
+.table-part.simple-border {
+  tr {
+    border-bottom: @table-border;
+
+    &.table-thead:first-child {
+      border-top: @table-border;
+    }
+  }
+}
+
+.table-part.border {
+  tr {
+    border-bottom: @table-border;
+
+    &.table-thead:first-child {
+      border-top: @table-border;
+    }
+
+    td {
+      border-right: @table-border;
+
+      &:first-child {
+        border-left: @table-border;
+      }
+    }
+  }
+}
+
+///单个表格中每个格子的div样式调整（实现ClassTdName中的样式）
+.content-container {
+  width: 100%;
+  height: 100%;
+  padding: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &.view-center {
+    justify-content: center;
+  }
+
+  &.view-left {
+    justify-content: left;
+  }
+
+  &.view-right {
+    justify-content: flex-end;
+  }
+
+  &.underline {
+    span {
+      text-decoration: underline;
+    }
+  }
+
+  &.color-blue {
+    span {
+      color: #035ADE;
+    }
+  }
+}
+
+// /格中内容部分
 .content-main {
   display: flex;
   justify-content: center;
@@ -137,7 +237,7 @@ tr {
     line-height: 22px;
     opacity: 0.8;
     padding: 0px 3px;
-    color: @c-F-default;
+    color: @C-F-normal;
     font-size: 14px;
   }
 
@@ -171,103 +271,5 @@ tr {
   .expend-link {
     color: #035ADE;
     cursor: pointer;
-  }
-}
-
-
-//表格整体配置样式调整（实现ClassTableName中的样式）
-.table-part {
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-
-  &.background-color {
-    tr {
-      &:nth-child(2n) {
-        background-color: @c-tbody-tr;
-      }
-
-      &:nth-child(2n+1) {
-        background-color: #FFF;
-      }
-
-      &.table-thead {
-        background-color: @c-thead-tr;
-      }
-    }
-  }
-
-  &.simple-border {
-    tr {
-      border-bottom: @table-border;
-
-      &.table-thead:first-child {
-        border-top: @table-border;
-      }
-    }
-  }
-
-  &.border {
-    tr {
-      border-bottom: @table-border;
-
-      &.table-thead:first-child {
-        border-top: @table-border;
-      }
-
-      td {
-        border-right: @table-border;
-
-        &:first-child {
-          border-left: @table-border;
-        }
-      }
-    }
-  }
-
-  &.view-center .content-container {
-    justify-content: center;
-  }
-
-  &.view-left .content-container {
-    justify-content: left;
-  }
-
-  &.view-right .content-container {
-    justify-content: flex-end;
-  }
-}
-
-//单个表格中每个格子的div样式调整（实现ClassTdName中的样式）
-.table-part .content-container {
-  width: 100%;
-  height: 100%;
-  padding: 3px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  &.view-center {
-    justify-content: center;
-  }
-
-  &.view-left {
-    justify-content: left;
-  }
-
-  &.view-right {
-    justify-content: flex-end;
-  }
-
-  &.underline {
-    span {
-      text-decoration: underline;
-    }
-  }
-
-  &.color-blue {
-    span {
-      color: #035ADE;
-    }
   }
 }

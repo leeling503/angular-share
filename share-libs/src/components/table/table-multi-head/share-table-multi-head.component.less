@@ -1,4 +1,5 @@
-@table-border: 1px solid #c0d8fe;
+@import "index.less";
+@table-border: 1px solid @C-T-border;
 
 .share-table-multi-head {
   .table-part {
@@ -33,13 +34,6 @@
 
           &:first-child {
             border-left: @table-border;
-          }
-
-          &.expend-element-td::before {
-            content: "";
-            display: block;
-            position: absolute;
-            border: @table-border;
           }
         }
       }

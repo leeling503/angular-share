@@ -1,7 +1,7 @@
 import { CdkOverlayOrigin } from '@angular/cdk/overlay';
 import { OnInit, Input, ViewChild, Output, EventEmitter, SimpleChanges } from '@angular/core';
-import { SelectOption, SelectModel, SelectModelType, SelectOptions, SelectPara } from '../share-select.model';
-import { UtilArrayCopy, UtilArrayGetObjByValue, UtilArrayRemoveItem, UtilIsEqual } from 'share-libs/src/utils';
+import { SelectOption, SelectModel, SelectModelType, SelectOpenType, SelectOptions, SelectPara } from '../share-select.model';
+import { UtilArray, UtilIsEqual } from 'share-libs/src/utils';
 import { UtilChanges, UtilChangesValue } from 'share-libs/src/utils/util-component';
 import { PerfixText } from '../../base/perfix-text.component';
 export class ShareSelect extends PerfixText implements OnInit {
@@ -40,11 +40,16 @@ export class ShareSelect extends PerfixText implements OnInit {
     @Input() inTip: string;
     /**是否至少勾选一个 */
     @Input() inOne: boolean;
+    /**open框类型 */
+    @Input() inType: SelectOpenType;
+    /**是否有确定按钮*/
+    @Input() inBtn: boolean;
     /**选中项发生改变 */
     @Output() modelOptionsChange: EventEmitter<SelectModel> = new EventEmitter();
     /**激活项发生改变 */
     @Output() onOptionsChange: EventEmitter<SelectOption> = new EventEmitter();
     protected defaultPara: SelectPara = {
+        type: SelectOpenType.base,
         /**是否显示后缀图标标志 true*/
         ifFlag: true,
         /**是否显示选项多选框(仅基础组件有用)  true*/
@@ -67,6 +72,7 @@ export class ShareSelect extends PerfixText implements OnInit {
         placeholder: '请选择',
         /**下拉无数据提示 暂无数据*/
         noneTip: "暂无数据",
+        ifBtn: false
     }
     /**选中的选项集合 */
     public checkOptions: SelectOptions = [];
@@ -119,6 +125,8 @@ export class ShareSelect extends PerfixText implements OnInit {
         this.inPlace = this.inPlace ?? para.placeholder;
         this.inTip = this.inTip ?? para.noneTip;
         this.inOne = this.inOne ?? para.ifOne;
+        this.inType = this.inType ?? para.type;
+        this.inBtn = this.inBtn ?? para.ifBtn;
     }
 
     /**设置选中 并判断model的类型 string | object | strings | objects */
@@ -144,13 +152,13 @@ export class ShareSelect extends PerfixText implements OnInit {
         if (!this.inMulti) {
             this.checkOptions = this.checkOptions.length ? [this.checkOptions[0]] : [];
         }
-        this.emitCheckOptions = UtilArrayCopy(this.checkOptions);
+        this.emitCheckOptions = UtilArray.copy(this.checkOptions);
     }
 
     /**通过关键inUuid来获取选项 
      * 没有该选项这创建并加入到选项中 */
     private _getOptionByValue(value: string): SelectOption {
-        let option = UtilArrayGetObjByValue(this.options, this.inUuid as keyof SelectOption, value, this.inSon ? undefined : '');
+        let option = UtilArray.getObjByValue(this.options, this.inUuid as keyof SelectOption, value, this.inSon ? undefined : '');
         if (!option) {
             option = this._createOptionByValue(value);
             this.options.unshift(option)
@@ -190,7 +198,7 @@ export class ShareSelect extends PerfixText implements OnInit {
     /**删除选中 */
     onClickClearNode(option: SelectOption) {
         event.stopPropagation();
-        UtilArrayRemoveItem(this.checkOptions, option);
+        UtilArray.itemRemove(this.checkOptions, option);
         this._emitModelOption();
     }
 
@@ -205,7 +213,7 @@ export class ShareSelect extends PerfixText implements OnInit {
     */
     protected _emitModelOption(flag = false) {
         if (UtilIsEqual(this.emitCheckOptions, this.checkOptions, this.inUuid) && !flag) return;
-        let original = this.emitCheckOptions = UtilArrayCopy(this.checkOptions);
+        let original = this.emitCheckOptions = UtilArray.copy(this.checkOptions);
         let uuids = original.map(e => e[this.inUuid]);
         if (this._inputType == "string") {
             this.emitModelOptions = uuids.join(',');

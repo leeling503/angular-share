@@ -11,6 +11,5 @@ export enum TypeInput {
     plusInt = 'plusInt',
     /**不允许出现空格 */
     noNull = 'noNull',
-
 }
 

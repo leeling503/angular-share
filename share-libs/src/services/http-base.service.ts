@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { catchError, map } from "rxjs/operators";
-import { Observable, of, throwError } from "rxjs";
+import { catchError } from "rxjs/operators";
+import { Observable, of } from "rxjs";
 import { OperatorFunction } from "rxjs/internal/types";
 import { HttpResult } from "../models";
 
@@ -16,9 +16,9 @@ const disposeError: OperatorFunction<any, any> = catchError((error: HttpErrorRes
     return of(result)
 })
 
-/** Http请求服务商 所有请求必须经过HttpBaseService*/
+/** Http请求服务商 所有请求必须经过HttpService*/
 @Injectable({ providedIn: 'root' })
-export class HttpBaseService {
+export class HttpService {
     constructor(private http: HttpClient) { }
 
     post(url: string, data, options?): Observable<HttpResult> {
