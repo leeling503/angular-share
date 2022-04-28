@@ -13,7 +13,16 @@ export class ShareSelectComponent extends ShareSelect {
     super();
     this.nativeEl = this.el.nativeElement;
   }
+  /**是否显示输入框  （base类且可输入多选或者未选择时 */
+  get elShowInput(): boolean {
+    return (this.inType == 'base') && this.inAdd && (this.inMulti || (this.checkOptions && this.checkOptions.length == 0))
+  }
+  /**是否显示span请输入提示文 （panel类或者不能添加且无选中）*/
+  get elShowPlace(): boolean {
+    return (!this.inAdd || this.inType == 'panel') && (!this.checkOptions || this.checkOptions.length == 0)
+  }
 
+  /**用户输入字符串 */
   inputValue: string;
   /**用户输入完成 */
   onInputValueEnd() {
@@ -37,9 +46,10 @@ export class ShareSelectComponent extends ShareSelect {
   }
 
   /**add框经过用户确认的关闭选框 */
-  onCheckSureChange($event: boolean) {
+  onCheckSureChange(flag: boolean) {
     this.openOptions = !1;
-    if ($event === false && this.inBtn) {
+    if (flag === false && this.inBtn) {
+      /**用户未确定，且存在确认按钮 */
       this.checkOptions = UtilArray.copy(this.emitCheckOptions);
     }
     this._emitModelOption();

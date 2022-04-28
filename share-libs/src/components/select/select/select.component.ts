@@ -18,6 +18,8 @@ export class ShareSelect extends PerfixText implements OnInit {
     /**配置(异步传入无效，请使用单项属性配置) */
     @Input() inPara: SelectPara = {};
     /**单项配置 */
+    /**emit出去的类型*/
+    @Input() inOutType: SelectModelType;
     /**是否显示后缀图标标志 */
     @Input() inFlag: boolean;
     /**是否显示选项多选框 */
@@ -76,7 +78,7 @@ export class ShareSelect extends PerfixText implements OnInit {
     }
     /**选中的选项集合 */
     public checkOptions: SelectOptions = [];
-    /**输入的选项类型 */
+    /**输入选项类型*/
     private _inputType: SelectModelType = 'string';
     /**emit出去的选中数据*/
     protected emitModelOptions: SelectModel;
@@ -95,7 +97,7 @@ export class ShareSelect extends PerfixText implements OnInit {
             this.setCheckOptions();
         }
         if (UtilChangesValue(changes, 'inOptions')) {
-            this.options = this.inOptions;
+            this.options = [...this.inOptions];
             this.setCheckOptions();
         }
     }
@@ -114,6 +116,7 @@ export class ShareSelect extends PerfixText implements OnInit {
     /**设置配置项 */
     setPara() {
         let para = this.inPara = Object.assign({}, this.defaultPara, this.inPara);
+        this.inOutType = this.inOutType ?? para.outType;
         this.inFlag = this.inFlag ?? para.ifFlag;
         this.inCheck = this.inCheck ?? para.ifCheck;
         this.inClear = this.inClear ?? para.ifClear;
@@ -189,14 +192,14 @@ export class ShareSelect extends PerfixText implements OnInit {
     }
 
     /**清空 */
-    onClickClearNodes() {
+    onClearNodes() {
         event.stopPropagation();
         this.checkOptions = [];
         this._emitModelOption();
     }
 
     /**删除选中 */
-    onClickClearNode(option: SelectOption) {
+    onRemoveNode(option: SelectOption) {
         event.stopPropagation();
         UtilArray.itemRemove(this.checkOptions, option);
         this._emitModelOption();
@@ -208,6 +211,10 @@ export class ShareSelect extends PerfixText implements OnInit {
         this._emitModelOption();
     }
 
+    onCheckChange($event: SelectOption[]) {
+        this.checkOptions = $event;
+    }
+
     /**根据输入类型输出选中数据(this.checkOptions)
      * flag为true时强制弹出
     */
@@ -215,19 +222,16 @@ export class ShareSelect extends PerfixText implements OnInit {
         if (UtilIsEqual(this.emitCheckOptions, this.checkOptions, this.inUuid) && !flag) return;
         let original = this.emitCheckOptions = UtilArray.copy(this.checkOptions);
         let uuids = original.map(e => e[this.inUuid]);
-        if (this._inputType == "string") {
+        let outType = this.inOutType || this._inputType;
+        if (outType == "string") {
             this.emitModelOptions = uuids.join(',');
-        } else if (this._inputType == "strings") {
+        } else if (outType == "strings") {
             this.emitModelOptions = uuids;
-        } else if (this._inputType == 'object') {
+        } else if (outType == 'object') {
             this.emitModelOptions = original[0]
         } else {
             this.emitModelOptions = original;
         }
         this.modelOptionsChange.emit(this.emitModelOptions);
-    }
-
-    onCheckChange($event: SelectOption[]) {
-        this.checkOptions = $event;
     }
 }

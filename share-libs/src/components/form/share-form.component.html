@@ -13,7 +13,7 @@
 </div>
 
 <ng-template #valueEl let-item="item" let-type="type" let-key="key" let-ref="ref">
-  <div [ngStyle]="{'width': item.widthV}">
+  <div class="value-conten" [ngStyle]="{'max-width': item.widthV,'width': item.widthV}">
     <ng-container [ngSwitch]="type">
       <ng-container *ngSwitchCase="'template'">
         <ng-template *ngTemplateOutlet='ref'></ng-template>

@@ -1,28 +1,26 @@
 //正式  勿动
-@C-red-a: #CC6666;@C-red-b: #CC3333;@C-red-c: #990000;@C-red-d: #AA0000;@C-red-e: #FF3300;
-@C-orange-a: #FFCC99;@C-orange-b: #FFAA66;@C-orange-c:#FF9933;@C-orange-d: #FF8811;@C-orange-e: #FF6600;
-@C-yellow-a: #FFFFBB;@C-yellow-b: #FFFF99;@C-yellow-c: #FFFF66;@C-yellow-d: #FFFF33;@C-yellow-e: #FFFF00;
-@C-green-a: #EEFFEE;@C-green-b: #DDFFDD;@C-green-c: #CCFFCC;@C-green-d: #AAFFAA;@C-green-e: #99FF99;
-@C-cyan-a: #CCFFFF;@C-cyan-b: #99FFFF;@C-cyan-c: #33CCCC;@C-cyan-d: #66FFFF;@C-cyan-e: #00FFFF;
-@C-blue-a: #99CCFF;@C-blue-b: #3399ff;@C-blue-c: #3366FF;@C-blue-d: #0066FF;@C-blue-e: #0000FF;
-@C-purple-a: #886688;@C-purple-b: #995599;@C-purple-c: #993399;@C-purple-d: #880088;@C-purple-e: #660066;
-@C-pink-a: #FF99CC;@C-pink-b: #FF99FF;@C-pink-c: #FF66FF;@C-pink-d: #FF3399;@C-pink-e: #FF0099;
-@C-gray-a: #EEEEEE;@C-gray-b: #DDDDDD;@C-gray-c: #CCCCCC;@C-gray-d: #BBBBBB;@C-gray-e: #AAAAAA;
-@C-black-a: #777777;@C-black-b: #666666;@C-black-c: #555555;@C-black-d: #444444;@C-black-e: #333333;
-
-@C-blue-1:#F6FAFF;@C-blue-2:#E4EFFF;@C-blue-3:#c0d8fe;
-@C-theme: #035ade; @C-active: @C-blue-c; @C-error: @C-red-a; @C-black: #2e2e2e; @C-white: #FFF; @C-gray: #808080;
-
-///T表格颜色相关 border边框颜色 bg-th头部栏颜色   bg-tr行白色   bg-td有颜色的行
-@C-T-border:#c0d8fe;@C-T-bg-th:#E4EFFF;@C-T-bg-tr:#FFF;@C-T-bg-td:#F6FAFF;
-///O弹出窗overlay相关
-@C-O-border:#A8A8A8;
-///S选择框弹出相关 ckeck选中的选项  active激活的  hover悬浮的
-@C-S-bg:#FFF;@C-S-bg-ckeck:#F6FAFF;@C-S-bg-active:#E4EFFF;@C-S-bg-hover:#E6F7FF;
-///字体颜色 normal默认的  active选中激活的边框  hover指针悬浮   error选框错误
-@C-F-normal:#333;@C-F-active: #4169E1; @C-F-hover: #4169E1; @C-F-white: #FFF; @C-F-black: #2e2e2e;
-///边框颜色 normal默认的  active选中边框  hover指针悬浮   error选框错误
+///字体颜色 normal默认的 white有背景色时  active激活 hover指针悬浮  error选框错误  link可点击链接  place请输入
+@C-F-normal:#333;@C-F-white: #FFF;@C-F-active: #4169E1; @C-F-hover: #4169E1; @C-F-place:#CCC;@C-F-link: #2b7cf5;
+@C-F-disable:#CCC;
+///边框颜色 
 @C-B-normal: #A8A8A8; @C-B-active: #4169E1; @C-B-hover: #4169E1; @C-B-error: #CC6666;
-///背景颜色 white默认的  active选中的边框  hover指针悬浮 danger错误  gray灰色背景  primary主体色（有颜色的背景）
-@C-BG-normal: #FFF; @C-BG-active: #4169E1; @C-BG-hover: #3399ff;@C-BG-danger: #AA0000;@C-BG-gray: #e0e0e0;
-@C-BG-primary:#4169E1;@C-BG-blue:  #99CCFF; @C-BG-trans: transparent; 
+///背景颜色  active选中的边框  hover指针悬浮 danger错误  gray灰色背景  primary主体色（有颜色的背景）  form表背景色
+@C-BG-normal: #FFF; @C-BG-active: #4169E1; @C-BG-hover: #3399ff;
+@C-BG-danger: #AA0000;@C-BG-gray: #e0e0e0;
+@C-BG-primary:#5588ff; @C-BG-trans: transparent; 
+///T表格颜色相关  bg-th头部栏颜色   bg-tr行白色   bg-td有颜色的行
+@C-B-T:#c0d8fe;@C-BG-T-th:#E4EFFF;@C-BG-T-tr:#FFF;@C-BG-T-td:#F6FAFF;
+///O弹出窗overlay相关
+@C-B-O:@C-B-normal;@C-BG-O:@C-BG-normal;@C-BG-O-title:@C-BG-primary;@C-F-O-title:@C-F-white;
+///S选择框弹出相关 ckeck选中的选项  active激活的  hover悬浮的
+@C-BG-S:@C-BG-normal;@C-BG-S-ckeck:#F6FAFF;@C-BG-S-active:#E4EFFF;@C-BG-S-hover:#E6F7FF;
+///form 沿用了table的颜色
+@C-BG-form:@C-BG-T-th;@C-B-form:@C-B-T;
+///C路由缓存控制栏部分
+@C-BG-C:#F8F8F8;@C-BG-C-normal:#F0F0F0;@C-BG-C-active:#e0e0e0;@C-BG-C-hover:#e8e8e8;
+@C-BG-C-dot:#e0e0e0;@C-BG-C-dot-active:@C-BG-active;@C-BG-C-dot-hover:@C-BG-hover;
+@C-B-C:@C-BG-C-normal;@C-B-C-active:@C-B-active;@C-B-C-hover:@C-BG-hover;
+@C-F-C:@C-F-disable;@C-F-C-active:@C-F-normal;@C-F-C-hover:@C-F-hover;
+///M菜单部分(包括头部)
+@C-BG-M:@C-BG-normal;@C-BG-M-hover:#227aff;@C-BG-M-active:#1070ff;@C-BG-M-head:@C-BG-primary;
+@C-F-M:#FFF;@C-F-M-active:@C-F-active;

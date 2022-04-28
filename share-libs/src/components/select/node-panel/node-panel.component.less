@@ -1,6 +1,4 @@
 @import 'index.less';
-@C-B: @C-B-normal;
-@C-BG: @C-BG-normal ;
 
 :host,
 .node-panel {
@@ -23,7 +21,7 @@
     width: 100%;
 
     .super-name {
-      color: coral;
+      color: @C-F-link;
     }
 
     div {
@@ -39,29 +37,45 @@
     width: 50%;
     display: flex;
     padding: 0px 5px;
-
-    .option-content {
-      display: flex;
-      flex-grow: 1;
-
-      &:hover {
-        background-color: @C-blue-2;
-        color: blue;
-        cursor: pointer;
-      }
-
-      .node-children {
-        color: rgb(43, 124, 245);
-        cursor: pointer;
-      }
-
-    }
   }
+}
 
+.option-content {
+  display: flex;
+  flex-grow: 1;
 
-  .option-add {
-    color: blue;
+  &:hover {
+    background-color: @C-BG-S-hover;
+    color: @C-F-hover;
     cursor: pointer;
   }
 
+  share-check {
+    margin-right: 5px;
+  }
+
+  /**有子选项的*/
+  .node-children {
+    color: @C-F-link;
+    cursor: pointer;
+  }
+
+  input {
+    flex-grow: 1;
+    border-bottom: 1px solid @C-B-normal;
+    border-radius: 0px;
+    padding: 1px 0px;
+  }
+
+}
+
+.option-add {
+  padding: 0px 5px;
+  color: @C-F-link;
+  cursor: pointer;
+
+  &.dis-add {
+    color: @C-F-normal;
+    cursor: default;
+  }
 }

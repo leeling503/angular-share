@@ -1,4 +1,14 @@
 export interface SelectPara {
+    /**提示语 请选择*/
+    placeholder?: string;
+    /**emit出去的类型 */
+    outType?: SelectModelType;
+    /**下拉无数据提示 暂无数据*/
+    noneTip?: string;
+    /**弹窗宽度 */
+    widthNode?: number | string;
+    /**类型 */
+    type?: SelectOpenType;
     /**是否显示后缀图标标志 true*/
     ifFlag?: boolean;
     /**是否显示选项多选框  true*/
@@ -17,16 +27,8 @@ export interface SelectPara {
     ifSon?: boolean;
     /**是否父子项联动 false*/
     ifGanged?: boolean;
-    /**提示语 请选择*/
-    placeholder?: string;
-    /**下拉无数据提示 暂无数据*/
-    noneTip?: string;
-    /**弹窗宽度 */
-    widthNode?: number | string;
-    /**类型 */
-    type?: SelectOpenType;
     /**是否有确定按钮 */
-    ifBtn?:boolean;
+    ifBtn?: boolean;
 }
 /**select选框的open框类型 */
 export enum SelectOpenType {
@@ -53,6 +55,8 @@ export interface SelectOption {
     _mix?: boolean;
     /**禁用 */
     _dis?: boolean;
+    /**用户自行添加 */
+    _add?: boolean;
 }
 /**选项组 */
 export type SelectOptions = SelectOption[];

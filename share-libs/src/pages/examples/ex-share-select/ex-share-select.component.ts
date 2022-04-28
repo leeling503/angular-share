@@ -63,6 +63,7 @@ export class ExShareSelectComponent implements OnInit {
   }
 
   radioData: RadioOption[] = [{ key: true, value: '是' }, { key: false, value: '否' }]
+  outTypeData: RadioOption[] = [{ key: 'string', value: 'string' }, { key: 'strings', value: 'strings' }, { key: 'object', value: 'object' }, { key: 'objects', value: 'objects' }]
   paraA: SelectPara = {
     ifMulti: false, ifCheck: true, ifSon: true, ifAdd: false, ifFlag: true, ifClear: true, ifOne: true, ifActive: false, ifGanged: true
   }
@@ -82,9 +83,10 @@ export class ExShareSelectComponent implements OnInit {
   paraB: SelectPara = {};
   setSelectB() {
     this.modelB = "A51,B";
+    // this.modelB = [];
     setTimeout(() => {
       this.optionsB = [{
-        key: 'A', value: '中国', children: [
+        key: 'A', value: '中国', showName: '最强', children: [
           { key: 'A1', value: '北京市' },
           { key: 'A2', value: '天津市' },
           { key: 'A3', value: '上海市' },

@@ -6,11 +6,10 @@ import { ShareCheckModule } from '../check/share-check.module';
 import { ShareSelectComponent } from './select-base/share-select.component';
 import { ShareDirectiveModule } from 'share-libs/src/directives/share-directive.module';
 import { NodePanel } from './node-panel/node-panel.component';
-import { NodeAdd } from './node-add/node-add.component';
 import { NodeSelect } from './node-select/node-select.component';
 @NgModule({
     imports: [CommonModule, FormsModule, OverlayModule, ShareDirectiveModule, ShareCheckModule],
-    declarations: [ShareSelectComponent, NodeSelect, NodePanel, NodeAdd],
+    declarations: [ShareSelectComponent, NodeSelect, NodePanel],
     providers: [],
     exports: [ShareSelectComponent]
 })

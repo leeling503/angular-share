@@ -2,7 +2,7 @@
   <share-input class="asd" [(model)]="valueA" [inPerText]="'研发公司'" [inReg]="reg"></share-input>
   <div class='show-value'> {{valueA}}</div>
   <span> 整数长度限制5</span>
-  <share-input [(model)]="valueB" [inType]="'int'" [inLength]='5'></share-input>
+  <share-input [(model)]="valueB" [inType]="'int'" [inLength]='5' [inMin]="1"></share-input>
   <div class='show-value'> {{valueB}}</div>
   <span> 数字长度限制8</span>
   <share-input [(model)]="valueC" [inType]="'number'" [inLength]='8'></share-input>

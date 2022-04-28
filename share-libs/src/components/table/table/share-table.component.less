@@ -1,6 +1,6 @@
 @import "index.less";
 @trheight: 34px;
-@table-border: 1px solid @C-T-border;
+@table-border: 1px solid @C-B-T;
 
 :host {
   width: 100%;
@@ -73,7 +73,7 @@ tr {
   display: table;
   width: 100%;
   table-layout: fixed;
-  background-color: @C-T-bg-tr;
+  background-color: @C-BG-T-tr;
 
   &.table-thead {
     position: sticky !important;
@@ -123,7 +123,7 @@ tr {
 .table-part.background-color {
   tr {
     &:nth-child(2n) {
-      background-color: @C-T-bg-td;
+      background-color: @C-BG-T-td;
     }
 
     &:nth-child(2n+1) {
@@ -131,7 +131,7 @@ tr {
     }
 
     &.table-thead {
-      background-color: @C-T-bg-th;
+      background-color: @C-BG-T-th;
     }
   }
 }

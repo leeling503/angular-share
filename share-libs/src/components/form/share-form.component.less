@@ -1,5 +1,5 @@
-@C-BD: #C0D8FE;
-@BD: 1px solid @C-BD;
+@import "index.less";
+@BD: 1px solid @C-B-form;
 
 .center-F-H() {
   display: flex;
@@ -32,7 +32,7 @@
   height: 100%;
   width: 100px;
   padding: 0px 5px;
-  background-color: #E4EFFF;
+  background-color: @C-BG-form;
   flex-shrink: 0;
   justify-content: flex-end;
 }
@@ -42,4 +42,8 @@
   height: 100%;
   padding: 0px 15px;
   flex-grow: 1;
+}
+
+.value-conten {
+  flex-grow: 0;
 }

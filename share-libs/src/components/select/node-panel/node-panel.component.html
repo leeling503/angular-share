@@ -10,9 +10,19 @@
       <div class="option-content" (click)="onClickOption(option)" (dblclick)="onDblClick(option)">
         <share-check [model]="option._check" [inIfOther]="option._mix" (onClick)="onCheckOption($event,option)">
         </share-check>
-        <span
-          [ngClass]="{'node-children': option.children && option.children.length >0 && inSon}">{{option.value}}</span>
+        <ng-container *ngIf="option._add">
+          <input [ngClass]="{'node-children': option.children && option.children.length >0 && inSon}"
+            [(ngModel)]="option.value" placeholder="请输入" (keydown.enter)="onInputValueEnd(option)"
+            (blur)="onInputValueEnd(option)" />
+        </ng-container>
+        <ng-container *ngIf="!option._add">
+          <span
+            [ngClass]="{'node-children': option.children && option.children.length >0 && inSon}">{{option.value}}</span>
+        </ng-container>
       </div>
     </div>
+  </ng-container>
+  <ng-container *ngIf="inAdd">
+    <div class="option-add" [ngClass]="{'dis-add':someNull}" (click)="onAddOption()"><span>+ 添加选项</span> </div>
   </ng-container>
 </div>

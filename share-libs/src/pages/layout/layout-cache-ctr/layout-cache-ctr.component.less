@@ -1,4 +1,4 @@
-@import "../../../styles/index.less";
+@import "index.less";
 
 :host,
 .layout-cache-ctr {
@@ -7,7 +7,7 @@
 }
 
 .layout-cache-ctr {
-  background-color: #fafafa;
+  background-color: @C-BG-C;
   display: flex;
   flex-wrap: nowrap;
 }
@@ -23,24 +23,34 @@
   align-items: center;
   justify-content: center;
   min-width: 170px;
-  border: 1px solid @C-blue-3;
+  border: 1px solid @C-B-C;
   border-left-width: 0px;
-  background-color: @C-gray-a;
+  background-color: @C-BG-C-normal;
+  color: @C-F-C;
   position: relative;
 
   .status-dot {
     width: 12px;
     height: 12px;
     border-radius: 50%;
-    background-color: @C-gray-c;
+    background-color:@C-BG-C-dot;
     margin: 0px 5px;
+  }
+  &:hover{
+    background-color: @C-BG-C-hover;
+    color: @C-F-C-hover;
+    border: 1px solid @C-B-C-hover;
+    .status-dot {
+      background-color: @C-BG-C-dot-hover;
+    }
   }
 
   &.active-item {
-    background-color: @C-gray-b;
-
+    background-color: @C-BG-C-active;
+    color: @C-F-C-active;
+    border: 1px solid @C-B-C-active;
     .status-dot {
-      background-color: @C-blue-c;
+      background-color: @C-BG-C-dot-active;
     }
   }
 }

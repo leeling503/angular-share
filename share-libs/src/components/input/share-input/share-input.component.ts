@@ -50,6 +50,9 @@ export class ShareInputComponent extends PerfixText implements OnChanges, OnDest
         let value: string = this.getModelByType($event), num: number | string = value, type = this.inType, str = value;
         /**小数点和符号标识 */
         let pointFlag = value.includes('.'), signFlag = value.includes('-');
+        if (this.inMin >= 0) {
+            signFlag = false;
+        }
         /**数字或者有设置最大最小就进入范围判断 */
         if (
             this.inMax || this.inMin ||
