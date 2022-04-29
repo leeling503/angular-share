@@ -1,0 +1,112 @@
+@import "index.less";
+@week-height: 32px;
+
+:host {
+  width: 100%;
+  height: 100%;
+}
+
+.calendar-content {
+  background-color: @C-BG-time;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding-right: 1px;
+  user-select: none;
+}
+
+.calendar-item {
+  width: 13%;
+  flex-grow: 1;
+  color: @C-F-time-disable;
+  font-size: 14px;
+  position: relative;
+  margin: 1px 0px 0px 1px;
+  box-shadow: 0px 0px 0px 1px @C-B-time;
+  z-index: 20;
+  cursor: default;
+
+  &:hover {
+    box-shadow: 0px 0px 0px 1px @C-B-time-hover;
+    background-color: @C-BG-time-hover;
+    z-index: 30;
+  }
+
+  /**面板当月的字体颜色*/
+  &.cur-item {
+    color: @C-F-time;
+  }
+
+  &.hovers-item {
+    box-shadow: 0px 0px 0px 1px @C-B-time-hover;
+    background-color: @C-BG-time-hover;
+    color: @C-B-time-hover;
+    z-index: 35;
+  }
+
+  /**选中的日期*/
+  &.checkB-item,
+  &.checkA-item {
+    box-shadow: 0px 0px 0px 1px @C-B-time-check;
+    background-color: @C-BG-time-ckeck;
+    color: @C-F-time-check;
+    z-index: 50;
+  }
+
+  &.checkA-item {
+    border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px;
+  }
+  &.checkB-item {
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+  }
+}
+
+///日历星期框
+.calendar-week {
+  height: @week-height;
+  line-height: @week-height;
+  text-align: center;
+  color: @C-F-time;
+  background-color: @C-BG-time-week;
+}
+
+///日历日期框
+.calendar-day {
+  padding: 50% 0px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+///日期框日期
+.date-day {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.date-day.today {
+  width: 45%;
+  height: 45%;
+  background: #185EFE;
+  border-radius: 2px;
+  color: #FFF;
+}
+
+.item-data {
+  z-index: 20;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

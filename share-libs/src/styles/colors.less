@@ -3,16 +3,16 @@
 @C-F-normal:#333;@C-F-white: #FFF;@C-F-active: #4169E1; @C-F-hover: #4169E1; @C-F-place:#CCC;@C-F-link: #2b7cf5;
 @C-F-disable:#CCC;
 ///边框颜色 
-@C-B-normal: #A8A8A8; @C-B-active: #4169E1; @C-B-hover: #4169E1; @C-B-error: #CC6666;
+@C-B-normal: #A8A8A8; @C-B-check: #3366EE;@C-B-active: #3366EE; @C-B-hover: #66aaff; @C-B-error: #CC6666;
 ///背景颜色  active选中的边框  hover指针悬浮 danger错误  gray灰色背景  primary主体色（有颜色的背景）  form表背景色
-@C-BG-normal: #FFF; @C-BG-active: #4169E1; @C-BG-hover: #3399ff;
+@C-BG-normal: #FFF; @C-BG-active: #3366EE; @C-BG-hover: #66aaff;
 @C-BG-danger: #AA0000;@C-BG-gray: #e0e0e0;
 @C-BG-primary:#5588ff; @C-BG-trans: transparent; 
 ///T表格颜色相关  bg-th头部栏颜色   bg-tr行白色   bg-td有颜色的行
 @C-B-T:#c0d8fe;@C-BG-T-th:#E4EFFF;@C-BG-T-tr:#FFF;@C-BG-T-td:#F6FAFF;
 ///O弹出窗overlay相关
 @C-B-O:@C-B-normal;@C-BG-O:@C-BG-normal;@C-BG-O-title:@C-BG-primary;@C-F-O-title:@C-F-white;
-///S选择框弹出相关 ckeck选中的选项  active激活的  hover悬浮的
+///S选择框弹出相关 ckeck选中的选项
 @C-BG-S:@C-BG-normal;@C-BG-S-ckeck:#F6FAFF;@C-BG-S-active:#E4EFFF;@C-BG-S-hover:#E6F7FF;
 ///form 沿用了table的颜色
 @C-BG-form:@C-BG-T-th;@C-B-form:@C-B-T;
@@ -24,3 +24,7 @@
 ///M菜单部分(包括头部)
 @C-BG-M:@C-BG-normal;@C-BG-M-hover:#227aff;@C-BG-M-active:#1070ff;@C-BG-M-head:@C-BG-primary;
 @C-F-M:#FFF;@C-F-M-active:@C-F-active;
+///Time日历时间组件
+@C-BG-time:@C-BG-normal;@C-BG-time-week:@C-BG-T-th; @C-BG-time-ckeck:#eef2ff;@C-BG-time-active:#E4EFFF;@C-BG-time-hover:#E6F7FF;
+@C-B-time:@C-B-T;@C-B-time-check:@C-B-check;@C-B-time-hover:@C-B-hover;
+@C-F-time:@C-F-normal;@C-F-time-check:@C-F-active;@C-F-time-disable:#999999;

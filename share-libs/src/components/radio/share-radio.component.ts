@@ -34,9 +34,9 @@ export class ShareRadioComponent implements OnInit {
   /**默认配置 */
   defaultPara: RadioPara = {
     ifMulti: false,
-    ifClear: false,
-    ifDisCancel: true,
-    iconType: 'radio',
+    ifClear: true,
+    ifDisCancel: false,
+    iconType: 'check',
     key: 'key'
   }
   /**输入数据类型(输出数组或单个数据)*/
