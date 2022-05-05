@@ -1,5 +1,5 @@
 <div class="layout-head">
-  <div class="head-left"></div>
+  <div class="head-left">{{scope.name}} {{ 'name'|in18}}</div>
   <div class="head-menu">
     <ng-container *ngFor="let menu of menus">
       <div class="menu" [ngClass]="{'menu-active':menu.active}" (click)="onMenuToPage(menu)" *ngIf="menu.ifShow">
@@ -15,7 +15,7 @@
   <div class="head-right">
     <ng-container>
       <ul>
-        <li *ngFor="let btn of headBtns" (click)="onClickBtn(btn)">
+        <li *ngFor="let btn of headBtns" (click)="onClickBtn(btn)" [title]="scope[btn.title]">
           <i [class]="btn.icon"></i>
         </li>
       </ul>

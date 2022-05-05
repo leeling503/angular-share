@@ -1,5 +1,5 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
-import { UtilDate } from 'share-libs/src/utils/util-date';
+import { DateData } from '../share-date-picker.model';
 /**
  * 日历组件
  */
@@ -11,38 +11,47 @@ import { UtilDate } from 'share-libs/src/utils/util-date';
 export class ShareCalendarPanelComponent implements OnInit {
 
   constructor(private el: ElementRef) {
-    let d = this.today = new Date();
-    this.date = new DateData(d.getFullYear(), d.getMonth() + 1, d.getDate(), d)
+    this.setDate();
   }
   /**接受年月日 （2021-01-01） */
   @Input() inDate: string = "2021-10-05";
   @Input() inPara: ShareParaCalendar;
   /**多个日期范围选择 */
   @Input() inMulti: boolean = true;
+  /**组件日期对象 */
+  @Input() date: DateData;
   @Output() onChange: EventEmitter<DateData> = new EventEmitter();
   /**星期栏数据 */
   public WEEK: string[] = ['一', '二', '三', '四', '五', '六', '日'];
-  /**今天日期对象 */
-  private today: Date;
-  /**组件日期对象 */
-  date: DateData;
+
   /**选中激活的日期 */
-  checkDate: DateData;
+  @Input() public showDateA: DateData;
+  // @Output() public onCheckDateAChange: EventEmitter<DateData> = new EventEmitter();
+  /**选中激活的日期 */
+  @Input() public showDateB: DateData;
+  // @Output() public onCheckDateAChange: EventEmitter<DateData> = new EventEmitter();
+  /**选中激活的日期 */
+  @Input() public checkDateA: DateData;
+  @Output() public onCheckDateAChange: EventEmitter<DateData> = new EventEmitter();
   /**第二个选中激活的日期 */
-  checkBDate: DateData;
+  @Input() public checkDateB: DateData;
+  @Output() public onCheckDateBChange: EventEmitter<DateData> = new EventEmitter();
   /**悬停的日期 */
-  hoverDate: DateData;
-  /**日历 */
-  calendar: DateData[] = [];
+  @Input() public hoverDate: DateData;
+  @Output() public onHoverDateChange: EventEmitter<DateData> = new EventEmitter();
+  /**日历面板 */
+  public calendar: DateData[] = [];
 
   ngOnChanges(changes: SimpleChanges): void {
+    /**面板日期 */
     if (changes.inDate) {
       this.setDate(this.inDate);
+      this.generCalendar();
     }
   }
 
   ngOnInit() {
-    this.calendar = this.generCalendar();
+    this.generCalendar();
   }
 
   /**页面点击日期 */
@@ -51,7 +60,7 @@ export class ShareCalendarPanelComponent implements OnInit {
     /**非当前页面展示月需要更新日历 */
     if (!item._curMonth) {
       this.date = item;
-      this.calendar = this.generCalendar();
+      this.generCalendar();
     }
     /**用户激活日期变更为点击日期 */
     this.setCheckDate(item);
@@ -60,34 +69,43 @@ export class ShareCalendarPanelComponent implements OnInit {
 
   /**鼠标进入当前日期 */
   onEnterDate(item: DateData) {
-    if (item.time < this.checkDate.time) { this.hoverDate = undefined; return; }
-    if (this.inMulti && !this.checkDate || this.checkBDate) return;
+    if (!this.checkDateA) return;
+    if (item.time < this.checkDateA.time) { this.hoverDate = undefined; return; }
+    if (this.inMulti && !this.checkDateA || this.checkDateB) return;
     this.hoverDate = item;
+    this.onHoverDateChange.emit(this.hoverDate)
+  }
+
+  /**鼠标离开日历 */
+  onLeaveCalendar() {
+    this.hoverDate = undefined;
+    this.onHoverDateChange.emit(this.hoverDate)
   }
 
   private emitModel() {
-    this.onChange.emit(this.checkDate);
+    this.onCheckDateAChange.emit(this.checkDateA);
+    this.onCheckDateBChange.emit(this.checkDateB);
   }
 
   private setCheckDate(item: DateData) {
     if (this.inMulti) {
-      if (this.checkBDate) {
-        this.checkDate = item;
-        this.checkBDate = undefined;
+      if (this.checkDateB) {
+        this.checkDateA = item;
+        this.checkDateB = undefined;
         this.hoverDate = undefined;
-      } else if (this.checkDate && item.time > this.checkDate.time) {
-        this.checkBDate = item;
+      } else if (this.checkDateA && item.time >= this.checkDateA.time) {
+        this.checkDateB = item;
       } else {
-        this.checkDate = item;
+        this.checkDateA = item;
         this.hoverDate = undefined;
       }
     } else {
-      this.checkDate = item;
+      this.checkDateA = item;
     }
   }
 
-  /**生成日历对象(需要自己赋值给日历变量) */
-  private generCalendar(): DateData[] {
+  /**根据date生成日历面板(需要自己赋值给日历变量) */
+  private generCalendar(): void {
     let date = this.date, curYear = date.year, curMonth = date.month;
     /**最后一天的数字 */
     let lastDays = this.getMonthLastDay(curYear, curMonth);
@@ -135,14 +153,14 @@ export class ShareCalendarPanelComponent implements OnInit {
       let data = new DateData(nextY, nextM, i, curDate)
       calendar.push(data)
     }
-    return calendar
+    this.calendar = calendar;
   }
 
   /**根据日期数据获得日期对象*/
-  private setDate(date: string | Date): void {
+  private setDate(date: string | Date = new Date()): void {
     /**无效日期判断 */
     let d = !!new Date(date).getTime ? new Date(date) : new Date();
-    this.date = new DateData(d.getFullYear(), d.getMonth() + 1, d.getDate(), this.today)
+    this.date = new DateData(d.getFullYear(), d.getMonth() + 1, d.getDate(), new Date())
   }
 
   /**
@@ -165,49 +183,5 @@ export class ShareCalendarPanelComponent implements OnInit {
 }
 
 export class ShareParaCalendar {
-
-}
-/**日期数据（对应每天的各种数据） */
-class DateData {
-  /**日期字符串*/
-  date: string;
-  /**对应的星期几 */
-  week: number;
-  /**年 */
-  year: number;
-  /**月份 (不需要+1处理)  */
-  month: number;
-  /**对应的第几天 */
-  day: number;
-  /**time */
-  time: number;
-  /**未来日子 */
-  _future?: boolean;
-  /**当月 */
-  _curMonth?: boolean;
-  /**当天 */
-  _curDay?: boolean;
-  /**激活的月份 */
-  _activeMonth?: boolean;
-  /**
-   * @param y年份
-   * @param m月份 12月对应12
-   * @param d日期
-   * @param cur当日时间
-  */
-  constructor(y: number, m: number, d: number, cur: Date = new Date()) {
-    let date = new Date(`${y}-${m}-${d}`);
-    let cd = cur.getDate(), cm = cur.getMonth() + 1, cy = cur.getFullYear();
-    let dateStr = UtilDate.getStr(date);
-    this.date = dateStr;
-    this.year = y;
-    this.month = m;
-    this.day = d;
-    this.time = date.getTime();
-    this.week = date.getDay();
-    this._future = cy < y ? true : cy > y ? false : cm < m ? true : cm > m ? false : cd < d ? true : false;
-    this._curMonth = y == cy && cm == m;
-    this._curDay = this._curMonth && cd == d;
-  }
 
 }

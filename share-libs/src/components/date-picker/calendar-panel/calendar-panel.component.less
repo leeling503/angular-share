@@ -17,6 +17,7 @@
   user-select: none;
 }
 
+.calendar-week-item,
 .calendar-item {
   width: 13%;
   flex-grow: 1;
@@ -27,7 +28,9 @@
   box-shadow: 0px 0px 0px 1px @C-B-time;
   z-index: 20;
   cursor: default;
+}
 
+.calendar-item {
   &:hover {
     box-shadow: 0px 0px 0px 1px @C-B-time-hover;
     background-color: @C-BG-time-hover;
@@ -59,6 +62,7 @@
     border-top-left-radius: 2px;
     border-bottom-left-radius: 2px;
   }
+
   &.checkB-item {
     border-top-right-radius: 2px;
     border-bottom-right-radius: 2px;

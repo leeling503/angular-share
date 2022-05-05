@@ -8,6 +8,7 @@ import { Component, OnInit } from '@angular/core';
 export class ExShareDateComponent implements OnInit {
 
   constructor() { }
+  calendarModel = ['2021-08-01'];
   month = "2020-07";
   monthB = "";
   day

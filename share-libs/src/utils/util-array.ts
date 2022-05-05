@@ -5,7 +5,7 @@ function clear<T>(arr: T[]): T[] {
 }
 
 /**判读对象是否是数组 */
-function isArray(arr: Array<any>): boolean {
+function isArray(arr: any): arr is any[] {
     if (Array.isArray) {
         return Array.isArray(arr)
     } else {

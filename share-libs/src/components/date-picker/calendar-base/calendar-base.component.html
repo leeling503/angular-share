@@ -1,8 +1,23 @@
 <div class="share-calendar">
-  <div class="calendar-ctr">
+  <ng-template *ngTemplateOutlet="panel;context:{para:0,model:showDateA,modelB:dateB}"></ng-template>
+  <ng-container *ngIf="!ifSingle">
+    <ng-template *ngTemplateOutlet="panel;context:{para:1,model:showDateB,modelB:dateB}"></ng-template>
+  </ng-container>
+</div>
 
+<ng-template #panel let-para="para" let-date="model">
+  <div class="calendar-ctr">
+    <div class="calendar-ctr-per" (click)="onDataCtr(date,para,-1)">&lt;</div>
+    <div class="calendar-ctr-date">
+      <div>{{date.year}}年</div>
+      <div> {{date.month}}月 </div>
+    </div>
+    <div class="calendar-ctr-next" (click)="onDataCtr(date,para,1)">></div>
   </div>
   <div class="calendar-view">
-    <share-calendar-panel></share-calendar-panel>
+    <share-calendar-panel [inDate]="date.date" [showDateA]="showDateA" [showDateB]="showDateB" [checkDateA]="dateA"
+      [checkDateB]="dateB" [hoverDate]="hoverDate" (onCheckDateAChange)="onChangeDateA($event)"
+      (onCheckDateBChange)="onChangeDateB($event)" (onHoverDateChange)="onChangeHoverDate($event)">
+    </share-calendar-panel>
   </div>
-</div>
+</ng-template>

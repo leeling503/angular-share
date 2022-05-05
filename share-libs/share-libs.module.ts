@@ -2,6 +2,7 @@
 import { NgModule } from '@angular/core';
 import { Share3DModule, ShareButtonModule, ShareCheckModule, ShareDateModule, ShareFileUploadModule, ShareInputModule, ShareModalModule, SharePaginationModule, ShareRadioModule, ShareSelectModule, ShareSwiperModule, ShareTableModule , ShareFormModule } from 'share-libs';
 import { ShareDirectiveModule } from './src/directives/share-directive.module';
+import { PipeModule } from './src/pipe/pipe.module';
 
 @NgModule({
   exports: [
@@ -18,7 +19,8 @@ import { ShareDirectiveModule } from './src/directives/share-directive.module';
     ShareInputModule,
     ShareModalModule,
     ShareSwiperModule,
-    ShareFormModule
+    ShareFormModule,
+    PipeModule
   ]
 })
 export class ShareLibsModule { }

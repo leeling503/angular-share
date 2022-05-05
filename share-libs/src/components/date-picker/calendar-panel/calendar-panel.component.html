@@ -1,7 +1,7 @@
 <div class="calendar-panel">
-  <div class="calendar-content">
+  <div class="calendar-content" (mouseleave)="onLeaveCalendar()">
     <ng-container *ngFor="let week of WEEK">
-      <div class="calendar-item ">
+      <div class="calendar-week-item ">
         <div class="calendar-week">
           <div> {{week}} </div>
         </div>
@@ -9,10 +9,10 @@
     </ng-container>
     <ng-container *ngFor="let item of calendar">
       <div class="calendar-item" [ngClass]="{
-          'checkA-item':checkDate&& checkDate.date == item.date,
-          'checkB-item':checkBDate&& checkBDate.date == item.date,
-          'hovers-item':hoverDate&&hoverDate.time>=item.time&&item.time>=checkDate.time || 
-          checkBDate&&checkBDate.time>=item.time&&item.time>=checkDate.time,
+          'checkA-item':checkDateA&& checkDateA.date == item.date,
+          'checkB-item':checkDateB&& checkDateB.date == item.date,
+          'hovers-item':hoverDate&&hoverDate.time>=item.time&&item.time>=checkDateA.time || 
+          checkDateB&&checkDateB.time>=item.time&&item.time>=checkDateA.time,
           'future-item':item._future,
           'cur-item':item._activeMonth}" (click)="onClickDate(item)" (mouseenter)="onEnterDate(item)">
         <div class="calendar-day">
