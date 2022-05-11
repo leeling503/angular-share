@@ -1,3 +1,6 @@
+import { ExExportExcelComponent } from "./ex-export-excel/ex-export-excel.component";
+import { JsonToSheetComponent } from "./ex-export-excel/json-to-sheet/json-to-sheet.component";
+import { TableToSheetComponent } from "./ex-export-excel/table-to-sheet/table-to-sheet.component";
 import { ExShareButtonsComponent } from "./ex-share-buttons/ex-share-buttons.component";
 import { ExShareDateComponent } from "./ex-share-date/ex-share-date.component";
 import { ExShareFileComponent } from "./ex-share-file/ex-share-file.component";
@@ -29,5 +32,8 @@ export const exComponents = [
     ExShareModalComponent,
     ExShareMapComponent,
     ExShareSwiperComponent,
-    ExShareFormComponent
+    ExShareFormComponent,
+    ExExportExcelComponent,
+    TableToSheetComponent,
+    JsonToSheetComponent,
 ]

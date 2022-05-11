@@ -1,0 +1,46 @@
+<p>
+  示例二：将一个table dom直接转成sheet，会自动识别colspan和rowspan并将其转成对应的单元格合并
+</p>
+<share-button id="btn" [inText]="'导出表格'" [inWidth]="80" (click)="onDownLoad()"></share-button>
+
+<table id="excel-table" cellspacing="0" cellpadding="0">
+  <thead>
+    <tr>
+      <td class="blank-col"></td>
+      <td colspan="7" style="border: none;font-size: 18px;">{{printInfo.title}}</td>
+    </tr>
+    <tr>
+      <td class="blank-col"></td>
+      <td rowspan="2">序号</td>
+      <td colspan="2">电视剧</td>
+      <td colspan="2">综艺</td>
+      <td colspan="2">纪录片</td>
+    </tr>
+    <tr>
+      <td class="blank-col"></td>
+      <td>剧名</td>
+      <td>导演</td>
+      <td>片名</td>
+      <td>主持人</td>
+      <td>片名</td>
+      <td>出品</td>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of dataList; index as idx">
+      <td class="blank-col"></td>
+      <td>{{idx+1}}</td>
+      <td>{{item.drama}}</td>
+      <td>{{item.director}}</td>
+      <td>{{item.variety}}</td>
+      <td>{{item.host}}</td>
+      <td>{{item.book}}</td>
+      <td>{{item.producer}}</td>
+    </tr>
+    <tr>
+      <td class="blank-col"></td>
+      <td>备注</td>
+      <td colspan="6" style="text-align: left;">{{printInfo.remark}}</td>
+    </tr>
+  </tbody>
+</table>

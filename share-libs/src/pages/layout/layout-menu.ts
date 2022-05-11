@@ -151,6 +151,9 @@ export const SYSTEM_MENU: MenuItem[] = [
             }, {
                 title: '表单',
                 url: `${example}/form`
+            }, {
+                title: '导出excel',
+                url: `${example}/excel`
             }
         ]
     },
