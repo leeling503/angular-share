@@ -27,9 +27,9 @@ export interface SelectPara {
     ifSon?: boolean;
     /**是否父子项联动 false*/
     ifGanged?: boolean;
-    /**是否有确定按钮 */
-    ifBtn?: boolean;
-    /**是否选中就自动关闭弹窗（多选无效） */
+    /**是否不需要按钮，关闭弹窗就自动更新 */
+    ifAuto?: boolean;
+    /**是否选中就自动关闭弹窗（多选不推荐） */
     ifClose?: boolean;
 }
 /**select选框的open框类型 */

@@ -5,11 +5,11 @@ import { SelectOption, SelectOptions } from "../share-select.model";
  * 多级node面板
  */
 @Component({
-    selector: 'node-panel',
-    templateUrl: './node-panel.component.html',
-    styleUrls: ['./node-panel.component.less']
+    selector: 'panel-nodes',
+    templateUrl: './panel-nodes.component.html',
+    styleUrls: ['./panel-nodes.component.less']
 })
-export class NodePanel {
+export class PanelNodes {
     constructor() { }
     @Input() inCheckOptions: SelectOptions = [];
     @Input() inOptions: SelectOptions = [];

@@ -65,7 +65,7 @@ export class ExShareSelectComponent implements OnInit {
   radioData: RadioOption[] = [{ key: true, value: '是' }, { key: false, value: '否' }]
   outTypeData: RadioOption[] = [{ key: 'string', value: 'string' }, { key: 'strings', value: 'strings' }, { key: 'object', value: 'object' }, { key: 'objects', value: 'objects' }]
   paraA: SelectPara = {
-    ifMulti: false, ifCheck: true, ifSon: true, ifAdd: false, ifFlag: true, ifClear: true, ifOne: true, ifActive: false, ifGanged: true, ifClose: true
+    ifMulti: false, ifCheck: true, ifSon: true, ifAdd: false, ifFlag: true, ifClear: true, ifOne: true, ifActive: false, ifGanged: true, ifClose: true, ifAuto: true
   }
   optionsA
   modelA = []

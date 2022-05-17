@@ -34,18 +34,18 @@
   <div class="open-overlay E_O_panel_el" [ngClass]="overlayClass">
     <ng-container [ngSwitch]="inType">
       <ng-container *ngSwitchCase="'panel'">
-        <node-panel [inOptions]="options" [inCheckOptions]="checkOptions" (onCheckChange)="onCheckChange($event)"
+        <panel-nodes [inOptions]="options" [inCheckOptions]="checkOptions" (onCheckChange)="onCheckChange($event)"
           [inMulti]="inMulti" [inCheck]="inCheck" [inSon]="inSon" [inTip]="inTip" [inOne]="inOne" [inActive]="inActive"
-          [inGanged]="inGanged" [inAdd]="inAdd"></node-panel>
+          [inGanged]="inGanged" [inAdd]="inAdd"></panel-nodes>
       </ng-container>
       <ng-container *ngSwitchDefault>
-        <node-select [inOptions]="options" [inCheckOptions]="checkOptions" (onCheckChange)="onCheckChange($event)"
+        <panel-select [inOptions]="options" [inCheckOptions]="checkOptions" (onCheckChange)="onCheckChange($event)"
           [inMulti]="inMulti" [inCheck]="inCheck" [inSon]="inSon" [inTip]="inTip" [inOne]="inOne" [inActive]="inActive"
           [inGanged]="inGanged" [inAdd]="inAdd">
-        </node-select>
+        </panel-select>
       </ng-container>
     </ng-container>
-    <div class="E_O_btns" *ngIf="inBtn">
+    <div class="E_O_btns" *ngIf="!inAuto">
       <div class="E_O_btn_sure" (click)="onCheckSureChange(true)">确定</div>
       <div class="E_O_btn_off" (click)="onCheckSureChange(false)">取消</div>
     </div>

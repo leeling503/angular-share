@@ -48,7 +48,7 @@ export class ShareSelect extends MadePerfix implements OnInit {
     /**是否选中就关闭 */
     @Input() inClose: boolean;
     /**是否有确定按钮*/
-    @Input() inBtn: boolean;
+    @Input() inAuto: boolean;
     /**弹窗宽度 */
     @Input() inOverlayWidth: number | string;
     /**选中项发生改变 */
@@ -79,7 +79,7 @@ export class ShareSelect extends MadePerfix implements OnInit {
         placeholder: '请选择',
         /**下拉无数据提示 暂无数据*/
         noneTip: "暂无数据",
-        ifBtn: false,
+        ifAuto: true,
         ifClose: true,
     }
     /**选中的选项集合 */
@@ -135,7 +135,7 @@ export class ShareSelect extends MadePerfix implements OnInit {
         this.inTip = this.inTip ?? para.noneTip;
         this.inOne = this.inOne ?? para.ifOne;
         this.inType = this.inType ?? para.type;
-        this.inBtn = this.inBtn ?? para.ifBtn;
+        this.inAuto = this.inAuto ?? para.ifAuto;
         this.inClose = this.inClose ?? para.ifClose;
         this.inOverlayWidth = this.inOverlayWidth ?? para.overlayWidth;
     }

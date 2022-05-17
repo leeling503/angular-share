@@ -72,9 +72,9 @@
       </div>
     </div>
     <div class="para-info">
-      <div>确定取消按钮</div>
+      <div>关窗自动更新(否则显示按钮)</div>
       <div>
-        <share-radio [(model)]="paraA.ifBtn" [inOptins]="radioData">
+        <share-radio [(model)]="paraA.ifAuto" [inOptins]="radioData">
         </share-radio>
       </div>
     </div>
@@ -89,7 +89,7 @@
   <div class="select-info">
     <span>默认基本配置:{{modelA|json}}</span>
     <div class="select">
-      <share-select [inOptions]="optionsA" [inBtn]="paraA.ifBtn" [(modelOptions)]="modelA" [inPara]='paraA'
+      <share-select [inOptions]="optionsA" [inAuto]="paraA.ifAuto" [(modelOptions)]="modelA" [inPara]='paraA'
         [inMulti]="paraA.ifMulti" [inAdd]="paraA.ifAdd" [inCheck]="paraA.ifCheck" [inClear]='paraA.ifClear'
         [inActive]="paraA.ifActive" [inSon]="paraA.ifSon" [inFlag]="paraA.ifFlag" [inOne]="paraA.ifOne"
         [inGanged]="paraA.ifGanged" [inOutType]="paraA.outType" [inClose]="paraA.ifClose"></share-select>
@@ -98,7 +98,7 @@
   <div class="select-info">
     <span>待定panel示例{{modelB|json}}</span>
     <div class="select">
-      <share-select [inType]="'panel'" [inOptions]="optionsB" [inBtn]="paraA.ifBtn" [(modelOptions)]="modelB"
+      <share-select [inType]="'panel'" [inOptions]="optionsB" [inAuto]="paraA.ifAuto" [(modelOptions)]="modelB"
         [inPara]='paraA' [inMulti]="paraA.ifMulti" [inAdd]="paraA.ifAdd" [inCheck]="paraA.ifCheck"
         [inClear]='paraA.ifClear' [inActive]="paraA.ifActive" [inSon]="paraA.ifSon" [inFlag]="paraA.ifFlag"
         [inOne]="paraA.ifOne" [inGanged]="paraA.ifGanged" [inAdd]="paraA.ifAdd" [inOutType]="paraA.outType"

@@ -18,8 +18,8 @@
         </ng-container>
       </ng-container>
       <ng-container *ngIf="inCheck">
-        <share-check (modelCheckedChange)="onClickOptionNode(option)" [model]='option._check'
-          [inIfOther]='option._mix' [inIfDisable]="option._dis || dis">
+        <share-check (modelChange)="onClickOptionNode(option)" [model]='option._check' [inIfOther]='option._mix'
+          [inIfDisable]="option._dis || dis">
         </share-check>
       </ng-container>
       <div class="node-content-text"><span>{{option.value}}</span></div>

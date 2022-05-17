@@ -1,15 +1,15 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
-import {   UtilArray, UtilChanges, UtilIsEqual } from "share-libs/src/utils";
+import { UtilArray, UtilChanges, UtilIsEqual } from "share-libs/src/utils";
 import { SelectOption, SelectOptions } from "../share-select.model";
 /**
  * 多级node面板
  */
 @Component({
-    selector: 'node-select',
-    templateUrl: './node-select.component.html',
-    styleUrls: ['./node-select.component.less']
+    selector: 'panel-select',
+    templateUrl: './panel-select.component.html',
+    styleUrls: ['./panel-select.component.less']
 })
-export class NodeSelect {
+export class PanelSelect {
     constructor() { }
     /**所有选项 */
     @Input() private inOptions: SelectOptions;
@@ -82,6 +82,10 @@ export class NodeSelect {
         }
     }
 
+    onCheckNode(option: SelectOption) {
+        console.log(option)
+    }
+
     /**flag=true表示点击整个节点 */
     onClickOptionNode(option: SelectOption, flag: boolean = false) {
         if (option._dis) return;
@@ -121,9 +125,7 @@ export class NodeSelect {
         this.checkOptions = UtilArray.getArrByValue(this.options, '_check', true, this.inGanged);
         /**至少选择一个时 */
         if (this.inOne && this.checkOptions.length == 0) {
-            setTimeout(() => {
-                this.onClickOptionNode(option);
-            }, 20);
+            setTimeout(() => { this.onClickOptionNode(option); }, 20);
             return
         }
         this.emitCheckOptions();
