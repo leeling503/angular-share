@@ -1,4 +1,4 @@
-import { Directive, ElementRef, EventEmitter, HostListener, Input, Output, Renderer2, SimpleChanges } from "@angular/core";
+import { ChangeDetectorRef, Directive, ElementRef, EventEmitter, HostListener, Input, Output, Renderer2, SimpleChanges } from "@angular/core";
 import { IconClass } from "../enum";
 
 /**对于悬浮才出现的图标采用此指令 */
@@ -18,7 +18,9 @@ export class ShareIconDirective {
     @Input() inName: IconClass = IconClass.clearRed;
     clearEl: HTMLElement;
 
-    ngOnChanges(changes: SimpleChanges): void { }
+    ngOnChanges(changes: SimpleChanges): void { 
+
+    }
 
     ngOnInit(): void { }
 

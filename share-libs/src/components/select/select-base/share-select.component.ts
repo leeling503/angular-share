@@ -47,7 +47,7 @@ export class ShareSelectComponent extends ShareSelect {
 
   /**add框经过用户确认的关闭选框 */
   onCheckSureChange(flag: boolean) {
-    this.openOptions = !1;
+    this.overlayOpen = !1;
     if (flag === false && this.inBtn) {
       /**用户未确定，且存在确认按钮 */
       this.checkOptions = UtilArray.copy(this.emitCheckOptions);

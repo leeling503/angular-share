@@ -1,5 +1,5 @@
 .E_overlay_plan {
-  background-color:@C-BG-normal;
+  background-color: @C-BG-normal;
 }
 
 .e_o_shade() {
@@ -23,4 +23,46 @@
   border: 1px solid @C-B-O;
   border-radius: 5px;
   overflow: hidden;
+  /**方便写在html上的组件打开*/
+  min-width: fit-content;
+}
+
+.E_O_panel_el {
+  /**方便写在html上的组件打开*/
+  background-color: @C-BG-normal;
+  border: 1px solid @C-B-O;
+  border-radius: 5px;
+  overflow: auto;
+  width: 100%;
+  min-width: fit-content;
+}
+
+
+.E_O_btns {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+
+  div {
+    width: 50px;
+    height: 30px;
+    line-height: 30px;
+    font-size: 14px;
+    border-radius: 3px;
+    text-align: center;
+    margin: 2px 15px;
+    cursor: pointer;
+  }
+
+  .E_O_btn_sure {
+    color: #FFF;
+    background-color: blue;
+  }
+
+  .E_O_btn_off {
+    color: #3e3e3e;
+    background-color: #ECECEC;
+    border: 1px solid #6e6e6e;
+  }
 }

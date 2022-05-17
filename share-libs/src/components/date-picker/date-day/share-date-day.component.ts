@@ -2,13 +2,13 @@ import { Component, Input, Output, EventEmitter, ElementRef, SimpleChanges, Host
 import * as moment from 'moment';
 import { TimeRange } from '../share-date-picker.model';
 import { UtilChanges, UtilChangesHasValue, UtilChangesValue } from "share-libs/src/utils";
-import { PerfixText } from "../../base/perfix-text.component";
+import { MadePerfix } from "../../base";
 @Component({
     selector: 'share-date-day',
     templateUrl: './share-date-day.component.html',
     styleUrls: ['./share-date-day.component.less'],
 })
-export class ShareDateDayComponent extends PerfixText {
+export class ShareDateDayComponent extends MadePerfix {
     constructor(private elementRef: ElementRef) {
         super();
         this.el = this.elementRef.nativeElement;
@@ -42,8 +42,8 @@ export class ShareDateDayComponent extends PerfixText {
         maxYear: 2100,//下拉选择框最大年份
         singleDatePicker: false,//单日期选择器
         timePicker: false,//小时和分钟选择器，需在local中设置format
-        timePicker24Hour: true,//24小时制
-        timePickerIncrement: 5,//分钟间隔
+        timePicker24Hour: false,//24小时制
+        timePickerIncrement: 7,//分钟间隔
         timePickerSeconds: false,//秒选择器
         maxSpan: {
             days: 7

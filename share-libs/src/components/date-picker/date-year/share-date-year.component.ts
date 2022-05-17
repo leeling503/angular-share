@@ -1,14 +1,14 @@
 import { CdkOverlayOrigin } from "@angular/cdk/overlay";
 import { Component, EventEmitter, Input, Output, SimpleChanges, ViewChild } from "@angular/core";
 import { extend } from "jquery";
-import { PerfixText } from "../../base/perfix-text.component";
+import { MadePerfix } from "../../base";
 
 @Component({
     selector: 'share-date-year',
     templateUrl: './share-date-year.component.html',
     styleUrls: ['./share-date-year.component.less']
 })
-export class ShareDateYearComponent extends PerfixText {
+export class ShareDateYearComponent extends MadePerfix {
     @Input() inPlaceholder: string = "请选择";
     @Input() inAutoSet: boolean = true;//关闭选款自动设置
     @Input() inIfDefault: boolean = true;//设置默认值

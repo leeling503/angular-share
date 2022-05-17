@@ -6,7 +6,7 @@ export interface SelectPara {
     /**下拉无数据提示 暂无数据*/
     noneTip?: string;
     /**弹窗宽度 */
-    widthNode?: number | string;
+    overlayWidth?: number | string;
     /**类型 */
     type?: SelectOpenType;
     /**是否显示后缀图标标志 true*/
@@ -29,6 +29,8 @@ export interface SelectPara {
     ifGanged?: boolean;
     /**是否有确定按钮 */
     ifBtn?: boolean;
+    /**是否选中就自动关闭弹窗（多选无效） */
+    ifClose?: boolean;
 }
 /**select选框的open框类型 */
 export enum SelectOpenType {

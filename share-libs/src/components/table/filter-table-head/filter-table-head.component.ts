@@ -92,9 +92,8 @@ export class FilterTableHeadComponent implements OnInit {
     /**打开弹出层 */
     onOpenOverlay() {
         let position = new ShareOverlayPosition(), config = new ShareOverlayConfig();
-        config.width = null, config.height = null;
         position.type = 'ele';
-        position.element = this.native.querySelector('.filter-table-head');
+        position.element = this.native;
         position.withPositions = [{
             originX: 'end',
             originY: 'bottom',

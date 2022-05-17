@@ -1,3 +1,6 @@
+/**各位加00变为00-09 */
+export const STRNUM: string[] = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09']
+
 
 /**undefined和null是返回true */
 function UtilIsUndefined(value: any): boolean {
@@ -20,7 +23,7 @@ function UtilIsEmpty(value: any): boolean {
     }
 }
 
-/**判断是否相等 ， 传入uuid后就只比对对象的key的值是否相等 */
+/**判断是否相等 ， 传入key后就只比对对象的key的值是否相等 , flag 为true则强制比较key值 */
 function UtilIsEqual(cur, value, key?: string) {
     if (cur === value) {
         return true
@@ -92,3 +95,21 @@ export class UtilSleep {
 }
 
 export { UtilIsUndefined, UtilIsFalse, UtilIsEmpty, UtilIsEqual, UtilGetAttrValue, UtilValueType, UtilIsFunction }
+
+/**生成指定间隔的字符数组 @param inter:间隔大小， @param max:最大数  @param min:最小数 @param flag:个位数转为 00 */
+function genIntervalStrs(inter: number = 1, max: number = 23, min: number = 0, flag: boolean = true): string[] {
+    let res = [], str;
+    for (let i = min; i <= max;) {
+        str = STRNUM[i] || (i + '');
+        i = i + inter;
+        res.push(str)
+    }
+    return res;
+}
+
+export const Util = {
+    /**生成指定间隔的字符数组 */
+    genIntervalNums: genIntervalStrs,
+    /**判断是否相等 ，传入key后就只比对对象的key的值是否相等 */
+    ifEqual: UtilIsEqual
+}

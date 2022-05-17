@@ -6,6 +6,50 @@
   height: 100%;
 }
 
+/// 头部年月控制部分
+.calendar-ctr {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  height: 40px;
+  width: 100%;
+  flex-grow: 1;
+  flex-shrink: 0;
+  background: #D5E8FF;
+  position: relative;
+}
+
+.calendar-ctr-per,
+.calendar-ctr-next {
+  margin: 0px 2px;
+  text-align: center;
+  width: 16px;
+  height: 22px;
+  background: #FFFFFF;
+  border-radius: 3px;
+  cursor: pointer;
+
+  &.ctr-disable {
+    background-color: #ececec;
+    pointer-events: none;
+    cursor: default;
+    opacity: 0.5;
+  }
+}
+
+.calendar-ctr-date {
+  cursor: pointer;
+  padding: 0px 5px;
+  min-width: 90px;
+  height: 22px;
+  display: flex;
+  border-radius: 3px;
+  align-items: center;
+  justify-content: center;
+  background-color: #FFF;
+}
+
+/// 日历部分
 .calendar-content {
   background-color: @C-BG-time;
   position: relative;
@@ -15,6 +59,8 @@
   flex-wrap: wrap;
   padding-right: 1px;
   user-select: none;
+  /**宽度太小会导致显示本年第几周换行*/
+  min-width: 200px;
 }
 
 .calendar-week-item,
@@ -31,6 +77,8 @@
 }
 
 .calendar-item {
+  cursor: pointer;
+
   &:hover {
     box-shadow: 0px 0px 0px 1px @C-B-time-hover;
     background-color: @C-BG-time-hover;
@@ -38,11 +86,12 @@
   }
 
   /**面板当月的字体颜色*/
-  &.cur-item {
+  &.show-item {
     color: @C-F-time;
   }
 
-  &.hovers-item {
+  /**处于划选范围内的日期 */
+  &.range-item {
     box-shadow: 0px 0px 0px 1px @C-B-time-hover;
     background-color: @C-BG-time-hover;
     color: @C-B-time-hover;
@@ -61,11 +110,29 @@
   &.checkA-item {
     border-top-left-radius: 2px;
     border-bottom-left-radius: 2px;
+
+    &.check-item {
+      border-top-right-radius: 2px;
+      border-bottom-right-radius: 2px;
+    }
   }
 
   &.checkB-item {
     border-top-right-radius: 2px;
     border-bottom-right-radius: 2px;
+  }
+
+  /**超出范围禁止样式 */
+  &.disable-item {
+    color: @C-F-time-disable;
+    cursor: default;
+    box-shadow: 0px 0px 0px 1px @C-B-time;
+    background-color: @C-BG-time;
+    z-index: 20;
+
+    .date-day {
+      text-decoration: line-through;
+    }
   }
 }
 
@@ -87,7 +154,8 @@
 }
 
 ///日期框日期
-.date-day {
+.date-day,
+.week-day {
   position: absolute;
   display: flex;
   align-items: center;
@@ -105,7 +173,8 @@
   color: #FFF;
 }
 
-.item-data {
+.item-data,
+.week-data {
   z-index: 20;
   position: absolute;
   width: 100%;
@@ -113,4 +182,55 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.week-data {
+  background-color: @C-BG-time-week;
+}
+
+///日期时间选择框
+.calendar-time {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 5px;
+
+  .time-group {
+    display: flex;
+    justify-content: space-between;
+
+    .time {
+      display: flex;
+    }
+  }
+}
+
+.calendar-week-numbers {
+
+  .calendar-week-item,
+  .calendar-item {
+    width: 12%;
+  }
+}
+
+/// ::ng-deep share-select这样写样式权重低 无法更改组件样式
+share-select::ng-deep {
+  div.share-select-panel {
+    width: 50px;
+    height: 20px;
+  }
+
+  .E_split_line {
+    border-left: 0px;
+    width: 20px;
+
+    i {
+      transform: scale(0.5);
+    }
+
+    i.E_TF_180 {
+      transform: rotate(180deg) scale(0.5);
+    }
+  }
 }

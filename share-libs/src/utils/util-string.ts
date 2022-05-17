@@ -4,7 +4,7 @@ function split(str: string, flag: string): any[] {
     if (typeof str === "undefined") {
         return []
     } else {
-        (str + '').split(flag)
+        return (str + '').split(flag)
     }
 }
 

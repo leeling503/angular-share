@@ -22,16 +22,16 @@
     </ng-container>
   </div>
   <div class="E_suffix_icon E_split_line" *ngIf="inFlag">
-    <i class="E_I_pull_down" [ngClass]=" {'E_TF_180':openOptions}"></i>
+    <i class="E_I_pull_down" [ngClass]=" {'E_TF_180':overlayOpen}"></i>
   </div>
 </div>
 
 <!--open框的实例-->
 <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="cdkOverlayOrigin" [cdkConnectedOverlayHasBackdrop]="true"
-  [cdkConnectedOverlayOpen]="openOptions" [cdkConnectedOverlayOffsetY]='3'
-  [cdkConnectedOverlayFlexibleDimensions]="true" [cdkConnectedOverlayWidth]='cdkConnectedOverlayWidth'
+  [cdkConnectedOverlayOpen]="overlayOpen" [cdkConnectedOverlayOffsetY]='3'
+  [cdkConnectedOverlayFlexibleDimensions]="true" [cdkConnectedOverlayWidth]='overlayWidth'
   [cdkConnectedOverlayBackdropClass]="'E_O_transparent'" (backdropClick)="onCheckSureChange(false)">
-  <div class="open-overlay E_O_panel">
+  <div class="open-overlay E_O_panel_el" [ngClass]="overlayClass">
     <ng-container [ngSwitch]="inType">
       <ng-container *ngSwitchCase="'panel'">
         <node-panel [inOptions]="options" [inCheckOptions]="checkOptions" (onCheckChange)="onCheckChange($event)"
@@ -45,9 +45,9 @@
         </node-select>
       </ng-container>
     </ng-container>
-    <div class="open-btns" *ngIf="inBtn">
-      <div class="btn-sure" (click)="onCheckSureChange(true)">确定</div>
-      <div class="btn-off" (click)="onCheckSureChange(false)">取消</div>
+    <div class="E_O_btns" *ngIf="inBtn">
+      <div class="E_O_btn_sure" (click)="onCheckSureChange(true)">确定</div>
+      <div class="E_O_btn_off" (click)="onCheckSureChange(false)">取消</div>
     </div>
   </div>
 </ng-template>

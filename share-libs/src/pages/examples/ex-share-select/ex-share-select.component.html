@@ -78,6 +78,13 @@
         </share-radio>
       </div>
     </div>
+    <div class="para-info">
+      <div>选后自动关闭弹窗</div>
+      <div>
+        <share-radio [(model)]="paraA.ifClose" [inOptins]="radioData">
+        </share-radio>
+      </div>
+    </div>
   </div>
   <div class="select-info">
     <span>默认基本配置:{{modelA|json}}</span>
@@ -85,16 +92,7 @@
       <share-select [inOptions]="optionsA" [inBtn]="paraA.ifBtn" [(modelOptions)]="modelA" [inPara]='paraA'
         [inMulti]="paraA.ifMulti" [inAdd]="paraA.ifAdd" [inCheck]="paraA.ifCheck" [inClear]='paraA.ifClear'
         [inActive]="paraA.ifActive" [inSon]="paraA.ifSon" [inFlag]="paraA.ifFlag" [inOne]="paraA.ifOne"
-        [inGanged]="paraA.ifGanged"></share-select>
-    </div>
-  </div>
-  <div class="select-info">
-    <span>待定add示例{{modelC}}</span>
-    <div class="select">
-      <share-select [inType]="'add'" [inBtn]="paraA.ifBtn" [inOptions]="optionsC" [(modelOptions)]="modelC"
-        [inPara]='paraA' [inMulti]="paraA.ifMulti" [inAdd]="paraA.ifAdd" [inCheck]="paraA.ifCheck"
-        [inClear]='paraA.ifClear' [inActive]="paraA.ifActive" [inSon]="paraA.ifSon" [inFlag]="paraA.ifFlag"
-        [inOne]="paraA.ifOne" [inGanged]="paraA.ifGanged"></share-select>
+        [inGanged]="paraA.ifGanged" [inOutType]="paraA.outType" [inClose]="paraA.ifClose"></share-select>
     </div>
   </div>
   <div class="select-info">
@@ -103,7 +101,8 @@
       <share-select [inType]="'panel'" [inOptions]="optionsB" [inBtn]="paraA.ifBtn" [(modelOptions)]="modelB"
         [inPara]='paraA' [inMulti]="paraA.ifMulti" [inAdd]="paraA.ifAdd" [inCheck]="paraA.ifCheck"
         [inClear]='paraA.ifClear' [inActive]="paraA.ifActive" [inSon]="paraA.ifSon" [inFlag]="paraA.ifFlag"
-        [inOne]="paraA.ifOne" [inGanged]="paraA.ifGanged" [inAdd]="paraA.ifAdd" [inOutType]="paraA.outType">
+        [inOne]="paraA.ifOne" [inGanged]="paraA.ifGanged" [inAdd]="paraA.ifAdd" [inOutType]="paraA.outType"
+        [inClose]="paraA.ifClose">
       </share-select>
     </div>
   </div>

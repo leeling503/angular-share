@@ -1,0 +1,16 @@
+<div class="month-plan">
+  <div class="month-year" *ngIf="ifYear">
+    <div class="per-year" (click)="onGoYear(-1)"><i class="E_I_pull_down E_I_S_A"></i></div>
+    <div class="year-cont"><input [(ngModel)]="showMonth.year"></div>
+    <div class="next-year" (click)="onGoYear(+1)"><i class="E_I_pull_down E_I_S_A"></i></div>
+  </div>
+  <div class="month-item " [ngClass]="{'active-item':month.value == showMonth.month}" *ngFor="let month of months">
+    <div class="item  E_BD E_BD_hover" (click)="onSelectMonth(month)">
+      <span>{{month.name}}</span>
+    </div>
+  </div>
+  <div class="E_O_btns" *ngIf="!ifAuto">
+    <div class="E_O_btn_sure" (click)="onSureChange(true)">确定</div>
+    <div class="E_O_btn_off" (click)="onSureChange(false)">取消</div>
+  </div>
+</div>

@@ -3,12 +3,13 @@ import { OnInit, Input, ViewChild, Output, EventEmitter, SimpleChanges } from '@
 import { SelectOption, SelectModel, SelectModelType, SelectOpenType, SelectOptions, SelectPara } from '../share-select.model';
 import { UtilArray, UtilIsEqual } from 'share-libs/src/utils';
 import { UtilChanges, UtilChangesValue } from 'share-libs/src/utils/util-component';
-import { PerfixText } from '../../base/perfix-text.component';
-export class ShareSelect extends PerfixText implements OnInit {
+import { MadePerfix } from '../../base';
+export class ShareSelect extends MadePerfix implements OnInit {
     constructor() {
         super();
     }
     nativeEl: HTMLElement
+    @Input() overlayClass: Object;
     /**所有选项 */
     @Input() inOptions: SelectOptions = [];
     /**已选中 */
@@ -44,8 +45,12 @@ export class ShareSelect extends PerfixText implements OnInit {
     @Input() inOne: boolean;
     /**open框类型 */
     @Input() inType: SelectOpenType;
+    /**是否选中就关闭 */
+    @Input() inClose: boolean;
     /**是否有确定按钮*/
     @Input() inBtn: boolean;
+    /**弹窗宽度 */
+    @Input() inOverlayWidth: number | string;
     /**选中项发生改变 */
     @Output() modelOptionsChange: EventEmitter<SelectModel> = new EventEmitter();
     /**激活项发生改变 */
@@ -74,7 +79,8 @@ export class ShareSelect extends PerfixText implements OnInit {
         placeholder: '请选择',
         /**下拉无数据提示 暂无数据*/
         noneTip: "暂无数据",
-        ifBtn: false
+        ifBtn: false,
+        ifClose: true,
     }
     /**选中的选项集合 */
     public checkOptions: SelectOptions = [];
@@ -85,9 +91,9 @@ export class ShareSelect extends PerfixText implements OnInit {
     /**上一次emit出去的选项（用于判断当前的选中改变是否需要触发emit）*/
     protected emitCheckOptions: SelectOptions = [];
     /**弹窗的打开状态 */
-    public openOptions: boolean = !1;
+    public overlayOpen: boolean = !1;
     /**弹窗的宽度 */
-    public cdkConnectedOverlayWidth: number | string;
+    public overlayWidth: number | string;
     /** 所有选项*/
     public options: SelectOptions = [];
     @ViewChild(CdkOverlayOrigin, { static: true }) cdkOverlayOrigin: CdkOverlayOrigin;
@@ -97,7 +103,7 @@ export class ShareSelect extends PerfixText implements OnInit {
             this.setCheckOptions();
         }
         if (UtilChangesValue(changes, 'inOptions')) {
-            this.options = [...this.inOptions];
+            this.options = this.getOptions(this.inOptions);
             this.setCheckOptions();
         }
     }
@@ -130,31 +136,45 @@ export class ShareSelect extends PerfixText implements OnInit {
         this.inOne = this.inOne ?? para.ifOne;
         this.inType = this.inType ?? para.type;
         this.inBtn = this.inBtn ?? para.ifBtn;
+        this.inClose = this.inClose ?? para.ifClose;
+        this.inOverlayWidth = this.inOverlayWidth ?? para.overlayWidth;
+    }
+
+    getOptions(options: any[]): any[] {
+        options = options.map(e => {
+            if (typeof e === 'string' || typeof e === 'number') {
+                return { key: e, value: e };
+            } else {
+                return e
+            }
+        });
+        return options
     }
 
     /**设置选中 并判断model的类型 string | object | strings | objects */
     setCheckOptions() {
-        let option = this.modelOptions || [], value = option[0], id = this.inUuid;
+        let option = this.modelOptions || [], value = option[0], id = this.inUuid, checkOptions, inputType;
         if (Array.isArray(option)) {
             if (typeof value !== "object") {
-                this._inputType = 'strings';
-                this.checkOptions = [...option].map(e => { return this._getOptionByValue(e as string); })
+                inputType = 'strings';
+                checkOptions = [...option].map(e => { return this._getOptionByValue(e as string); })
             } else {
-                this._inputType = 'objects';
-                this.checkOptions = [...option].map(e => { return this._getOptionByValue(e[id] as string) });
+                inputType = 'objects';
+                checkOptions = [...option].map(e => { return this._getOptionByValue(e[id] as string) });
             }
         } else {
-            if (typeof option == "string") {
-                this._inputType = 'string';
-                this.checkOptions = option.split(',').map(e => { return this._getOptionByValue(e as string) })
+            if (typeof option == "string" || typeof option == "number") {
+                inputType = 'string';
+                checkOptions = (option + '').split(',').map(e => { return this._getOptionByValue(e as string) })
             } else {
-                this._inputType = 'object';
-                this.checkOptions = [option].map(e => { return this._getOptionByValue(e[id] as string) })
+                inputType = 'object';
+                checkOptions = [option].map(e => { return this._getOptionByValue(e[id] as string) })
             }
         }
         if (!this.inMulti) {
-            this.checkOptions = this.checkOptions.length ? [this.checkOptions[0]] : [];
+            checkOptions = checkOptions.length ? [checkOptions[0]] : [];
         }
+        this._inputType = inputType, this.checkOptions = checkOptions;
         this.emitCheckOptions = UtilArray.copy(this.checkOptions);
     }
 
@@ -162,6 +182,7 @@ export class ShareSelect extends PerfixText implements OnInit {
      * 没有该选项这创建并加入到选项中 */
     private _getOptionByValue(value: string): SelectOption {
         let option = UtilArray.getObjByValue(this.options, this.inUuid as keyof SelectOption, value, this.inSon ? undefined : '');
+        UtilArray.getAncestorsByValue
         if (!option) {
             option = this._createOptionByValue(value);
             this.options.unshift(option)
@@ -176,18 +197,18 @@ export class ShareSelect extends PerfixText implements OnInit {
 
     /**打开选框 */
     onOpenOverlay() {
-        this.cdkConnectedOverlayWidth || this._setOpenWidth();
-        this.openOptions = !0;
+        this.overlayWidth || this._setOpenWidth();
+        this.overlayOpen = !0;
     }
 
     /**设置弹窗宽度 */
     private _setOpenWidth() {
-        if (this.inPara.widthNode) {
-            this.cdkConnectedOverlayWidth = this.inPara.widthNode;
+        if (this.inOverlayWidth) {
+            this.overlayWidth = this.inOverlayWidth;
         } else {
             let el = this.nativeEl.querySelector('.share-select-panel')
             let rect = el.getBoundingClientRect();
-            this.cdkConnectedOverlayWidth = rect.width || undefined;
+            this.overlayWidth = rect.width || undefined;
         }
     }
 
@@ -207,12 +228,15 @@ export class ShareSelect extends PerfixText implements OnInit {
 
     /**关闭选框并根据输入类型输出选中数据 */
     onCloseOptions(): void {
-        this.openOptions = !1;
+        this.overlayOpen = !1;
         this._emitModelOption();
     }
 
     onCheckChange($event: SelectOption[]) {
         this.checkOptions = $event;
+        if (this.inClose) {
+            this.onCloseOptions();
+        }
     }
 
     /**根据输入类型输出选中数据(this.checkOptions)
@@ -220,7 +244,8 @@ export class ShareSelect extends PerfixText implements OnInit {
     */
     protected _emitModelOption(flag = false) {
         if (UtilIsEqual(this.emitCheckOptions, this.checkOptions, this.inUuid) && !flag) return;
-        let original = this.emitCheckOptions = UtilArray.copy(this.checkOptions);
+        /**不copyDeep用户输入类型会导致Equal始终为true */
+        let original = this.emitCheckOptions = UtilArray.copyDeep(this.checkOptions);
         let uuids = original.map(e => e[this.inUuid]);
         let outType = this.inOutType || this._inputType;
         if (outType == "string") {

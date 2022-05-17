@@ -8,8 +8,8 @@ import { Component, OnInit } from '@angular/core';
 export class ExShareDateComponent implements OnInit {
 
   constructor() { }
-  calendarModel = ['2021-08-01'];
-  month = "2020-07";
+  calendarModel = [];
+  month = "07";
   monthB = "";
   day
   dayA;
@@ -20,15 +20,15 @@ export class ExShareDateComponent implements OnInit {
   }
 
   localA = { format: 'YYYY-MM-DD HH:mm' }
-  ngOnInit() {
-    setTimeout(() => {
-      this.monthB = ''
-    }, 3000);
-  }
+  ngOnInit() { }
   onModelMonthChange($event) {
-    this.month = $event
+    // this.month = $event
   }
   onModelMonthChangeB($event) {
     this.monthB = $event
+  }
+
+  onCalendarChange($event) {
+    console.log($event)
   }
 }

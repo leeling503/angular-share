@@ -65,7 +65,8 @@ export class ShareOverlayService {
         return overlayTemplate;
     }
 
-    instanceComponent<T>(overlay: ShareOverlayComponent<T>, pa: Partial<T>) {
+    /**组件初始化数据 */
+    public instanceComponent<T>(overlay: ShareOverlayComponent<T>, pa: Partial<T>) {
         Object.assign(overlay.component, pa);
     }
 
@@ -226,7 +227,7 @@ export class ShareOverlayPosition {
         this.x = data.x;
         this.y = data.y;
         this.withPositions = data.withPositions || [{
-            originX: 'end',
+            originX: 'start',
             originY: 'bottom',
             overlayX: 'start',
             overlayY: 'top',

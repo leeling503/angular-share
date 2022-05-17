@@ -1,25 +1,19 @@
-<div class="share-date-month  E_BD E_BD_hover" cdkOverlayOrigin (click)="onToggleOpen()" shareIcon
-  (onIconClick)="onClearValue()" [inView]="modelMonth">
+<div class="share-date-month  E_BD E_BD_hover" cdkOverlayOrigin (click)="onOpenOverlay()" shareIcon
+  (onIconClick)="onClearValue()" [inView]="model">
   <div class="E_T_prefix" *ngIf="_perText" [style.width]="_perWidth">{{_perText}}</div>
-  <input type="text" [ngModel]="viewMonth" [placeholder]="inPlaceholder" readonly>
+  <input type="text" [ngModel]="vModel" [placeholder]="inPlaceholder" readonly>
   <div class="E_suffix_icon E_split_line">
     <i class="E_I_date_day"></i>
   </div>
 </div>
 
 <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="cdkOverlayOrigin" [cdkConnectedOverlayHasBackdrop]="true"
-  [cdkConnectedOverlayBackdropClass]='"E_O_transparent"' [cdkConnectedOverlayOpen]="overlayOpen"
-  [cdkConnectedOverlayOffsetY]='3' (backdropClick)="onClose()">
-  <div class="month-plan E_BD">
-    <div class="month-year" *ngIf="inIfYear">
-      <div class="per-year" (click)="onGoYear(-1)"><i class="E_I_pull_down E_I_S_A"></i></div>
-      <div class="year-cont"><input [(ngModel)]="viewYear"></div>
-      <div class="next-year" (click)="onGoYear(+1)"><i class="E_I_pull_down E_I_S_A"></i></div>
-    </div>
-    <div class="month-item " [ngClass]="{'active-item':month == dateMonth}" *ngFor="let month of dateMonths">
-      <div class="item  E_BD E_BD_hover" (click)="onSelectMonth(month)">
-        <span>{{month.name}}</span>
-      </div>
-    </div>
+  [cdkConnectedOverlayOpen]="overlayOpen" [cdkConnectedOverlayOffsetY]='3'
+  [cdkConnectedOverlayFlexibleDimensions]="true" [cdkConnectedOverlayWidth]='overlayWidth'
+  [cdkConnectedOverlayBackdropClass]="'E_O_transparent'" (backdropClick)="onSureChange(false)">
+  <div class="E_O_panel_el">
+    <panel-month [model]='vModel' [ifYear]="inIfYear" [ifAuto]="inAutoApply" (onMonthChange)="onMonthChange($event)"
+      (onSureChange)="onSureChange($event)">
+    </panel-month>
   </div>
 </ng-template>

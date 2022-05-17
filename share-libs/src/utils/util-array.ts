@@ -1,3 +1,4 @@
+import * as _ from "lodash";
 /**清空数组，不改变引用地址*/
 function clear<T>(arr: T[]): T[] {
     arr.length = 0;
@@ -80,6 +81,21 @@ function itemToggle<T>(arr: T[], value: T, key?: keyof T): T[] {
     return arr
 }
 
+/**将数组中指定对象替换为另一个对象，可设置key来判断对象,没有找到指定对象则push */
+function replace<T>(arr: T[], valueA: T, valueB: T, key?: keyof T): T[] {
+    if (isArray(arr)) {
+        for (let i = 0, len = arr.length; i < len; i++) {
+            let el = arr[i];
+            if (el === valueA || (key && el[key] == valueA[key])) {
+                arr[i] = valueB;
+                return arr
+            }
+        }
+        arr.push(valueB);
+    }
+    return arr
+}
+
 /**浅复制（改变引用地址） */
 function copy<T>(arr: T[]): T[] {
     let r: T[] = [];
@@ -141,7 +157,7 @@ function setValueByOther<T>(A: T[], B: T[], key: keyof T, value: any, attr?: key
     }
 }
 
-/** 获取数组中key为指定value的对象组合的数组 onlySuper为true表示父类匹配后就不再匹配子类*/
+/** 获取数组中所有key为指定value的对象组合的数组 onlySuper为true表示父类匹配后就不再匹配子类*/
 function getArrByValue<T>(arr: T[], key: keyof T, value: any, onlySuper: boolean = false, children: string = 'children'): T[] {
     let values = [];
     if (isNonNull(arr)) {
@@ -254,21 +270,42 @@ function getSparesByKey<T>(A: T[], B: T[], key: keyof T, children: string): T[] 
 
 /**数组操作工具对象 */
 export const UtilArray = {
+    /**清空数组，不改变引用地址*/
     clear: clear,
+    /**浅复制（改变引用地址） */
     copy: copy,
+    copyDeep: _.cloneDeep,
+    /**判读对象是否是数组 */
     isArray: isArray,
+    /**对象是数组且length > 0*/
     isNonNull: isNonNull,
+    /**判断数组（包含其子项）中的key是否全为value */
     every: every,
+    /**判断数组（包含其子项）中是否存在key为value的选项 */
     some: some,
+    /**将数组中指定对象替换为另一个对象，可设置key来判断对象 */
+    replace: replace,
+    /**移除数组指定item，会改变原数组，不改变引用地址 */
     itemRemove: itemRemove,
+    /**数组中如果有就删除如果没有就添加(对象可指定key) */
     itemToggle: itemToggle,
+    /**将数组及其后代数组中的 指定的key的值设置为 value arr 为数组 key为要设置的key value为要设置值 children 为子数组所在的key children 为 '' 表示不设置子项 */
     setItemValue: setItemValue,
+    /**当数组arr中某条数据key为指定value时，将该数据及其所有祖先的attr设置为指定的data
+    children为子数组所在的key 返回该条数据(路由服务中启用) */
     setItemDataByValue: setItemDataByValue,
+    /**两个数组（A,B）， 如果A中的数据X在B中也存在，或者X的attr属性的值等于B中某条数据的attr属性的值， 则将A中该数据的key设置为value */
     setValueByOther: setValueByOther,
+    /**获取数组中所有key为指定value的对象数组onlySuper为true表示父类匹配后就不再匹配子类*/
     getArrByValue: getArrByValue,
+    /**获取数组及其子项中获得key为指定value的对象 children 为 '' 表示不查找子项 */
     getObjByValue: getObjByValue,
+    /**两个数组（A,B）， 如果A中的某个数据a不存在于B中，或者该数据的attr属性在B中找不到对应的， 则将该数据的放置额外的数组中并返回该数组 */
     getSpares: getSpares,
+    /**两个数组（A,B）， 如果A中的某个数据a不存在于B中，或者该数据的attr属性在B中找不到对应的， 则将A中该数据的放置额外的数组中并返回该数组 */
     getSparesByKey: getSparesByKey,
+    /**获取数组arr中key为指定value的始祖对象 */
     getAncestorByValue: getAncestorByValue,
+    /**得到含自身和父级的数组,顶级父类排第一 arr数组中key等于value或者该对象等于value的父级数组 */
     getAncestorsByValue: getAncestorsByValue,
 }

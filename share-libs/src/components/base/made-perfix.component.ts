@@ -1,7 +1,8 @@
 import { Input, SimpleChanges } from "@angular/core";
 import { UtilChanges } from "share-libs/src/utils";
 
-export   class PerfixText {
+/**前置tip组件的构成类 */
+export class MadePerfix {
     @Input() inPerText: string;
     @Input() inPerWidth: string;
     /**前置tip文字 */

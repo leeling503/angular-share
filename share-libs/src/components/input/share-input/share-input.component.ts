@@ -1,7 +1,7 @@
 import { OnChanges, OnDestroy, SimpleChanges } from "@angular/core";
 import { Component, ElementRef, EventEmitter, Input, Output } from "@angular/core";
 import { UtilChanges } from "share-libs/src/utils";
-import { PerfixText } from "../../base/perfix-text.component";
+import { MadePerfix } from "../../base";
 import { TypeInput } from "../share-input.model";
 /**基础输入框组件 */
 @Component({
@@ -9,7 +9,7 @@ import { TypeInput } from "../share-input.model";
     templateUrl: './share-input.component.html',
     styleUrls: ['./share-input.component.less'],
 })
-export class ShareInputComponent extends PerfixText implements OnChanges, OnDestroy {
+export class ShareInputComponent extends MadePerfix implements OnChanges, OnDestroy {
     constructor(private el: ElementRef) {
         super();
         this.nativeEl = this.el.nativeElement;

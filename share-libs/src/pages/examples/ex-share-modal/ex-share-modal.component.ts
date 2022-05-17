@@ -8,6 +8,7 @@ import { UtilSleep } from "share-libs/src/utils";
 import { ExShareSelectComponent } from "../ex-share-select/ex-share-select.component";
 import { TypeBtn } from "share-libs/src/enum";
 import { ShareModalRef } from "share-libs/src/components/modal/modal/share-modal.component";
+import { ShareCalendarBaseComponent } from "share-libs/src/components/date-picker/calendar-base/calendar-base.component";
 
 @Component({
     templateUrl: './ex-share-modal.component.html',
@@ -33,11 +34,12 @@ export class ExShareModalComponent {
     }
 
     openModal($event) {
-        let c = this.overlay_.show(ExShareSelectComponent);
-        let a = this.overlay_.show(this.ddd, undefined, undefined, this.dddV);
-        new UtilSleep()
-            .sleep(() => { a.overlayRef.detach(); return 2 }, 1)
-            .sleep((res) => { console.log(res); c.modalRef.destroy() }, 1)
+        let c = this.overlay_.show(ShareCalendarBaseComponent);
+        // c.modalRef.instance.
+        // let a = this.overlay_.show(this.ddd, undefined, undefined, this.dddV);
+        // new UtilSleep()
+        //     .sleep(() => { a.overlayRef.detach(); return 2 }, 1)
+        //     .sleep((res) => { console.log(res); c.modalRef.destroy() }, 1)
     }
 
     onShowTemplate() {

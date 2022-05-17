@@ -149,7 +149,7 @@ export class NodePanel {
         for (let i = ancestors.length - 1; i >= 0; i--) {
             let anc = ancestors[i], children = anc.children || [];
             if (this.inGanged) {
-                // /联动时flag为false则父项和自身必为false，flag为true父类还需要判断其余子项
+                // /联动时选中态为false则父项和自身必为false，选中态为true父类还需要判断其余子项
                 anc._check = flag && children.every(e => e._check == true);
             }
             anc._mix = children.some(e => e._check == true) || children.some(e => e._mix == true);

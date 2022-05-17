@@ -10,7 +10,7 @@ function UtilChangesValue(c: SimpleChanges, key: string): boolean {
     return c[key] && c[key].currentValue !== undefined
 }
 
-/** 从undefined变为有值  true */
+/** 从undefined变为有值true */
 function UtilChangesHasValue(c: SimpleChanges, key: string): boolean {
     return c[key] && c[key].previousValue === undefined && c[key].currentValue
 }
@@ -21,7 +21,7 @@ function UtilChangesUndefined(c: SimpleChanges, key: string): boolean {
 }
 
 /**第一次改变 */
-function UtilChangesFirst(c: SimpleChanges, key: string): boolean {
+function changesFirst(c: SimpleChanges, key: string): boolean {
     return !!c[key] && c[key].firstChange
 }
 
@@ -35,4 +35,10 @@ function UtilChangesNoFirstValue(c: SimpleChanges, key: string): boolean {
     return c[key] && !c[key].firstChange && c[key].currentValue !== undefined
 }
 
-export { UtilChangesNoFirstValue, UtilChangesHasValue, UtilChangesValue, UtilChangesUndefined, UtilChanges, UtilChangesFirst }
+export { UtilChangesNoFirstValue, UtilChangesHasValue, UtilChangesValue, UtilChangesUndefined, UtilChanges }
+export const UtilChange = {
+    /**发生改变 */
+    change: UtilChanges,
+    /**第一次改变 */
+    first: changesFirst
+}
