@@ -1,4 +1,5 @@
 import { RouterModule, Routes } from "@angular/router";
+import { ExExportExcelComponent } from "./ex-export-excel/ex-export-excel.component";
 import { ExShareButtonsComponent } from "./ex-share-buttons/ex-share-buttons.component";
 import { ExShareDateComponent } from "./ex-share-date/ex-share-date.component";
 import { ExShareFileComponent } from "./ex-share-file/ex-share-file.component";
@@ -33,6 +34,7 @@ let routes: Routes = [
             { path: 'modal', component: ExShareModalComponent, data: { title: '弹窗' } },
             { path: 'swiper', component: ExShareSwiperComponent, data: { title: '轮播图' } },
             { path: 'form', component: ExShareFormComponent, data: { title: '表单' } },
+            { path: 'excel', component: ExExportExcelComponent, data: { title: '导出Excel' } },
         ]
     },
 ]
