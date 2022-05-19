@@ -1,4 +1,4 @@
-import { ScopeUtil } from "share-libs/src/services/in18.service";
+import { ScopeUtil } from "share-libs/services/in18.service";
 
 export const Lang = {
     zh: {
